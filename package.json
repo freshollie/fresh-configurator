@@ -1,0 +1,16 @@
+{
+  "name": "betaflight-configurator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node device.ts"
+  },
+  "dependencies": {
+    "serialport": "^8.0.7"
+  },
+  "devDependencies": {
+    "@types/serialport": "^8.0.0",
+    "ts-node": "^8.6.2"
+  }
+}

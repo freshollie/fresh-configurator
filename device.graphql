@@ -1,0 +1,22 @@
+type Device {
+    cycleTime: 
+}
+
+
+type Query {
+    ports: [String!]!
+    fc: FlightController
+}
+
+type Mutation {
+    connect(port: String!): Boolean
+    disconnect: Boolean;
+}
+
+type Config {
+
+}
+
+type FlightController {
+
+}
