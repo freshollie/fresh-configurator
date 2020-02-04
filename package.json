@@ -4,13 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node device.ts"
+    "start": "ts-node -T testing.ts"
   },
   "dependencies": {
     "serialport": "^8.0.7"
   },
   "devDependencies": {
     "@types/serialport": "^8.0.0",
-    "ts-node": "^8.6.2"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
   }
 }

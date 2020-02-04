@@ -48,10 +48,10 @@ const crc8_dvb_s2 = (crc: number, ch: number): number => {
     return crc;
 }
 
-const crc8_dvb_s2_data = (data, start, end) => {
+const crc8_dvb_s2_data = (data: Uint8Array, start: number, end: number): number => {
     let crc = 0;
     for (let ii = start; ii < end; ii++) {
-        crc = this.crc8_dvb_s2(crc, data[ii]);
+        crc = crc8_dvb_s2(crc, data[ii]);
     }
     return crc;
 }
@@ -96,7 +96,7 @@ export const encode_message_v1 = (code, data) => {
 }
 
 
-export const encode_message_v2 = (code, data) => {
+export const encode_message_v2 = (code: number, data?: number[]): ArrayBuffer => {
     const dataLength = data ? data.length : 0;
     // 9 bytes for protocol overhead
     const bufferSize = dataLength + 9;
@@ -111,7 +111,7 @@ export const encode_message_v2 = (code, data) => {
     bufView[6] = dataLength & 0xFF;
     bufView[7] = (dataLength >> 8) & 0xFF;
     for (let ii = 0; ii < dataLength; ii++) {
-        bufView[8 + ii] = data[ii];
+        bufView[8 + ii] = data![ii];
     }
     bufView[bufferSize - 1] = crc8_dvb_s2_data(bufView, 3, bufferSize - 1);
     return bufferOut;
@@ -129,7 +129,7 @@ export class MspDataView extends DataView {
 
     public readU16() {
         if (this.byteLength >= this.offset + 2) {
-            return this.readU8() + this.readU8() * 256;
+            return this.readU8()! + this.readU8()! * 256;
         } else {
             return null;
         }
@@ -137,7 +137,7 @@ export class MspDataView extends DataView {
 
     public readU32() {
         if (this.byteLength >= this.offset + 4) {
-            return this.readU16() + this.readU16() * 65536;
+            return this.readU16()! + this.readU16()! * 65536;
         } else {
             return null;
         }
@@ -209,10 +209,11 @@ export class MspParser extends Transform {
         this.messageIsJumboFrame = false;
         this.crcError = false;
         this.packet_errors = 0;
+        this.unsupported = 0;
     }
 
-    public _transform(chunk, encoding, cb) {
-        var data = new Uint8Array(chunk);
+    public _transform(chunk: Buffer, encoding: string, cb: (error?: Error | null, data?: any) => void): void {
+        const data = new Uint8Array(chunk);
 
         for (var i = 0; i < data.length; i++) {
             switch (this.state) {
@@ -353,6 +354,7 @@ export class MspParser extends Transform {
                     console.log(`Unknown state detected: ${this.state}`);
             }
         }
+        cb();
     }
 
     private _initialize_read_buffer() {
@@ -360,7 +362,7 @@ export class MspParser extends Transform {
         this.message_buffer_uint8_view = new Uint8Array(this.message_buffer);
     }
 
-    private _dispatch_message(expectedChecksum): void {
+    private _dispatch_message(expectedChecksum: number): void {
         let dataView: MspDataView;
         if (this.message_checksum === expectedChecksum) {
             // message received, store dataview
@@ -388,7 +390,7 @@ export class MspParser extends Transform {
         this.crcError = false;
     }
 
-    public _flush(cb) {
+    public _flush(cb: () => void) {
         this.reset();
         cb()
     }
