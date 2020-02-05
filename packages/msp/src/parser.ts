@@ -1,5 +1,6 @@
+/* eslint-disable no-bitwise */
 import { Transform } from "stream";
-import { MspDataView, crc8_dvb_s2 } from "./utils";
+import { MspDataView, crc8DvbS2 } from "./utils";
 
 const SYMBOLS = {
   BEGIN: "$".charCodeAt(0),
@@ -46,21 +47,30 @@ export interface MspMessage {
 
 export class MspParser extends Transform {
   private state: DECODER_STATES;
-  private message_direction: number;
+
+  private messageDirection: number;
+
   private code: number;
+
   private message_length_expected: number;
+
   private message_length_received: number;
+
   private message_buffer: ArrayBuffer;
+
   private message_buffer_uint8_view: Uint8Array;
+
   private message_checksum: number;
+
   private crcError: boolean;
+
   private unsupported: number;
 
   constructor() {
     super();
 
     this.state = 0;
-    this.message_direction = 1;
+    this.messageDirection = 1;
     this.code = 0;
     this.message_length_expected = 0;
     this.message_length_received = 0;
@@ -71,6 +81,7 @@ export class MspParser extends Transform {
     this.unsupported = 0;
   }
 
+  // eslint-disable-next-line no-underscore-dangle
   public _transform(
     chunk: Buffer,
     encoding: string,
@@ -78,7 +89,7 @@ export class MspParser extends Transform {
   ): void {
     const data = new Uint8Array(chunk);
 
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i += 1) {
       switch (this.state) {
         case DECODER_STATES.IDLE: // sync char 1
           if (data[i] === SYMBOLS.BEGIN) {
@@ -105,14 +116,15 @@ export class MspParser extends Transform {
           this.unsupported = 0;
           switch (data[i]) {
             case SYMBOLS.FROM_MWC:
-              this.message_direction = 1;
+              this.messageDirection = 1;
               break;
             case SYMBOLS.TO_MWC:
-              this.message_direction = 0;
+              this.messageDirection = 0;
               break;
             case SYMBOLS.UNSUPPORTED:
               this.unsupported = 1;
               break;
+            default:
           }
           this.state =
             this.state === DECODER_STATES.DIRECTION_V1
@@ -129,7 +141,7 @@ export class MspParser extends Transform {
           if (this.message_length_expected === CONSTANTS.JUMBO_FRAME_MIN_SIZE) {
             this.state = DECODER_STATES.CODE_JUMBO_V1;
           } else {
-            this._initialize_read_buffer();
+            this.initializeReadBuffer();
             this.state = DECODER_STATES.CODE_V1;
           }
 
@@ -140,7 +152,7 @@ export class MspParser extends Transform {
           break;
         case DECODER_STATES.PAYLOAD_LENGTH_V2_HIGH:
           this.message_length_expected |= data[i] << 8;
-          this._initialize_read_buffer();
+          this.initializeReadBuffer();
           this.state =
             this.message_length_expected > 0
               ? DECODER_STATES.PAYLOAD_V2
@@ -175,14 +187,14 @@ export class MspParser extends Transform {
           break;
         case DECODER_STATES.PAYLOAD_LENGTH_JUMBO_HIGH:
           this.message_length_expected |= data[i] << 8;
-          this._initialize_read_buffer();
+          this.initializeReadBuffer();
           this.state = DECODER_STATES.PAYLOAD_V1;
           break;
         case DECODER_STATES.PAYLOAD_V1:
         case DECODER_STATES.PAYLOAD_V2:
           this.message_buffer_uint8_view[this.message_length_received] =
             data[i];
-          this.message_length_received++;
+          this.message_length_received += 1;
 
           if (this.message_length_received >= this.message_length_expected) {
             this.state =
@@ -203,37 +215,37 @@ export class MspParser extends Transform {
             this.message_checksum ^=
               (this.message_length_expected & 0xff00) >> 8;
           }
-          for (let ii = 0; ii < this.message_length_received; ii++) {
+          for (let ii = 0; ii < this.message_length_received; ii += 1) {
             this.message_checksum ^= this.message_buffer_uint8_view[ii];
           }
-          this._dispatch_message(data[i]);
+          this.dispatchMessage(data[i]);
           break;
         case DECODER_STATES.CHECKSUM_V2:
           this.message_checksum = 0;
-          this.message_checksum = crc8_dvb_s2(this.message_checksum, 0); // flag
-          this.message_checksum = crc8_dvb_s2(
+          this.message_checksum = crc8DvbS2(this.message_checksum, 0); // flag
+          this.message_checksum = crc8DvbS2(
             this.message_checksum,
             this.code & 0xff
           );
-          this.message_checksum = crc8_dvb_s2(
+          this.message_checksum = crc8DvbS2(
             this.message_checksum,
             (this.code & 0xff00) >> 8
           );
-          this.message_checksum = crc8_dvb_s2(
+          this.message_checksum = crc8DvbS2(
             this.message_checksum,
             this.message_length_expected & 0xff
           );
-          this.message_checksum = crc8_dvb_s2(
+          this.message_checksum = crc8DvbS2(
             this.message_checksum,
             (this.message_length_expected & 0xff00) >> 8
           );
-          for (let ii = 0; ii < this.message_length_received; ii++) {
-            this.message_checksum = crc8_dvb_s2(
+          for (let ii = 0; ii < this.message_length_received; ii += 1) {
+            this.message_checksum = crc8DvbS2(
               this.message_checksum,
               this.message_buffer_uint8_view[ii]
             );
           }
-          this._dispatch_message(data[i]);
+          this.dispatchMessage(data[i]);
           break;
         default:
           console.log(`Unknown state detected: ${this.state}`);
@@ -242,12 +254,12 @@ export class MspParser extends Transform {
     cb();
   }
 
-  private _initialize_read_buffer() {
+  private initializeReadBuffer(): void {
     this.message_buffer = new ArrayBuffer(this.message_length_expected);
     this.message_buffer_uint8_view = new Uint8Array(this.message_buffer);
   }
 
-  private _dispatch_message(expectedChecksum: number): void {
+  private dispatchMessage(expectedChecksum: number): void {
     let dataView: MspDataView;
     if (this.message_checksum === expectedChecksum) {
       // message received, store dataview
@@ -278,7 +290,8 @@ export class MspParser extends Transform {
     this.crcError = false;
   }
 
-  public _flush(cb: () => void) {
+  // eslint-disable-next-line no-underscore-dangle
+  public _flush(cb: () => void): void {
     this.reset();
     cb();
   }

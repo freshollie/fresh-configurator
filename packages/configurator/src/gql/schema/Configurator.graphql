@@ -1,0 +1,7 @@
+type Query {
+    port: String
+}
+
+type Mutation {
+    selectPort(port: String): Boolean
+}

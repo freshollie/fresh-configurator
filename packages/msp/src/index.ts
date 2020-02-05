@@ -1,2 +1,2 @@
 export * from "./device";
-export { ports, connections, isConnected, connect } from "./serial";
+export { ports, connections, isConnected, open as connect } from "./serial";

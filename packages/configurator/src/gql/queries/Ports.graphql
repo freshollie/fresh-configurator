@@ -1,0 +1,3 @@
+query AvailablePorts {
+    ports @client
+}

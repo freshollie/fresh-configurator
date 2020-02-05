@@ -1,0 +1,3 @@
+mutation SelectPort($port: String) {
+    selectPort(port: $port) @client
+}

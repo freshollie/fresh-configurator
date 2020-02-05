@@ -5,8 +5,9 @@
  */
 import { MspDataView } from "./utils";
 import { MspMessage, MspParser } from "./parser";
+import { encodeMessageV2 } from "./encoders";
+
 import SerialPort = require("serialport");
-import { encode_message_v2 } from "./encoders";
 
 interface Connection {
   serial: SerialPort;
@@ -14,10 +15,18 @@ interface Connection {
 }
 const connectionsMap: Record<string, Connection> = {};
 
-export const ports = () =>
+export const ports = (): Promise<string[]> =>
   SerialPort.list().then(data => data.map(({ path }) => path));
 
-export const connect = async (
+/**
+ * Close the given port
+ */
+export const close = (port: string): void => {
+  connectionsMap[port]?.serial.close();
+  delete connectionsMap[port];
+};
+
+export const open = async (
   port: string,
   onClose?: () => void
 ): Promise<boolean> => {
@@ -28,6 +37,7 @@ export const connect = async (
   let serial: SerialPort | undefined;
   await new Promise((resolve, reject) => {
     serial = new SerialPort(port, err => {
+      console.log("callback error");
       if (err) {
         reject(err);
       } else {
@@ -45,8 +55,13 @@ export const connect = async (
       parser
     };
 
+    serial.on("error", () => {
+      console.log("emmited error");
+      close(port);
+    });
+
     serial.on("close", () => {
-      delete connectionsMap[port];
+      console.log("emmited close");
       onClose?.();
     });
   }
@@ -55,7 +70,7 @@ export const connect = async (
 };
 
 export const connections = (): string[] => Object.keys(connectionsMap);
-export const isConnected = (port: string) => !!connectionsMap[port];
+export const isConnected = (port: string): boolean => !!connectionsMap[port];
 
 interface MspCommand {
   code: number;
@@ -78,10 +93,10 @@ export const execute = async (
 
   const { parser, serial } = connectionsMap[port];
 
-  serial.write(Buffer.from(encode_message_v2(code, data)));
+  serial.write(Buffer.from(encodeMessageV2(code, data)));
 
   return new Promise((resolve, reject) => {
-    const onData = (message: MspMessage) => {
+    const onData = (message: MspMessage): void => {
       if (message.code === code) {
         // Copy the data view
         resolve(new MspDataView(message.dataView.buffer()));
@@ -97,11 +112,4 @@ export const execute = async (
 
     parser.on("data", onData);
   });
-};
-
-/**
- * Close the given port
- */
-export const close = async (port: string): Promise<void> => {
-  connectionsMap[port]?.serial.close();
 };

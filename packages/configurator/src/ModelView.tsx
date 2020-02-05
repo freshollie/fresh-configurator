@@ -1,14 +1,7 @@
-import React, { Suspense } from "react";
-import { Canvas, useLoader, Loader } from "react-three-fiber";
-import {
-  BufferGeometryLoader,
-  BufferGeometry,
-  MaterialLoader,
-  Material,
-  ObjectLoader,
-  JSONLoader
-} from "three";
-import { join } from "path";
+import React from "react";
+import { Canvas } from "react-three-fiber";
+import { JSONLoader } from "three";
+
 import quadx from "./models/quad_x.json";
 
 interface ModelProps {
@@ -21,7 +14,6 @@ interface ModelProps {
 const { geometry, materials } = new JSONLoader().parse(quadx);
 
 const ModelView: React.FC<ModelProps> = ({
-  name,
   roll = 0,
   pitch = 0,
   heading = 0
@@ -31,6 +23,7 @@ const ModelView: React.FC<ModelProps> = ({
   const z = roll * -1.0 * 0.017453292519943295;
   return (
     <Canvas>
+      <ambientLight />
       <mesh rotation-y={y} position={[0, 0, -125]}>
         <mesh
           position={[0, 0, 0]}

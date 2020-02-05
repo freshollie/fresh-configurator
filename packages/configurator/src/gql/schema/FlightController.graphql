@@ -1,0 +1,10 @@
+type FlightController {
+    connected: Boolean!
+    attitude: Attitude!
+}
+
+type Attitude {
+    roll: Float!
+    pitch: Float!
+    heading: Float!
+}

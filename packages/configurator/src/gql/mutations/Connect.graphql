@@ -1,0 +1,3 @@
+mutation Connect($port: String!) {
+    connect(port: $port) @client
+}
