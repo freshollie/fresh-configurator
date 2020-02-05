@@ -1,17 +1,33 @@
 {
-  "name": "betaflight-configurator",
+  "name": "electron-configurator",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
+  "repository": "https://github.com/freshollie/electron-configurator",
+  "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node -T testing.ts"
+    "start": "yarn workspace @fresh/configurator start",
+    "postinstall": "electron-rebuild"
   },
-  "dependencies": {
-    "serialport": "^8.0.7"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@types/serialport": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "electron": "7.1.11",
+    "electron-rebuild": "^1.10.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^6.3.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@serialport/bindings": "^8.0.7"
   }
 }

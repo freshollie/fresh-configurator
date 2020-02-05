@@ -1,0 +1,18 @@
+{
+  "name": "@fresh/msp",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node -T testing.ts",
+    "prepare": "tsc"
+  },
+  "dependencies": {
+    "rambda": "^4.5.0",
+    "serialport": "^8.0.7"
+  },
+  "devDependencies": {
+    "@types/serialport": "^8.0.0"
+  }
+}
