@@ -1,3 +1,11 @@
+/**
+ * The MSP Parser
+ *
+ * This module is designed to parse bytes and
+ * emit data once the full request has been
+ * received, parsed, and checked.
+ */
+
 /* eslint-disable no-bitwise */
 import { Transform } from "stream";
 import { MspDataView, crc8DvbS2 } from "./utils";
@@ -43,27 +51,19 @@ export interface MspMessage {
   dataView: MspDataView;
   crcError: boolean;
   unsupported: number;
+  direction: number;
 }
 
 export class MspParser extends Transform {
   private state: DECODER_STATES;
-
   private messageDirection: number;
-
   private code: number;
-
   private message_length_expected: number;
-
   private message_length_received: number;
-
   private message_buffer: ArrayBuffer;
-
   private message_buffer_uint8_view: Uint8Array;
-
   private message_checksum: number;
-
   private crcError: boolean;
-
   private unsupported: number;
 
   constructor() {
@@ -84,7 +84,7 @@ export class MspParser extends Transform {
   // eslint-disable-next-line no-underscore-dangle
   public _transform(
     chunk: Buffer,
-    encoding: string,
+    _: string,
     cb: (error?: Error | null, data?: any) => void
   ): void {
     const data = new Uint8Array(chunk);
@@ -277,7 +277,8 @@ export class MspParser extends Transform {
       code: this.code,
       dataView,
       crcError: this.crcError,
-      unsupported: this.unsupported
+      unsupported: this.unsupported,
+      direction: this.messageDirection
     };
 
     this.emit("data", message);

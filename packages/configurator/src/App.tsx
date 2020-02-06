@@ -9,22 +9,23 @@ import {
   useConnectedQuery,
   useConnectMutation
 } from "./gql/__generated__";
-
-const useSelectedPort = (): string | undefined => {
-  const { data: portsData } = useSelectedPortQuery();
-  return portsData?.port || undefined;
-};
+import useSelectedPort from "./hooks/useSelectedPort";
+import useConnected from "./hooks/useConnected";
 
 const ModelStatus: React.FC = () => {
   const port = useSelectedPort();
 
-  const { data: attitudeData } = useAttitudeQuery({
+  const { data: attitudeData, error } = useAttitudeQuery({
     variables: {
       port: port || ""
     },
     pollInterval: 10,
     skip: !port
   });
+
+  if (error) {
+    console.log(error);
+  }
 
   if (attitudeData) {
     return (
@@ -41,18 +42,12 @@ const ModelStatus: React.FC = () => {
 
 const App: React.FC = () => {
   const selectedPort = useSelectedPort();
-  const { data: connectedData } = useConnectedQuery({
-    variables: {
-      port: selectedPort || ""
-    },
-    skip: !selectedPort
-  });
+  const connected = useConnected(selectedPort);
 
   // Constantly query the available ports, unless we have already
   // selected a port
   const { data: portsData } = useAvailablePortsQuery({
-    pollInterval: 1000,
-    skip: !!selectedPort
+    pollInterval: !selectedPort ? 1000 : undefined
   });
 
   const [connect] = useConnectMutation();
@@ -60,7 +55,7 @@ const App: React.FC = () => {
 
   return (
     <div>
-      {connectedData?.device.connected ? (
+      {connected ? (
         <>
           {new Array(3).fill(true).map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -74,6 +69,7 @@ const App: React.FC = () => {
             <select
               id="port-selection"
               placeholder="Select port"
+              value={selectedPort}
               onChange={e =>
                 selectPort({ variables: { port: e.target.value } })
               }
@@ -94,7 +90,7 @@ const App: React.FC = () => {
                 variables: {
                   port: selectedPort
                 }
-              })
+              }).catch(() => {})
             }
           >
             Connect

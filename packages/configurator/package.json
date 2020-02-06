@@ -15,7 +15,9 @@
     "graphql": "^14.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-is": "^16.12.0",
     "react-three-fiber": "^4.0.14",
+    "styled-components": "^5.0.1",
     "three": "0.98.0"
   },
   "devDependencies": {

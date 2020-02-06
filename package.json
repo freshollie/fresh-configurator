@@ -36,6 +36,7 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.3.0",
     "graphql": "^14.6.0",
+    "graphql-tag": "^2.10.3",
     "husky": "^4.2.1",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",

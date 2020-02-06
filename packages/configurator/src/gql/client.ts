@@ -3,7 +3,7 @@ import {
   ApolloContextValue,
   InMemoryCache
 } from "@apollo/client";
-import { ports, isConnected, connect, getAttitude } from "@fresh/msp";
+import { ports, isConnected, open, getAttitude } from "@fresh/msp";
 import {
   Resolvers,
   SelectedPortQuery,
@@ -27,7 +27,7 @@ const resolvers: Resolvers = {
         return true;
       }
 
-      await connect(port, () => {
+      await open(port, () => {
         // disconnect
         client?.writeQuery<ConnectedQuery, ConnectedQueryVariables>({
           query: ConnectedDocument,
