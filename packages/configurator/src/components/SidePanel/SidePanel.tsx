@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 // import useConnected from "../../hooks/useConnected";
 // import useSelectedPort from "../../hooks/useSelectedPort";
 
@@ -243,3 +243,6 @@
 //     </div>
 //   );
 // };
+
+const Test: React.FC = () => <div>Test</div>;
+export default Test;

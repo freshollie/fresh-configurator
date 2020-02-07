@@ -8,6 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn workspace @fresh/configurator start",
+    "storybook": "yarn workspace @fresh/configurator storybook",
+    "build:storybook": "yarn workspace @fresh/configurator build-storybook",
     "postinstall": "electron-rebuild",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
