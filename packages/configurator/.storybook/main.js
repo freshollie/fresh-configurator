@@ -1,5 +1,8 @@
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
+
 module.exports = {
-  stories: ["../stories/**/*.stories.(js|mdx)"],
+  stories: ["../stories/**/*.stories.tsx"],
   addons: [
     "@storybook/addon-actions",
     "@storybook/addon-links",
@@ -11,15 +14,24 @@ module.exports = {
       test: /\.(ts|tsx)$/,
       use: [
         {
-          loader: require.resolve("ts-loader")
-        },
-        // Optional
-        {
-          loader: require.resolve("react-docgen-typescript-loader")
+          loader: require.resolve("ts-loader"),
+          options: {
+            transpileOnly: true
+          }
         }
       ]
     });
+    config.module.rules = config.module.rules.map( data => {
+      if (/svg\|/.test( String( data.test ) ))
+        data.test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani)(\?.*)?$/;
+      return data;
+    });
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [{ loader: "react-svg-loader" }]
+    });
     config.resolve.extensions.push(".ts", ".tsx");
+    config.plugins.push(new ForkTsCheckerWebpackPlugin());
     return config;
   }
 };

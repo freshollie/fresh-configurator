@@ -1,3 +1,7 @@
-mutation SelectPort($port: String) {
-    selectPort(port: $port) @client
+mutation SelectPort($port: String!) {
+  selectPort(port: $port) @client
+}
+
+mutation SelectTab($tabId: String!) {
+  selectTab(tabId: $tabId) @client
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import ModelView from "./ModelView";
+import ModelView from "./components/ModelView";
 import {
   useAttitudeQuery,
   useSelectedPortQuery,
@@ -15,7 +15,7 @@ import useConnected from "./hooks/useConnected";
 const ModelStatus: React.FC = () => {
   const port = useSelectedPort();
 
-  const { data: attitudeData, error } = useAttitudeQuery({
+  const { data: attitudeData } = useAttitudeQuery({
     variables: {
       port: port || ""
     },
@@ -23,19 +23,8 @@ const ModelStatus: React.FC = () => {
     skip: !port
   });
 
-  if (error) {
-    console.log(error);
-  }
-
   if (attitudeData) {
-    return (
-      <ModelView
-        name="quad_x"
-        roll={attitudeData.device.attitude.roll}
-        pitch={attitudeData.device.attitude.pitch}
-        heading={attitudeData.device.attitude.heading}
-      />
-    );
+    return <ModelView name="quadx" attitude={attitudeData.device.attitude} />;
   }
   return null;
 };

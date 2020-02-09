@@ -16,7 +16,7 @@ import SerialPort = require("serialport");
 interface Connection {
   serial: SerialPort;
   parser: MspParser;
-  requests: Record<string, Promise<ArrayBuffer>>;
+  requests: Record<string, Promise<ArrayBuffer> | undefined>;
 }
 const connectionsMap: Record<string, Connection> = {};
 
@@ -99,7 +99,6 @@ export const execute = async (
   if (!connectionsMap[port]) {
     throw new Error(`${port} is not open`);
   }
-
   const { parser, serial, requests } = connectionsMap[port];
 
   const request = Buffer.from(encodeMessageV2(code, data));
@@ -111,7 +110,7 @@ export const execute = async (
   if (!existingRequest) {
     serial.write(request);
 
-    requests[requestKey] = new Promise((resolve, reject) => {
+    requests[requestKey] = new Promise<ArrayBuffer>((resolve, reject) => {
       const onData = (message: MspMessage): void => {
         if (message.code === code) {
           // Copy the data view
@@ -129,12 +128,14 @@ export const execute = async (
       parser.on("data", onData);
     });
 
-    requests[requestKey].finally(() => {
+    requests[requestKey]!.finally(() => {
       delete requests[requestKey];
     });
   }
 
   // make every DataView unique to each request, even though
   // they are accessing the same set of data
-  return requests[requestKey].then(data => new MspDataView(data));
+  return requests[requestKey]!.then(
+    responseData => new MspDataView(responseData)
+  );
 };

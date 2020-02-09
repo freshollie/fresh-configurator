@@ -56,14 +56,23 @@ export interface MspMessage {
 
 export class MspParser extends Transform {
   private state: DECODER_STATES;
+
   private messageDirection: number;
+
   private code: number;
+
   private message_length_expected: number;
+
   private message_length_received: number;
+
   private message_buffer: ArrayBuffer;
+
   private message_buffer_uint8_view: Uint8Array;
+
   private message_checksum: number;
+
   private crcError: boolean;
+
   private unsupported: number;
 
   constructor() {

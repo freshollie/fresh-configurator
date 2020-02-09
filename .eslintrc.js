@@ -21,7 +21,17 @@ module.exports = {
         checksVoidReturn: false
       }
     ],
-    "react/prop-types": ["off"]
+    "react/prop-types": ["off"],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: [
+          "**/*.spec.{ts,tsx}",
+          "**/*.stories.{ts,tsx}",
+          "**/webpack.*.js"
+        ]
+      }
+    ]
   },
   parserOptions: {
     project: ["./packages/*/tsconfig.eslint.json"],

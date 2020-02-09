@@ -1,16 +1,16 @@
 {
-  "name": "electron-configurator",
+  "name": "fresh-configurator",
   "version": "1.0.0",
   "main": "index.js",
   "private": true,
-  "repository": "https://github.com/freshollie/electron-configurator",
+  "repository": "https://github.com/freshollie/fresh-configurator",
   "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "yarn workspace @fresh/configurator start",
     "storybook": "yarn workspace @fresh/configurator storybook",
     "build:storybook": "yarn workspace @fresh/configurator build-storybook",
-    "postinstall": "electron-rebuild",
+    "postinstall": "electron-rebuild -v 7",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn codegen && yarn workspace @fresh/msp prepare"

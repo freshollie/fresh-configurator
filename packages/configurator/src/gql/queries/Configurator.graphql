@@ -1,3 +1,7 @@
 query SelectedPort {
-    port @client
+  port @client
+}
+
+query SelectedTab {
+  tab @client
 }

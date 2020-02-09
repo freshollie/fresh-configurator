@@ -1,7 +1,9 @@
 type Query {
-    port: String
+  port: String
+  tab: String
 }
 
 type Mutation {
-    selectPort(port: String): Boolean
+  selectPort(port: String!): Boolean
+  selectTab(tabId: String!): Boolean
 }

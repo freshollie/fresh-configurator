@@ -2,7 +2,7 @@ import { times } from "rambda";
 import codes from "./codes";
 import { execute } from "./serial";
 
-interface VoltageMeters {
+export interface VoltageMeters {
   id: number;
   voltage: number;
 }
@@ -20,7 +20,7 @@ export const getVoltages = async (port: string): Promise<VoltageMeters[]> => {
 
 type ImuUnit = [number, number, number];
 
-interface ImuData {
+export interface ImuData {
   accelerometer: ImuUnit;
   gyroscope: ImuUnit;
   magnetometer: ImuUnit;
@@ -34,9 +34,9 @@ export const getIMUData = async (port: string): Promise<ImuData> => {
   const mangetUnit = (): number => data.read16() / 1090;
 
   return {
-    accelerometer: [accUnit(), accUnit(), accUnit()],
-    gyroscope: [gyroUnit(), gyroUnit(), gyroUnit()],
-    magnetometer: [mangetUnit(), mangetUnit(), mangetUnit()]
+    accelerometer: times(accUnit, 3) as ImuUnit,
+    gyroscope: times(gyroUnit, 3) as ImuUnit,
+    magnetometer: times(mangetUnit, 3) as ImuUnit
   };
 };
 

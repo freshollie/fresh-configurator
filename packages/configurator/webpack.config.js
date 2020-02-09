@@ -15,7 +15,7 @@ module.exports = [
       ]
     },
     output: {
-      path: __dirname + "/dist",
+      path: `${__dirname}/dist`,
       filename: "electron.js"
     }
   },
@@ -36,11 +36,15 @@ module.exports = [
           test: /\.ts(x?)$/,
           include: /src/,
           use: [{ loader: "ts-loader" }]
+        },
+        {
+          test: /\.svg$/,
+          use: [{ loader: "react-svg-loader" }]
         }
       ]
     },
     output: {
-      path: __dirname + "/dist",
+      path: `${__dirname}/dist`,
       filename: "react.js"
     },
     plugins: [
