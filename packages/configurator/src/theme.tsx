@@ -15,7 +15,42 @@ const GlobalStyle = createGlobalStyle`
     background-color: #3d3f3e;
     margin: 0px;
     padding: 0px;
-    overflow: hidden;
+  }
+
+  select {
+  overflow:visible;
+  width: 100%;
+  margin-top:0px;
+  padding: 1px 8px 6px 5px;
+  height: 23px;
+  line-height: 20px;
+  font-size: 12px;
+  color: #62717a;
+  text-shadow: 0 1px white;
+  /* "transparent" doesn't work with Opera */
+  background: rgba(0, 0, 0, 0) !important;
+  border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+  }
+
+  select:focus {
+    z-index: 3;
+    width: 90%;
+    color: #4fa619;
+    outline: 0px solid #49aff2;
+    outline: 0px solid -webkit-focus-ring-color;
+    outline-offset: 5px;
+    height:25px;
+  }
+
+  select > option {
+    margin: 3px;
+    padding: 6px 8px;
+    text-shadow: none;
+    background: #f2f2f2;
+    border-radius: 3px;
+    cursor: pointer;
   }
 `;
 

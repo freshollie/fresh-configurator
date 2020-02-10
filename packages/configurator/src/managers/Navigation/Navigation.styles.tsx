@@ -33,6 +33,8 @@ export const TabLink = styled.li<{ active?: boolean }>`
       ? css`0px 1px rgba(255, 255, 255, 0.45)`
       : css`0px 1px rgba(0, 0, 0, 0.45)`};
 
+  cursor: ${({ active }) => (active ? css`default` : css`pointer`)};
+
   height: 23px;
   display: flex;
   transition: none;
@@ -66,7 +68,6 @@ export const TabLink = styled.li<{ active?: boolean }>`
     !active &&
     css`
       &:hover {
-        cursor: pointer;
         background-color: rgba(128, 128, 128, 0.5);
         color: #fff;
 

@@ -20,7 +20,9 @@
     "stories/**/*.tsx",
     "__mocks__/**/*.ts",
     "__mocks__/**/*.tsx",
-    "*.d.ts"
+    "*.d.ts",
+    ".storybook/*.ts",
+    ".storybook/*.tsx"
   ],
   "exclude": ["node_modules", "dist"]
 }

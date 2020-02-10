@@ -1,6 +1,6 @@
 import React from "react";
 import { MockedProvider, MockedResponse } from "@apollo/react-testing";
-import Navigation from "../src/components/Navigation";
+import Navigation from "../src/managers/Navigation";
 import styled, { ThemeProvider } from "../src/theme";
 import {
   SelectedTabDocument,
@@ -10,11 +10,11 @@ import {
 
 export default {
   component: Navigation,
-  title: "Containers|Navigation"
+  title: "Managers|Navigation"
 };
 
 const Page = styled.div`
-  height: 1000px;
+  height: 100vh;
 `;
 
 const selectedPort = (port: string): MockedResponse => ({
@@ -23,7 +23,7 @@ const selectedPort = (port: string): MockedResponse => ({
   },
   result: {
     data: {
-      device: {
+      configurator: {
         port
       }
     }
@@ -58,7 +58,9 @@ const selectedTab = (tab: string): MockedResponse => ({
   },
   result: {
     data: {
-      tab
+      configurator: {
+        tab
+      }
     }
   }
 });
@@ -71,10 +73,36 @@ export const landing = (): JSX.Element => (
       selectedTab("landing")
     ]}
   >
-    <ThemeProvider>
-      <Page>
-        <Navigation />
-      </Page>
-    </ThemeProvider>
+    <Page>
+      <Navigation />
+    </Page>
+  </MockedProvider>
+);
+
+export const firmwareFlasher = (): JSX.Element => (
+  <MockedProvider
+    mocks={[
+      selectedPort("a"),
+      device({ port: "a", connected: false }),
+      selectedTab("flasher")
+    ]}
+  >
+    <Page>
+      <Navigation />
+    </Page>
+  </MockedProvider>
+);
+
+export const connected = (): JSX.Element => (
+  <MockedProvider
+    mocks={[
+      selectedPort("a"),
+      device({ port: "a", connected: true }),
+      selectedTab("setup")
+    ]}
+  >
+    <Page>
+      <Navigation />
+    </Page>
   </MockedProvider>
 );

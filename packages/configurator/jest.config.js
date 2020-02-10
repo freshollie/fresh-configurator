@@ -1,3 +1,10 @@
 const base = require("../../jest.base");
+const { name } = require("./package.json");
 
-module.exports = { ...base };
+module.exports = {
+  displayName: {
+    name,
+    color: "green"
+  },
+  ...base
+};

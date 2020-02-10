@@ -6,15 +6,18 @@ import useSelectedPort from "../../hooks/useSelectedPort";
 import WelcomeIcon from "../../icons/cf_icon_welcome_grey.svg";
 import HelpIcon from "../../icons/cf_icon_help_grey.svg";
 import FlasherIcon from "../../icons/cf_icon_flasher_grey.svg";
+import SetupIcon from "../../icons/cf_icon_setup_grey.svg";
+import OSDIcon from "../../icons/icon_osd.svg";
 import { TabsContainer, TabLink } from "./Navigation.styles";
 
 interface LinkDetails {
   title: string;
   icon: JSX.Element;
   id: string;
+  export?: boolean;
 }
 
-const landingLinks: LinkDetails[] = [
+const disconnectedLinks: LinkDetails[] = [
   {
     title: "Welcome",
     icon: <WelcomeIcon />,
@@ -38,63 +41,22 @@ const landingLinks: LinkDetails[] = [
   }
 ];
 
-const Navigation: React.FC = () => {
-  const port = useSelectedPort();
-  const connected = useConnected(port);
+const connectedLinks: LinkDetails[] = [
+  {
+    title: "Setup",
+    icon: <SetupIcon />,
+    id: "setup"
+  },
+  {
+    title: "OSD",
+    icon: <OSDIcon />,
+    id: "osd"
+  }
+];
 
-  const selectedTab = useSelectedTab();
-
-  const makeLink = ({ title, icon, id }: LinkDetails): JSX.Element => (
-    <TabLink key={id} active={id === selectedTab}>
-      {icon}
-      <div>{title}</div>
-    </TabLink>
-  );
-
-  return (
-    <TabsContainer>
-      <ul>
-        {!connected ? (
-          landingLinks.map(makeLink)
-        ) : (
-          /* <li className="tab_landing">
-                <a className="tabicon ic_welcome" i18n_title="tabLanding" />
-              </li>
-              <li className="tab_changelog">
-                <a href="#" className="tabicon ic_help" i18n="tabChangelog" />
-              </li>
-              <li className="tab_privacy_policy">
-                <a
-                  href="#"
-                  className="tabicon ic_help"
-                  i18n="tabPrivacyPolicy"
-                />
-              </li>
-              <li className="tab_help" id="tab_help">
-                <a
-                  href="#"
-                  i18n="tabHelp"
-                  className="tabicon ic_help"
-                  i18n_title="tabHelp"
-                />
-              </li>
-              <li className="tab_firmware_flasher" id="tabFirmware">
-                <a
-                  href="#"
-                  i18n="tabFirmwareFlasher"
-                  className="tabicon ic_flasher"
-                  i18n_title="tabFirmwareFlasher"
-                />
-              </li> */
+/*
           <>
-            {/* <li className="tab_setup">
-                <a
-                  href="#"
-                  i18n="tabSetup"
-                  className="tabicon ic_setup"
-                  i18n_title="tabSetup"
-                />
-              </li>
+            { 
               <li className="tab_setup_osd">
                 <a
                   href="#"
@@ -263,19 +225,39 @@ const Navigation: React.FC = () => {
                 <a href="#" className="tabicon ic_wizzard">
                   Wizzard (spare icon)
                 </a>
-              </li> */}
+              </li> }
           </>
-        )}
-        {/* <ul className="mode-connected mode-connected-cli">
-            <li className="tab_cli">
-              <a
-                href="#"
-                i18n="tabCLI"
-                className="tabicon ic_cli"
-                i18n_title="tabCLI"
-              />
-            </li>
-          </ul> */}
+          */
+
+// {/* <ul className="mode-connected mode-connected-cli">
+//     <li className="tab_cli">
+//       <a
+//         href="#"
+//         i18n="tabCLI"
+//         className="tabicon ic_cli"
+//         i18n_title="tabCLI"
+//       />
+//     </li>
+//   </ul> */
+
+const Navigation: React.FC = () => {
+  const port = useSelectedPort();
+  const connected = useConnected(port);
+  const selectedTab = useSelectedTab();
+
+  const makeLink = ({ title, icon, id }: LinkDetails): JSX.Element => (
+    <TabLink key={id} active={id === selectedTab}>
+      {icon}
+      <div>{title}</div>
+    </TabLink>
+  );
+
+  return (
+    <TabsContainer>
+      <ul>
+        {!connected
+          ? disconnectedLinks.map(makeLink)
+          : connectedLinks.map(makeLink)}
       </ul>
     </TabsContainer>
   );
