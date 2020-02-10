@@ -3,10 +3,8 @@ import React from "react";
 import ModelView from "./components/ModelView";
 import {
   useAttitudeQuery,
-  useSelectedPortQuery,
   useAvailablePortsQuery,
   useSelectPortMutation,
-  useConnectedQuery,
   useConnectMutation
 } from "./gql/__generated__";
 import useSelectedPort from "./hooks/useSelectedPort";

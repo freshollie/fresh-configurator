@@ -1,5 +1,0 @@
-query Connected($port: String!) {
-    device(port: $port) @client {
-        connected
-    }
-}

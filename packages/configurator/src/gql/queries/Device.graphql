@@ -1,0 +1,15 @@
+query Connected($port: String!) {
+  device(port: $port) @client {
+    connected
+  }
+}
+
+query Attitude($port: String!) {
+  device(port: $port) @client {
+    attitude {
+      roll
+      pitch
+      heading
+    }
+  }
+}

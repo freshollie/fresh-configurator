@@ -5,9 +5,16 @@ import useSelectedPort from "../../hooks/useSelectedPort";
 
 import WelcomeIcon from "../../icons/cf_icon_welcome_grey.svg";
 import HelpIcon from "../../icons/cf_icon_help_grey.svg";
+import FlasherIcon from "../../icons/cf_icon_flasher_grey.svg";
 import { TabsContainer, TabLink } from "./Navigation.styles";
 
-const landingTabs = [
+interface LinkDetails {
+  title: string;
+  icon: JSX.Element;
+  id: string;
+}
+
+const landingLinks: LinkDetails[] = [
   {
     title: "Welcome",
     icon: <WelcomeIcon />,
@@ -17,6 +24,17 @@ const landingTabs = [
     title: "Change log",
     icon: <HelpIcon />,
     id: "change-log"
+  },
+  { title: "Privacy Policy", icon: <HelpIcon />, id: "privary-policy" },
+  {
+    title: "Documentation & Support",
+    icon: <HelpIcon />,
+    id: "documentation"
+  },
+  {
+    title: "Firmware Flasher",
+    icon: <FlasherIcon />,
+    id: "flasher"
   }
 ];
 
@@ -26,16 +44,18 @@ const Navigation: React.FC = () => {
 
   const selectedTab = useSelectedTab();
 
+  const makeLink = ({ title, icon, id }: LinkDetails): JSX.Element => (
+    <TabLink key={id} active={id === selectedTab}>
+      {icon}
+      <div>{title}</div>
+    </TabLink>
+  );
+
   return (
     <TabsContainer>
       <ul>
         {!connected ? (
-          landingTabs.map(({ title, icon, id }) => (
-            <TabLink key={id} active={id === selectedTab}>
-              {icon}
-              <div>{title}</div>
-            </TabLink>
-          ))
+          landingLinks.map(makeLink)
         ) : (
           /* <li className="tab_landing">
                 <a className="tabicon ic_welcome" i18n_title="tabLanding" />

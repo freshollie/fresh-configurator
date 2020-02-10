@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 import { crc8DvbS2Data } from "./utils";
 
-export const encodeMessageV1 = (code: number, data?: number[]): ArrayBuffer => {
+export const encodeMessageV1 = (code: number, data?: Buffer): Buffer => {
   let bufferOut;
   // always reserve 6 bytes for protocol overhead !
   if (data) {
@@ -37,10 +37,10 @@ export const encodeMessageV1 = (code: number, data?: number[]): ArrayBuffer => {
     bufView[4] = code; // code
     bufView[5] = bufView[3] ^ bufView[4]; // checksum
   }
-  return bufferOut;
+  return Buffer.from(bufferOut);
 };
 
-export const encodeMessageV2 = (code: number, data?: number[]): ArrayBuffer => {
+export const encodeMessageV2 = (code: number, data?: Buffer): Buffer => {
   const dataLength = data ? data.length : 0;
   // 9 bytes for protocol overhead
   const bufferSize = dataLength + 9;
@@ -55,9 +55,8 @@ export const encodeMessageV2 = (code: number, data?: number[]): ArrayBuffer => {
   bufView[6] = dataLength & 0xff;
   bufView[7] = (dataLength >> 8) & 0xff;
   for (let i = 0; i < dataLength; i += 1) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     bufView[8 + i] = data![i];
   }
   bufView[bufferSize - 1] = crc8DvbS2Data(bufView, 3, bufferSize - 1);
-  return bufferOut;
+  return Buffer.from(bufferOut);
 };

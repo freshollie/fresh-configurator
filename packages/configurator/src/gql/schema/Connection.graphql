@@ -1,8 +1,7 @@
 type Query {
-    ports: [String!]!
-    device(port: String!): FlightController!
+  ports: [String!]!
 }
 
 type Mutation {
-    connect(port: String!): Boolean!
+  connect(port: String!): Boolean!
 }

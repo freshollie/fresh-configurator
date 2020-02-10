@@ -5,3 +5,7 @@ mutation SelectPort($port: String!) {
 mutation SelectTab($tabId: String!) {
   selectTab(tabId: $tabId) @client
 }
+
+mutation SetExpertMode($enabled: Boolean!) {
+  setExpertMode(enabled: $enabled) @client
+}

@@ -20,7 +20,8 @@ It would also allow for easier refactoring and redesigning of the UI.
 At the moment the amount of code is very minimal, and is mostly working on setting up
 of the repo and frameworks for development.
 
-- The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package
+- The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package.
+- Tests have been started to be written
 - GraphQL has been setup for communication between the UI and the flight controller
 - Framework around using electron to build the application has been started, and mostly works
 - Storybook has been setup to ease component development

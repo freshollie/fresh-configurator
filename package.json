@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn workspace @fresh/configurator start",
+    "test": "jest",
     "storybook": "yarn workspace @fresh/configurator storybook",
     "build:storybook": "yarn workspace @fresh/configurator build-storybook",
     "postinstall": "electron-rebuild -v 7",
@@ -19,14 +20,19 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
     "@graphql-codegen/add": "^1.12.1",
     "@graphql-codegen/cli": "^1.12.1",
     "@graphql-codegen/typescript-operations": "^1.12.1",
     "@graphql-codegen/typescript-react-apollo": "^1.12.1",
     "@graphql-codegen/typescript-resolvers": "^1.12.1",
+    "@types/jest": "^25.1.2",
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
-    "add": "^2.0.6",
+    "babel-jest": "^25.1.0",
     "electron": "7.1.11",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
@@ -40,12 +46,11 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "husky": "^4.2.1",
+    "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5",
-    "utility-types": "^3.10.0",
-    "yarn": "^1.21.1"
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@serialport/bindings": "^8.0.7"
@@ -55,7 +60,7 @@
       "eslint --fix",
       "git add"
     ],
-    "**/*.{json}": [
+    "**/*.{json,graphql}": [
       "prettier --write",
       "git add"
     ]

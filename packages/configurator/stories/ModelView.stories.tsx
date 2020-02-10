@@ -8,7 +8,7 @@ export default {
 };
 
 const Container = styled.div`
-  height: 100px;
+  height: 310px;
 `;
 
 const useRollingAttitude = (): {
@@ -36,9 +36,13 @@ export const QuadX = (): JSX.Element => (
 );
 
 export const Tricopter = (): JSX.Element => (
-  <ModelView attitude={useRollingAttitude()} name="tricopter" />
+  <Container>
+    <ModelView attitude={useRollingAttitude()} name="tricopter" />
+  </Container>
 );
 
 export const HexX = (): JSX.Element => (
-  <ModelView attitude={useRollingAttitude()} name="hexx" />
+  <Container>
+    <ModelView attitude={useRollingAttitude()} name="hexx" />
+  </Container>
 );

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`execute should throw an error if the port is not open 1`] = `[Error: /dev/something is not open]`;
+
+exports[`execute should timeout after given timeout 1`] = `[Error: Timed out during execution]`;
+
+exports[`open should not allow a connection to be opened more than once 1`] = `[Error: /dev/something is already open]`;
+
+exports[`open should throw an error when port cannot be opened 1`] = `[Error: Port does not exist - please call MockBinding.createPort('/something/wrong') first]`;

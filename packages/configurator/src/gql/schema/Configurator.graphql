@@ -1,9 +1,15 @@
 type Query {
-  port: String
-  tab: String
+  configurator: Configurator!
 }
 
 type Mutation {
   selectPort(port: String!): Boolean
   selectTab(tabId: String!): Boolean
+  setExpertMode(enabled: Boolean!): Boolean
+}
+
+type Configurator {
+  port: String
+  tab: String
+  expertMode: Boolean!
 }

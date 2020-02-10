@@ -1,7 +1,17 @@
 query SelectedPort {
-  port @client
+  configurator @client {
+    port
+  }
 }
 
 query SelectedTab {
-  tab @client
+  configurator @client {
+    tab
+  }
+}
+
+query ExpertMode {
+  configurator @client {
+    expertMode
+  }
 }

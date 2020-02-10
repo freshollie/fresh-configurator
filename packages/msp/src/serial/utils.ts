@@ -27,14 +27,11 @@ export const crc8DvbS2Data = (
 export class MspDataView {
   private dataView: DataView;
 
-  private offset = 0;
+  private offset: number;
 
-  constructor(
-    buffer: ArrayBufferLike,
-    byteOffset?: number,
-    byteLength?: number
-  ) {
+  constructor(buffer: ArrayBuffer, byteOffset?: number, byteLength?: number) {
     this.dataView = new DataView(buffer, byteOffset, byteLength);
+    this.offset = 0;
   }
 
   public buffer(): ArrayBuffer {

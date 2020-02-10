@@ -1,5 +1,5 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
+/* eslint-disable no-param-reassign */
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
   stories: ["../stories/**/*.stories.tsx"],
@@ -21,9 +21,10 @@ module.exports = {
         }
       ]
     });
-    config.module.rules = config.module.rules.map( data => {
-      if (/svg\|/.test( String( data.test ) ))
+    config.module.rules = config.module.rules.map(data => {
+      if (`${data.test}`.includes("svg")) {
         data.test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani)(\?.*)?$/;
+      }
       return data;
     });
     config.module.rules.push({

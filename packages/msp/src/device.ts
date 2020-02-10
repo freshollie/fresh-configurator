@@ -1,6 +1,6 @@
 import { times } from "rambda";
 import codes from "./codes";
-import { execute } from "./serial";
+import { execute } from "./serial/connection";
 
 export interface VoltageMeters {
   id: number;

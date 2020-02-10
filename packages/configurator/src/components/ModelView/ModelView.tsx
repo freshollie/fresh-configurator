@@ -1,7 +1,7 @@
 import React from "react";
-import Paper from "../Paper"
 import { Canvas } from "react-three-fiber";
 import { JSONLoader, Color } from "three";
+import Paper from "../Paper";
 
 import quadx from "./models/quad_x.json";
 import tricopter from "./models/tricopter.json";
@@ -29,6 +29,11 @@ interface ModelProps {
 const ambientColor = new Color(0x404040);
 const whiteColor = new Color(1, 1, 1);
 
+/**
+ * Create a 3D representation of the given model
+ * and show what it will look like with the given
+ * roll pitch and heading values
+ */
 const ModelView: React.FC<ModelProps> = ({
   name,
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 }
@@ -38,6 +43,7 @@ const ModelView: React.FC<ModelProps> = ({
   const x = pitch * -1.0 * 0.017453292519943295;
   const y = (heading * -1.0 - 0) * 0.017453292519943295;
   const z = roll * -1.0 * 0.017453292519943295;
+
   return (
     <Paper>
       <Canvas camera={{ position: [0, 0, 125], fov: 60 }}>
@@ -49,7 +55,6 @@ const ModelView: React.FC<ModelProps> = ({
         />
         <mesh rotation-y={y}>
           <mesh
-            position={[0, 0, 0]}
             geometry={geometry}
             material={materials}
             scale={[15, 15, 15]}

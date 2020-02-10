@@ -4,11 +4,19 @@
  * This module is designed to parse bytes and
  * emit data once the full request has been
  * received, parsed, and checked.
+ *
+ * The sourcecode in this module can mostly be attributed
+ * to the betaflight-configurator repository, but has
+ * been ported to typescript and redesigned to work
+ * with node-serialport
  */
 
 /* eslint-disable no-bitwise */
 import { Transform } from "stream";
-import { MspDataView, crc8DvbS2 } from "./utils";
+import debug from "debug";
+import { crc8DvbS2 } from "./utils";
+
+const log = debug("parser");
 
 const SYMBOLS = {
   BEGIN: "$".charCodeAt(0),
@@ -19,13 +27,13 @@ const SYMBOLS = {
   UNSUPPORTED: "!".charCodeAt(0)
 };
 
-const enum CONSTANTS {
+enum CONSTANTS {
   PROTOCOL_V1 = 1,
   PROTOCOL_V2 = 2,
   JUMBO_FRAME_MIN_SIZE = 255
 }
 
-const enum DECODER_STATES {
+enum DECODER_STATES {
   IDLE = 0,
   PROTO_IDENTIFIER = 1,
   DIRECTION_V1 = 2,
@@ -48,7 +56,7 @@ const enum DECODER_STATES {
 
 export interface MspMessage {
   code: number;
-  dataView: MspDataView;
+  data: ArrayBuffer;
   crcError: boolean;
   unsupported: number;
   direction: number;
@@ -94,8 +102,9 @@ export class MspParser extends Transform {
   public _transform(
     chunk: Buffer,
     _: string,
-    cb: (error?: Error | null, data?: any) => void
+    cb: (error?: Error | null, data?: Buffer) => void
   ): void {
+    log(`Received data ${chunk.toJSON().data}`);
     const data = new Uint8Array(chunk);
 
     for (let i = 0; i < data.length; i += 1) {
@@ -114,9 +123,7 @@ export class MspParser extends Transform {
               this.state = DECODER_STATES.DIRECTION_V2;
               break;
             default:
-              console.log(
-                `Unknown protocol char ${String.fromCharCode(data[i])}`
-              );
+              log(`Unknown protocol char ${String.fromCharCode(data[i])}`);
               this.state = DECODER_STATES.IDLE;
           }
           break;
@@ -257,7 +264,7 @@ export class MspParser extends Transform {
           this.dispatchMessage(data[i]);
           break;
         default:
-          console.log(`Unknown state detected: ${this.state}`);
+          log(`Unknown state detected: ${this.state}`);
       }
     }
     cb();
@@ -269,28 +276,25 @@ export class MspParser extends Transform {
   }
 
   private dispatchMessage(expectedChecksum: number): void {
-    let dataView: MspDataView;
+    let data: ArrayBuffer;
     if (this.message_checksum === expectedChecksum) {
       // message received, store dataview
-      dataView = new MspDataView(
-        this.message_buffer,
-        0,
-        this.message_length_expected
-      );
+      data = new DataView(this.message_buffer, 0, this.message_length_expected)
+        .buffer;
     } else {
-      console.log(`code: ${this.code} - crc failed`);
+      log(`code: ${this.code} - crc failed`);
       this.crcError = true;
-      dataView = new MspDataView(new ArrayBuffer(0));
+      data = new ArrayBuffer(0);
     }
-    const message: MspMessage = {
+    log(`Parsed message: ${data}`);
+
+    this.emit("data", {
       code: this.code,
-      dataView,
+      data,
       crcError: this.crcError,
       unsupported: this.unsupported,
       direction: this.messageDirection
-    };
-
-    this.emit("data", message);
+    });
     this.reset();
   }
 

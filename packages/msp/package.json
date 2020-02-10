@@ -6,13 +6,18 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "start": "ts-node -T ./src/testing.ts",
-    "prepare": "tsc"
+    "prepare": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "debug": "^4.1.1",
     "rambda": "^4.5.0",
     "serialport": "^8.0.7"
   },
   "devDependencies": {
-    "@types/serialport": "^8.0.0"
+    "@serialport/stream": "^8.0.6",
+    "@serialport/binding-mock": "^8.0.6",
+    "@types/debug": "^4.1.5",
+    "@types/serialport": "^8.0.0",
+    "flush-promises": "^1.0.2"
   }
 }
