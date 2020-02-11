@@ -29,7 +29,7 @@ module.exports = {
           "**/*.spec.{ts,tsx}",
           "**/*.stories.{ts,tsx}",
           "**/webpack.*.js",
-          "**/.storybook/*.js",
+          "**/.storybook/*.{js,ts}",
           "**/__mocks__/*.{ts,tsx}"
         ]
       }

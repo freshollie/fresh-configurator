@@ -15,3 +15,10 @@ query ExpertMode {
     expertMode
   }
 }
+
+query NavigationData {
+  configurator @client {
+    tab
+    port
+  }
+}

@@ -18,20 +18,20 @@ const GlobalStyle = createGlobalStyle`
   }
 
   select {
-  overflow:visible;
-  width: 100%;
-  margin-top:0px;
-  padding: 1px 8px 6px 5px;
-  height: 23px;
-  line-height: 20px;
-  font-size: 12px;
-  color: #62717a;
-  text-shadow: 0 1px white;
-  /* "transparent" doesn't work with Opera */
-  background: rgba(0, 0, 0, 0) !important;
-  border: 0;
-  border-radius: 0;
-  -webkit-appearance: none;
+    overflow:visible;
+    width: 100%;
+    margin-top:0px;
+    padding: 1px 8px 6px 5px;
+    height: 23px;
+    line-height: 20px;
+    font-size: 12px;
+    color: #62717a;
+    text-shadow: 0 1px white;
+    /* "transparent" doesn't work with Opera */
+    background: rgba(0, 0, 0, 0) !important;
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
   }
 
   select:focus {

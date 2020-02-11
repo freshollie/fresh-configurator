@@ -1,7 +1,10 @@
 import React from "react";
-import useSelectedTab from "../../hooks/useSelectedTab";
+
+import {
+  useNavigationDataQuery,
+  useSelectTabMutation
+} from "../../gql/__generated__";
 import useConnected from "../../hooks/useConnected";
-import useSelectedPort from "../../hooks/useSelectedPort";
 
 import WelcomeIcon from "../../icons/cf_icon_welcome_grey.svg";
 import HelpIcon from "../../icons/cf_icon_help_grey.svg";
@@ -57,14 +60,6 @@ const connectedLinks: LinkDetails[] = [
 /*
           <>
             { 
-              <li className="tab_setup_osd">
-                <a
-                  href="#"
-                  i18n="tabSetupOSD"
-                  className="tabicon ic_setup"
-                  i18n_title="tabSetupOSD"
-                />
-              </li>
 
               <li className="tab_ports">
                 <a
@@ -241,12 +236,22 @@ const connectedLinks: LinkDetails[] = [
 //   </ul> */
 
 const Navigation: React.FC = () => {
-  const port = useSelectedPort();
-  const connected = useConnected(port);
-  const selectedTab = useSelectedTab();
+  const { data: navigationQuery } = useNavigationDataQuery();
+  const connected = useConnected();
+  const [selectTab] = useSelectTabMutation();
 
   const makeLink = ({ title, icon, id }: LinkDetails): JSX.Element => (
-    <TabLink key={id} active={id === selectedTab}>
+    <TabLink
+      key={id}
+      active={id === navigationQuery?.configurator.tab}
+      onClick={() =>
+        selectTab({
+          variables: {
+            tabId: id
+          }
+        })
+      }
+    >
       {icon}
       <div>{title}</div>
     </TabLink>

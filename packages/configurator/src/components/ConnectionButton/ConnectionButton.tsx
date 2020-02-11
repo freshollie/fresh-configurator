@@ -9,8 +9,8 @@ const ConnectionButton: React.FC<{
   onClick?: () => void;
 }> = ({ connected = false, connecting = false, onClick }) => (
   <Container>
-    <Button active={connected || connecting} onClick={onClick}>
-      {connected || connecting ? <UsbConnectIcon /> : <UsbDisconnectIcon />}
+    <Button active={connected} onClick={onClick}>
+      {!connected || connecting ? <UsbConnectIcon /> : <UsbDisconnectIcon />}
     </Button>
     <div>
       {connected && "Disconnect"}

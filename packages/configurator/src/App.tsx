@@ -1,17 +1,15 @@
 import React from "react";
 
 import ModelView from "./components/ModelView";
-import {
-  useAttitudeQuery,
-  useAvailablePortsQuery,
-  useSelectPortMutation,
-  useConnectMutation
-} from "./gql/__generated__";
-import useSelectedPort from "./hooks/useSelectedPort";
+import { useAttitudeQuery, useSelectedPortQuery } from "./gql/__generated__";
 import useConnected from "./hooks/useConnected";
+import ConnectionSettings from "./managers/ConnectionSettings";
+import ConnectControls from "./managers/ConnectControls";
+import Navigation from "./managers/Navigation";
 
 const ModelStatus: React.FC = () => {
-  const port = useSelectedPort();
+  const { data: configuratorQuery } = useSelectedPortQuery();
+  const port = configuratorQuery?.configurator?.port;
 
   const { data: attitudeData } = useAttitudeQuery({
     variables: {
@@ -28,62 +26,18 @@ const ModelStatus: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const selectedPort = useSelectedPort();
-  const connected = useConnected(selectedPort);
-
-  // Constantly query the available ports, unless we have already
-  // selected a port
-  const { data: portsData } = useAvailablePortsQuery({
-    pollInterval: !selectedPort ? 1000 : undefined
-  });
-
-  const [connect] = useConnectMutation();
-  const [selectPort] = useSelectPortMutation();
+  const { data: configuratorQuery } = useSelectedPortQuery();
+  const port = configuratorQuery?.configurator?.port;
+  const connected = useConnected(port || undefined);
 
   return (
     <div>
-      {connected ? (
-        <>
-          {new Array(3).fill(true).map((_, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <ModelStatus key={i} />
-          ))}
-        </>
-      ) : (
-        <>
-          <label htmlFor="port-selection">
-            Port
-            <select
-              id="port-selection"
-              placeholder="Select port"
-              value={selectedPort}
-              onChange={e =>
-                selectPort({ variables: { port: e.target.value } })
-              }
-            >
-              {portsData?.ports.map(port => (
-                <option key={port} value={port}>
-                  {port}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="button"
-            disabled={!selectedPort}
-            onClick={() =>
-              selectedPort &&
-              connect({
-                variables: {
-                  port: selectedPort
-                }
-              }).catch(() => {})
-            }
-          >
-            Connect
-          </button>
-        </>
-      )}
+      <Navigation />
+      <div>
+        {connected && <ModelStatus />}
+        <ConnectionSettings />
+        <ConnectControls />
+      </div>
     </div>
   );
 };

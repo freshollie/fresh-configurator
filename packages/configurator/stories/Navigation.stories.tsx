@@ -1,9 +1,9 @@
 import React from "react";
 import { MockedProvider, MockedResponse } from "@apollo/react-testing";
 import Navigation from "../src/managers/Navigation";
-import styled, { ThemeProvider } from "../src/theme";
+import styled from "../src/theme";
 import {
-  SelectedTabDocument,
+  NavigationDataDocument,
   ConnectedDocument,
   SelectedPortDocument
 } from "../src/gql/__generated__";
@@ -17,14 +17,21 @@ const Page = styled.div`
   height: 100vh;
 `;
 
-const selectedPort = (port: string): MockedResponse => ({
+const navigationData = ({
+  port,
+  tab
+}: {
+  port: string;
+  tab: string;
+}): MockedResponse => ({
   request: {
-    query: SelectedPortDocument
+    query: NavigationDataDocument
   },
   result: {
     data: {
       configurator: {
-        port
+        port,
+        tab
       }
     }
   }
@@ -52,25 +59,14 @@ const device = ({
   }
 });
 
-const selectedTab = (tab: string): MockedResponse => ({
-  request: {
-    query: SelectedTabDocument
-  },
-  result: {
-    data: {
-      configurator: {
-        tab
-      }
-    }
-  }
-});
-
 export const landing = (): JSX.Element => (
   <MockedProvider
     mocks={[
-      selectedPort("a"),
-      device({ port: "a", connected: false }),
-      selectedTab("landing")
+      navigationData({
+        port: "a",
+        tab: "landing"
+      }),
+      device({ port: "a", connected: false })
     ]}
   >
     <Page>
@@ -82,9 +78,11 @@ export const landing = (): JSX.Element => (
 export const firmwareFlasher = (): JSX.Element => (
   <MockedProvider
     mocks={[
-      selectedPort("a"),
-      device({ port: "a", connected: false }),
-      selectedTab("flasher")
+      navigationData({
+        port: "a",
+        tab: "flasher"
+      }),
+      device({ port: "a", connected: false })
     ]}
   >
     <Page>
@@ -96,9 +94,11 @@ export const firmwareFlasher = (): JSX.Element => (
 export const connected = (): JSX.Element => (
   <MockedProvider
     mocks={[
-      selectedPort("a"),
-      device({ port: "a", connected: true }),
-      selectedTab("setup")
+      navigationData({
+        port: "a",
+        tab: "setup"
+      }),
+      device({ port: "a", connected: true })
     ]}
   >
     <Page>
