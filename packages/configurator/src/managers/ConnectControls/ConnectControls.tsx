@@ -4,7 +4,7 @@ import {
   useConnectMutation,
   useSelectedPortQuery
 } from "../../gql/__generated__";
-import ConnectionButton from "../../components/ConnectionButton";
+import BigButton from "../../components/BigButton";
 
 const ConnectControls: React.FC = () => {
   const { data: configuratorQuery } = useSelectedPortQuery();
@@ -17,10 +17,17 @@ const ConnectControls: React.FC = () => {
     }
   });
 
+  let statusText = "Connecting";
+
+  if (!connecting) {
+    statusText = connected ? "Disconnect" : "Connect";
+  }
+
   return (
-    <ConnectionButton
-      connected={connected}
-      connecting={connecting}
+    <BigButton
+      active={connected}
+      icon={!connected || connecting ? "usb-connect" : "usb-disconnect"}
+      text={statusText}
       onClick={() =>
         connect().catch(e => {
           console.log(e);
