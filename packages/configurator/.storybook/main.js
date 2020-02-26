@@ -29,7 +29,23 @@ module.exports = {
     });
     config.module.rules.push({
       test: /\.svg$/,
-      use: [{ loader: "react-svg-loader" }]
+      use: [
+        {
+          loader: "react-svg-loader",
+          options: {
+            svgo: {
+              plugins: [
+                {
+                  removeViewBox: false
+                },
+                {
+                  cleanupIDs: false
+                }
+              ]
+            }
+          }
+        }
+      ]
     });
     config.resolve.extensions.push(".ts", ".tsx");
     config.plugins.push(new ForkTsCheckerWebpackPlugin());

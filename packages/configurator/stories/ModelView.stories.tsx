@@ -18,7 +18,7 @@ const useRollingAttitude = (): {
 } => {
   const [number, setNumber] = useState(0);
   useEffect(() => {
-    const interval = setInterval(() => setNumber(number + (1 % 360)), 10);
+    const interval = setInterval(() => setNumber((number + 1) % 360), 10);
     return () => clearInterval(interval);
   });
 

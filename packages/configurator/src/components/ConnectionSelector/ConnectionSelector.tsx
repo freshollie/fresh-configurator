@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Container, DarkSelectContainer } from "./ConnectionSelector.styles";
+import React from "react";
+import {
+  Container,
+  SelectorsContainer,
+  ManualOverride,
+  DarkSelectContainer
+} from "./ConnectionSelector.styles";
 
 const BAUDRATES = [
   1000000,
@@ -33,9 +38,9 @@ const ConnectionSelector: React.FC<{
   selectedBaud = 115200,
   onChange
 }) => (
-  <>
+  <Container>
     {!ports?.includes(selectedPort) && (
-      <label htmlFor="port-override">
+      <ManualOverride htmlFor="port-override">
         <span>Port:</span>
         <input
           type="text"
@@ -44,9 +49,9 @@ const ConnectionSelector: React.FC<{
             onChange?.({ port: e.target.value, baud: selectedBaud })
           }
         />
-      </label>
+      </ManualOverride>
     )}
-    <Container>
+    <SelectorsContainer>
       <DarkSelectContainer>
         <select
           value={selectedPort}
@@ -57,7 +62,7 @@ const ConnectionSelector: React.FC<{
           {ports.map(port => (
             <option value={port}>{port}</option>
           ))}
-          <option value="/dev/rfcomm0">Manual Selection</option>
+          <option value="/dev/rfcomm0">Manual</option>
         </select>
       </DarkSelectContainer>
       <DarkSelectContainer>
@@ -75,8 +80,8 @@ const ConnectionSelector: React.FC<{
           ))}
         </select>
       </DarkSelectContainer>
-    </Container>
-  </>
+    </SelectorsContainer>
+  </Container>
 );
 
 export default ConnectionSelector;

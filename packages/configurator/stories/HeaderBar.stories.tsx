@@ -1,7 +1,9 @@
 import React from "react";
+import { action } from "@storybook/addon-actions";
 import HeaderBar from "../src/components/HeaderBar";
 import BigButton from "../src/components/BigButton";
 import styled from "../src/theme";
+import ConnectionSelector from "../src/components/ConnectionSelector";
 
 export default {
   component: HeaderBar,
@@ -14,11 +16,22 @@ const Rest = styled.div`
   width: 200px;
 `;
 
-export const empty = (): JSX.Element => (
+export const withTools = (): JSX.Element => (
   <div>
     <HeaderBar>
-      <BigButton />
+      <div className="tools">
+        <ConnectionSelector onChange={action("onChange")} />
+        <BigButton />
+        <BigButton />
+      </div>
     </HeaderBar>
+    <Rest />
+  </div>
+);
+
+export const empty = (): JSX.Element => (
+  <div>
+    <HeaderBar />
     <Rest />
   </div>
 );

@@ -12,3 +12,4 @@ export const connectButton = (): JSX.Element => (
 export const disconnectButton = (): JSX.Element => (
   <BigButton icon="usb-disconnect" text="Disconnect" active />
 );
+

@@ -35,3 +35,13 @@ export const LogoSubText = styled.div`
     bottom: 10px;
   }
 `;
+
+export const Children = styled.div`
+  .tools {
+    margin-top: 20px;
+    display: flex;
+    > * {
+      margin-right: 20px;
+    }
+  }
+`;

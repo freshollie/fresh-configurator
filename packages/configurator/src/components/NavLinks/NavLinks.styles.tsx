@@ -1,21 +1,18 @@
 import styled, { css } from "../../theme";
 
-export const TabsContainer = styled.div`
+export const List = styled.ul`
   height: 100%;
   width: 200px;
   border-right: 4px solid ${({ theme }) => theme.colors.accent};
   background-color: #2e2e2e;
   transition: all 0.2s;
   font-size: 13px;
-
-  ul {
-    margin-block-start: 0rem;
-    margin-block-end: 0rem;
-    padding-inline-start: 0px;
-  }
+  margin-block-start: 0rem;
+  margin-block-end: 0rem;
+  padding-inline-start: 0px;
 `;
 
-export const TabLink = styled.li<{ active?: boolean }>`
+export const NavLink = styled.li<{ active?: boolean }>`
   font-weight: normal;
   padding-left: 15px;
   padding-top: 5px;

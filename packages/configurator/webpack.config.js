@@ -39,7 +39,23 @@ module.exports = [
         },
         {
           test: /\.svg$/,
-          use: [{ loader: "react-svg-loader" }]
+          use: [
+            {
+              loader: "react-svg-loader",
+              options: {
+                svgo: {
+                  plugins: [
+                    {
+                      removeViewBox: false
+                    },
+                    {
+                      cleanupIDs: false
+                    }
+                  ]
+                }
+              }
+            }
+          ]
         }
       ]
     },

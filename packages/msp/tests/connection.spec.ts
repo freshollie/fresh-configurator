@@ -278,6 +278,5 @@ describe("execute", () => {
 
     expect(rejected).toBeTruthy();
     expect(rejected).toMatchSnapshot();
-    // await expect(response).rejects.toEqual(expect.any(Error));
   });
 });

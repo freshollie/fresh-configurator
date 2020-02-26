@@ -37,7 +37,7 @@ const App: React.FC = () => {
     <MainLayout>
       <header>
         <HeaderBar>
-          <div style={{ display: "flex" }}>
+          <div className="tools">
             <ConnectionSettings />
             <ConnectControls />
           </div>

@@ -11,16 +11,9 @@ import HelpIcon from "../../icons/cf_icon_help_grey.svg";
 import FlasherIcon from "../../icons/cf_icon_flasher_grey.svg";
 import SetupIcon from "../../icons/cf_icon_setup_grey.svg";
 import OSDIcon from "../../icons/icon_osd.svg";
-import { TabsContainer, TabLink } from "./Navigation.styles";
+import NavLinks from "../../components/NavLinks";
 
-interface LinkDetails {
-  title: string;
-  icon: JSX.Element;
-  id: string;
-  export?: boolean;
-}
-
-const disconnectedLinks: LinkDetails[] = [
+const disconnectedLinks = [
   {
     title: "Welcome",
     icon: <WelcomeIcon />,
@@ -44,7 +37,7 @@ const disconnectedLinks: LinkDetails[] = [
   }
 ];
 
-const connectedLinks: LinkDetails[] = [
+const connectedLinks = [
   {
     title: "Setup",
     icon: <SetupIcon />,
@@ -240,31 +233,18 @@ const Navigation: React.FC = () => {
   const connected = useConnected();
   const [selectTab] = useSelectTabMutation();
 
-  const makeLink = ({ title, icon, id }: LinkDetails): JSX.Element => (
-    <TabLink
-      key={id}
-      active={id === navigationQuery?.configurator.tab}
-      onClick={() =>
+  return (
+    <NavLinks
+      links={connected ? connectedLinks : disconnectedLinks}
+      activeLink={navigationQuery?.configurator.tab ?? undefined}
+      onClick={tab =>
         selectTab({
           variables: {
-            tabId: id
+            tabId: tab
           }
         })
       }
-    >
-      {icon}
-      <div>{title}</div>
-    </TabLink>
-  );
-
-  return (
-    <TabsContainer>
-      <ul>
-        {!connected
-          ? disconnectedLinks.map(makeLink)
-          : connectedLinks.map(makeLink)}
-      </ul>
-    </TabsContainer>
+    />
   );
 };
 
