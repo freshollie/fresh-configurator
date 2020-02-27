@@ -1,3 +1,6 @@
+/**
+ * This is the base theme to all components of this APP
+ */
 import React from "react";
 import styled, {
   createGlobalStyle,
@@ -7,13 +10,71 @@ import styled, {
   ThemeProvider as DefaultThemeProvider
 } from "styled-components";
 
+import openSansLight2 from "./fonts/opensans-light-webfont.woff2";
+import openSansLight from "./fonts/opensans-light-webfont.woff";
+import openSansRegular2 from "./fonts/opensans-regular-webfont.woff2";
+import openSansRegular from "./fonts/opensans-regular-webfont.woff";
+import openSansItalic2 from "./fonts/opensans-italic-webfont.woff2";
+import openSansItalic from "./fonts/opensans-italic-webfont.woff";
+import openSansSemibold2 from "./fonts/opensans-semibold-webfont.woff2";
+import openSansSemibold from "./fonts/opensans-semibold-webfont.woff";
+import openSansBold2 from "./fonts/opensans-bold-webfont.woff2";
+import openSansBold from "./fonts/opensans-bold-webfont.woff";
+import openSansBoldItalic2 from "./fonts/opensans-bolditalic-webfont.woff2";
+import openSansBoldItalic from "./fonts/opensans-bolditalic-webfont.woff";
+
 const GlobalStyle = createGlobalStyle`
   * {
     outline: none;
   }
 
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansLight2}) format("woff2"),
+      url(${openSansLight}) format("woff");
+    font-weight: 300;
+    font-style: normal;
+  }
+  /* Light Italic? */
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansRegular2}) format("woff2"),
+      url(${openSansRegular}) format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansItalic2}) format("woff2"),
+      url(${openSansItalic}) format("woff");
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansSemibold2}) format("woff2"),
+      url(${openSansSemibold}) format("woff");
+    font-weight: 600;
+    font-style: normal;
+  }
+  /* Semi-Bold Italic */
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansBold2}) format("woff2"),
+      url(${openSansBold}) format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Open Sans";
+    src: url(${openSansBoldItalic2}) format("woff2"),
+      url(${openSansBoldItalic}) format("woff");
+    font-weight: bold;
+    font-style: italic;
+  }
+
   body {
-    font-family: 'Open Sans', 'Segoe UI', Tahoma, sans-serif;
+    font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
     font-size: 12px;
     color: #303030;
     background-color: #3d3f3e;

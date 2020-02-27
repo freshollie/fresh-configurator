@@ -2,7 +2,8 @@ import React from "react";
 import useConnected from "../../hooks/useConnected";
 import {
   useConnectMutation,
-  useSelectedPortQuery
+  useSelectedPortQuery,
+  useDisconnectMutation
 } from "../../gql/__generated__";
 import BigButton from "../../components/BigButton";
 
@@ -12,6 +13,11 @@ const ConnectControls: React.FC = () => {
 
   const connected = useConnected(selectedPort || undefined);
   const [connect, { loading: connecting }] = useConnectMutation({
+    variables: {
+      port: selectedPort || ""
+    }
+  });
+  const [disconnect] = useDisconnectMutation({
     variables: {
       port: selectedPort || ""
     }
@@ -29,9 +35,13 @@ const ConnectControls: React.FC = () => {
       icon={!connected || connecting ? "usb-connect" : "usb-disconnect"}
       text={statusText}
       onClick={() =>
-        connect().catch(e => {
-          console.log(e);
-        })
+        !connected && !connecting
+          ? connect().catch(e => {
+              console.log(e);
+            })
+          : disconnect().catch(e => {
+              console.log(e);
+            })
       }
     />
   );

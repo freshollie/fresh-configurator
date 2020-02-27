@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { ports, isOpen, open, getAttitude } from "@fresh/msp";
+import { ports, isOpen, open, getAttitude, close } from "@fresh/msp";
 import { Resolvers } from "./__generated__";
 
 const cache: InMemoryCache = new InMemoryCache({
@@ -7,27 +8,23 @@ const cache: InMemoryCache = new InMemoryCache({
     FlightController: {
       fields: {
         connected: (_, { variables }) => {
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           return !!connections()?.[variables?.port];
         }
       }
     },
     Configurator: {
       fields: {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         port: () => selectedPort(),
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         tab: () => selectedTab(),
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         expertMode: () => expertMode()
       }
     }
   }
 });
 
-const selectedPort = cache.makeLocalVar<string>();
+const selectedPort = cache.makeLocalVar<string | null>(null);
 const expertMode = cache.makeLocalVar<boolean>(false);
-const selectedTab = cache.makeLocalVar<string>();
+const selectedTab = cache.makeLocalVar<string | null>(null);
 const connections = cache.makeLocalVar<Record<string, boolean>>({});
 
 const setConnection = (port: string, connected: boolean): void => {
@@ -57,13 +54,22 @@ const resolvers: Resolvers = {
       }
 
       await open(port, () => {
-        // disconnect
+        // on disconnect
         setConnection(port, false);
       });
 
       setConnection(port, true);
       return true;
     },
+    disconnect: async (_, { port }) => {
+      if (!isOpen(port)) {
+        return true;
+      }
+
+      await close(port);
+      return true;
+    },
+
     selectTab: (_, { tabId }) => !!selectedTab(tabId),
     selectPort: (_, { port }) => !!selectedPort(port),
     setExpertMode: (_, { enabled }) => !!expertMode(enabled)

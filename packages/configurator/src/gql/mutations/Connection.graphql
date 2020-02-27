@@ -1,3 +1,7 @@
 mutation Connect($port: String!) {
   connect(port: $port) @client
 }
+
+mutation Disconnect($port: String!) {
+  disconnect(port: $port) @client
+}

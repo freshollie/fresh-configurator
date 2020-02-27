@@ -24,7 +24,7 @@ describe("client", () => {
         query: SelectedPortDocument
       });
 
-      expect(data?.configurator.port).toEqual(undefined);
+      expect(data?.configurator.port).toEqual(null);
 
       await client.mutate<SelectPortMutation, SelectPortMutationVariables>({
         mutation: SelectPortDocument,
@@ -51,7 +51,7 @@ describe("client", () => {
         query: SelectedTabDocument
       });
 
-      expect(data?.configurator.tab).toEqual(undefined);
+      expect(data?.configurator.tab).toEqual(null);
 
       await client.mutate<SelectTabMutation, SelectTabMutationVariables>({
         mutation: SelectTabDocument,

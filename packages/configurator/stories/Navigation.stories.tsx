@@ -4,8 +4,7 @@ import Navigation from "../src/managers/Navigation";
 import styled from "../src/theme";
 import {
   NavigationDataDocument,
-  ConnectedDocument,
-  SelectedPortDocument
+  ConnectedDocument
 } from "../src/gql/__generated__";
 
 export default {

@@ -32,12 +32,7 @@ const ConnectionSelector: React.FC<{
   selectedPort?: string;
   selectedBaud?: number;
   onChange?: (connectionDetails: ConnectionDetails) => void;
-}> = ({
-  ports = [],
-  selectedPort = "/dev/rfcomm0",
-  selectedBaud = 115200,
-  onChange
-}) => (
+}> = ({ ports = [], selectedPort = "", selectedBaud = 115200, onChange }) => (
   <Container>
     {!ports?.includes(selectedPort) && (
       <ManualOverride htmlFor="port-override">
@@ -54,7 +49,7 @@ const ConnectionSelector: React.FC<{
     <SelectorsContainer>
       <DarkSelectContainer>
         <select
-          value={selectedPort}
+          value={ports?.includes(selectedPort) ? selectedPort : "manual"}
           onChange={e =>
             onChange?.({ port: e.target.value, baud: selectedBaud })
           }
@@ -62,7 +57,7 @@ const ConnectionSelector: React.FC<{
           {ports.map(port => (
             <option value={port}>{port}</option>
           ))}
-          <option value="/dev/rfcomm0">Manual</option>
+          <option value="manual">Manual</option>
         </select>
       </DarkSelectContainer>
       <DarkSelectContainer>

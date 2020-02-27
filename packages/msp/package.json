@@ -14,9 +14,10 @@
     "serialport": "^8.0.7"
   },
   "devDependencies": {
-    "@serialport/stream": "^8.0.6",
     "@serialport/binding-mock": "^8.0.6",
+    "@serialport/stream": "^8.0.6",
     "@types/debug": "^4.1.5",
+    "@types/react-is": "^16.7.1",
     "@types/serialport": "^8.0.0",
     "flush-promises": "^1.0.2"
   },

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   useNavigationDataQuery,
@@ -229,14 +229,32 @@ const connectedLinks = [
 //   </ul> */
 
 const Navigation: React.FC = () => {
-  const { data: navigationQuery } = useNavigationDataQuery();
-  const connected = useConnected();
+  const { data: navigationQuery, loading } = useNavigationDataQuery();
+  const selectedTab = navigationQuery?.configurator.tab ?? undefined;
+
+  const connected = useConnected(
+    navigationQuery?.configurator.port ?? undefined
+  );
   const [selectTab] = useSelectTabMutation();
+
+  const links = connected ? connectedLinks : disconnectedLinks;
+
+  // Select the first available tab, if no tabs can be selected
+  // for the given state
+  useEffect(() => {
+    if (!loading && !links.find(link => link.id === selectedTab)) {
+      selectTab({
+        variables: {
+          tabId: links[0].id
+        }
+      });
+    }
+  }, [links, loading, selectTab, selectedTab]);
 
   return (
     <NavLinks
-      links={connected ? connectedLinks : disconnectedLinks}
-      activeLink={navigationQuery?.configurator.tab ?? undefined}
+      links={links}
+      activeLink={selectedTab}
       onClick={tab =>
         selectTab({
           variables: {
