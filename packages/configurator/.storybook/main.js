@@ -28,7 +28,6 @@ module.exports = {
       return data;
     });
 
-    console.log(config.module.rules);
     config.module.rules.push({
       test: /\.svg$/,
       use: [

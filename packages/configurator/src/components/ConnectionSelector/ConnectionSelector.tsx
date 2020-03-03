@@ -55,7 +55,9 @@ const ConnectionSelector: React.FC<{
           }
         >
           {ports.map(port => (
-            <option value={port}>{port}</option>
+            <option key={port} value={port}>
+              {port}
+            </option>
           ))}
           <option value="manual">Manual</option>
         </select>
@@ -71,7 +73,9 @@ const ConnectionSelector: React.FC<{
           }
         >
           {BAUDRATES.map(baud => (
-            <option value={baud}>{baud}</option>
+            <option key={baud} value={baud}>
+              {baud}
+            </option>
           ))}
         </select>
       </DarkSelectContainer>

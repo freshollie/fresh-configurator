@@ -1,6 +1,6 @@
-import styled from "../../theme";
-import LogoIcon1 from "../../logos/light-wide-1.svg";
-import LogoIcon2 from "../../logos/light-wide-2.svg";
+import styled from "../theme";
+import LogoIcon1 from "./assets/light-wide-1.svg";
+import LogoIcon2 from "./assets/light-wide-2.svg";
 
 export const Logo1 = styled(LogoIcon1)`
   .st0 {

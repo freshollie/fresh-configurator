@@ -14,7 +14,7 @@ export const Container = styled.div`
   user-select: none;
 `;
 
-export const Button = styled.div<{ active: boolean }>`
+export const Button = styled.button<{ active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,6 +24,11 @@ export const Button = styled.div<{ active: boolean }>`
   height: 50px;
   width: 50px;
   border-radius: 100px;
+
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
 
   cursor: pointer;
 

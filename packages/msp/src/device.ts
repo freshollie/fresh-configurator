@@ -54,3 +54,16 @@ export const getAttitude = async (port: string): Promise<Kinematics> => {
     heading: data.read16() // z
   };
 };
+
+export interface MspInfo {
+  mspProtocolVersion: number;
+  apiVersion: string;
+}
+
+export const getMspInfo = async (port: string): Promise<MspInfo> => {
+  const data = await execute(port, { code: codes.MSP_API_VERSION });
+  return {
+    mspProtocolVersion: data.readU8(),
+    apiVersion: `${data.readU8()}.${data.readU8()}.0`
+  };
+};

@@ -15,6 +15,13 @@ export const Layout = styled.div`
     display: flex;
     flex-direction: row;
     flex: 1;
+    > * {
+      flex: 1;
+    }
+
+    > nav {
+      flex: unset;
+    }
   }
   footer {
     flex: 0;

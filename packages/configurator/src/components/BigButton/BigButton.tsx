@@ -1,22 +1,17 @@
 import React from "react";
-import UsbConnectIcon from "../../icons/cf_icon_usb1_white.svg";
-import UsbDisconnectIcon from "../../icons/cf_icon_usb2_white.svg";
-import { Container, Button } from "./BigButton.styles";
 
-const ICON_TYPES = {
-  "usb-connect": <UsbConnectIcon />,
-  "usb-disconnect": <UsbDisconnectIcon />
-};
+import { Container, Button } from "./BigButton.styles";
 
 const BigButton: React.FC<{
   text?: string;
-  icon?: keyof typeof ICON_TYPES;
+  icon?: React.ReactNode;
+  disabled?: boolean;
   active?: boolean;
   onClick?: () => void;
-}> = ({ text, icon, active = false, onClick }) => (
+}> = ({ text, icon, active = false, onClick, disabled }) => (
   <Container>
-    <Button active={active} onClick={onClick}>
-      {icon && ICON_TYPES[icon]}
+    <Button type="button" active={active} onClick={onClick} disabled={disabled}>
+      {icon}
     </Button>
     {text && <div>{text}</div>}
   </Container>

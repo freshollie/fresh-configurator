@@ -10,6 +10,7 @@ import ModelViewProvider from "./providers/ModelViewProvider";
 import ModelIntrumentsProvider from "./providers/ModelInstrumentsProvider";
 
 import MainLayout from "./components/MainLayout";
+import Widget from "./components/Widget";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -22,12 +23,18 @@ const App: React.FC = () => (
       </HeaderBar>
     </header>
     <main>
-      <Navigation />
+      <nav>
+        <Navigation />
+      </nav>
       <TabRouter>
         <div id="landing">This is some landing page</div>
         <div id="setup">
-          <ModelViewProvider />
-          <ModelIntrumentsProvider />
+          <div style={{ height: "300px" }}>
+            <ModelViewProvider />
+          </div>
+          <Widget>
+            <ModelIntrumentsProvider />
+          </Widget>
         </div>
       </TabRouter>
     </main>

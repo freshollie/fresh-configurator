@@ -6,12 +6,14 @@ import {
 } from "../../gql/__generated__";
 import useConnected from "../../hooks/useConnected";
 
-import WelcomeIcon from "../../icons/cf_icon_welcome_grey.svg";
-import HelpIcon from "../../icons/cf_icon_help_grey.svg";
-import FlasherIcon from "../../icons/cf_icon_flasher_grey.svg";
-import SetupIcon from "../../icons/cf_icon_setup_grey.svg";
-import OSDIcon from "../../icons/icon_osd.svg";
 import NavLinks from "../../components/NavLinks";
+import {
+  WelcomeIcon,
+  HelpIcon,
+  FlasherIcon,
+  OSDIcon,
+  SetupIcon
+} from "../../icons";
 
 const disconnectedLinks = [
   {

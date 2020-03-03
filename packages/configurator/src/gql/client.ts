@@ -1,14 +1,25 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { ports, isOpen, open, getAttitude, close } from "@fresh/msp";
+import {
+  ports,
+  isOpen,
+  open,
+  getAttitude,
+  close,
+  getMspInfo
+} from "@fresh/msp";
+import semver from "semver";
 import { Resolvers } from "./__generated__";
+import config from "../config";
+
+type ConnectionState = "disconnected" | "connecting" | "connected";
 
 const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     FlightController: {
       fields: {
         connected: (_, { variables }) => {
-          return !!connections()?.[variables?.port];
+          return connections()[variables?.port] === "connected";
         }
       }
     },
@@ -25,12 +36,14 @@ const cache: InMemoryCache = new InMemoryCache({
 const selectedPort = cache.makeLocalVar<string | null>(null);
 const expertMode = cache.makeLocalVar<boolean>(false);
 const selectedTab = cache.makeLocalVar<string | null>(null);
-const connections = cache.makeLocalVar<Record<string, boolean>>({});
+const connections = cache.makeLocalVar<Record<string, ConnectionState>>({});
 
-const setConnection = (port: string, connected: boolean): void => {
+const setConnectionState = (port: string, newState: ConnectionState): void => {
   const currentConnections = connections();
-  connections({ ...currentConnections, [port]: connected });
+  connections({ ...currentConnections, [port]: newState });
 };
+
+const connectionState = (port: string): ConnectionState => connections()[port];
 
 const resolvers: Resolvers = {
   Query: {
@@ -53,19 +66,36 @@ const resolvers: Resolvers = {
         return true;
       }
 
+      setConnectionState(port, "connecting");
+
       await open(port, () => {
         // on disconnect
-        setConnection(port, false);
+        setConnectionState(port, "disconnected");
       });
 
-      setConnection(port, true);
-      return true;
+      try {
+        const mspInfo = await getMspInfo(port);
+        if (semver.gte(mspInfo.apiVersion, config.apiVersionAccepted)) {
+          setConnectionState(port, "connected");
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (connectionState(port) === "connecting") {
+        await close(port);
+      }
+
+      return false;
     },
     disconnect: async (_, { port }) => {
       if (!isOpen(port)) {
         return true;
       }
 
+      // Closing the port will cause the callback to update the port
+      // state to disconnected anyway
       await close(port);
       return true;
     },

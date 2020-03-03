@@ -41,7 +41,7 @@ export class MspDataView {
   public readU8(): number {
     if (this.dataView.byteLength >= this.offset + 1) {
       this.offset += 1;
-      return this.dataView.getUint8(this.offset);
+      return this.dataView.getUint8(this.offset - 1);
     }
     return MspDataView.error();
   }

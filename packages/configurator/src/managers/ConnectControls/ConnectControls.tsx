@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { UsbConnectIcon, UsbDisconnectIcon } from "../../icons";
 import useConnected from "../../hooks/useConnected";
 import {
   useConnectMutation,
@@ -8,18 +9,25 @@ import {
 import BigButton from "../../components/BigButton";
 
 const ConnectControls: React.FC = () => {
+  const [connecting, setConnecting] = useState(false);
   const { data: configuratorQuery } = useSelectedPortQuery();
   const selectedPort = configuratorQuery?.configurator.port;
 
   const connected = useConnected(selectedPort || undefined);
-  const [connect, { loading: connecting }] = useConnectMutation({
+  const [connect] = useConnectMutation({
     variables: {
-      port: selectedPort || ""
+      port: selectedPort ?? ""
+    },
+    onCompleted: () => {
+      setConnecting(false);
     }
   });
   const [disconnect] = useDisconnectMutation({
     variables: {
-      port: selectedPort || ""
+      port: selectedPort ?? ""
+    },
+    onCompleted: () => {
+      setConnecting(false);
     }
   });
 
@@ -29,20 +37,27 @@ const ConnectControls: React.FC = () => {
     statusText = connected ? "Disconnect" : "Connect";
   }
 
+  const onClick = (): void => {
+    if (!connected && !connecting) {
+      setConnecting(true);
+      connect().catch(e => {
+        console.log(e);
+      });
+    } else {
+      disconnect().catch(e => {
+        console.log(e);
+      });
+    }
+  };
+
   return (
     <BigButton
       active={connected}
-      icon={!connected || connecting ? "usb-connect" : "usb-disconnect"}
-      text={statusText}
-      onClick={() =>
-        !connected && !connecting
-          ? connect().catch(e => {
-              console.log(e);
-            })
-          : disconnect().catch(e => {
-              console.log(e);
-            })
+      icon={
+        !connected && !connecting ? <UsbConnectIcon /> : <UsbDisconnectIcon />
       }
+      text={statusText}
+      onClick={onClick}
     />
   );
 };

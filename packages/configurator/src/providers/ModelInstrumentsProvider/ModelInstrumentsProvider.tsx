@@ -6,7 +6,7 @@ import {
   useAttitudeQuery
 } from "../../gql/__generated__";
 
-const ModelIntrumentsProvider: React.FC = () => {
+const ModelInstrumentsProvider: React.FC = () => {
   const { data: portsData } = useSelectedPortQuery();
   const { data: deviceData } = useAttitudeQuery({
     variables: {
@@ -26,4 +26,4 @@ const ModelIntrumentsProvider: React.FC = () => {
   );
 };
 
-export default ModelIntrumentsProvider;
+export default ModelInstrumentsProvider;
