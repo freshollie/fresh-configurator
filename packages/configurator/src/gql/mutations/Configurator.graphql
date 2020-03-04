@@ -1,9 +1,9 @@
-mutation SelectPort($port: String!) {
-  selectPort(port: $port) @client
+mutation SetConnectionSettings($port: String!, $baudRate: Int) {
+  setConnectionSettings(port: $port, baudRate: $baudRate) @client
 }
 
 mutation SelectTab($tabId: String!) {
-  selectTab(tabId: $tabId) @client
+  setTab(tabId: $tabId) @client
 }
 
 mutation SetExpertMode($enabled: Boolean!) {

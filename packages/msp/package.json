@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "start": "ts-node -T ./src/testing.ts",
+    "testscript": "ts-node -T test-script.ts",
     "prepare": "tsc -p tsconfig.build.json"
   },
   "dependencies": {

@@ -4,6 +4,7 @@ type Query {
 
 type FlightController {
   connected: Boolean!
+  connecting: Boolean!
   attitude: Attitude!
 }
 

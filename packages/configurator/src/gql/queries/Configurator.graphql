@@ -1,6 +1,7 @@
-query SelectedPort {
+query ConnectionSettings {
   configurator @client {
     port
+    baudRate
   }
 }
 

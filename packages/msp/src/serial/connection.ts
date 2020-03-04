@@ -13,14 +13,17 @@ import { MspDataView } from "./utils";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
 
+import {
+  Connection,
+  MspCommand,
+  ConnectionOptions,
+  OpenFunction as OpenConnectionFunction,
+  OnCloseCallback
+} from "./connection.d";
+
 const log = debug("connection");
 
-interface Connection {
-  serial: SerialPort;
-  parser: MspParser;
-  requests: Record<string, Promise<ArrayBuffer> | undefined>;
-}
-const connectionsMap: Record<string, Connection> = {};
+export const connectionsMap: Record<string, Connection> = {};
 
 /**
  * Private, used for testing
@@ -58,15 +61,29 @@ export const close = async (port: string): Promise<void> => {
  * port, onClose will be emited once the
  * connection is closed
  */
-export const open = async (
+export const open: OpenConnectionFunction = async (
   port: string,
-  onClose?: () => void
-): Promise<void> => {
+  options?: ConnectionOptions | OnCloseCallback,
+  onClose?: OnCloseCallback
+) => {
   if (connectionsMap[port]) {
     throw new Error(`${port} is already open`);
   }
 
-  const serial = new SerialPort(port, { autoOpen: false });
+  // Handle overloads
+  let onCloseCallback = onClose;
+  let connectionOptions = options;
+
+  if (typeof connectionOptions === "function") {
+    onCloseCallback = connectionOptions;
+    connectionOptions = {};
+  }
+
+  const serial = new SerialPort(port, {
+    baudRate: 115200,
+    ...connectionOptions,
+    autoOpen: false
+  });
 
   await new Promise((resolve, reject) => {
     serial.open(err => {
@@ -96,18 +113,12 @@ export const open = async (
   serial.on("close", () => {
     log(`${port} on close received`);
     close(port);
-    onClose?.();
+    onCloseCallback?.();
   });
 };
 
 export const connections = (): string[] => Object.keys(connectionsMap);
 export const isOpen = (port: string): boolean => !!connectionsMap[port];
-
-interface MspCommand {
-  code: number;
-  data?: Buffer;
-  timeout?: number;
-}
 
 /**
  * Execute the given MspCommand on the given port.

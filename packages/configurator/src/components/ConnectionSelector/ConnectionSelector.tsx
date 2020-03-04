@@ -31,13 +31,21 @@ const ConnectionSelector: React.FC<{
   ports?: string[];
   selectedPort?: string;
   selectedBaud?: number;
+  disabled?: boolean;
   onChange?: (connectionDetails: ConnectionDetails) => void;
-}> = ({ ports = [], selectedPort = "", selectedBaud = 115200, onChange }) => (
+}> = ({
+  ports = [],
+  selectedPort = "",
+  selectedBaud = 115200,
+  onChange,
+  disabled = false
+}) => (
   <Container>
     {!ports?.includes(selectedPort) && (
       <ManualOverride htmlFor="port-override">
         <span>Port:</span>
         <input
+          disabled={disabled}
           type="text"
           value={selectedPort}
           onChange={e =>
@@ -49,6 +57,7 @@ const ConnectionSelector: React.FC<{
     <SelectorsContainer>
       <DarkSelectContainer>
         <select
+          disabled={disabled}
           value={ports?.includes(selectedPort) ? selectedPort : "manual"}
           onChange={e =>
             onChange?.({ port: e.target.value, baud: selectedBaud })
@@ -64,6 +73,7 @@ const ConnectionSelector: React.FC<{
       </DarkSelectContainer>
       <DarkSelectContainer>
         <select
+          disabled={disabled}
           value={selectedBaud}
           onChange={e =>
             onChange?.({

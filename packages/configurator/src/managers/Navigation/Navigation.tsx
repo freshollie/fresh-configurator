@@ -4,7 +4,7 @@ import {
   useNavigationDataQuery,
   useSelectTabMutation
 } from "../../gql/__generated__";
-import useConnected from "../../hooks/useConnected";
+import useConnectionState from "../../hooks/useConnectionState";
 
 import NavLinks from "../../components/NavLinks";
 import {
@@ -234,7 +234,7 @@ const Navigation: React.FC = () => {
   const { data: navigationQuery, loading } = useNavigationDataQuery();
   const selectedTab = navigationQuery?.configurator.tab ?? undefined;
 
-  const connected = useConnected(
+  const { connected } = useConnectionState(
     navigationQuery?.configurator.port ?? undefined
   );
   const [selectTab] = useSelectTabMutation();

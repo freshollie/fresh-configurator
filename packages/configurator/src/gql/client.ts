@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import {
   ports,
@@ -9,41 +8,58 @@ import {
   getMspInfo
 } from "@fresh/msp";
 import semver from "semver";
-import { Resolvers } from "./__generated__";
+import {
+  Resolvers,
+  ConnectionStateQueryVariables,
+  ConnectionStateDocument,
+  ConnectionStateQuery
+} from "./__generated__";
 import config from "../config";
 
-type ConnectionState = "disconnected" | "connecting" | "connected";
+interface Context {
+  client: ApolloClient<object>;
+}
 
-const cache: InMemoryCache = new InMemoryCache({
-  typePolicies: {
-    FlightController: {
-      fields: {
-        connected: (_, { variables }) => {
-          return connections()[variables?.port] === "connected";
-        }
-      }
-    },
-    Configurator: {
-      fields: {
-        port: () => selectedPort(),
-        tab: () => selectedTab(),
-        expertMode: () => expertMode()
-      }
+const cache = new InMemoryCache();
+
+const selectedPort = cache.makeVar<string | null>(null);
+// default baudrate
+const selectedBaud = cache.makeVar<number>(115200);
+
+const expertMode = cache.makeVar<boolean>(false);
+const selectedTab = cache.makeVar<string | null>(null);
+
+cache.policies.addTypePolicies({
+  Configurator: {
+    fields: {
+      port: () => selectedPort(),
+      baudRate: () => selectedBaud(),
+      tab: () => selectedTab(),
+      expertMode: () => expertMode()
     }
   }
 });
 
-const selectedPort = cache.makeLocalVar<string | null>(null);
-const expertMode = cache.makeLocalVar<boolean>(false);
-const selectedTab = cache.makeLocalVar<string | null>(null);
-const connections = cache.makeLocalVar<Record<string, ConnectionState>>({});
-
-const setConnectionState = (port: string, newState: ConnectionState): void => {
-  const currentConnections = connections();
-  connections({ ...currentConnections, [port]: newState });
-};
-
-const connectionState = (port: string): ConnectionState => connections()[port];
+const setConnectionState = (
+  client: ApolloClient<object>,
+  port: string,
+  connecting: boolean,
+  connected: boolean
+): void =>
+  client.writeQuery<ConnectionStateQuery, ConnectionStateQueryVariables>({
+    query: ConnectionStateDocument,
+    data: {
+      __typename: "Query",
+      device: {
+        connected,
+        connecting,
+        __typename: "FlightController"
+      }
+    },
+    variables: {
+      port
+    }
+  });
 
 const resolvers: Resolvers = {
   Query: {
@@ -51,57 +67,77 @@ const resolvers: Resolvers = {
     device: (_, { port }) => ({
       port,
       connected: false,
+      connecting: false,
       __typename: "FlightController"
     }),
     configurator: () => ({
       port: selectedPort(),
+      baudRate: selectedBaud(),
       tab: selectedTab(),
       expertMode: expertMode(),
       __typename: "Configurator"
     })
   },
   Mutation: {
-    connect: async (_, { port }) => {
+    connect: async (_, { port, baudRate }, { client }: Context) => {
       if (isOpen(port)) {
         return true;
       }
 
-      setConnectionState(port, "connecting");
+      setConnectionState(client, port, true, false);
 
-      await open(port, () => {
+      await open(port, { baudRate }, () => {
         // on disconnect
-        setConnectionState(port, "disconnected");
+        setConnectionState(client, port, false, false);
       });
 
       try {
         const mspInfo = await getMspInfo(port);
         if (semver.gte(mspInfo.apiVersion, config.apiVersionAccepted)) {
-          setConnectionState(port, "connected");
+          setConnectionState(client, port, false, true);
           return true;
         }
       } catch (e) {
         console.log(e);
       }
 
-      if (connectionState(port) === "connecting") {
+      // read the current connection state from memory
+      const { data } = await client.query<
+        ConnectionStateQuery,
+        ConnectionStateQueryVariables
+      >({
+        query: ConnectionStateDocument,
+        variables: {
+          port
+        }
+      });
+
+      // And only close the port if we are connecting
+      if (data.device.connecting) {
         await close(port);
       }
 
       return false;
     },
-    disconnect: async (_, { port }) => {
+    disconnect: async (_, { port }, { client }: Context) => {
       if (!isOpen(port)) {
         return true;
       }
 
-      // Closing the port will cause the callback to update the port
-      // state to disconnected anyway
       await close(port);
+      setConnectionState(client, port, false, false);
+
       return true;
     },
 
-    selectTab: (_, { tabId }) => !!selectedTab(tabId),
-    selectPort: (_, { port }) => !!selectedPort(port),
+    setTab: (_, { tabId }) => !!selectedTab(tabId),
+    setConnectionSettings: (_, { port, baudRate }) => {
+      selectedPort(port);
+      if (typeof baudRate === "number") {
+        selectedBaud(baudRate);
+      }
+      return true;
+    },
     setExpertMode: (_, { enabled }) => !!expertMode(enabled)
   },
 

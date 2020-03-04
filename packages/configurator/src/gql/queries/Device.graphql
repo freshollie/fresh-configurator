@@ -1,6 +1,7 @@
-query Connected($port: String!) {
+query ConnectionState($port: String!) {
   device(port: $port) @client {
     connected
+    connecting
   }
 }
 

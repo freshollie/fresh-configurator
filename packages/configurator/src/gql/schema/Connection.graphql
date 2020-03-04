@@ -3,6 +3,6 @@ type Query {
 }
 
 type Mutation {
-  connect(port: String!): Boolean
+  connect(port: String!, baudRate: Int!): Boolean
   disconnect(port: String!): Boolean
 }

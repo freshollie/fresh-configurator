@@ -4,7 +4,7 @@ import Navigation from "../src/managers/Navigation";
 import styled from "../src/theme";
 import {
   NavigationDataDocument,
-  ConnectedDocument
+  ConnectionStateDocument
 } from "../src/gql/__generated__";
 
 export default {
@@ -38,13 +38,15 @@ const navigationData = ({
 
 const device = ({
   port,
-  connected
+  connected,
+  connecting = false
 }: {
   port: string;
   connected: boolean;
+  connecting?: boolean;
 }): MockedResponse => ({
   request: {
-    query: ConnectedDocument,
+    query: ConnectionStateDocument,
     variables: {
       port
     }
@@ -52,7 +54,8 @@ const device = ({
   result: {
     data: {
       device: {
-        connected
+        connected,
+        connecting
       }
     }
   }

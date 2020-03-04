@@ -3,13 +3,14 @@ type Query {
 }
 
 type Mutation {
-  selectPort(port: String!): Boolean
-  selectTab(tabId: String!): Boolean
+  setConnectionSettings(port: String!, baudRate: Int): Boolean
+  setTab(tabId: String!): Boolean
   setExpertMode(enabled: Boolean!): Boolean
 }
 
 type Configurator {
   port: String
+  baudRate: Int!
   tab: String
   expertMode: Boolean!
 }

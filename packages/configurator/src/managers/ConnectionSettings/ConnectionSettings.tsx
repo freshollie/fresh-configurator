@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import {
-  useSelectPortMutation,
-  useSelectedPortQuery,
+  useSetConnectionSettingsMutation,
+  useConnectionSettingsQuery,
   useAvailablePortsQuery
 } from "../../gql/__generated__";
 import ConnectionSelector from "../../components/ConnectionSelector";
-import useConnected from "../../hooks/useConnected";
+import useConnectionState from "../../hooks/useConnectionState";
 
 const ConnectionSettings: React.FC = () => {
-  const [selectPort] = useSelectPortMutation();
+  const [updateSettings] = useSetConnectionSettingsMutation();
 
-  const { data: configuratorData, loading } = useSelectedPortQuery();
-  const selectedPort = configuratorData?.configurator?.port;
+  const { data: configuratorData, loading } = useConnectionSettingsQuery();
+  const { port, baudRate } = configuratorData?.configurator ?? {};
 
-  const connected = useConnected(selectedPort || undefined);
+  const { connected, connecting } = useConnectionState(port || undefined);
 
   // Constantly query the available ports, unless we have already
   // selected a port
@@ -25,24 +25,27 @@ const ConnectionSettings: React.FC = () => {
   // If this is the first load, and the currently selected port is null
   // then select the first available port
   useEffect(() => {
-    if (selectedPort === null && !loadingPorts) {
-      selectPort({
+    if (port === null && !loadingPorts) {
+      updateSettings({
         variables: {
           port: portsData?.ports[0] ?? "/dev/rfcomm0"
         }
       });
     }
-  }, [loading, loadingPorts, portsData, selectPort, selectedPort]);
+  }, [loading, loadingPorts, port, portsData, updateSettings]);
 
   // Only show the connection selector if we are not connected
   return !connected ? (
     <ConnectionSelector
       ports={portsData?.ports ?? undefined}
-      selectedPort={selectedPort ?? undefined}
-      onChange={({ port }) =>
-        selectPort({
+      selectedPort={port ?? undefined}
+      selectedBaud={baudRate}
+      disabled={connecting}
+      onChange={({ port: newPort, baud }) =>
+        updateSettings({
           variables: {
-            port
+            port: newPort,
+            baudRate: baud
           }
         })
       }
