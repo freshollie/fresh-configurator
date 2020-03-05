@@ -7,10 +7,10 @@ export const Layout = styled.div`
   display: flex;
   flex-direction: column;
 
-  header {
+  > header {
     flex: 0;
   }
-  main {
+  > main {
     background-color: white;
     display: flex;
     flex-direction: row;
@@ -23,7 +23,7 @@ export const Layout = styled.div`
       flex: unset;
     }
   }
-  footer {
+  > footer {
     flex: 0;
   }
 `;

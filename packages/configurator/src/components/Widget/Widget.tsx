@@ -8,9 +8,10 @@ export default styled.article<WidgetProps>`
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #ffffff;
-  width: calc(100% - 2px);
-  margin-bottom: 10px;
+  width: 100%;
   background-color: #f9f9f9;
+
+  overflow: hidden;
 
   ${({ type }) =>
     type === "white" &&

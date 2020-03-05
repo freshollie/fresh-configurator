@@ -2,6 +2,10 @@
 
 > A re-write of the Betaflight configurator
 
+<p align="center">
+  <img width="460" height="300" src="./docs/progress.png">
+</p>
+
 ## What is this?
 
 This is a new version of the [betaflight configurator](https://github.com/betaflight/betaflight-configurator) which is attempting to re-write the software in more modern technologies.
@@ -17,14 +21,12 @@ It would also allow for easier refactoring and redesigning of the UI.
 
 ## What's happening right now?
 
-At the moment the amount of code is very minimal, and is mostly working on setting up
-of the repo and frameworks for development.
+At the moment functionality is very minimal, and lots is changing all the time.
 
 - The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package.
-- Tests have been started to be written
-- GraphQL has been setup for communication between the UI and the flight controller
-- Framework around using electron to build the application has been started, and mostly works
-- Storybook has been setup to ease component development
+- Tests have been written for most of `@fresh/msp`
+- The main layout, device connection controls, model information, navigation, instruments have been written
+- Storybook is utlised to develop components
 
 ## What's the plan?
 

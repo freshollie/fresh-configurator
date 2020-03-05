@@ -17,10 +17,12 @@ const ModelViewProvider: React.FC = () => {
     skip: !port
   });
 
-  if (attitudeData) {
-    return <ModelView name="quadx" attitude={attitudeData.device.attitude} />;
-  }
-  return null;
+  return (
+    <ModelView
+      modelType="quadx"
+      attitude={attitudeData?.device.attitude ?? undefined}
+    />
+  );
 };
 
 export default ModelViewProvider;

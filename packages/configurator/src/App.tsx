@@ -9,8 +9,10 @@ import TabRouter from "./managers/TabRouter";
 import ModelViewProvider from "./providers/ModelViewProvider";
 import ModelIntrumentsProvider from "./providers/ModelInstrumentsProvider";
 
-import MainLayout from "./components/MainLayout";
+import MainLayout from "./layouts/MainLayout";
+import SetupLayout from "./layouts/SetupLayout";
 import Widget from "./components/Widget";
+import Title from "./components/Title";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -29,12 +31,34 @@ const App: React.FC = () => (
       <TabRouter>
         <div id="landing">This is some landing page</div>
         <div id="setup">
-          <div style={{ height: "300px" }}>
-            <ModelViewProvider />
+          <div className="content">
+            <SetupLayout>
+              <header>
+                <Title>Setup</Title>
+              </header>
+              <main>
+                <Widget>
+                  <ModelViewProvider />
+                </Widget>
+                <aside>
+                  <Widget>
+                    <header>Info</header>
+                    <div style={{ height: "150px" }} />
+                  </Widget>
+                  <Widget>
+                    <header>GPS</header>
+                    <div style={{ height: "120px" }} />
+                  </Widget>
+                  <Widget>
+                    <header>Instruments</header>
+                    <main>
+                      <ModelIntrumentsProvider />
+                    </main>
+                  </Widget>
+                </aside>
+              </main>
+            </SetupLayout>
           </div>
-          <Widget>
-            <ModelIntrumentsProvider />
-          </Widget>
         </div>
       </TabRouter>
     </main>

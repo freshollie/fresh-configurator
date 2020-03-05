@@ -31,18 +31,18 @@ const useRollingAttitude = (): {
 
 export const QuadX = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} name="quadx" />
+    <ModelView attitude={useRollingAttitude()} modelType="quadx" />
   </Container>
 );
 
 export const Tricopter = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} name="tricopter" />
+    <ModelView attitude={useRollingAttitude()} modelType="tricopter" />
   </Container>
 );
 
 export const HexX = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} name="hexx" />
+    <ModelView attitude={useRollingAttitude()} modelType="hexx" />
   </Container>
 );

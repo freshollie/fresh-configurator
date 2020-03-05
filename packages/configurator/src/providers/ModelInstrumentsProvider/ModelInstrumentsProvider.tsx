@@ -22,8 +22,8 @@ const ModelInstrumentsProvider: React.FC = () => {
 
   return (
     <>
-      <Attitude roll={roll} pitch={pitch} />
-      <Heading heading={heading} />
+      <Attitude roll={roll} pitch={pitch} size={90} />
+      <Heading heading={heading} size={90} />
     </>
   );
 };
