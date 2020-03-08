@@ -1,7 +1,6 @@
-import styled from "../../theme";
+import styled from "../theme";
 
-// eslint-disable-next-line import/prefer-default-export
-export const Layout = styled.div`
+export default styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;

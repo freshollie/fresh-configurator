@@ -1,10 +1,10 @@
 import React from "react";
-import Attitude from "../../flightindicators/Attitude";
-import Heading from "../../flightindicators/Heading";
+import Attitude from "../flightindicators/Attitude";
+import Heading from "../flightindicators/Heading";
 import {
   useConnectionSettingsQuery,
   useAttitudeQuery
-} from "../../gql/__generated__";
+} from "../gql/__generated__";
 
 const ModelInstrumentsProvider: React.FC = () => {
   const { data: portsData } = useConnectionSettingsQuery();

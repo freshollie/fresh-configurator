@@ -2,8 +2,8 @@ import React from "react";
 import {
   useAttitudeQuery,
   useConnectionSettingsQuery
-} from "../../gql/__generated__";
-import ModelView from "../../components/ModelView";
+} from "../gql/__generated__";
+import ModelView from "../components/ModelView";
 
 const ModelViewProvider: React.FC = () => {
   const { data: configuratorData } = useConnectionSettingsQuery();

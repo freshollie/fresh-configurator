@@ -13,7 +13,5 @@ export default (
     skip: !port
   });
 
-  console.log(deviceData);
-
   return deviceData?.device ?? { connected: false, connecting: false };
 };
