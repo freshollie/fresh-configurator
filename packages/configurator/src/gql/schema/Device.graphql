@@ -3,9 +3,15 @@ type Query {
 }
 
 type FlightController {
+  connection: ConnectionState!
+  attitude: Attitude!
+}
+
+type ConnectionState {
   connected: Boolean!
   connecting: Boolean!
-  attitude: Attitude!
+  bytesRead: Int!
+  bytesWritten: Int!
 }
 
 type Attitude {

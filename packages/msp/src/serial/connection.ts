@@ -23,7 +23,7 @@ import {
 
 const log = debug("connection");
 
-export const connectionsMap: Record<string, Connection> = {};
+const connectionsMap: Record<string, Connection | undefined> = {};
 
 /**
  * Private, used for testing
@@ -44,10 +44,11 @@ export const ports = (): Promise<string[]> =>
  * Close the given port
  */
 export const close = async (port: string): Promise<void> => {
-  if (!connectionsMap[port]) {
+  const connection = connectionsMap[port];
+  if (!connection) {
     return;
   }
-  const { serial } = connectionsMap[port];
+  const { serial } = connection;
 
   const closePromise = new Promise(resolve => serial.on("close", resolve));
   serial.close();
@@ -99,11 +100,17 @@ export const open: OpenConnectionFunction = async (
   const parser = serial.pipe(new MspParser());
   parser.setMaxListeners(1000000);
 
-  connectionsMap[port] = {
+  const connection = {
     serial,
     parser,
-    requests: {}
+    requests: {},
+    bytesRead: 0,
+    bytesWritten: 0
   };
+
+  serial.on("data", (data: Buffer) => {
+    connection.bytesRead += Buffer.byteLength(data);
+  });
 
   serial.on("error", () => {
     log(`${port} on error received`);
@@ -115,10 +122,17 @@ export const open: OpenConnectionFunction = async (
     close(port);
     onCloseCallback?.();
   });
+  connectionsMap[port] = connection;
 };
 
 export const connections = (): string[] => Object.keys(connectionsMap);
 export const isOpen = (port: string): boolean => !!connectionsMap[port];
+
+export const bytesRead = (port: string): number =>
+  connectionsMap[port]?.bytesRead ?? 0;
+
+export const bytesWritten = (port: string): number =>
+  connectionsMap[port]?.bytesWritten ?? 0;
 
 /**
  * Execute the given MspCommand on the given port.
@@ -129,10 +143,12 @@ export const execute = async (
   port: string,
   { code, data, timeout = 5000 }: MspCommand
 ): Promise<MspDataView> => {
-  if (!connectionsMap[port]) {
+  const connection = connectionsMap[port];
+  if (!connection) {
     throw new Error(`${port} is not open`);
   }
-  const { parser, serial, requests } = connectionsMap[port];
+
+  const { parser, serial, requests } = connection;
 
   const request =
     code > 254 ? encodeMessageV2(code, data) : encodeMessageV1(code, data);
@@ -168,6 +184,7 @@ export const execute = async (
 
     log(`Writing ${request.toJSON().data} to ${port}`);
     serial.write(request);
+    connection.bytesWritten += Buffer.byteLength(request);
   }
 
   // make every DataView unique to each request, even though

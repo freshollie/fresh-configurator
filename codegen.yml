@@ -1,4 +1,3 @@
-  
 overwrite: true
 schema: "./packages/**/*.graphql"
 documents: "./packages/**/*.graphql"
@@ -10,6 +9,7 @@ generates:
       withHOC: false
       mappers:
         FlightController: ../models#FlightControllerPartial
+        ConnectionState: ../models#ConnectionStateMapping
       nonOptionalTypename: true
       reactApolloVersion: 3
     plugins:
@@ -17,4 +17,3 @@ generates:
       - "typescript-resolvers"
       - "typescript-operations"
       - "typescript-react-apollo"
-      

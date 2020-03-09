@@ -1,6 +1,12 @@
 import MockBinding from "@serialport/binding-mock";
 import flushPromises from "flush-promises";
-import { raw, reset, execute } from "../src/serial/connection";
+import {
+  raw,
+  reset,
+  execute,
+  bytesRead,
+  bytesWritten
+} from "../src/serial/connection";
 import { open, connections, isOpen, ports, close } from "../src";
 import { encodeMessageV1, encodeMessageV2 } from "../src/serial/encoders";
 
@@ -278,5 +284,41 @@ describe("execute", () => {
 
     expect(rejected).toBeTruthy();
     expect(rejected).toMatchSnapshot();
+  });
+});
+
+describe("bytesRead", () => {
+  it("should initialise at 0", async () => {
+    await open("/dev/something");
+    expect(bytesRead("/dev/something")).toEqual(0);
+  });
+
+  it("should cound the number of bytes read from the device", async () => {
+    const data = [36, 77, 62, 6, 108, 129, 0, 62, 1, 100, 1, 177];
+    await open("/dev/something");
+    reply("/dev/something", Buffer.from(data));
+    await flushPromises();
+    expect(bytesRead("/dev/something")).toEqual(data.length);
+  });
+});
+
+describe("bytesWritten", () => {
+  it("should initialise at 0", async () => {
+    await open("/dev/something");
+    expect(bytesWritten("/dev/something")).toEqual(0);
+  });
+
+  it("should cound the number of bytes read from the device", async () => {
+    await open("/dev/something");
+    execute("/dev/something", {
+      code: 255,
+      data: Buffer.from("This is a v2 message")
+    });
+
+    expect(bytesWritten("/dev/something")).toEqual(
+      Buffer.byteLength(
+        encodeMessageV2(255, Buffer.from("This is a v2 message"))
+      )
+    );
   });
 });

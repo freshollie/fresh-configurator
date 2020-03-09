@@ -1,7 +1,11 @@
 query ConnectionState($port: String!) {
   device(port: $port) @client {
-    connected
-    connecting
+    connection {
+      connected
+      connecting
+      bytesWritten
+      bytesRead
+    }
   }
 }
 

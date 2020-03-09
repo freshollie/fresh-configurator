@@ -5,7 +5,9 @@ import {
   open,
   getAttitude,
   close,
-  getMspInfo
+  getMspInfo,
+  bytesRead,
+  bytesWritten
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -51,8 +53,11 @@ const setConnectionState = (
     data: {
       __typename: "Query",
       device: {
-        connected,
-        connecting,
+        connection: {
+          connected,
+          connecting,
+          __typename: "ConnectionState"
+        },
         __typename: "FlightController"
       }
     },
@@ -66,8 +71,11 @@ const resolvers: Resolvers = {
     ports: () => ports(),
     device: (_, { port }) => ({
       port,
-      connected: false,
-      connecting: false,
+      connection: {
+        connecting: false,
+        connected: true,
+        __typename: "ConnectionState"
+      },
       __typename: "FlightController"
     }),
     configurator: () => ({
@@ -102,7 +110,7 @@ const resolvers: Resolvers = {
       }
 
       // read the current connection state from memory
-      const { data } = await client.query<
+      const data = client.readQuery<
         ConnectionStateQuery,
         ConnectionStateQueryVariables
       >({
@@ -113,7 +121,7 @@ const resolvers: Resolvers = {
       });
 
       // And only close the port if we are connecting
-      if (data.device.connecting) {
+      if (data?.device.connection.connecting) {
         await close(port);
       }
 
@@ -144,6 +152,10 @@ const resolvers: Resolvers = {
   FlightController: {
     attitude: ({ port }) =>
       getAttitude(port).then(values => ({ ...values, __typename: "Attitude" }))
+  },
+  ConnectionState: {
+    bytesRead: ({ parent: { port } }) => bytesRead(port),
+    bytesWritten: ({ parent: { port } }) => bytesWritten(port)
   }
 };
 

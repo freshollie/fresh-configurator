@@ -1,9 +1,12 @@
+import SerialPort from "serialport";
 import { MspParser } from "./parser";
 
 export interface Connection {
   serial: SerialPort;
   parser: MspParser;
   requests: Record<string, Promise<ArrayBuffer> | undefined>;
+  bytesWritten: number;
+  bytesRead: number;
 }
 
 export interface ConnectionOptions {
