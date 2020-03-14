@@ -105,7 +105,8 @@ export const open: OpenConnectionFunction = async (
     parser,
     requests: {},
     bytesRead: 0,
-    bytesWritten: 0
+    bytesWritten: 0,
+    packetErrors: 0
   };
 
   serial.on("data", (data: Buffer) => {
@@ -133,6 +134,9 @@ export const bytesRead = (port: string): number =>
 
 export const bytesWritten = (port: string): number =>
   connectionsMap[port]?.bytesWritten ?? 0;
+
+export const packetErrors = (port: string): number =>
+  connectionsMap[port]?.packetErrors ?? 0;
 
 /**
  * Execute the given MspCommand on the given port.
@@ -168,7 +172,11 @@ export const execute = async (
       }, timeout);
 
       function onData(message: MspMessage): void {
-        if (message.code === code && !message.crcError) {
+        if (message.code === code) {
+          if (message.crcError && connection) {
+            connection.packetErrors += 1;
+            return;
+          }
           log(`${request.toJSON().data} response: ${message.data}`);
 
           delete requests[requestKey];

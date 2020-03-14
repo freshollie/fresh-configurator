@@ -7,6 +7,7 @@ export interface Connection {
   requests: Record<string, Promise<ArrayBuffer> | undefined>;
   bytesWritten: number;
   bytesRead: number;
+  packetErrors: number;
 }
 
 export interface ConnectionOptions {

@@ -6,5 +6,6 @@ export {
   open,
   close,
   bytesRead,
-  bytesWritten
+  bytesWritten,
+  packetErrors
 } from "./serial/connection";

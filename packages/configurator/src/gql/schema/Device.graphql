@@ -3,19 +3,28 @@ type Query {
 }
 
 type FlightController {
-  connection: ConnectionState!
+  connection: ConnectionStatus!
   attitude: Attitude!
+  status: Status!
 }
 
-type ConnectionState {
+type ConnectionStatus {
   connected: Boolean!
   connecting: Boolean!
   bytesRead: Int!
   bytesWritten: Int!
+  packetErrors: Int!
 }
 
 type Attitude {
   roll: Float!
   pitch: Float!
   heading: Float!
+}
+
+type Status {
+  cycleTime: Int!
+  i2cError: Int!
+  activeSensors: Int!
+  cpuload: Float!
 }

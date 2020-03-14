@@ -7,14 +7,18 @@ import {
   close,
   getMspInfo,
   bytesRead,
-  bytesWritten
+  bytesWritten,
+  getStatusExtended
 } from "@fresh/msp";
 import semver from "semver";
 import {
   Resolvers,
   ConnectionStateQueryVariables,
   ConnectionStateDocument,
-  ConnectionStateQuery
+  ConnectionStateQuery,
+  LogsQuery,
+  LogsQueryVariables,
+  LogsDocument
 } from "./__generated__";
 import config from "../config";
 
@@ -56,7 +60,7 @@ const setConnectionState = (
         connection: {
           connected,
           connecting,
-          __typename: "ConnectionState"
+          __typename: "ConnectionStatus"
         },
         __typename: "FlightController"
       }
@@ -66,6 +70,30 @@ const setConnectionState = (
     }
   });
 
+const log = (client: ApolloClient<object>, message: String): void => {
+  const data = client.readQuery<LogsQuery, LogsQueryVariables>({
+    query: LogsDocument
+  });
+
+  client.writeQuery<LogsQuery, LogsQueryVariables>({
+    query: LogsDocument,
+    data: {
+      configurator: {
+        logs: [
+          ...(data?.configurator.logs ?? []),
+          {
+            time: new Date().toISOString(),
+            message,
+            __typename: "Log"
+          } as const
+        ],
+        __typename: "Configurator"
+      },
+      __typename: "Query"
+    }
+  });
+};
+
 const resolvers: Resolvers = {
   Query: {
     ports: () => ports(),
@@ -74,7 +102,7 @@ const resolvers: Resolvers = {
       connection: {
         connecting: false,
         connected: true,
-        __typename: "ConnectionState"
+        __typename: "ConnectionStatus"
       },
       __typename: "FlightController"
     }),
@@ -83,6 +111,7 @@ const resolvers: Resolvers = {
       baudRate: selectedBaud(),
       tab: selectedTab(),
       expertMode: expertMode(),
+      logs: [],
       __typename: "Configurator"
     })
   },
@@ -146,16 +175,26 @@ const resolvers: Resolvers = {
       }
       return true;
     },
-    setExpertMode: (_, { enabled }) => !!expertMode(enabled)
+    setExpertMode: (_, { enabled }) => !!expertMode(enabled),
+    log: (_, { message }, { client }: Context) => {
+      log(client, message);
+      return true;
+    }
   },
 
   FlightController: {
     attitude: ({ port }) =>
-      getAttitude(port).then(values => ({ ...values, __typename: "Attitude" }))
+      getAttitude(port).then(values => ({ ...values, __typename: "Attitude" })),
+    status: ({ port }) =>
+      getStatusExtended(port).then(values => ({
+        ...values,
+        __typename: "Status"
+      }))
   },
-  ConnectionState: {
+  ConnectionStatus: {
     bytesRead: ({ parent: { port } }) => bytesRead(port),
-    bytesWritten: ({ parent: { port } }) => bytesWritten(port)
+    bytesWritten: ({ parent: { port } }) => bytesWritten(port),
+    packetErrors: ({ parent: { port } }) => bytesWritten(port)
   }
 };
 

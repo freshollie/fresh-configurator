@@ -9,7 +9,7 @@ generates:
       withHOC: false
       mappers:
         FlightController: ../models#FlightControllerPartial
-        ConnectionState: ../models#ConnectionStateMapping
+        ConnectionStatus: ../models#ConnectionStatusMapping
       nonOptionalTypename: true
       reactApolloVersion: 3
     plugins:

@@ -13,5 +13,7 @@ export default (
     skip: !port
   });
 
-  return deviceData?.device ?? { connected: false, connecting: false };
+  return (
+    deviceData?.device.connection ?? { connected: false, connecting: false }
+  );
 };

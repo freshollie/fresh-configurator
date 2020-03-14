@@ -9,3 +9,7 @@ mutation SelectTab($tabId: String!) {
 mutation SetExpertMode($enabled: Boolean!) {
   setExpertMode(enabled: $enabled) @client
 }
+
+mutation Log($message: String!) {
+  log(message: $message)
+}

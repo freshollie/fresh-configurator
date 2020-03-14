@@ -23,3 +23,12 @@ query NavigationData {
     port
   }
 }
+
+query Logs {
+  configurator @client {
+    logs {
+      time
+      message
+    }
+  }
+}

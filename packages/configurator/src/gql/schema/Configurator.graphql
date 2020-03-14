@@ -6,6 +6,7 @@ type Mutation {
   setConnectionSettings(port: String!, baudRate: Int): Boolean
   setTab(tabId: String!): Boolean
   setExpertMode(enabled: Boolean!): Boolean
+  log(message: String!): Boolean
 }
 
 type Configurator {
@@ -13,4 +14,10 @@ type Configurator {
   baudRate: Int!
   tab: String
   expertMode: Boolean!
+  logs: [Log!]!
+}
+
+type Log {
+  time: String!
+  message: String!
 }

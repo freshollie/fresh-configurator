@@ -3,8 +3,16 @@ query ConnectionState($port: String!) {
     connection {
       connected
       connecting
+    }
+  }
+}
+
+query ConnectionDetails($port: String!) {
+  device(port: $port) @client {
+    connection {
       bytesWritten
       bytesRead
+      packetErrors
     }
   }
 }
@@ -15,6 +23,17 @@ query Attitude($port: String!) {
       roll
       pitch
       heading
+    }
+  }
+}
+
+query Status($port: String!) {
+  device(port: $port) @client {
+    status {
+      cycleTime
+      i2cError
+      activeSensors
+      cpuload
     }
   }
 }

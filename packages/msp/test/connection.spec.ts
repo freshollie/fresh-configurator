@@ -1,13 +1,16 @@
 import MockBinding from "@serialport/binding-mock";
 import flushPromises from "flush-promises";
+import { raw, reset, execute } from "../src/serial/connection";
 import {
-  raw,
-  reset,
-  execute,
+  open,
+  connections,
+  isOpen,
+  ports,
+  close,
   bytesRead,
-  bytesWritten
-} from "../src/serial/connection";
-import { open, connections, isOpen, ports, close } from "../src";
+  bytesWritten,
+  packetErrors
+} from "../src";
 import { encodeMessageV1, encodeMessageV2 } from "../src/serial/encoders";
 
 const mockPorts = ["/dev/something", "/dev/somethingelse"];
@@ -258,6 +261,7 @@ describe("execute", () => {
     jest.runAllTimers();
     // Should timeout from no response
     await expect(execution).rejects.toEqual(expect.any(Error));
+    expect(packetErrors("/dev/something")).toBe(1);
   });
 
   it("should timeout after given timeout", async () => {
