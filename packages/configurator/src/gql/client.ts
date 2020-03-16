@@ -21,6 +21,7 @@ import {
   LogsDocument
 } from "./__generated__";
 import config from "../config";
+import { versionInfo } from "../util";
 
 interface Context {
   client: ApolloClient<object>;
@@ -70,7 +71,7 @@ const setConnectionState = (
     }
   });
 
-const log = (client: ApolloClient<object>, message: String): void => {
+const log = (client: ApolloClient<object>, message: string): void => {
   const data = client.readQuery<LogsQuery, LogsQueryVariables>({
     query: LogsDocument
   });
@@ -80,12 +81,11 @@ const log = (client: ApolloClient<object>, message: String): void => {
     data: {
       configurator: {
         logs: [
-          ...(data?.configurator.logs ?? []),
-          {
+          ...(data?.configurator.logs ?? []).concat({
             time: new Date().toISOString(),
             message,
-            __typename: "Log"
-          } as const
+            __typename: "Log" as const
+          })
         ],
         __typename: "Configurator"
       },
@@ -106,14 +106,23 @@ const resolvers: Resolvers = {
       },
       __typename: "FlightController"
     }),
-    configurator: () => ({
-      port: selectedPort(),
-      baudRate: selectedBaud(),
-      tab: selectedTab(),
-      expertMode: expertMode(),
-      logs: [],
-      __typename: "Configurator"
-    })
+    configurator: () => {
+      const { os, version, chromeVersion } = versionInfo();
+      return {
+        port: selectedPort(),
+        baudRate: selectedBaud(),
+        tab: selectedTab(),
+        expertMode: expertMode(),
+        logs: [
+          {
+            time: new Date().toISOString(),
+            message: `Running - OS: <strong>${os}</strong>, Chrome: <strong>${chromeVersion}</strong>, Configurator: <strong>${version}</strong>`,
+            __typename: "Log"
+          }
+        ],
+        __typename: "Configurator"
+      };
+    }
   },
   Mutation: {
     connect: async (_, { port, baudRate }, { client }: Context) => {

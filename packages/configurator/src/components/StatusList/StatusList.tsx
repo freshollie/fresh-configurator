@@ -8,6 +8,7 @@ export default styled.ul`
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 0;
+  line-height: 20px;
 
   > li {
     display: block;

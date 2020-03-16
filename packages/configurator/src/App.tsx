@@ -7,6 +7,7 @@ import Navigation from "./managers/Navigation";
 import TabRouter from "./managers/TabRouter";
 
 import FcStatusProvider from "./providers/FcStatusProvider";
+import LogsProvider from "./providers/LogsProvider";
 import MainLayout from "./layouts/MainLayout";
 import Setup from "./tabs/Setup";
 
@@ -19,6 +20,7 @@ const App: React.FC = () => (
           <ConnectControls />
         </div>
       </HeaderBar>
+      <LogsProvider />
     </header>
     <main>
       <nav>
