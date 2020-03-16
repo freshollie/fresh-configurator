@@ -101,7 +101,7 @@ const resolvers: Resolvers = {
       port,
       connection: {
         connecting: false,
-        connected: true,
+        connected: false,
         __typename: "ConnectionStatus"
       },
       __typename: "FlightController"
@@ -130,16 +130,28 @@ const resolvers: Resolvers = {
         return true;
       }
 
+      let closed = false;
+
       setConnectionState(client, port, true, false);
 
       await open(port, { baudRate }, () => {
         // on disconnect
+        log(
+          client,
+          `Serial port <span class="message-positive">successfully</span> closed on ${port}`
+        );
         setConnectionState(client, port, false, false);
+        closed = true;
       });
+      log(
+        client,
+        `Serial port <span class="message-positive">successfully</span> opened on ${port}`
+      );
 
       try {
-        const mspInfo = await getMspInfo(port);
-        if (semver.gte(mspInfo.apiVersion, config.apiVersionAccepted)) {
+        const { apiVersion } = await getMspInfo(port);
+        log(client, `MultiWii API version: <strong>${apiVersion}</strong>`);
+        if (semver.gte(apiVersion, config.apiVersionAccepted)) {
           setConnectionState(client, port, false, true);
           return true;
         }
@@ -147,19 +159,12 @@ const resolvers: Resolvers = {
         console.log(e);
       }
 
-      // read the current connection state from memory
-      const data = client.readQuery<
-        ConnectionStateQuery,
-        ConnectionStateQueryVariables
-      >({
-        query: ConnectionStateDocument,
-        variables: {
-          port
-        }
-      });
-
       // And only close the port if we are connecting
-      if (data?.device.connection.connecting) {
+      if (!closed) {
+        log(
+          client,
+          `No configuration received within <span class="message-negative">5 seconds</span>, communication <span class="message-negative">failed</span>`
+        );
         await close(port);
       }
 

@@ -36,6 +36,8 @@ const FcStatusProvider: React.FC = () => {
 
   const { cycleTime, cpuload, i2cError } = deviceStatus?.device.status ?? {};
 
+  // Read the sent and received bytes every second in order to
+  // determine the port usage compared to the baudRate
   useEffect(() => {
     if (baudRate && connected) {
       let lastUsage = { read: 0, written: 0 };

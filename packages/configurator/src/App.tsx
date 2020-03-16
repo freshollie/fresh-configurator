@@ -9,7 +9,9 @@ import TabRouter from "./managers/TabRouter";
 import FcStatusProvider from "./providers/FcStatusProvider";
 import LogsProvider from "./providers/LogsProvider";
 import MainLayout from "./layouts/MainLayout";
+
 import Setup from "./tabs/Setup";
+import Landing from "./tabs/Landing";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -27,7 +29,9 @@ const App: React.FC = () => (
         <Navigation />
       </nav>
       <TabRouter>
-        <div id="landing">This is some landing page</div>
+        <div id="landing">
+          <Landing />
+        </div>
         <div id="setup">
           <Setup />
         </div>
