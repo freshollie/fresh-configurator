@@ -8,6 +8,7 @@ import {
   getMspInfo,
   bytesRead,
   bytesWritten,
+  packetErrors,
   getStatusExtended
 } from "@fresh/msp";
 import semver from "semver";
@@ -100,6 +101,7 @@ const resolvers: Resolvers = {
     device: (_, { port }) => ({
       port,
       connection: {
+        parent: { port },
         connecting: false,
         connected: false,
         __typename: "ConnectionStatus"
@@ -208,7 +210,7 @@ const resolvers: Resolvers = {
   ConnectionStatus: {
     bytesRead: ({ parent: { port } }) => bytesRead(port),
     bytesWritten: ({ parent: { port } }) => bytesWritten(port),
-    packetErrors: ({ parent: { port } }) => bytesWritten(port)
+    packetErrors: ({ parent: { port } }) => packetErrors(port)
   }
 };
 

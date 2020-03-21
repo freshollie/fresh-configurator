@@ -14,7 +14,7 @@ const usagePercentage = (
   last: number,
   current: number,
   baudRate: number
-): number => (((current - last) * 10) / baudRate) * 100;
+): number => Math.round((((current - last) * 10) / baudRate) * 100);
 
 const FcStatusProvider: React.FC = () => {
   const [usage, setUsage] = useState({ read: 0, write: 0, packetErrors: 0 });
@@ -60,8 +60,8 @@ const FcStatusProvider: React.FC = () => {
         } = data.device.connection;
 
         setUsage({
-          read: usagePercentage(bytesRead, lastUsage.read, baudRate),
-          write: usagePercentage(bytesWritten, lastUsage.written, baudRate),
+          read: usagePercentage(lastUsage.read, bytesRead, baudRate),
+          write: usagePercentage(lastUsage.written, bytesWritten, baudRate),
           packetErrors
         });
 
