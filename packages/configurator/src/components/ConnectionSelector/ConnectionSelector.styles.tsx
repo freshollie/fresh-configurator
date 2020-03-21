@@ -9,7 +9,7 @@ export const Container = styled.div`
 export const SelectorsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 180px;
+  min-width: 180px;
 `;
 
 export const ManualOverride = styled.label`

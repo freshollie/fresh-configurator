@@ -23,5 +23,26 @@ export default styled.div`
   }
   > main {
     background-color: ${({ theme }) => theme.colors.accent};
+
+    h3 {
+      margin-block-start: 0em;
+      margin-block-end: 1em;
+    }
+
+    > section {
+      display: flex;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      font-weight: normal;
+      font-size: 12px;
+      > * {
+        flex: 1;
+        margin: 15px;
+      }
+
+      > *:last-child {
+        flex: 0;
+      }
+    }
   }
 `;
