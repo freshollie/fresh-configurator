@@ -12,6 +12,7 @@ import MainLayout from "./layouts/MainLayout";
 
 import Setup from "./tabs/Setup";
 import Landing from "./tabs/Landing";
+import Receiver from "./tabs/Receiver";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -34,6 +35,9 @@ const App: React.FC = () => (
         </div>
         <div id="setup">
           <Setup />
+        </div>
+        <div id="receiver">
+          <Receiver />
         </div>
       </TabRouter>
     </main>

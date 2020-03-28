@@ -12,10 +12,11 @@ import {
   HelpIcon,
   FlasherIcon,
   OSDIcon,
-  SetupIcon
+  SetupIcon,
+  ReceiverIcon
 } from "../../icons";
 
-const disconnectedLinks = [
+const DISCONNECTED_LINKS = [
   {
     title: "Welcome",
     icon: <WelcomeIcon />,
@@ -39,7 +40,7 @@ const disconnectedLinks = [
   }
 ];
 
-const connectedLinks = [
+const CONNECTED_LINKS = [
   {
     title: "Setup",
     icon: <SetupIcon />,
@@ -49,6 +50,11 @@ const connectedLinks = [
     title: "OSD",
     icon: <OSDIcon />,
     id: "osd"
+  },
+  {
+    title: "Receiver",
+    icon: <ReceiverIcon />,
+    id: "receiver"
   }
 ];
 
@@ -239,7 +245,7 @@ const Navigation: React.FC = () => {
   );
   const [selectTab] = useSelectTabMutation();
 
-  const links = connected ? connectedLinks : disconnectedLinks;
+  const links = connected ? CONNECTED_LINKS : DISCONNECTED_LINKS;
 
   // Select the first available tab, if no tabs can be selected
   // for the given state

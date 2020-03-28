@@ -20,10 +20,11 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/preset-typescript": "^7.8.3",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
     "@graphql-codegen/add": "^1.12.1",
     "@graphql-codegen/cli": "^1.12.1",
     "@graphql-codegen/typescript-operations": "^1.12.1",

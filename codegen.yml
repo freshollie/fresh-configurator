@@ -9,7 +9,8 @@ generates:
       withHOC: false
       mappers:
         FlightController: ../models#FlightControllerPartial
-        ConnectionStatus: ../models#ConnectionStatusMapping
+        ConnectionStatus: ../models#FlightControllerQuery
+        RC: ../models#FlightControllerQuery
       nonOptionalTypename: true
       reactApolloVersion: 3
     plugins:

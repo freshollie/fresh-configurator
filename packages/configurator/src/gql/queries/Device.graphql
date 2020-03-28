@@ -17,6 +17,12 @@ query ConnectionDetails($port: String!) {
   }
 }
 
+query ApiVersion($port: String!) {
+  device(port: $port) {
+    apiVersion
+  }
+}
+
 query Attitude($port: String!) {
   device(port: $port) @client {
     attitude {
@@ -34,6 +40,14 @@ query Status($port: String!) {
       i2cError
       activeSensors
       cpuload
+    }
+  }
+}
+
+query RcChannels($port: String!) {
+  device(port: $port) @client {
+    rc {
+      channels
     }
   }
 }

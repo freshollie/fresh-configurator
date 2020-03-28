@@ -6,3 +6,4 @@ export { default as FlasherIcon } from "./assets/cf_icon_flasher_grey.svg";
 export { default as SetupIcon } from "./assets/cf_icon_setup_grey.svg";
 export { default as OSDIcon } from "./assets/icon_osd.svg";
 export { default as ScrollIcon } from "./assets/scroll.svg";
+export { default as ReceiverIcon } from "./assets/cf_icon_rx_grey.svg";

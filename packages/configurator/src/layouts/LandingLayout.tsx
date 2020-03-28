@@ -21,6 +21,7 @@ export default styled.div`
       }
     }
   }
+
   > main {
     background-color: ${({ theme }) => theme.colors.accent};
 

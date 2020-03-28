@@ -54,8 +54,10 @@ const device = ({
   result: {
     data: {
       device: {
-        connected,
-        connecting
+        connection: {
+          connected,
+          connecting
+        }
       }
     }
   }

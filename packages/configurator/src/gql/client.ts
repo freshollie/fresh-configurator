@@ -5,11 +5,13 @@ import {
   open,
   getAttitude,
   close,
-  getMspInfo,
+  initialise,
+  apiVersion,
   bytesRead,
   bytesWritten,
   packetErrors,
-  getStatusExtended
+  getStatusExtended,
+  getRcValues
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -100,8 +102,9 @@ const resolvers: Resolvers = {
     ports: () => ports(),
     device: (_, { port }) => ({
       port,
+      apiVersion: "",
       connection: {
-        parent: { port },
+        port,
         connecting: false,
         connected: false,
         __typename: "ConnectionStatus"
@@ -151,22 +154,28 @@ const resolvers: Resolvers = {
       );
 
       try {
-        const { apiVersion } = await getMspInfo(port);
-        log(client, `MultiWii API version: <strong>${apiVersion}</strong>`);
-        if (semver.gte(apiVersion, config.apiVersionAccepted)) {
+        await initialise(port);
+        const version = apiVersion(port);
+        log(client, `MultiWii API version: <strong>${version}</strong>`);
+
+        if (semver.gte(version, config.apiVersionAccepted)) {
           setConnectionState(client, port, false, true);
           return true;
         }
+        log(
+          client,
+          `MSP version not supported: <span class="message-negative">${version}</span>`
+        );
       } catch (e) {
         console.log(e);
-      }
-
-      // And only close the port if we are connecting
-      if (!closed) {
         log(
           client,
           `No configuration received within <span class="message-negative">5 seconds</span>, communication <span class="message-negative">failed</span>`
         );
+      }
+
+      // And only close the port if we are connecting
+      if (!closed) {
         await close(port);
       }
 
@@ -205,12 +214,20 @@ const resolvers: Resolvers = {
       getStatusExtended(port).then(values => ({
         ...values,
         __typename: "Status"
-      }))
+      })),
+    rc: ({ port }) => ({
+      port,
+      __typename: "RC"
+    }),
+    apiVersion: ({ port }) => apiVersion(port)
   },
   ConnectionStatus: {
-    bytesRead: ({ parent: { port } }) => bytesRead(port),
-    bytesWritten: ({ parent: { port } }) => bytesWritten(port),
-    packetErrors: ({ parent: { port } }) => packetErrors(port)
+    bytesRead: ({ port }) => bytesRead(port),
+    bytesWritten: ({ port }) => bytesWritten(port),
+    packetErrors: ({ port }) => packetErrors(port)
+  },
+  RC: {
+    channels: ({ port }) => getRcValues(port)
   }
 };
 

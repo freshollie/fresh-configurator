@@ -187,7 +187,7 @@ describe("execute", () => {
     reply("/dev/something", Buffer.from([129, 0, 62, 1, 100, 1, 177]));
 
     const response = await execution;
-    expect(Buffer.from(response.buffer())).toEqual(
+    expect(Buffer.from(response.buffer)).toEqual(
       Buffer.from([129, 0, 62, 1, 100, 1])
     );
   });
@@ -209,7 +209,7 @@ describe("execute", () => {
     await flushPromises();
 
     const response = await execution;
-    expect(Buffer.from(response.buffer())).toEqual(
+    expect(Buffer.from(response.buffer)).toEqual(
       Buffer.from([129, 0, 62, 1, 100, 1])
     );
   });
@@ -230,12 +230,12 @@ describe("execute", () => {
     );
 
     const response1 = await execution1;
-    expect(Buffer.from(response1.buffer())).toEqual(
+    expect(Buffer.from(response1.buffer)).toEqual(
       Buffer.from([129, 0, 62, 1, 100, 1])
     );
 
     const response2 = await execution2;
-    expect(Buffer.from(response2.buffer())).toEqual(
+    expect(Buffer.from(response2.buffer)).toEqual(
       Buffer.from([129, 0, 62, 1, 100, 1])
     );
 

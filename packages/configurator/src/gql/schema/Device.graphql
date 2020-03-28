@@ -6,6 +6,8 @@ type FlightController {
   connection: ConnectionStatus!
   attitude: Attitude!
   status: Status!
+  rc: RC!
+  apiVersion: String!
 }
 
 type ConnectionStatus {
@@ -27,4 +29,8 @@ type Status {
   i2cError: Int!
   activeSensors: Int!
   cpuload: Float!
+}
+
+type RC {
+  channels: [Int!]!
 }

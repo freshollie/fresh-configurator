@@ -9,7 +9,7 @@
 
 import SerialPort from "serialport";
 import debug from "debug";
-import { MspDataView } from "./utils";
+import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
 
@@ -20,10 +20,73 @@ import {
   OpenFunction as OpenConnectionFunction,
   OnCloseCallback
 } from "./connection.d";
+import codes from "./codes";
 
 const log = debug("connection");
 
 const connectionsMap: Record<string, Connection | undefined> = {};
+
+/**
+ * Execute the given MspCommand on the given port.
+ *
+ * Return the data received from the command
+ */
+export const execute = async (
+  port: string,
+  { code, data, timeout = 5000 }: MspCommand
+): Promise<MspDataView> => {
+  const connection = connectionsMap[port];
+  if (!connection) {
+    throw new Error(`${port} is not open`);
+  }
+
+  const { parser, serial, requests } = connection;
+
+  const request =
+    code > 254 ? encodeMessageV2(code, data) : encodeMessageV1(code, data);
+  const requestKey = request.toString("utf-8");
+  let dataRequest = requests[requestKey];
+
+  // Prevent FC lockup by checking if this request is currently being performed
+  // and if not, making the request
+  if (!dataRequest) {
+    dataRequest = new Promise((resolve, reject) => {
+      // Throw an error if timeout is reached
+      const timeoutId = setTimeout(() => {
+        delete requests[requestKey];
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        parser.off("data", onData);
+        reject(new Error("Timed out during execution"));
+      }, timeout);
+
+      function onData(message: MspMessage): void {
+        if (message.code === code) {
+          if (message.crcError && connection) {
+            connection.packetErrors += 1;
+            return;
+          }
+          log(`${request.toJSON().data} response: ${message.data}`);
+
+          delete requests[requestKey];
+          clearTimeout(timeoutId);
+
+          resolve(message.data);
+          parser.off("data", onData);
+        }
+      }
+
+      parser.on("data", onData);
+    });
+
+    log(`Writing ${request.toJSON().data} to ${port}`);
+    serial.write(request);
+    connection.bytesWritten += Buffer.byteLength(request);
+  }
+
+  // make every DataView unique to each request, even though
+  // they are accessing the same set of data
+  return dataRequest.then(responseData => new MspDataView(responseData));
+};
 
 /**
  * Private, used for testing
@@ -100,13 +163,17 @@ export const open: OpenConnectionFunction = async (
   const parser = serial.pipe(new MspParser());
   parser.setMaxListeners(1000000);
 
-  const connection = {
+  const connection: Connection = {
     serial,
     parser,
     requests: {},
     bytesRead: 0,
     bytesWritten: 0,
-    packetErrors: 0
+    packetErrors: 0,
+    mspInfo: {
+      apiVersion: "0",
+      mspProtocolVersion: 0
+    }
   };
 
   serial.on("data", (data: Buffer) => {
@@ -123,7 +190,23 @@ export const open: OpenConnectionFunction = async (
     close(port);
     onCloseCallback?.();
   });
+
   connectionsMap[port] = connection;
+};
+
+export const initialise = async (port: string): Promise<void> => {
+  const connection = connectionsMap[port];
+  try {
+    const data = await execute(port, { code: codes.MSP_API_VERSION });
+    if (connection) {
+      connection.mspInfo = {
+        mspProtocolVersion: data.readU8(),
+        apiVersion: `${data.readU8()}.${data.readU8()}.0`
+      };
+    }
+  } catch (e) {
+    throw new Error(`Could not receive MSP info for ${port}`);
+  }
 };
 
 export const connections = (): string[] => Object.keys(connectionsMap);
@@ -138,66 +221,5 @@ export const bytesWritten = (port: string): number =>
 export const packetErrors = (port: string): number =>
   connectionsMap[port]?.packetErrors ?? 0;
 
-/**
- * Execute the given MspCommand on the given port.
- *
- * Return the data received from the command
- */
-export const execute = async (
-  port: string,
-  { code, data, timeout = 5000 }: MspCommand
-): Promise<MspDataView> => {
-  const connection = connectionsMap[port];
-  if (!connection) {
-    throw new Error(`${port} is not open`);
-  }
-
-  const { parser, serial, requests } = connection;
-
-  const request =
-    code > 254 ? encodeMessageV2(code, data) : encodeMessageV1(code, data);
-  const requestKey = request.toString("utf-8");
-  const existingRequest = requests[requestKey];
-
-  // Prevent FC lockup by checking if this request is currently being performed
-  // and if not, making the request
-  if (!existingRequest) {
-    requests[requestKey] = new Promise((resolve, reject) => {
-      // Throw an error if timeout is reached
-      const timeoutId = setTimeout(() => {
-        delete requests[requestKey];
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        parser.off("data", onData);
-        reject(new Error("Timed out during execution"));
-      }, timeout);
-
-      function onData(message: MspMessage): void {
-        if (message.code === code) {
-          if (message.crcError && connection) {
-            connection.packetErrors += 1;
-            return;
-          }
-          log(`${request.toJSON().data} response: ${message.data}`);
-
-          delete requests[requestKey];
-          clearTimeout(timeoutId);
-
-          resolve(message.data);
-          parser.off("data", onData);
-        }
-      }
-
-      parser.on("data", onData);
-    });
-
-    log(`Writing ${request.toJSON().data} to ${port}`);
-    serial.write(request);
-    connection.bytesWritten += Buffer.byteLength(request);
-  }
-
-  // make every DataView unique to each request, even though
-  // they are accessing the same set of data
-  return requests[requestKey]!.then(
-    responseData => new MspDataView(responseData)
-  );
-};
+export const apiVersion = (port: string): string =>
+  connectionsMap[port]?.mspInfo.apiVersion ?? "0";

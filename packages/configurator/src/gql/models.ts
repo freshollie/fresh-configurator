@@ -3,6 +3,6 @@ export interface FlightControllerPartial {
   connection: { connecting: boolean; connected: boolean };
 }
 
-export interface ConnectionStatusMapping {
-  parent: FlightControllerPartial;
+export interface FlightControllerQuery {
+  port: string;
 }

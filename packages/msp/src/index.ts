@@ -4,8 +4,11 @@ export {
   connections,
   isOpen,
   open,
+  initialise,
   close,
   bytesRead,
   bytesWritten,
-  packetErrors
+  packetErrors,
+  apiVersion
 } from "./serial/connection";
+export { Features } from "./features";

@@ -1,25 +1,48 @@
 import styled from "../../theme";
 
-export const Bar = styled.div`
-  width: 100%;
-  height: 15px;
-  border: 1px solid ${({ theme }) => theme.colors.subtleAccent};
-  background-color: #f4f4f4;
-  border-radius: 3px;
-`;
-
-export const Label = styled.div`
-  width: 50px;
-  height: 15px;
-  line-height: 15px;
-  text-align: center;
-  color: #474747;
-`;
-
-export interface FillProps {
+export interface BarProps {
   color: string;
+  percentage: number;
 }
 
-export const Fill = styled.div<FillProps>`
-  color: ${({ color }) => color};
+export const Bar = styled.div.attrs<BarProps>(
+  ({ color, percentage, theme }) => ({
+    style: {
+      background: `linear-gradient(
+    to right,
+    ${color} ${percentage}%,
+    ${theme.dark ? "#393b3a" : "#f4f4f4"} 0
+  )
+  no-repeat`
+    }
+  })
+)<BarProps>`
+  width: 100%;
+  height: 16px;
+  line-height: 15px;
+  border: 1px solid ${({ theme }) => theme.colors.subtleAccent};
+  border-radius: 3px;
+  text-align: center;
+  box-sizing: border-box;
+`;
+
+export interface BarLabelProps {
+  percentage: number;
+}
+
+export const BarLabel = styled.div.attrs<BarLabelProps>(
+  ({ percentage, theme }) => ({
+    style: {
+      background: `linear-gradient(to right, white ${percentage}%, ${
+        theme.dark ? "white" : "#474747"
+      } 0)
+    no-repeat`
+    }
+  })
+)<BarLabelProps>`
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 `;

@@ -31,3 +31,27 @@ At the moment functionality is very minimal, and lots is changing all the time.
 ## What's the plan?
 
 Idealy, to become feature complete with the current configurator. The overall goal of the project, however, is to simplify the requirements to develop your own configurator or customise an existing one.
+
+## Developing
+
+```bash
+$ yarn
+```
+
+### Running the full application
+
+```
+$ yarn start
+```
+
+### Component development enviroment
+
+```
+$ yarn storybook
+```
+
+### Compile `@fresh/msp` changes
+
+```
+$ yarn prepare
+```

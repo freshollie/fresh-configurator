@@ -1,6 +1,11 @@
 import SerialPort from "serialport";
 import { MspParser } from "./parser";
 
+export interface MspInfo {
+  mspProtocolVersion: number;
+  apiVersion: string;
+}
+
 export interface Connection {
   serial: SerialPort;
   parser: MspParser;
@@ -8,6 +13,7 @@ export interface Connection {
   bytesWritten: number;
   bytesRead: number;
   packetErrors: number;
+  mspInfo: MspInfo;
 }
 
 export interface ConnectionOptions {

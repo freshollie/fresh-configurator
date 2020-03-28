@@ -17,10 +17,6 @@ export interface Kinematics {
   heading: number;
 }
 
-export interface MspInfo {
-  mspProtocolVersion: number;
-  apiVersion: string;
-}
 export interface Status {
   cycleTime: number;
   i2cError: number;
@@ -35,4 +31,26 @@ export interface ExtendedStatus extends Status {
   rateProfile: number;
   armingDisableCount?: number;
   armingDisableFlags?: number;
+}
+
+export interface RcTuning {
+  rcRate: number;
+  rcExpo: number;
+  rollPitchRate: number;
+  pitchRate: number;
+  rollRate: number;
+  yawRate: number;
+  dynamicThrottlePid: number;
+  throttleMid: number;
+  throttleExpo: number;
+  dynamicThrottleBreakpoint: number;
+  rcYawExpo: number;
+  rcYawRate: number;
+  rcPitchRate: number;
+  rcPitchExpo: number;
+  throttleLimitType: number;
+  throttleLimitPercent: number;
+  rollRateLimit: number;
+  pitchRateLimit: number;
+  yawRateLimit: number;
 }

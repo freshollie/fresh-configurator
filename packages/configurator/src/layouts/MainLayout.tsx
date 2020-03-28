@@ -9,12 +9,14 @@ export default styled.div`
   > header {
     flex: 0;
   }
+
   > main {
     background-color: white;
     display: flex;
     flex-direction: row;
     flex: 1;
     > * {
+      overflow-y: scroll;
       flex: 1;
     }
 
@@ -22,6 +24,7 @@ export default styled.div`
       flex: unset;
     }
   }
+
   > footer {
     flex: 0;
     display: flex;

@@ -1,7 +1,7 @@
 import { execute } from "../src/serial/connection";
-import { MspDataView } from "../src/serial/utils";
+import MspDataView from "../src/serial/dataview";
 import { getAttitude } from "../src";
-import codes from "../src/codes";
+import codes from "../src/serial/codes";
 
 jest.mock("../src/serial/connection");
 const mockExecute = (execute as unknown) as jest.MockedFunction<typeof execute>;
