@@ -12,9 +12,12 @@ const RcModelViewProvider: React.FC = () => {
   const port = useSelectedPort();
   const { data } = useRcChannelsQuery({
     variables: {
-      port
-    }
+      port: port ?? ""
+    },
+    pollInterval: 10
   });
 
   const channels = data?.device.rc.channels ?? [0, 0, 0, 0];
+
+  return null;
 };

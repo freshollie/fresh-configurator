@@ -5,6 +5,7 @@ export default styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   > header {
     flex: 0;
@@ -14,8 +15,9 @@ export default styled.div`
     background-color: white;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
     flex: 1;
-    > * {
+    > .tab-content {
       overflow-y: scroll;
       flex: 1;
     }

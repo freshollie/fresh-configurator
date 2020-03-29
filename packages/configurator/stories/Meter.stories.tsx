@@ -35,12 +35,3 @@ export const Example = (): JSX.Element => {
   const value = useMeterValue(900, 2000, 20);
   return <Meter value={value} min={900} max={2000} color="red" />;
 };
-
-export const Multiple = (): JSX.Element => {
-  const channels = new Array(18)
-    .fill(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    .map((_, i) => useMeterValue(800, 2200, (i + 1) * 3));
-
-  return <ChannelsList channels={channels} />;
-};

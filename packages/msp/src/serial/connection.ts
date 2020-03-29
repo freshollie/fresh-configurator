@@ -33,7 +33,7 @@ const connectionsMap: Record<string, Connection | undefined> = {};
  */
 export const execute = async (
   port: string,
-  { code, data, timeout = 5000 }: MspCommand
+  { code, data, timeout = 2500 }: MspCommand
 ): Promise<MspDataView> => {
   const connection = connectionsMap[port];
   if (!connection) {
@@ -77,6 +77,8 @@ export const execute = async (
 
       parser.on("data", onData);
     });
+
+    requests[requestKey] = dataRequest;
 
     log(`Writing ${request.toJSON().data} to ${port}`);
     serial.write(request);
@@ -163,7 +165,7 @@ export const open: OpenConnectionFunction = async (
   const parser = serial.pipe(new MspParser());
   parser.setMaxListeners(1000000);
 
-  const connection: Connection = {
+  const connection = {
     serial,
     parser,
     requests: {},
@@ -176,6 +178,20 @@ export const open: OpenConnectionFunction = async (
     }
   };
 
+  connectionsMap[port] = connection;
+
+  try {
+    const response = await execute(port, { code: codes.MSP_API_VERSION });
+    connection.mspInfo = {
+      mspProtocolVersion: response.readU8(),
+      apiVersion: `${response.readU8()}.${response.readU8()}.0`
+    };
+  } catch (e) {
+    await close(port);
+    throw new Error(`Could not read MSP version from ${port}`);
+  }
+
+  // valid connection, setup listeners
   serial.on("data", (data: Buffer) => {
     connection.bytesRead += Buffer.byteLength(data);
   });
@@ -191,22 +207,9 @@ export const open: OpenConnectionFunction = async (
     onCloseCallback?.();
   });
 
-  connectionsMap[port] = connection;
-};
-
-export const initialise = async (port: string): Promise<void> => {
-  const connection = connectionsMap[port];
-  try {
-    const data = await execute(port, { code: codes.MSP_API_VERSION });
-    if (connection) {
-      connection.mspInfo = {
-        mspProtocolVersion: data.readU8(),
-        apiVersion: `${data.readU8()}.${data.readU8()}.0`
-      };
-    }
-  } catch (e) {
-    throw new Error(`Could not receive MSP info for ${port}`);
-  }
+  connection.bytesRead = 0;
+  connection.bytesWritten = 0;
+  connection.packetErrors = 0;
 };
 
 export const connections = (): string[] => Object.keys(connectionsMap);

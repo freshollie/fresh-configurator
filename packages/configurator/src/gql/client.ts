@@ -5,7 +5,6 @@ import {
   open,
   getAttitude,
   close,
-  initialise,
   apiVersion,
   bytesRead,
   bytesWritten,
@@ -138,23 +137,24 @@ const resolvers: Resolvers = {
       let closed = false;
 
       setConnectionState(client, port, true, false);
-
-      await open(port, { baudRate }, () => {
-        // on disconnect
-        log(
-          client,
-          `Serial port <span class="message-positive">successfully</span> closed on ${port}`
-        );
-        setConnectionState(client, port, false, false);
-        closed = true;
-      });
-      log(
-        client,
-        `Serial port <span class="message-positive">successfully</span> opened on ${port}`
-      );
+      log(client, `Opening connection on ${port}`);
 
       try {
-        await initialise(port);
+        await open(port, { baudRate }, () => {
+          // on disconnect
+          log(
+            client,
+            `Serial port <span class="message-positive">successfully</span> closed on ${port}`
+          );
+          setConnectionState(client, port, false, false);
+          closed = true;
+        });
+
+        log(
+          client,
+          `Serial port <span class="message-positive">successfully</span> opened on ${port}`
+        );
+
         const version = apiVersion(port);
         log(client, `MultiWii API version: <strong>${version}</strong>`);
 
@@ -167,16 +167,16 @@ const resolvers: Resolvers = {
           `MSP version not supported: <span class="message-negative">${version}</span>`
         );
       } catch (e) {
-        console.log(e);
         log(
           client,
-          `No configuration received within <span class="message-negative">5 seconds</span>, communication <span class="message-negative">failed</span>`
+          `Could not open connection (<span class="message-negative">${e.message}</span>), communication <span class="message-negative">failed</span>`
         );
       }
 
       // And only close the port if we are connecting
       if (!closed) {
         await close(port);
+        setConnectionState(client, port, false, false);
       }
 
       return false;

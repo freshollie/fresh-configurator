@@ -7,3 +7,5 @@ exports[`execute should timeout after given timeout 1`] = `[Error: Timed out dur
 exports[`open should not allow a connection to be opened more than once 1`] = `[Error: /dev/something is already open]`;
 
 exports[`open should throw an error when port cannot be opened 1`] = `[Error: Port does not exist - please call MockBinding.createPort('/something/wrong') first]`;
+
+exports[`open should throw an error when trying to open a port which doesn't respond with api version 1`] = `[Error: Could not read MSP version from /dev/non-msp-device]`;

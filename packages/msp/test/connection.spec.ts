@@ -1,6 +1,6 @@
 import MockBinding from "@serialport/binding-mock";
 import flushPromises from "flush-promises";
-import { raw, reset, execute } from "../src/serial/connection";
+import { raw, reset, execute, apiVersion } from "../src/serial/connection";
 import {
   open,
   connections,
@@ -11,39 +11,96 @@ import {
   bytesWritten,
   packetErrors
 } from "../src";
+import codes from "../src/serial/codes";
+
 import { encodeMessageV1, encodeMessageV2 } from "../src/serial/encoders";
 
-const mockPorts = ["/dev/something", "/dev/somethingelse"];
+const mockMspDevices = ["/dev/something", "/dev/somethingelse"];
+const mockPorts = ["/dev/non-msp-device", ...mockMspDevices];
 
+const mspInfoRequest = encodeMessageV1(codes.MSP_API_VERSION);
+
+/**
+ * Get the data written to the given port
+ * after the msp info request was written
+ */
 const writtenData = (port: string): Buffer =>
-  (raw(port)?.binding as MockBinding).recording;
+  (raw(port)?.binding as MockBinding).recording.slice(
+    mspInfoRequest.byteLength
+  );
 
 const reply = (port: string, data: Buffer): void => {
   (raw(port)?.binding as MockBinding).emitData(data);
 };
+
+/**
+ * Automatically reply MSP info for the given port
+ * when it's opened
+ */
+const handleMspInfoReply = async (port: string): Promise<void> => {
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      if (
+        (raw(port)?.binding as MockBinding).recording.compare(
+          mspInfoRequest
+        ) === 0
+      ) {
+        // Reply with some mock MSP info
+        reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
+        break;
+      }
+    } catch (e) {}
+    // wait 10 miliseconds
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise(resolve => setTimeout(resolve, 10));
+  }
+};
+
+beforeEach(() => {
+  jest.useRealTimers();
+});
 
 beforeEach(() => {
   MockBinding.reset();
   reset();
 
   mockPorts.forEach(path => {
-    MockBinding.createPort(path, { record: true });
+    MockBinding.createPort(path, {
+      record: true
+    });
   });
-});
 
-beforeEach(() => {
-  jest.useRealTimers();
+  mockMspDevices.forEach(port => handleMspInfoReply(port));
 });
 
 describe("open", () => {
-  it("should open a serial connection to the given port", async () => {
+  it("should open an MSP connection to the given port", async () => {
     await open("/dev/something");
     expect(isOpen("/dev/something")).toBe(true);
   });
 
   it("should allow multiple ports to be opened", async () => {
-    await Promise.all(mockPorts.map(port => open(port)));
-    expect(mockPorts.every(port => isOpen(port))).toBe(true);
+    await Promise.all(mockMspDevices.map(port => open(port)));
+    expect(mockMspDevices.every(port => isOpen(port))).toBe(true);
+  });
+
+  it("should throw an error when trying to open a port which doesn't respond with api version", done => {
+    const realSetTimeout = setTimeout;
+    jest.useFakeTimers();
+
+    open("/dev/non-msp-device")
+      .then(() => {
+        throw new Error("should not have resolved");
+      })
+      .catch(e => {
+        expect(e).toMatchSnapshot();
+        done();
+      });
+
+    realSetTimeout(() => {
+      jest.runTimersToTime(2500);
+    }, 100);
   });
 
   it("should provide a callback and close the connection when the connection closes", done => {
@@ -150,12 +207,14 @@ describe("execute", () => {
       code: 255,
       data: Buffer.from("This is a v2 message")
     });
+
     await flushPromises();
     execute("/dev/something", {
       code: 255,
       data: Buffer.from("This is a v2 message")
     });
 
+    await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
       encodeMessageV2(255, Buffer.from("This is a v2 message"))
     );
@@ -297,7 +356,7 @@ describe("bytesRead", () => {
     expect(bytesRead("/dev/something")).toEqual(0);
   });
 
-  it("should cound the number of bytes read from the device", async () => {
+  it("should count the number of bytes read from the device", async () => {
     const data = [36, 77, 62, 6, 108, 129, 0, 62, 1, 100, 1, 177];
     await open("/dev/something");
     reply("/dev/something", Buffer.from(data));
@@ -312,7 +371,7 @@ describe("bytesWritten", () => {
     expect(bytesWritten("/dev/something")).toEqual(0);
   });
 
-  it("should cound the number of bytes read from the device", async () => {
+  it("should count the number of bytes written to the device", async () => {
     await open("/dev/something");
     execute("/dev/something", {
       code: 255,
@@ -324,5 +383,16 @@ describe("bytesWritten", () => {
         encodeMessageV2(255, Buffer.from("This is a v2 message"))
       )
     );
+  });
+});
+
+describe("apiVersion", () => {
+  it("should respond with the api version for the currently open port", async () => {
+    await open("/dev/something");
+    expect(apiVersion("/dev/something")).toEqual("1.40.0");
+  });
+
+  it("should respond with 0 when port is not open", () => {
+    expect(apiVersion("/dev/something")).toEqual("0");
   });
 });

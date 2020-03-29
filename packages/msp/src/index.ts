@@ -4,7 +4,6 @@ export {
   connections,
   isOpen,
   open,
-  initialise,
   close,
   bytesRead,
   bytesWritten,

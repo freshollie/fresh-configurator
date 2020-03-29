@@ -29,17 +29,19 @@ const App: React.FC = () => (
       <nav>
         <Navigation />
       </nav>
-      <TabRouter>
-        <div id="landing">
-          <Landing />
-        </div>
-        <div id="setup">
-          <Setup />
-        </div>
-        <div id="receiver">
-          <Receiver />
-        </div>
-      </TabRouter>
+      <div className="tab-content">
+        <TabRouter>
+          <div id="landing">
+            <Landing />
+          </div>
+          <div id="setup">
+            <Setup />
+          </div>
+          <div id="receiver">
+            <Receiver />
+          </div>
+        </TabRouter>
+      </div>
     </main>
     <footer>
       <div>
