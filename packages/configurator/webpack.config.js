@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
   {
-    entry: "./src/electron.ts",
+    entry: "./src/main.ts",
     target: "electron-main",
     node: {
       __dirname: false,
@@ -19,7 +19,7 @@ module.exports = [
     },
     output: {
       path: `${__dirname}/app`,
-      filename: "electron.js"
+      filename: "main.js"
     }
   },
   {
@@ -67,7 +67,7 @@ module.exports = [
     },
     output: {
       path: `${__dirname}/app`,
-      filename: "react.js"
+      filename: "renderer.js"
     },
     plugins: [
       new HtmlWebpackPlugin({
