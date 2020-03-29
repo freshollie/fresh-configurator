@@ -7,15 +7,15 @@
   "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "yarn workspace @fresh/configurator start",
+    "start": "yarn workspace @fresh/msp run build && yarn workspace @fresh/configurator start",
     "test": "jest",
-    "build:production": "yarn prepare && yarn workspace @fresh/configurator build:production",
+    "build": "wsrun -t build",
     "storybook": "yarn workspace @fresh/configurator storybook",
     "build:storybook": "yarn workspace @fresh/configurator build-storybook",
-    "postinstall": "electron-rebuild -v 7 && electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "prepare": "yarn codegen && yarn workspace @fresh/msp prepare"
+    "prepare": "yarn codegen"
   },
   "workspaces": [
     "packages/*"
@@ -37,7 +37,6 @@
     "babel-jest": "^25.1.0",
     "electron": "7.1.11",
     "electron-builder": "^22.4.1",
-    "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^6.3.1",
     "eslint-config-prettier": "^6.10.0",
@@ -53,7 +52,8 @@
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "wsrun": "^5.2.0"
   },
   "dependencies": {
     "@serialport/bindings": "^8.0.7"

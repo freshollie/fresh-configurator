@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "target": "es5",
+    "target": "ES2018",
     "module": "commonjs",
     "strict": true,
     "skipLibCheck": true,
@@ -9,9 +9,9 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "rootDirs": ["src", "stories"],
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@fresh/msp": ["../msp/src"]
+      "@fresh/msp": ["../../msp/src"]
     }
   },
   "include": [

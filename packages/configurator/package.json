@@ -11,11 +11,8 @@
     }
   },
   "scripts": {
-    "build": "webpack --mode=development --config ./webpack.config.js",
-    "build:production": "webpack --mode=production --config ./webpack.config.js && yarn dist",
-    "start": "yarn build && electron ./app/electron.js",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "start": "webpack --mode=development --config ./webpack.config.js && electron ./app/main.js",
+    "build": "webpack --mode=production --config ./webpack.config.js && electron-builder",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

@@ -24,6 +24,8 @@ export default styled.div`
 
   > main {
     background-color: ${({ theme }) => theme.colors.accent};
+    display: flex;
+    flex-direction: column;
 
     h3 {
       margin-block-start: 0em;
@@ -44,6 +46,11 @@ export default styled.div`
       > *:last-child {
         flex: 0;
       }
+    }
+
+    > footer {
+      flex: 1;
+      background-color: ${({ theme }) => theme.colors.accent};
     }
   }
 `;
