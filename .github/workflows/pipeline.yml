@@ -47,10 +47,11 @@ jobs:
           yarn --frozen-lockfile
           yarn build:storybook
       - name: Publish
+        if: github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: master
+          BRANCH: gh-pages
           FOLDER: packages/configurator/storybook-static
 
   release:
