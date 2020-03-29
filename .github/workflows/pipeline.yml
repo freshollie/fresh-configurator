@@ -46,6 +46,12 @@ jobs:
         run: |
           yarn --frozen-lockfile
           yarn build:storybook
+      - name: Publish
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: master
+          FOLDER: packages/configurator/storybook-static
 
   release:
     runs-on: ${{ matrix.os }}
