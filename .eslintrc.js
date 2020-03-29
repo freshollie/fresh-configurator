@@ -68,7 +68,8 @@ module.exports = {
         "@typescript-eslint/prefer-regexp-exec": "off",
         "@typescript-eslint/prefer-string-starts-ends-with": "off",
         "@typescript-eslint/require-await": "off",
-        "@typescript-eslint/unbound-method": "off"
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]

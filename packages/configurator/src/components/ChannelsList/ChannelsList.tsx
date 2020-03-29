@@ -54,7 +54,7 @@ const ChannelsList: React.FC<ChannelsListProps> = ({ channels, disabled }) => {
             max={CHANNEL_MAX}
             min={CHANNEL_MIN}
             value={value}
-            color={CHANNEL_COLORS[number] ?? "green"}
+            color={disabled ? "grey" : CHANNEL_COLORS[number] ?? "green"}
           />
         ))}
       </div>

@@ -9,9 +9,10 @@
   "scripts": {
     "start": "yarn workspace @fresh/configurator start",
     "test": "jest",
+    "build:production": "yarn prepare && yarn workspace @fresh/configurator build:production",
     "storybook": "yarn workspace @fresh/configurator storybook",
     "build:storybook": "yarn workspace @fresh/configurator build-storybook",
-    "postinstall": "electron-rebuild -v 7",
+    "postinstall": "electron-rebuild -v 7 && electron-builder install-app-deps",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn codegen && yarn workspace @fresh/msp prepare"
@@ -35,6 +36,7 @@
     "@typescript-eslint/parser": "^2.19.0",
     "babel-jest": "^25.1.0",
     "electron": "7.1.11",
+    "electron-builder": "^22.4.1",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^6.3.1",
