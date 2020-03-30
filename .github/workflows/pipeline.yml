@@ -32,6 +32,10 @@ jobs:
           yarn test
         env:
           CI: true
+      - name: Publish Coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   storybook:
     runs-on: ubuntu-latest

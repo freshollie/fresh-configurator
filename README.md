@@ -2,6 +2,10 @@
 
 > A re-write of the Betaflight configurator
 
+[![Pipeline status](https://github.com/freshollie/jest-dynalite/workflows/Pipeline/badge.svg)](https://github.com/freshollie/fresh-configurator/actions)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://freshollie.github.io/fresh-configurator)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 <p align="center">
   <img width="460" height="300" src="./docs/progress.png">
 </p>
@@ -38,7 +42,7 @@ Idealy, to become feature complete with the current configurator. The overall go
 $ yarn
 ```
 
-### Running the full application
+### Running the application
 
 ```
 $ yarn start
