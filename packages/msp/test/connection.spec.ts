@@ -50,6 +50,7 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
         break;
       }
+      // eslint-disable-next-line no-empty
     } catch (e) {}
     // wait 10 miliseconds
     // eslint-disable-next-line no-await-in-loop
