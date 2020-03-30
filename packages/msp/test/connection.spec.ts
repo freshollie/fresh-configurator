@@ -393,7 +393,7 @@ describe("apiVersion", () => {
     expect(apiVersion("/dev/something")).toEqual("1.40.0");
   });
 
-  it("should respond with 0 when port is not open", () => {
-    expect(apiVersion("/dev/something")).toEqual("0");
+  it("should respond with 0.0.0 when port is not open", () => {
+    expect(apiVersion("/dev/something")).toEqual("0.0.0");
   });
 });

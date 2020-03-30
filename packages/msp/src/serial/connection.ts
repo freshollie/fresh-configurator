@@ -225,4 +225,4 @@ export const packetErrors = (port: string): number =>
   connectionsMap[port]?.packetErrors ?? 0;
 
 export const apiVersion = (port: string): string =>
-  connectionsMap[port]?.mspInfo.apiVersion ?? "0";
+  connectionsMap[port]?.mspInfo.apiVersion ?? "0.0.0";

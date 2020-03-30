@@ -101,7 +101,7 @@ const RcModelViewProvider: React.FC = () => {
     },
     skip: !port
   });
-  const apiVersion = apiVersionData?.device.apiVersion ?? "0";
+  const apiVersion = apiVersionData?.device.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useRcChannelsQuery({
     variables: {
