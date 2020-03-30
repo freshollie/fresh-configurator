@@ -51,3 +51,35 @@ query RcChannels($port: String!) {
     }
   }
 }
+
+query RcSettings($port: String!) {
+  device(port: $port) @client {
+    rc {
+      tuning {
+        rcRate
+        rcExpo
+        rollPitchRate
+        pitchRate
+        rollRate
+        yawRate
+        dynamicThrottlePid
+        throttleMid
+        throttleExpo
+        dynamicThrottleBreakpoint
+        rcYawExpo
+        rcYawRate
+        rcPitchRate
+        rcPitchExpo
+        throttleLimitType
+        throttleLimitPercent
+        rollRateLimit
+        pitchRateLimit
+        yawRateLimit
+      }
+      deadband {
+        deadband
+        yawDeadband
+      }
+    }
+  }
+}

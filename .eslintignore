@@ -4,3 +4,4 @@
 **/__generated__
 !.storybook/
 **/app
+**/storybook-static

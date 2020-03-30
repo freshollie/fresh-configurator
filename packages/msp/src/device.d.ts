@@ -54,3 +54,10 @@ export interface RcTuning {
   pitchRateLimit: number;
   yawRateLimit: number;
 }
+
+export interface RcDeadband {
+  deadband: number;
+  yawDeadband: number;
+  altHoldDeadhand: number;
+  deadband3dThrottle: number;
+}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Meter from "../src/components/Meter";
-import ChannelsList from "../src/components/ChannelsList";
 
 export default {
   component: Meter,

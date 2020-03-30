@@ -10,7 +10,8 @@ import {
   Kinematics,
   Status,
   ExtendedStatus,
-  RcTuning
+  RcTuning,
+  RcDeadband
 } from "./device.d";
 import { getFeatureBits, Features } from "./features";
 
@@ -175,4 +176,17 @@ export const getRcTuning = async (port: string): Promise<RcTuning> => {
   }
 
   return tuning;
+};
+
+export const getRcDeadband = async (port: string): Promise<RcDeadband> => {
+  const data = await execute(port, { code: codes.MSP_RC_DEADBAND });
+
+  return {
+    deadband: data.readU8(),
+    yawDeadband: data.readU8(),
+    altHoldDeadhand: data.readU8(),
+    deadband3dThrottle: semver.gte(apiVersion(port), "1.17.0")
+      ? data.readU16()
+      : 0
+  };
 };
