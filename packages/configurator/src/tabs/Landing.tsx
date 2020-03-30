@@ -31,6 +31,7 @@ const Landing: React.FC = () => (
         </div>
       </section>
     </main>
+    <footer />
   </LandingLayout>
 );
 

@@ -20,6 +20,7 @@ export default styled.div`
     > .tab-content {
       overflow-y: scroll;
       flex: 1;
+      height: 100%;
     }
 
     > nav {

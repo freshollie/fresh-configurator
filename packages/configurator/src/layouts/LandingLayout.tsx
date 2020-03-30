@@ -1,6 +1,10 @@
 import styled from "../theme";
 
 export default styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   > header {
     height: 140px;
 
@@ -24,8 +28,6 @@ export default styled.div`
 
   > main {
     background-color: ${({ theme }) => theme.colors.accent};
-    display: flex;
-    flex-direction: column;
 
     h3 {
       margin-block-start: 0em;
@@ -47,10 +49,10 @@ export default styled.div`
         flex: 0;
       }
     }
+  }
 
-    > footer {
-      flex: 1;
-      background-color: ${({ theme }) => theme.colors.accent};
-    }
+  > footer {
+    flex: 1;
+    background-color: ${({ theme }) => theme.colors.accent};
   }
 `;
