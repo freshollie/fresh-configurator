@@ -33,30 +33,35 @@ const reply = (port: string, data: Buffer): void => {
   (raw(port)?.binding as MockBinding).emitData(data);
 };
 
+const realSetTimeout = setTimeout;
 /**
  * Automatically reply MSP info for the given port
  * when it's opened
  */
 const handleMspInfoReply = async (port: string): Promise<void> => {
+  let currentPort = raw(port);
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       if (
+        currentPort !== raw(port) &&
         (raw(port)?.binding as MockBinding).recording.compare(
           mspInfoRequest
         ) === 0
       ) {
+        currentPort = raw(port);
         // Reply with some mock MSP info
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
-        break;
       }
       // eslint-disable-next-line no-empty
     } catch (e) {}
     // wait 10 miliseconds
     // eslint-disable-next-line no-await-in-loop
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise(resolve => realSetTimeout(resolve, 10));
   }
 };
+
+mockMspDevices.forEach(port => handleMspInfoReply(port));
 
 beforeEach(() => {
   jest.useRealTimers();
@@ -71,8 +76,6 @@ beforeEach(() => {
       record: true
     });
   });
-
-  mockMspDevices.forEach(port => handleMspInfoReply(port));
 });
 
 describe("open", () => {
@@ -87,7 +90,6 @@ describe("open", () => {
   });
 
   it("should throw an error when trying to open a port which doesn't respond with api version", done => {
-    const realSetTimeout = setTimeout;
     jest.useFakeTimers();
 
     open("/dev/non-msp-device")
