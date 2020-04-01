@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Canvas } from "react-three-fiber";
-import { JSONLoader, Color } from "three";
+import { JSONLoader, Color, Geometry, Material } from "three";
 
-import quadx from "./models/quad_x.json";
-import tricopter from "./models/tricopter.json";
-import hexx from "./models/hex_x.json";
+import quadx from "./models/quad_x.model";
+import tricopter from "./models/tricopter.model";
+import hexx from "./models/hex_x.model";
 
 const MODEL_MAP = {
   quadx,
@@ -12,11 +12,24 @@ const MODEL_MAP = {
   hexx
 };
 
-const models = Object.entries(MODEL_MAP)
-  .map(([key, data]) => ({ [key]: new JSONLoader().parse(data) }))
-  .reduce((acc, data) => ({ ...acc, ...data }), {});
+type Model = {
+  geometry: Geometry;
+  materials?: Material[] | undefined;
+};
 
 export type ModelType = keyof typeof MODEL_MAP;
+
+const useModel = (modelKey: ModelType): Model | undefined => {
+  const [data, setData] = useState<Model | undefined>(undefined);
+
+  useEffect(() => {
+    fetch(MODEL_MAP[modelKey])
+      .then(res => res.json())
+      .then(modelData => setData(new JSONLoader().parse(modelData)))
+      .catch(console.error);
+  }, [modelKey]);
+  return data;
+};
 
 interface ModelProps {
   name: ModelType;
@@ -39,7 +52,13 @@ const Model: React.FC<ModelProps> = ({
   name,
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 }
 }) => {
-  const { geometry, materials } = models[name];
+  const data = useModel(name);
+
+  if (!data) {
+    return null;
+  }
+
+  const { geometry, materials } = data;
 
   const x = pitch * -1.0 * (Math.PI / 180);
   const y = (heading * -1.0 - 0) * (Math.PI / 180);
