@@ -6,27 +6,38 @@ import quadx from "./models/quad_x.model";
 import tricopter from "./models/tricopter.model";
 import hexx from "./models/hex_x.model";
 
+interface Model {
+  geometry: Geometry;
+  materials?: Material[] | undefined;
+}
+
 const MODEL_MAP = {
   quadx,
   tricopter,
   hexx
 };
 
-type Model = {
-  geometry: Geometry;
-  materials?: Material[] | undefined;
-};
-
 export type ModelType = keyof typeof MODEL_MAP;
+const modelsCache = {} as Record<ModelType, Model | undefined>;
 
+/**
+ * Load the given model
+ */
 const useModel = (modelKey: ModelType): Model | undefined => {
   const [data, setData] = useState<Model | undefined>(undefined);
 
   useEffect(() => {
-    fetch(MODEL_MAP[modelKey])
-      .then(res => res.json())
-      .then(modelData => setData(new JSONLoader().parse(modelData)))
-      .catch(console.error);
+    if (modelsCache[modelKey]) {
+      setData(modelsCache[modelKey]);
+    } else {
+      fetch(MODEL_MAP[modelKey])
+        .then(res => res.json())
+        .then(modelData => {
+          modelsCache[modelKey] = new JSONLoader().parse(modelData);
+          setData(modelsCache[modelKey]);
+        })
+        .catch(console.error);
+    }
   }, [modelKey]);
   return data;
 };
@@ -54,6 +65,7 @@ const Model: React.FC<ModelProps> = ({
 }) => {
   const data = useModel(name);
 
+  // Don't display anything until the model is loaded
   if (!data) {
     return null;
   }
