@@ -1,3 +1,11 @@
+import {
+  OSD_TIMER_SOURCES,
+  OSD_ALARMS,
+  OSD_WARNINGS,
+  OSD_FIELDS,
+  OSD_STATIC_FIELDS
+} from "./features";
+
 export interface VoltageMeters {
   id: number;
   voltage: number;
@@ -99,29 +107,70 @@ export enum OSD_VIDEO_TYPES {
   NTSC
 }
 
-export const OSD_VIDEO_VALUE_TO_TYPE = [
-  OSD_VIDEO_TYPES.AUTO,
-  OSD_VIDEO_TYPES.PAL,
-  OSD_VIDEO_TYPES.NTSC
-];
-
 export enum OSD_UNIT_TYPES {
   IMPERIAL,
   METRIC
 }
-
-export const OSD_UNIT_VALUE_TO_TYPE = [
-  OSD_UNIT_TYPES.IMPERIAL,
-  OSD_UNIT_TYPES.METRIC
-];
 
 export enum OSD_PRECISION_TYPES {
   SECOND,
   HUNDREDTH,
   TENTH
 }
-export const OSD_PRECISION_VALUE_TO_TYPE = [
-  OSD_PRECISION_TYPES.SECOND,
-  OSD_PRECISION_TYPES.HUNDREDTH,
-  OSD_PRECISION_TYPES.TENTH
-];
+
+interface OSDProfileConfig {
+  count: number;
+  selected: number;
+}
+
+interface OSDTimer {
+  src: OSD_TIMER_SOURCES;
+  precision: OSD_PRECISION_TYPES;
+  time: number;
+}
+
+interface OSDAlarm {
+  key: OSD_ALARMS;
+  value: number;
+}
+
+interface OSDWarning {
+  key: OSD_WARNINGS;
+  enabled: boolean;
+}
+
+interface OSDDisplayItem {
+  key: OSD_FIELDS;
+  position: [number, number];
+  visibility: boolean[];
+}
+
+interface OSDStaticItem {
+  key: OSD_STATIC_FIELDS;
+  enabled: boolean;
+}
+
+interface OSDFlags {
+  hasOSD: boolean;
+  haveMax7456Video: boolean;
+  haveOsdFeature: boolean;
+  isOsdSlave: boolean;
+}
+
+export interface OSDConfig {
+  flags: OSDFlags;
+  unitMode: OSD_UNIT_TYPES;
+  displayItems: OSDDisplayItem[];
+  staticItems: OSDStaticItem[];
+  warnings: OSDWarning[];
+  timers: OSDTimer[];
+  timerSources: OSD_TIMER_SOURCES[];
+  osdProfiles: OSDProfileConfig;
+  videoSystem: OSD_VIDEO_TYPES;
+  alarms: OSDAlarm[];
+  parameters: {
+    cameraFrameWidth: number;
+    cameraFrameHeight: number;
+    overlayRadioMode: number;
+  };
+}

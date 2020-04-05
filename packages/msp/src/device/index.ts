@@ -1,8 +1,8 @@
 import { times } from "rambda";
 import semver from "semver";
-import codes from "./serial/codes";
-import { execute, apiVersion } from "./serial/connection";
-import MspDataView from "./serial/dataview";
+import codes from "../serial/codes";
+import { execute, apiVersion } from "../serial/connection";
+import MspDataView from "../serial/dataview";
 import {
   VoltageMeters,
   ImuData,
@@ -18,10 +18,8 @@ import {
   OSD_VIDEO_TYPES,
   OSD_UNIT_TYPES,
   OSD_PRECISION_TYPES,
-  OSD_VIDEO_VALUE_TO_TYPE,
-  OSD_UNIT_VALUE_TO_TYPE,
-  OSD_PRECISION_VALUE_TO_TYPE
-} from "./device.d";
+  OSDConfig
+} from "./types";
 import {
   getFeatureBits,
   Features,
@@ -35,7 +33,15 @@ import {
   OSD_FIELDS,
   OSD_ALARMS
 } from "./features";
-import { bitCheck } from "./serial/utils";
+import { bitCheck } from "../serial/utils";
+
+export {
+  OSD_FIELDS,
+  OSD_ALARMS,
+  OSD_TIMER_SOURCES,
+  OSD_STATIC_FIELDS,
+  Features
+} from "./features";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -279,62 +285,17 @@ export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
   };
 };
 
-interface OSDProfileConfig {
-  count: number;
-  selected: number;
-}
-
-interface OSDTimer {
-  src: OSD_TIMER_SOURCES;
-  precision: OSD_PRECISION_TYPES;
-  time: number;
-}
-
-interface OSDAlarm {
-  key: OSD_ALARMS;
-  value: number;
-}
-
-interface OSDWarning {
-  key: OSD_WARNINGS;
-  enabled: boolean;
-}
-
-interface OSDDisplayItem {
-  key: OSD_FIELDS;
-  position: [number, number];
-  visibility: boolean[];
-}
-
-interface OSDStaticItem {
-  key: OSD_STATIC_FIELDS;
-  enabled: boolean;
-}
-
-interface OSDFlags {
-  hasOSD: boolean;
-  haveMax7456Video: boolean;
-  haveOsdFeature: boolean;
-  isOsdSlave: boolean;
-}
-
-interface OSDConfig {
-  flags: OSDFlags;
-  unitMode: OSD_UNIT_TYPES;
-  displayItems: OSDDisplayItem[];
-  staticItems: OSDStaticItem[];
-  warnings: OSDWarning[];
-  timers: OSDTimer[];
-  timerSources: OSD_TIMER_SOURCES[];
-  osdProfiles: OSDProfileConfig;
-  videoSystem: OSD_VIDEO_TYPES;
-  alarms: OSDAlarm[];
-  parameters: {
-    cameraFrameWidth: number;
-    cameraFrameHeight: number;
-    overlayRadioMode: number;
-  };
-}
+const OSD_UNIT_VALUE_TO_TYPE = [OSD_UNIT_TYPES.IMPERIAL, OSD_UNIT_TYPES.METRIC];
+const OSD_VIDEO_VALUE_TO_TYPE = [
+  OSD_VIDEO_TYPES.AUTO,
+  OSD_VIDEO_TYPES.PAL,
+  OSD_VIDEO_TYPES.NTSC
+];
+const OSD_PRECISION_VALUE_TO_TYPE = [
+  OSD_PRECISION_TYPES.SECOND,
+  OSD_PRECISION_TYPES.HUNDREDTH,
+  OSD_PRECISION_TYPES.TENTH
+];
 
 export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
   const api = apiVersion(port);

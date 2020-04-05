@@ -10,4 +10,3 @@ export {
   packetErrors,
   apiVersion
 } from "./serial/connection";
-export { Features } from "./features";
