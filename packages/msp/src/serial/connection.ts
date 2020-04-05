@@ -65,7 +65,11 @@ export const execute = async (
             connection.packetErrors += 1;
             return;
           }
-          log(`${request.toJSON().data} response: ${message.data}`);
+          log(
+            `${request.toJSON().data} response: ${
+              Buffer.from(message.data).toJSON().data
+            }`
+          );
 
           delete requests[requestKey];
           clearTimeout(timeoutId);
@@ -135,6 +139,7 @@ export const open: OpenConnectionFunction = async (
   if (connectionsMap[port]) {
     throw new Error(`${port} is already open`);
   }
+  log(`opening ${port}`);
 
   // Handle overloads
   let onCloseCallback = onClose;
@@ -180,13 +185,17 @@ export const open: OpenConnectionFunction = async (
 
   connectionsMap[port] = connection;
 
+  log(`reading API version from ${port}`);
   try {
     const response = await execute(port, { code: codes.MSP_API_VERSION });
     connection.mspInfo = {
       mspProtocolVersion: response.readU8(),
       apiVersion: `${response.readU8()}.${response.readU8()}.0`
     };
+
+    log(`read apiVersion=${connection.mspInfo.apiVersion}`);
   } catch (e) {
+    log(`failed to read MSP info from ${port}, failed to open`);
     await close(port);
     throw new Error(`Could not read MSP version from ${port}`);
   }

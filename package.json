@@ -12,7 +12,6 @@
     "build": "wsrun -t build",
     "storybook": "yarn workspace @fresh/configurator storybook",
     "build:storybook": "yarn workspace @fresh/configurator build-storybook",
-    "postinstall": "electron-builder install-app-deps",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn codegen && wsrun -m prepare"
