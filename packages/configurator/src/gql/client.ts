@@ -3,16 +3,16 @@ import {
   ports,
   isOpen,
   open,
-  getAttitude,
+  readAttitude,
   close,
   apiVersion,
   bytesRead,
   bytesWritten,
   packetErrors,
-  getStatusExtended,
-  getRcValues,
-  getRcTuning,
-  getRcDeadband
+  readExtendedStatus,
+  readRcValues,
+  readRcTuning,
+  readRcDeadband
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -211,9 +211,12 @@ const resolvers: Resolvers = {
 
   FlightController: {
     attitude: ({ port }) =>
-      getAttitude(port).then(values => ({ ...values, __typename: "Attitude" })),
+      readAttitude(port).then(values => ({
+        ...values,
+        __typename: "Attitude"
+      })),
     status: ({ port }) =>
-      getStatusExtended(port).then(values => ({
+      readExtendedStatus(port).then(values => ({
         ...values,
         __typename: "Status"
       })),
@@ -229,11 +232,14 @@ const resolvers: Resolvers = {
     packetErrors: ({ port }) => packetErrors(port)
   },
   RC: {
-    channels: ({ port }) => getRcValues(port),
+    channels: ({ port }) => readRcValues(port),
     tuning: ({ port }) =>
-      getRcTuning(port).then(values => ({ ...values, __typename: "RCTuning" })),
+      readRcTuning(port).then(values => ({
+        ...values,
+        __typename: "RCTuning"
+      })),
     deadband: ({ port }) =>
-      getRcDeadband(port).then(values => ({
+      readRcDeadband(port).then(values => ({
         ...values,
         __typename: "RCDeadband"
       }))

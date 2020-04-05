@@ -36,6 +36,7 @@ const useModel = (modelKey: ModelType): Model | undefined => {
           modelsCache[modelKey] = new JSONLoader().parse(modelData);
           setData(modelsCache[modelKey]);
         })
+        // eslint-disable-next-line no-console
         .catch(console.error);
     }
   }, [modelKey]);

@@ -35,6 +35,9 @@ type RC {
   channels: [Int!]!
   tuning: RCTuning!
   deadband: RCDeadband!
+  analogValues: AnalogValues!
+  boardInfo: BoardInfo!
+  gps: GpsData!
 }
 
 type RCTuning {
@@ -66,3 +69,33 @@ type RCDeadband {
   deadband3dThrottle: Int!
 }
 
+type AnalogValues {
+  voltage: Int!
+  mahDrawn: Int!
+  rssi: Int!
+  amperage: Int!
+}
+
+type GpsData {
+  fix: Int!
+  numSat: Int!
+  lat: Int!
+  lon: Int!
+  alt: Int!
+  speed: Int!
+  groundCourse: Int!
+}
+
+type BoardInfo {
+  boardIdentifier: String!
+  boardVersion: Int!
+  boardType: Int!
+  targetCapabilities: Int!
+  targetName: String!
+  boardName: String!
+  manufacturerId: String!
+  signature: [Int!]!
+  mcuTypeId: Int!
+  configurationState: Int
+  sampleRateHz: Int
+}

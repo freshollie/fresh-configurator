@@ -3,6 +3,37 @@ export interface VoltageMeters {
   voltage: number;
 }
 
+export interface AnalogValues {
+  voltage: number;
+  mahDrawn: number;
+  rssi: number;
+  amperage: number;
+}
+
+export interface RawGpsData {
+  fix: number;
+  numSat: number;
+  lat: number;
+  lon: number;
+  alt: number;
+  speed: number;
+  groundCourse: number;
+}
+
+export interface BoardInfo {
+  boardIdentifier: string;
+  boardVersion: number;
+  boardType: number;
+  targetCapabilities: number;
+  targetName: string;
+  boardName: string;
+  manufacturerId: string;
+  signature: number[];
+  mcuTypeId: number;
+  configurationState: number | undefined;
+  sampleRateHz: number | undefined;
+}
+
 export type ImuUnit = [number, number, number];
 
 export interface ImuData {
@@ -61,3 +92,5 @@ export interface RcDeadband {
   altHoldDeadhand: number;
   deadband3dThrottle: number;
 }
+
+export const OSD_LINE_SIZE = 30;

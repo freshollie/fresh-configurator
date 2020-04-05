@@ -5,7 +5,7 @@
  * https://github.com/betaflight/betaflight-configurator/src/js/injected_methods.js
  */
 export default class MspDataView extends DataView {
-  private offset = 0;
+  public offset = 0;
 
   public readU8(): number {
     if (this.byteLength >= this.offset + 1) {

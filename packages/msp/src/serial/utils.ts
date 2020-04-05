@@ -23,3 +23,6 @@ export const crc8DvbS2Data = (
   }
   return crc;
 };
+
+export const bitCheck = (num: number, bit: number): boolean =>
+  (num >> bit) % 2 !== 0;
