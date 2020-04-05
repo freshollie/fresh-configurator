@@ -429,7 +429,7 @@ export const osdWarnings = (apiVersion: string): OSD_WARNINGS[] => [
   ...(semver.gte(apiVersion, "1.43.0") ? [OSD_WARNINGS.OVER_CAP] : [])
 ];
 
-export enum OSD_TIMERS {
+export enum OSD_TIMER_SOURCES {
   ON_TIME,
   TOTAL_ARMED_TIME,
   LAST_ARMED_TIME,
@@ -437,9 +437,23 @@ export enum OSD_TIMERS {
   UNKNOWN
 }
 
-export const osdTimers = (apiVersion: string): OSD_TIMERS[] => [
-  OSD_TIMERS.ON_TIME,
-  OSD_TIMERS.TOTAL_ARMED_TIME,
-  OSD_TIMERS.LAST_ARMED_TIME,
-  ...(semver.gte(apiVersion, "1.42.0") ? [OSD_TIMERS.ON_ARM_TIME] : [])
+export const osdTimerSources = (apiVersion: string): OSD_TIMER_SOURCES[] => [
+  OSD_TIMER_SOURCES.ON_TIME,
+  OSD_TIMER_SOURCES.TOTAL_ARMED_TIME,
+  OSD_TIMER_SOURCES.LAST_ARMED_TIME,
+  ...(semver.gte(apiVersion, "1.42.0") ? [OSD_TIMER_SOURCES.ON_ARM_TIME] : [])
+];
+
+export enum OSD_ALARMS {
+  RSSI,
+  CAP,
+  TIME,
+  ALT
+}
+
+export const osdAlarms = (): OSD_ALARMS[] => [
+  OSD_ALARMS.RSSI,
+  OSD_ALARMS.CAP,
+  OSD_ALARMS.TIME,
+  OSD_ALARMS.ALT
 ];

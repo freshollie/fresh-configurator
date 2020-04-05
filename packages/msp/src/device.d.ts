@@ -93,4 +93,35 @@ export interface RcDeadband {
   deadband3dThrottle: number;
 }
 
-export const OSD_LINE_SIZE = 30;
+export enum OSD_VIDEO_TYPES {
+  AUTO,
+  PAL,
+  NTSC
+}
+
+export const OSD_VIDEO_VALUE_TO_TYPE = [
+  OSD_VIDEO_TYPES.AUTO,
+  OSD_VIDEO_TYPES.PAL,
+  OSD_VIDEO_TYPES.NTSC
+];
+
+export enum OSD_UNIT_TYPES {
+  IMPERIAL,
+  METRIC
+}
+
+export const OSD_UNIT_VALUE_TO_TYPE = [
+  OSD_UNIT_TYPES.IMPERIAL,
+  OSD_UNIT_TYPES.METRIC
+];
+
+export enum OSD_PRECISION_TYPES {
+  SECOND,
+  HUNDREDTH,
+  TENTH
+}
+export const OSD_PRECISION_VALUE_TO_TYPE = [
+  OSD_PRECISION_TYPES.SECOND,
+  OSD_PRECISION_TYPES.HUNDREDTH,
+  OSD_PRECISION_TYPES.TENTH
+];
