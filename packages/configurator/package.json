@@ -12,7 +12,7 @@
     "linux": {
       "category": "Settings",
       "executableName": "fresh-configurator",
-      "artifactName": "${productName}-${version}.${ext}"
+      "artifactName": "fresh-configurator-${version}.${ext}"
     },
     "win": {
       "target": "msi"
