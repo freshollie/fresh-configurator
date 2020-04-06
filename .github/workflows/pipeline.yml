@@ -76,7 +76,13 @@ jobs:
         with:
           node-version: 12
 
-      - name: Build/release Electron app
+      - name: Build configurator
         run: |
           yarn --frozen-lockfile
           yarn build
+
+      - name: Publish
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: installer
+          path: packages/configurator/dist/*.{dmg,pkg,exe}
