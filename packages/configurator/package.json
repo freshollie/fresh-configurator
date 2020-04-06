@@ -14,7 +14,7 @@
       "executableName": "fresh-configurator",
       "artifactName": "${productName}-${version}.${ext}"
     },
-    "windows": {
+    "win": {
       "target": "msi"
     }
   },

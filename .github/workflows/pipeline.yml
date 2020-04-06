@@ -80,7 +80,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
+      - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
           node-version: 12
