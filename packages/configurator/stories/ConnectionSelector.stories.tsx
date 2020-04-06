@@ -4,7 +4,7 @@ import ConnectionSelector from "../src/components/ConnectionSelector";
 
 export default {
   component: ConnectionSelector,
-  title: "Components|ConnectionSelector"
+  title: "Components|ConnectionSelector",
 };
 
 export const noPortsAvailable = (): JSX.Element => (

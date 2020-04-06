@@ -4,7 +4,7 @@ import {
   AltitudePressure,
   AltitudeTicks,
   FiNeedleSmall,
-  FiNeedle
+  FiNeedle,
 } from "./assets";
 import withBase from "./hoc/withBase";
 
@@ -23,7 +23,7 @@ export default withBase<{
     <FiNeedle
       className="needle box"
       style={{
-        transform: `rotate(${90 + ((altitude % 1000) * 360) / 1000}deg)`
+        transform: `rotate(${90 + ((altitude % 1000) * 360) / 1000}deg)`,
       }}
     />
   </>

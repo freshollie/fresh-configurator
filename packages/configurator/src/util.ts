@@ -30,5 +30,5 @@ export const versionInfo = (): VersionInfo => ({
     /.*Chrome\/([0-9.]*).*/,
     "$1"
   ),
-  version
+  version,
 });

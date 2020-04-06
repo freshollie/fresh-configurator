@@ -3,7 +3,7 @@ import Meter from "../src/components/Meter";
 
 export default {
   component: Meter,
-  title: "Components|Meter"
+  title: "Components|Meter",
 };
 
 const useMeterValue = (min: number, max: number, step = 1): number => {

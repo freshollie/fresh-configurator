@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {
   useSetConnectionSettingsMutation,
   useConnectionSettingsQuery,
-  useAvailablePortsQuery
+  useAvailablePortsQuery,
 } from "../../gql/__generated__";
 import ConnectionSelector from "../../components/ConnectionSelector";
 import useConnectionState from "../../hooks/useConnectionState";
@@ -19,7 +19,7 @@ const ConnectionSettings: React.FC = () => {
   // selected a port
   const { data: portsData, loading: loadingPorts } = useAvailablePortsQuery({
     pollInterval: !connected ? 1000 : undefined,
-    skip: connected
+    skip: connected,
   });
 
   // If this is the first load, and the currently selected port is null
@@ -28,8 +28,8 @@ const ConnectionSettings: React.FC = () => {
     if (port === null && !loadingPorts) {
       updateSettings({
         variables: {
-          port: portsData?.ports[0] ?? "/dev/rfcomm0"
-        }
+          port: portsData?.ports[0] ?? "/dev/rfcomm0",
+        },
       });
     }
   }, [loading, loadingPorts, port, portsData, updateSettings]);
@@ -45,8 +45,8 @@ const ConnectionSettings: React.FC = () => {
         updateSettings({
           variables: {
             port: newPort,
-            baudRate: baud
-          }
+            baudRate: baud,
+          },
         })
       }
     />

@@ -12,7 +12,7 @@ import {
   readExtendedStatus,
   readRcValues,
   readRcTuning,
-  readRcDeadband
+  readRcDeadband,
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -22,7 +22,7 @@ import {
   ConnectionStateQuery,
   LogsQuery,
   LogsQueryVariables,
-  LogsDocument
+  LogsDocument,
 } from "./__generated__";
 import config from "../config";
 import { versionInfo } from "../util";
@@ -46,9 +46,9 @@ cache.policies.addTypePolicies({
       port: () => selectedPort(),
       baudRate: () => selectedBaud(),
       tab: () => selectedTab(),
-      expertMode: () => expertMode()
-    }
-  }
+      expertMode: () => expertMode(),
+    },
+  },
 });
 
 const setConnectionState = (
@@ -65,19 +65,19 @@ const setConnectionState = (
         connection: {
           connected,
           connecting,
-          __typename: "ConnectionStatus"
+          __typename: "ConnectionStatus",
         },
-        __typename: "FlightController"
-      }
+        __typename: "FlightController",
+      },
     },
     variables: {
-      port
-    }
+      port,
+    },
   });
 
 const log = (client: ApolloClient<object>, message: string): void => {
   const data = client.readQuery<LogsQuery, LogsQueryVariables>({
-    query: LogsDocument
+    query: LogsDocument,
   });
 
   client.writeQuery<LogsQuery, LogsQueryVariables>({
@@ -88,13 +88,13 @@ const log = (client: ApolloClient<object>, message: string): void => {
           ...(data?.configurator.logs ?? []).concat({
             time: new Date().toISOString(),
             message,
-            __typename: "Log" as const
-          })
+            __typename: "Log" as const,
+          }),
         ],
-        __typename: "Configurator"
+        __typename: "Configurator",
       },
-      __typename: "Query"
-    }
+      __typename: "Query",
+    },
   });
 };
 
@@ -108,9 +108,9 @@ const resolvers: Resolvers = {
         port,
         connecting: false,
         connected: false,
-        __typename: "ConnectionStatus"
+        __typename: "ConnectionStatus",
       },
-      __typename: "FlightController"
+      __typename: "FlightController",
     }),
     configurator: () => {
       const { os, version, chromeVersion } = versionInfo();
@@ -123,12 +123,12 @@ const resolvers: Resolvers = {
           {
             time: new Date().toISOString(),
             message: `Running - OS: <strong>${os}</strong>, Chrome: <strong>${chromeVersion}</strong>, Configurator: <strong>${version}</strong>`,
-            __typename: "Log"
-          }
+            __typename: "Log",
+          },
         ],
-        __typename: "Configurator"
+        __typename: "Configurator",
       };
-    }
+    },
   },
   Mutation: {
     connect: async (_, { port, baudRate }, { client }: Context) => {
@@ -206,51 +206,51 @@ const resolvers: Resolvers = {
     log: (_, { message }, { client }: Context) => {
       log(client, message);
       return true;
-    }
+    },
   },
 
   FlightController: {
     attitude: ({ port }) =>
-      readAttitude(port).then(values => ({
+      readAttitude(port).then((values) => ({
         ...values,
-        __typename: "Attitude"
+        __typename: "Attitude",
       })),
     status: ({ port }) =>
-      readExtendedStatus(port).then(values => ({
+      readExtendedStatus(port).then((values) => ({
         ...values,
-        __typename: "Status"
+        __typename: "Status",
       })),
     rc: ({ port }) => ({
       port,
-      __typename: "RC"
+      __typename: "RC",
     }),
-    apiVersion: ({ port }) => apiVersion(port)
+    apiVersion: ({ port }) => apiVersion(port),
   },
   ConnectionStatus: {
     bytesRead: ({ port }) => bytesRead(port),
     bytesWritten: ({ port }) => bytesWritten(port),
-    packetErrors: ({ port }) => packetErrors(port)
+    packetErrors: ({ port }) => packetErrors(port),
   },
   RC: {
     channels: ({ port }) => readRcValues(port),
     tuning: ({ port }) =>
-      readRcTuning(port).then(values => ({
+      readRcTuning(port).then((values) => ({
         ...values,
-        __typename: "RCTuning"
+        __typename: "RCTuning",
       })),
     deadband: ({ port }) =>
-      readRcDeadband(port).then(values => ({
+      readRcDeadband(port).then((values) => ({
         ...values,
-        __typename: "RCDeadband"
-      }))
-  }
+        __typename: "RCDeadband",
+      })),
+  },
 };
 
 const client = new ApolloClient({
   cache,
   // generated resolvers are not compatible with apollo
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolvers: resolvers as any
+  resolvers: resolvers as any,
 });
 
 export default client;

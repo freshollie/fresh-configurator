@@ -5,7 +5,7 @@ import Heading from "../src/flightindicators/Heading";
 
 export default {
   component: Widget,
-  title: "Components|Widget"
+  title: "Components|Widget",
 };
 
 export const grey = (): JSX.Element => (

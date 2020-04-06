@@ -7,7 +7,7 @@ import styled from "../src/theme";
 
 export default {
   component: LandingLayout,
-  title: "Layouts|Landing"
+  title: "Layouts|Landing",
 };
 
 const Page = styled.div`

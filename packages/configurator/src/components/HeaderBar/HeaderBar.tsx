@@ -3,7 +3,7 @@ import {
   Container,
   LogoContainer,
   LogoSubText,
-  Children
+  Children,
 } from "./HeaderBar.styles";
 import { Logo2 } from "../../logos";
 import { version } from "../../../package.json";

@@ -6,38 +6,38 @@ module.exports = [
     target: "electron-main",
     node: {
       __dirname: false,
-      __filename: false
+      __filename: false,
     },
     module: {
       rules: [
         {
           test: /\.ts$/,
           include: /src/,
-          use: [{ loader: "ts-loader" }]
-        }
-      ]
+          use: [{ loader: "ts-loader" }],
+        },
+      ],
     },
     output: {
       path: `${__dirname}/app`,
-      filename: "main.js"
-    }
+      filename: "main.js",
+    },
   },
   {
     entry: "./src/index.tsx",
     target: "electron-renderer",
     devtool: "source-map",
     resolve: {
-      extensions: [".ts", ".tsx", ".js"]
+      extensions: [".ts", ".tsx", ".js"],
     },
     externals: {
-      serialport: "commonjs serialport"
+      serialport: "commonjs serialport",
     },
     module: {
       rules: [
         {
           test: /\.ts(x?)$/,
           include: /src/,
-          use: [{ loader: "ts-loader" }]
+          use: [{ loader: "ts-loader" }],
         },
         {
           test: /\.svg$/,
@@ -48,31 +48,31 @@ module.exports = [
                 svgo: {
                   plugins: [
                     {
-                      removeViewBox: false
+                      removeViewBox: false,
                     },
                     {
-                      cleanupIDs: false
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      cleanupIDs: false,
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         {
           test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
-          loader: "file-loader"
-        }
-      ]
+          loader: "file-loader",
+        },
+      ],
     },
     output: {
       path: `${__dirname}/app`,
-      filename: "renderer.js"
+      filename: "renderer.js",
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/index.html"
-      })
-    ]
-  }
+        template: "./src/index.html",
+      }),
+    ],
+  },
 ];

@@ -7,7 +7,7 @@ import styled, {
   css as defaultCss,
   ThemedStyledInterface,
   ThemedCssFunction,
-  ThemeProvider as DefaultThemeProvider
+  ThemeProvider as DefaultThemeProvider,
 } from "styled-components";
 
 import openSansLight2 from "./fonts/opensans-light-webfont.woff2";
@@ -127,7 +127,7 @@ const lightColors: ThemeColors = {
   ledBackground: "#e9e9e9",
   gimbalBackground: "#eee",
   gimbalCrosshair: "silver",
-  switcherysecond: "#c4c4c4"
+  switcherysecond: "#c4c4c4",
 };
 
 const darkColors: ThemeColors = {
@@ -146,7 +146,7 @@ const darkColors: ThemeColors = {
   ledBackground: "#e9e9e9",
   gimbalBackground: "#eee",
   gimbalCrosshair: "silver",
-  switcherysecond: "#c4c4c4"
+  switcherysecond: "#c4c4c4",
 };
 
 export default styled as ThemedStyledInterface<Theme>;
@@ -154,7 +154,7 @@ export const css = defaultCss as ThemedCssFunction<Theme>;
 
 export const ThemeProvider: React.FC<{ dark?: boolean }> = ({
   dark,
-  children
+  children,
 }) => (
   <>
     <GlobalStyle />

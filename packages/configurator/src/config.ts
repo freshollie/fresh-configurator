@@ -9,5 +9,5 @@ export default {
   connectionValidCliOnly: false,
   cliActive: false,
   cliValid: false,
-  gitChangesetId: "unknown"
+  gitChangesetId: "unknown",
 };

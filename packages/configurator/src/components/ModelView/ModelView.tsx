@@ -8,7 +8,7 @@ const ModelView: React.FC<{
   attitude?: { roll: number; pitch: number; heading: number };
 }> = ({
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
-  modelType
+  modelType,
 }) => {
   const [headingOffset, setHeadingOffset] = useState(0);
   return (

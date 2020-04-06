@@ -24,13 +24,13 @@ const SYMBOLS = {
   PROTO_V2: "X".charCodeAt(0),
   FROM_MWC: ">".charCodeAt(0),
   TO_MWC: "<".charCodeAt(0),
-  UNSUPPORTED: "!".charCodeAt(0)
+  UNSUPPORTED: "!".charCodeAt(0),
 };
 
 enum CONSTANTS {
   PROTOCOL_V1 = 1,
   PROTOCOL_V2 = 2,
-  JUMBO_FRAME_MIN_SIZE = 255
+  JUMBO_FRAME_MIN_SIZE = 255,
 }
 
 enum DECODER_STATES {
@@ -51,7 +51,7 @@ enum DECODER_STATES {
   PAYLOAD_V1 = 14,
   PAYLOAD_V2 = 15,
   CHECKSUM_V1 = 16,
-  CHECKSUM_V2 = 17
+  CHECKSUM_V2 = 17,
 }
 
 export interface MspMessage {
@@ -293,7 +293,7 @@ export class MspParser extends Transform {
       data,
       crcError: this.crcError,
       unsupported: this.unsupported,
-      direction: this.messageDirection
+      direction: this.messageDirection,
     });
     this.reset();
   }

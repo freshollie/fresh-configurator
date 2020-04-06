@@ -7,7 +7,7 @@ import ConnectionSelector from "../src/components/ConnectionSelector";
 
 export default {
   component: HeaderBar,
-  title: "Components|Header Bar"
+  title: "Components|Header Bar",
 };
 
 const Rest = styled.div`

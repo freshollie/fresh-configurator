@@ -14,10 +14,10 @@ const TabRouter: React.FC = ({ children }) => {
 
   const visibleTab =
     selectedTab &&
-    React.Children.map(children, c => c)
+    React.Children.map(children, (c) => c)
       ?.filter(isElement)
       .filter((c): c is TabElement => typeof c.props.id === "string")
-      .find(t => t.props.id === selectedTab);
+      .find((t) => t.props.id === selectedTab);
 
   return visibleTab || null;
 };

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import {
   useNavigationDataQuery,
-  useSelectTabMutation
+  useSelectTabMutation,
 } from "../../gql/__generated__";
 import useConnectionState from "../../hooks/useConnectionState";
 
@@ -13,49 +13,49 @@ import {
   FlasherIcon,
   OSDIcon,
   SetupIcon,
-  ReceiverIcon
+  ReceiverIcon,
 } from "../../icons";
 
 const DISCONNECTED_LINKS = [
   {
     title: "Welcome",
     icon: <WelcomeIcon />,
-    id: "landing"
+    id: "landing",
   },
   {
     title: "Change log",
     icon: <HelpIcon />,
-    id: "change-log"
+    id: "change-log",
   },
   { title: "Privacy Policy", icon: <HelpIcon />, id: "privary-policy" },
   {
     title: "Documentation & Support",
     icon: <HelpIcon />,
-    id: "documentation"
+    id: "documentation",
   },
   {
     title: "Firmware Flasher",
     icon: <FlasherIcon />,
-    id: "flasher"
-  }
+    id: "flasher",
+  },
 ];
 
 const CONNECTED_LINKS = [
   {
     title: "Setup",
     icon: <SetupIcon />,
-    id: "setup"
+    id: "setup",
   },
   {
     title: "OSD",
     icon: <OSDIcon />,
-    id: "osd"
+    id: "osd",
   },
   {
     title: "Receiver",
     icon: <ReceiverIcon />,
-    id: "receiver"
-  }
+    id: "receiver",
+  },
 ];
 
 /*
@@ -250,11 +250,11 @@ const Navigation: React.FC = () => {
   // Select the first available tab, if no tabs can be selected
   // for the given state
   useEffect(() => {
-    if (!loading && !links.find(link => link.id === selectedTab)) {
+    if (!loading && !links.find((link) => link.id === selectedTab)) {
       selectTab({
         variables: {
-          tabId: links[0].id
-        }
+          tabId: links[0].id,
+        },
       });
     }
   }, [links, loading, selectTab, selectedTab]);
@@ -263,11 +263,11 @@ const Navigation: React.FC = () => {
     <NavLinks
       links={links}
       activeLink={selectedTab}
-      onClick={tab =>
+      onClick={(tab) =>
         selectTab({
           variables: {
-            tabId: tab
-          }
+            tabId: tab,
+          },
         })
       }
     />

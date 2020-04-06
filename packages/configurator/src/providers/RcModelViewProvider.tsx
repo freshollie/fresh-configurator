@@ -5,7 +5,7 @@ import useSelectedPort from "../hooks/useSelectedPort";
 import {
   useRcChannelsQuery,
   useRcSettingsQuery,
-  useApiVersionQuery
+  useApiVersionQuery,
 } from "../gql/__generated__";
 
 const MID_RC = 1500;
@@ -84,31 +84,31 @@ const RcModelViewProvider: React.FC = () => {
   const [{ roll, pitch, heading }, setAttitude] = useState({
     roll: 0,
     pitch: 0,
-    heading: 0
+    heading: 0,
   });
 
   const port = useSelectedPort();
   const { data: rcSettingsData } = useRcSettingsQuery({
     variables: {
-      port: port ?? ""
+      port: port ?? "",
     },
-    skip: !port
+    skip: !port,
   });
 
   const { data: apiVersionData } = useApiVersionQuery({
     variables: {
-      port: port ?? ""
+      port: port ?? "",
     },
-    skip: !port
+    skip: !port,
   });
   const apiVersion = apiVersionData?.device.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useRcChannelsQuery({
     variables: {
-      port: port ?? ""
+      port: port ?? "",
     },
     skip: !port,
-    pollInterval: 10
+    pollInterval: 10,
   });
 
   const channels = channelsData?.device.rc.channels ?? [0, 0, 0, 0];
@@ -158,7 +158,7 @@ const RcModelViewProvider: React.FC = () => {
               rc.deadband.yawDeadband,
               rc.tuning.yawRateLimit,
               apiVersion
-            )
+            ),
       });
     }
   }, [
@@ -168,7 +168,7 @@ const RcModelViewProvider: React.FC = () => {
     heading,
     pitch,
     rcSettingsData,
-    roll
+    roll,
   ]);
 
   return (
@@ -177,7 +177,7 @@ const RcModelViewProvider: React.FC = () => {
       attitude={{
         roll,
         pitch,
-        heading
+        heading,
       }}
     />
   );

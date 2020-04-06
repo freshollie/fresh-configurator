@@ -18,7 +18,7 @@ import {
   MspCommand,
   ConnectionOptions,
   OpenFunction as OpenConnectionFunction,
-  OnCloseCallback
+  OnCloseCallback,
 } from "./types";
 import codes from "./codes";
 
@@ -96,7 +96,7 @@ export const execute = async (
 
   // make every DataView unique to each request, even though
   // they are accessing the same set of data
-  return dataRequest.then(responseData => new MspDataView(responseData));
+  return dataRequest.then((responseData) => new MspDataView(responseData));
 };
 
 /**
@@ -106,13 +106,13 @@ export const raw = (port: string): SerialPort | undefined =>
   connectionsMap[port]?.serial;
 
 export const reset = (): void => {
-  Object.keys(connectionsMap).forEach(port => {
+  Object.keys(connectionsMap).forEach((port) => {
     delete connectionsMap[port];
   });
 };
 
 export const ports = (): Promise<string[]> =>
-  SerialPort.list().then(data => data.map(({ path }) => path));
+  SerialPort.list().then((data) => data.map(({ path }) => path));
 
 /**
  * Close the given port
@@ -124,7 +124,7 @@ export const close = async (port: string): Promise<void> => {
   }
   const { serial } = connection;
 
-  const closePromise = new Promise(resolve => serial.on("close", resolve));
+  const closePromise = new Promise((resolve) => serial.on("close", resolve));
   serial.close();
   delete connectionsMap[port];
 
@@ -158,11 +158,11 @@ export const open: OpenConnectionFunction = async (
   const serial = new SerialPort(port, {
     baudRate: 115200,
     ...connectionOptions,
-    autoOpen: false
+    autoOpen: false,
   });
 
   await new Promise((resolve, reject) => {
-    serial.open(err => {
+    serial.open((err) => {
       if (err) {
         log(`error opening ${port}`);
         reject(err);
@@ -184,8 +184,8 @@ export const open: OpenConnectionFunction = async (
     packetErrors: 0,
     mspInfo: {
       apiVersion: "0",
-      mspProtocolVersion: 0
-    }
+      mspProtocolVersion: 0,
+    },
   };
 
   connectionsMap[port] = connection;
@@ -195,7 +195,7 @@ export const open: OpenConnectionFunction = async (
     const response = await execute(port, { code: codes.MSP_API_VERSION });
     connection.mspInfo = {
       mspProtocolVersion: response.readU8(),
-      apiVersion: `${response.readU8()}.${response.readU8()}.0`
+      apiVersion: `${response.readU8()}.${response.readU8()}.0`,
     };
 
     log(`read apiVersion=${connection.mspInfo.apiVersion}`);

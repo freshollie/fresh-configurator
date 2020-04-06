@@ -9,9 +9,9 @@ const createWindow = (): void => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
-    show: false
+    show: false,
   });
 
   // and load the index.html of the app.

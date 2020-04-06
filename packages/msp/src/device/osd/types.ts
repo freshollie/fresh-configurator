@@ -86,7 +86,7 @@ export enum OSD_WARNINGS {
   LINK_QUALITY,
   RSSI_DBM,
   OVER_CAP,
-  UNKNOWN
+  UNKNOWN,
 }
 
 export enum OSD_TIMER_SOURCES {
@@ -94,31 +94,31 @@ export enum OSD_TIMER_SOURCES {
   TOTAL_ARMED_TIME,
   LAST_ARMED_TIME,
   ON_ARM_TIME,
-  UNKNOWN
+  UNKNOWN,
 }
 
 export enum OSD_ALARMS {
   RSSI,
   CAP,
   TIME,
-  ALT
+  ALT,
 }
 
 export enum OSD_VIDEO_TYPES {
   AUTO,
   PAL,
-  NTSC
+  NTSC,
 }
 
 export enum OSD_UNIT_TYPES {
   IMPERIAL,
-  METRIC
+  METRIC,
 }
 
 export enum OSD_PRECISION_TYPES {
   SECOND,
   HUNDREDTH,
-  TENTH
+  TENTH,
 }
 
 export enum OSD_FIELDS {
@@ -187,7 +187,7 @@ export enum OSD_FIELDS {
   RSSI_DBM_VALUE,
   RC_CHANNELS,
   CAMERA_FRAME,
-  UNKNOWN
+  UNKNOWN,
 }
 
 export enum OSD_STATIC_FIELDS {
@@ -215,5 +215,5 @@ export enum OSD_STATIC_FIELDS {
   TOTAL_FLIGHT_TIME,
   TOTAL_FLIGHT_DIST,
   MIN_RSSI_DBM,
-  UNKNOWN
+  UNKNOWN,
 }

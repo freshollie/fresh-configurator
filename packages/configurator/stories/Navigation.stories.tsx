@@ -4,12 +4,12 @@ import Navigation from "../src/managers/Navigation";
 import styled from "../src/theme";
 import {
   NavigationDataDocument,
-  ConnectionStateDocument
+  ConnectionStateDocument,
 } from "../src/gql/__generated__";
 
 export default {
   component: Navigation,
-  title: "Managers|Navigation"
+  title: "Managers|Navigation",
 };
 
 const Page = styled.div`
@@ -18,28 +18,28 @@ const Page = styled.div`
 
 const navigationData = ({
   port,
-  tab
+  tab,
 }: {
   port: string;
   tab: string;
 }): MockedResponse => ({
   request: {
-    query: NavigationDataDocument
+    query: NavigationDataDocument,
   },
   result: {
     data: {
       configurator: {
         port,
-        tab
-      }
-    }
-  }
+        tab,
+      },
+    },
+  },
 });
 
 const device = ({
   port,
   connected,
-  connecting = false
+  connecting = false,
 }: {
   port: string;
   connected: boolean;
@@ -48,19 +48,19 @@ const device = ({
   request: {
     query: ConnectionStateDocument,
     variables: {
-      port
-    }
+      port,
+    },
   },
   result: {
     data: {
       device: {
         connection: {
           connected,
-          connecting
-        }
-      }
-    }
-  }
+          connecting,
+        },
+      },
+    },
+  },
 });
 
 export const landing = (): JSX.Element => (
@@ -68,9 +68,9 @@ export const landing = (): JSX.Element => (
     mocks={[
       navigationData({
         port: "a",
-        tab: "landing"
+        tab: "landing",
       }),
-      device({ port: "a", connected: false })
+      device({ port: "a", connected: false }),
     ]}
   >
     <Page>
@@ -84,9 +84,9 @@ export const firmwareFlasher = (): JSX.Element => (
     mocks={[
       navigationData({
         port: "a",
-        tab: "flasher"
+        tab: "flasher",
       }),
-      device({ port: "a", connected: false })
+      device({ port: "a", connected: false }),
     ]}
   >
     <Page>
@@ -100,9 +100,9 @@ export const connected = (): JSX.Element => (
     mocks={[
       navigationData({
         port: "a",
-        tab: "setup"
+        tab: "setup",
       }),
-      device({ port: "a", connected: true })
+      device({ port: "a", connected: true }),
     ]}
   >
     <Page>

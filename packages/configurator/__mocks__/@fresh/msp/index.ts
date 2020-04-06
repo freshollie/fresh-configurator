@@ -5,5 +5,5 @@ export const getAttitude = (): Promise<object> =>
   Promise.resolve({
     roll: 0,
     pitch: 0,
-    heading: 0
+    heading: 0,
   });

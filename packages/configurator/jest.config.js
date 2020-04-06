@@ -4,7 +4,7 @@ const { name } = require("./package.json");
 module.exports = {
   displayName: {
     name,
-    color: "green"
+    color: "green",
   },
-  ...base
+  ...base,
 };

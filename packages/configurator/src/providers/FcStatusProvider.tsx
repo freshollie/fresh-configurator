@@ -6,7 +6,7 @@ import {
   ConnectionDetailsQuery,
   ConnectionDetailsQueryVariables,
   ConnectionDetailsDocument,
-  useStatusQuery
+  useStatusQuery,
 } from "../gql/__generated__";
 import StatusList from "../components/StatusList";
 
@@ -28,10 +28,10 @@ const FcStatusProvider: React.FC = () => {
   const { connected } = useConnectionState(port);
   const { data: deviceStatus } = useStatusQuery({
     variables: {
-      port
+      port,
     },
     pollInterval: 100,
-    skip: !port || !connected
+    skip: !port || !connected,
   });
 
   const { cycleTime, cpuload, i2cError } = deviceStatus?.device.status ?? {};
@@ -48,21 +48,21 @@ const FcStatusProvider: React.FC = () => {
         >({
           query: ConnectionDetailsDocument,
           variables: {
-            port
+            port,
           },
-          fetchPolicy: "no-cache"
+          fetchPolicy: "no-cache",
         });
 
         const {
           bytesRead,
           bytesWritten,
-          packetErrors
+          packetErrors,
         } = data.device.connection;
 
         setUsage({
           read: usagePercentage(lastUsage.read, bytesRead, baudRate),
           write: usagePercentage(lastUsage.written, bytesWritten, baudRate),
-          packetErrors
+          packetErrors,
         });
 
         lastUsage = { read: bytesRead, written: bytesWritten };

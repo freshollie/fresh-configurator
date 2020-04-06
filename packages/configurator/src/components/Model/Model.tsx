@@ -14,7 +14,7 @@ interface Model {
 const MODEL_MAP = {
   quadx,
   tricopter,
-  hexx
+  hexx,
 };
 
 export type ModelType = keyof typeof MODEL_MAP;
@@ -31,8 +31,8 @@ const useModel = (modelKey: ModelType): Model | undefined => {
       setData(modelsCache[modelKey]);
     } else {
       fetch(MODEL_MAP[modelKey])
-        .then(res => res.json())
-        .then(modelData => {
+        .then((res) => res.json())
+        .then((modelData) => {
           modelsCache[modelKey] = new JSONLoader().parse(modelData);
           setData(modelsCache[modelKey]);
         })
@@ -62,7 +62,7 @@ const whiteColor = new Color(1, 1, 1);
  */
 const Model: React.FC<ModelProps> = ({
   name,
-  attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 }
+  attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
 }) => {
   const data = useModel(name);
 

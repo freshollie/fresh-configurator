@@ -3,7 +3,7 @@ import {
   Container,
   SelectorsContainer,
   ManualOverride,
-  DarkSelectContainer
+  DarkSelectContainer,
 } from "./ConnectionSelector.styles";
 
 const BAUDRATES = [
@@ -19,7 +19,7 @@ const BAUDRATES = [
   9600,
   4800,
   2400,
-  1200
+  1200,
 ];
 
 interface ConnectionDetails {
@@ -38,7 +38,7 @@ const ConnectionSelector: React.FC<{
   selectedPort = "",
   selectedBaud = 115200,
   onChange,
-  disabled = false
+  disabled = false,
 }) => (
   <Container>
     {!ports?.includes(selectedPort) && (
@@ -48,7 +48,7 @@ const ConnectionSelector: React.FC<{
           disabled={disabled}
           type="text"
           value={selectedPort}
-          onChange={e =>
+          onChange={(e) =>
             onChange?.({ port: e.target.value, baud: selectedBaud })
           }
         />
@@ -59,11 +59,11 @@ const ConnectionSelector: React.FC<{
         <select
           disabled={disabled}
           value={ports?.includes(selectedPort) ? selectedPort : "manual"}
-          onChange={e =>
+          onChange={(e) =>
             onChange?.({ port: e.target.value, baud: selectedBaud })
           }
         >
-          {ports.map(port => (
+          {ports.map((port) => (
             <option key={port} value={port}>
               {port}
             </option>
@@ -75,14 +75,14 @@ const ConnectionSelector: React.FC<{
         <select
           disabled={disabled}
           value={selectedBaud}
-          onChange={e =>
+          onChange={(e) =>
             onChange?.({
               baud: parseInt(e.target.value, 10),
-              port: selectedPort
+              port: selectedPort,
             })
           }
         >
-          {BAUDRATES.map(baud => (
+          {BAUDRATES.map((baud) => (
             <option key={baud} value={baud}>
               {baud}
             </option>

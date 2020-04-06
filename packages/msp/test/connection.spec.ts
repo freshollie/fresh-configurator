@@ -9,7 +9,7 @@ import {
   close,
   bytesRead,
   bytesWritten,
-  packetErrors
+  packetErrors,
 } from "../src";
 import codes from "../src/serial/codes";
 
@@ -57,11 +57,11 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
     } catch (e) {}
     // wait 10 miliseconds
     // eslint-disable-next-line no-await-in-loop
-    await new Promise(resolve => realSetTimeout(resolve, 10));
+    await new Promise((resolve) => realSetTimeout(resolve, 10));
   }
 };
 
-mockMspDevices.forEach(port => handleMspInfoReply(port));
+mockMspDevices.forEach((port) => handleMspInfoReply(port));
 
 beforeEach(() => {
   jest.useRealTimers();
@@ -71,9 +71,9 @@ beforeEach(() => {
   MockBinding.reset();
   reset();
 
-  mockPorts.forEach(path => {
+  mockPorts.forEach((path) => {
     MockBinding.createPort(path, {
-      record: true
+      record: true,
     });
   });
 });
@@ -85,18 +85,18 @@ describe("open", () => {
   });
 
   it("should allow multiple ports to be opened", async () => {
-    await Promise.all(mockMspDevices.map(port => open(port)));
-    expect(mockMspDevices.every(port => isOpen(port))).toBe(true);
+    await Promise.all(mockMspDevices.map((port) => open(port)));
+    expect(mockMspDevices.every((port) => isOpen(port))).toBe(true);
   });
 
-  it("should throw an error when trying to open a port which doesn't respond with api version", done => {
+  it("should throw an error when trying to open a port which doesn't respond with api version", (done) => {
     jest.useFakeTimers();
 
     open("/dev/non-msp-device")
       .then(() => {
         throw new Error("should not have resolved");
       })
-      .catch(e => {
+      .catch((e) => {
         expect(e).toMatchSnapshot();
         done();
       });
@@ -106,14 +106,14 @@ describe("open", () => {
     }, 100);
   });
 
-  it("should provide a callback and close the connection when the connection closes", done => {
+  it("should provide a callback and close the connection when the connection closes", (done) => {
     open("/dev/something", () => {
       expect(isOpen("/dev/something")).toBe(false);
       done();
     }).then(() => raw("/dev/something")?.close());
   });
 
-  it("should close the connection when an error occurs", done => {
+  it("should close the connection when an error occurs", (done) => {
     open("/dev/something", () => {
       expect(isOpen("/dev/something")).toBe(false);
       done();
@@ -182,7 +182,7 @@ describe("execute", () => {
     await open("/dev/something");
     execute("/dev/something", {
       code: 254,
-      data: Buffer.from("This is a message")
+      data: Buffer.from("This is a message"),
     });
     await flushPromises();
 
@@ -195,7 +195,7 @@ describe("execute", () => {
     await open("/dev/something");
     execute("/dev/something", {
       code: 255,
-      data: Buffer.from("This is a v2 message")
+      data: Buffer.from("This is a v2 message"),
     });
     await flushPromises();
 
@@ -208,13 +208,13 @@ describe("execute", () => {
     await open("/dev/something");
     execute("/dev/something", {
       code: 255,
-      data: Buffer.from("This is a v2 message")
+      data: Buffer.from("This is a v2 message"),
     });
 
     await flushPromises();
     execute("/dev/something", {
       code: 255,
-      data: Buffer.from("This is a v2 message")
+      data: Buffer.from("This is a v2 message"),
     });
 
     await flushPromises();
@@ -224,13 +224,13 @@ describe("execute", () => {
 
     execute("/dev/something", {
       code: 255,
-      data: Buffer.from("This is a different request")
+      data: Buffer.from("This is a different request"),
     });
     await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
       Buffer.concat([
         encodeMessageV2(255, Buffer.from("This is a v2 message")),
-        encodeMessageV2(255, Buffer.from("This is a different request"))
+        encodeMessageV2(255, Buffer.from("This is a different request")),
       ])
     );
   });
@@ -238,7 +238,7 @@ describe("execute", () => {
   it("should return response of the given request", async () => {
     await open("/dev/something");
     const execution = execute("/dev/something", {
-      code: 108
+      code: 108,
     });
     await flushPromises();
 
@@ -257,7 +257,7 @@ describe("execute", () => {
   it("should ignore responses which are not related", async () => {
     await open("/dev/something");
     const execution = execute("/dev/something", {
-      code: 108
+      code: 108,
     });
     await flushPromises();
 
@@ -279,10 +279,10 @@ describe("execute", () => {
   it("should return the same data for a duplicate request", async () => {
     await open("/dev/something");
     const execution1 = execute("/dev/something", {
-      code: 108
+      code: 108,
     });
     const execution2 = execute("/dev/something", {
-      code: 108
+      code: 108,
     });
 
     await flushPromises();
@@ -310,7 +310,7 @@ describe("execute", () => {
 
     jest.useFakeTimers();
     const execution = execute("/dev/something", {
-      code: 108
+      code: 108,
     });
 
     // Invalid checksum
@@ -334,8 +334,8 @@ describe("execute", () => {
     let rejected: Error | undefined;
     execute("/dev/something", {
       code: 108,
-      timeout: 500
-    }).catch(err => {
+      timeout: 500,
+    }).catch((err) => {
       rejected = err;
     });
 
@@ -378,7 +378,7 @@ describe("bytesWritten", () => {
     await open("/dev/something");
     execute("/dev/something", {
       code: 255,
-      data: Buffer.from("This is a v2 message")
+      data: Buffer.from("This is a v2 message"),
     });
 
     expect(bytesWritten("/dev/something")).toEqual(

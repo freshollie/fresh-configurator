@@ -1,7 +1,7 @@
 import React from "react";
 import {
   useAttitudeQuery,
-  useConnectionSettingsQuery
+  useConnectionSettingsQuery,
 } from "../gql/__generated__";
 import ModelView from "../components/ModelView";
 
@@ -11,10 +11,10 @@ const ModelViewProvider: React.FC = () => {
 
   const { data: attitudeData } = useAttitudeQuery({
     variables: {
-      port: port ?? ""
+      port: port ?? "",
     },
     pollInterval: 5,
-    skip: !port
+    skip: !port,
   });
 
   return (

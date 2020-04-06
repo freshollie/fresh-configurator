@@ -20,7 +20,7 @@ const CHANNEL_COLORS = [
   "#cf267d",
   "#7a1464",
   "#3a7a14",
-  "#14407a"
+  "#14407a",
 ];
 
 const CHANNEL_NAMES = ["Roll [A]", "Pitch [E]", "Yaw [R]", "Throttle [T]"];

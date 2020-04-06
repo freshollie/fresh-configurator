@@ -4,7 +4,7 @@ import ModelView from "../src/components/ModelView";
 
 export default {
   component: ModelView,
-  title: "Components|ModelView"
+  title: "Components|ModelView",
 };
 
 const Container = styled.div`
@@ -25,7 +25,7 @@ const useRollingAttitude = (): {
   return {
     roll: number,
     pitch: number,
-    heading: number
+    heading: number,
   };
 };
 

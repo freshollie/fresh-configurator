@@ -11,7 +11,7 @@ import {
   SelectedTabDocument,
   SelectTabDocument,
   SelectTabMutation,
-  SelectTabMutationVariables
+  SelectTabMutationVariables,
 } from "./__generated__";
 
 describe("client", () => {
@@ -21,7 +21,7 @@ describe("client", () => {
         ConnectionSettingsQuery,
         ConnectionSettingsQueryVariables
       >({
-        query: ConnectionSettingsDocument
+        query: ConnectionSettingsDocument,
       });
 
       expect(data?.configurator.port).toEqual(null);
@@ -32,15 +32,15 @@ describe("client", () => {
       >({
         mutation: SetConnectionSettingsDocument,
         variables: {
-          port: "/a/test/port"
-        }
+          port: "/a/test/port",
+        },
       });
 
       ({ data } = await client.query<
         ConnectionSettingsQuery,
         ConnectionSettingsQueryVariables
       >({
-        query: ConnectionSettingsDocument
+        query: ConnectionSettingsDocument,
       }));
 
       expect(data?.configurator.port).toEqual("/a/test/port");
@@ -51,7 +51,7 @@ describe("client", () => {
         SelectedTabQuery,
         SelectedTabQueryVariables
       >({
-        query: SelectedTabDocument
+        query: SelectedTabDocument,
       });
 
       expect(data?.configurator.tab).toEqual(null);
@@ -59,15 +59,15 @@ describe("client", () => {
       await client.mutate<SelectTabMutation, SelectTabMutationVariables>({
         mutation: SelectTabDocument,
         variables: {
-          tabId: "some-tab"
-        }
+          tabId: "some-tab",
+        },
       });
 
       ({ data } = await client.query<
         SelectedTabQuery,
         SelectedTabQueryVariables
       >({
-        query: SelectedTabDocument
+        query: SelectedTabDocument,
       }));
 
       expect(data?.configurator.tab).toEqual("some-tab");

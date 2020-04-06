@@ -38,18 +38,18 @@ export default styled.article<WidgetProps>`
       background-color: #414443;
 
       ${type === "warning" &&
-        css`
-          background-color: #393b3a;
-        `}
+      css`
+        background-color: #393b3a;
+      `}
       ${type === "note" &&
-        css`
-          background-color: #393b3a;
-        `};
+      css`
+        background-color: #393b3a;
+      `};
 
       ${type === "white" &&
-        css`
-          background-color: #393b3a;
-        `}
+      css`
+        background-color: #393b3a;
+      `}
     `}
 
   > header {
@@ -127,9 +127,9 @@ export default styled.article<WidgetProps>`
         color: white;
 
         ${theme.dark &&
-          css`
-            background: #393b3a;
-          `}
+        css`
+          background: #393b3a;
+        `}
       `}
   }
 

@@ -14,7 +14,7 @@ import {
   RcDeadband,
   AnalogValues,
   RawGpsData,
-  BoardInfo
+  BoardInfo,
 } from "./types";
 import { getFeatureBits, Features } from "./features";
 
@@ -27,7 +27,7 @@ export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   return times(
     () => ({
       id: data.readU8(),
-      voltage: data.readU8() / 10.0
+      voltage: data.readU8() / 10.0,
     }),
     3
   );
@@ -54,7 +54,7 @@ export const readBoardInfo = async (port: string): Promise<BoardInfo> => {
     signature: semver.gte(api, "1.39.0") ? times(() => data.readU8(), 32) : [],
     mcuTypeId: semver.gte(api, "1.41.0") ? data.readU8() : 255,
     configurationState: semver.gte(api, "1.42.0") ? data.readU8() : undefined,
-    sampleRateHz: semver.gte(api, "1.43.0") ? data.readU16() : undefined
+    sampleRateHz: semver.gte(api, "1.43.0") ? data.readU16() : undefined,
   };
 };
 
@@ -65,7 +65,7 @@ export const readAnalogValues = async (port: string): Promise<AnalogValues> => {
     voltage: data.readU8() / 10.0,
     mahDrawn: data.readU16(),
     rssi: data.readU16(), // 0-1023
-    amperage: data.read16() / 100 // A
+    amperage: data.read16() / 100, // A
   };
 
   if (semver.gte(apiVersion(port), "1.41.0")) {
@@ -85,7 +85,7 @@ export const readRawGPS = async (port: string): Promise<RawGpsData> => {
     lon: data.read32(),
     alt: data.readU16(),
     speed: data.readU16(),
-    groundCourse: data.readU16()
+    groundCourse: data.readU16(),
   };
 };
 
@@ -99,7 +99,7 @@ export const readIMUData = async (port: string): Promise<ImuData> => {
   return {
     accelerometer: times(accUnit, 3) as ImuUnit,
     gyroscope: times(gyroUnit, 3) as ImuUnit,
-    magnetometer: times(mangetUnit, 3) as ImuUnit
+    magnetometer: times(mangetUnit, 3) as ImuUnit,
   };
 };
 
@@ -108,7 +108,7 @@ export const readAttitude = async (port: string): Promise<Kinematics> => {
   return {
     roll: data.read16() / 10.0, // x
     pitch: data.read16() / 10.0, // y
-    heading: data.read16() // z
+    heading: data.read16(), // z
   };
 };
 
@@ -117,7 +117,7 @@ const extractStatus = (data: MspDataView): Status => ({
   i2cError: data.readU16(),
   activeSensors: data.readU16(),
   mode: data.readU32(),
-  profile: data.readU8()
+  profile: data.readU8(),
 });
 
 export const readStatus = async (port: string): Promise<Status> => {
@@ -135,7 +135,7 @@ export const readExtendedStatus = async (
     numProfiles: data.readU8(),
     rateProfile: data.readU8(),
     armingDisableCount: 0,
-    armingDisableFlags: 0
+    armingDisableFlags: 0,
   };
 
   try {
@@ -162,7 +162,7 @@ export const readFeatures = async (
   return Object.entries(featureBits).map(([bit, name]) => ({
     name,
     // eslint-disable-next-line no-bitwise
-    enabled: (featureMask >> parseInt(bit, 10)) % 2 !== 0
+    enabled: (featureMask >> parseInt(bit, 10)) % 2 !== 0,
   }));
 };
 
@@ -194,7 +194,7 @@ export const readRcTuning = async (port: string): Promise<RcTuning> => {
     throttleLimitPercent: 0,
     rollRateLimit: 0,
     pitchRateLimit: 0,
-    yawRateLimit: 0
+    yawRateLimit: 0,
   };
 
   tuning.rcRate = parseFloat((data.readU8() / 100).toFixed(2));
@@ -250,6 +250,6 @@ export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
     altHoldDeadhand: data.readU8(),
     deadband3dThrottle: semver.gte(apiVersion(port), "1.17.0")
       ? data.readU16()
-      : 0
+      : 0,
   };
 };

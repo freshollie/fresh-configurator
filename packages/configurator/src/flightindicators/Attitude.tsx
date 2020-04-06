@@ -4,7 +4,7 @@ import {
   HorizonBack,
   HorizonBall,
   HorizonCircle,
-  HorizonMechanics
+  HorizonMechanics,
 } from "./assets";
 
 const PITCH_LIMIT = 30;

@@ -30,7 +30,7 @@ export enum Features {
   ANTI_GRAVITY,
   DYNAMIC_FILTER,
   VBAT,
-  VCURRENT_METER
+  VCURRENT_METER,
 }
 
 type FeatureBits = Record<number, Features>;
@@ -50,7 +50,7 @@ const BASE_FEATURE_BITS: FeatureBits = {
   14: Features.RX_MSP,
   15: Features.RSSI_ADC,
   16: Features.LED_STRIP,
-  17: Features.DISPLAY
+  17: Features.DISPLAY,
 };
 
 export const getFeatureBits = (apiVersion: string): FeatureBits => {

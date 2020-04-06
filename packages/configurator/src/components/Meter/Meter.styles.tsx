@@ -13,8 +13,8 @@ export const Bar = styled.div.attrs<BarProps>(
     ${color} ${percentage}%,
     ${theme.dark ? "#393b3a" : "#f4f4f4"} 0
   )
-  no-repeat`
-    }
+  no-repeat`,
+    },
   })
 )<BarProps>`
   width: 100%;
@@ -36,8 +36,8 @@ export const BarLabel = styled.div.attrs<BarLabelProps>(
       background: `linear-gradient(to right, white ${percentage}%, ${
         theme.dark ? "white" : "#474747"
       } 0)
-    no-repeat`
-    }
+    no-repeat`,
+    },
   })
 )<BarLabelProps>`
   -webkit-background-clip: text !important;

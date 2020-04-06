@@ -7,7 +7,7 @@ import {
   OSD_ALARMS,
   OSD_UNIT_TYPES,
   OSD_VIDEO_TYPES,
-  OSD_PRECISION_TYPES
+  OSD_PRECISION_TYPES,
 } from "./types";
 /**
  * Return the OSD fields in their data read order
@@ -39,7 +39,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             OSD_FIELDS.PID_ROLL,
             OSD_FIELDS.PID_PITCH,
             OSD_FIELDS.PID_YAW,
-            OSD_FIELDS.POWER
+            OSD_FIELDS.POWER,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.32.0")
@@ -48,7 +48,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             semver.gte(apiVersion, "1.36.0")
               ? OSD_FIELDS.WARNINGS
               : OSD_FIELDS.BATTERY_WARNING,
-            OSD_FIELDS.AVG_CELL_VOLTAGE
+            OSD_FIELDS.AVG_CELL_VOLTAGE,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.34.0")
@@ -67,7 +67,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             OSD_FIELDS.NUMERICAL_VARIO,
             OSD_FIELDS.COMPASS_BAR,
             OSD_FIELDS.ESC_TEMPERATURE,
-            OSD_FIELDS.ESC_RPM
+            OSD_FIELDS.ESC_RPM,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.37.0")
@@ -75,7 +75,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             OSD_FIELDS.REMAINING_TIME_ESTIMATE,
             OSD_FIELDS.RTC_DATE_TIME,
             OSD_FIELDS.ADJUSTMENT_RANGE,
-            OSD_FIELDS.CORE_TEMPERATURE
+            OSD_FIELDS.CORE_TEMPERATURE,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.39.0") ? [OSD_FIELDS.ANTI_GRAVITY] : []),
@@ -90,7 +90,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             OSD_FIELDS.STICK_OVERLAY_LEFT,
             OSD_FIELDS.STICK_OVERLAY_RIGHT,
             OSD_FIELDS.DISPLAY_NAME,
-            OSD_FIELDS.ESC_RPM_FREQ
+            OSD_FIELDS.ESC_RPM_FREQ,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.42.0")
@@ -98,12 +98,12 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
             OSD_FIELDS.RATE_PROFILE_NAME,
             OSD_FIELDS.PID_PROFILE_NAME,
             OSD_FIELDS.OSD_PROFILE_NAME,
-            OSD_FIELDS.RSSI_DBM_VALUE
+            OSD_FIELDS.RSSI_DBM_VALUE,
           ]
         : []),
       ...(semver.gte(apiVersion, "1.43.0")
         ? [OSD_FIELDS.RC_CHANNELS, OSD_FIELDS.CAMERA_FRAME]
-        : [])
+        : []),
     ];
   }
   // version 3.0.0
@@ -123,7 +123,7 @@ export const osdFields = (apiVersion: string): OSD_FIELDS[] => {
     OSD_FIELDS.CURRENT_DRAW,
     OSD_FIELDS.MAH_DRAWN,
     OSD_FIELDS.CRAFT_NAME,
-    OSD_FIELDS.ALTITUDE
+    OSD_FIELDS.ALTITUDE,
   ];
 };
 
@@ -144,7 +144,7 @@ export const osdStaticFields = (apiVersion: string): OSD_STATIC_FIELDS[] => {
       OSD_STATIC_FIELDS.BLACKBOX_LOG_NUMBER,
       ...(semver.gte(apiVersion, "1.37.0")
         ? [OSD_STATIC_FIELDS.RTC_DATE_TIME]
-        : [])
+        : []),
     ];
   }
   // Starting with 1.39.0 OSD stats are reordered to match how they're presented on screen
@@ -170,7 +170,7 @@ export const osdStaticFields = (apiVersion: string): OSD_STATIC_FIELDS[] => {
           OSD_STATIC_FIELDS.MAX_ESC_RPM,
           OSD_STATIC_FIELDS.MIN_LINK_QUALITY,
           OSD_STATIC_FIELDS.FLIGHT_DISTANCE,
-          OSD_STATIC_FIELDS.MAX_FFT
+          OSD_STATIC_FIELDS.MAX_FFT,
         ]
       : []),
     ...(semver.gte(apiVersion, "1.42.0")
@@ -178,9 +178,9 @@ export const osdStaticFields = (apiVersion: string): OSD_STATIC_FIELDS[] => {
           OSD_STATIC_FIELDS.TOTAL_FLIGHTS,
           OSD_STATIC_FIELDS.TOTAL_FLIGHT_TIME,
           OSD_STATIC_FIELDS.TOTAL_FLIGHT_DIST,
-          OSD_STATIC_FIELDS.MIN_RSSI_DBM
+          OSD_STATIC_FIELDS.MIN_RSSI_DBM,
         ]
-      : [])
+      : []),
   ];
 };
 
@@ -195,7 +195,7 @@ export const osdWarnings = (apiVersion: string): OSD_WARNINGS[] => [
     ? [
         OSD_WARNINGS.ESC_FAIL,
         OSD_WARNINGS.CORE_TEMPERATURE,
-        OSD_WARNINGS.RC_SMOOTHING_FAILURE
+        OSD_WARNINGS.RC_SMOOTHING_FAILURE,
       ]
     : []),
   ...(semver.gte(apiVersion, "1.41.0")
@@ -203,42 +203,42 @@ export const osdWarnings = (apiVersion: string): OSD_WARNINGS[] => [
         OSD_WARNINGS.FAILSAFE,
         OSD_WARNINGS.LAUNCH_CONTROL,
         OSD_WARNINGS.GPS_RESCUE_UNAVAILABLE,
-        OSD_WARNINGS.GPS_RESCUE_DISABLED
+        OSD_WARNINGS.GPS_RESCUE_DISABLED,
       ]
     : []),
   ...(semver.gte(apiVersion, "1.42.0")
     ? [OSD_WARNINGS.RSSI, OSD_WARNINGS.LINK_QUALITY, OSD_WARNINGS.RSSI_DBM]
     : []),
-  ...(semver.gte(apiVersion, "1.43.0") ? [OSD_WARNINGS.OVER_CAP] : [])
+  ...(semver.gte(apiVersion, "1.43.0") ? [OSD_WARNINGS.OVER_CAP] : []),
 ];
 
 export const osdTimerSources = (apiVersion: string): OSD_TIMER_SOURCES[] => [
   OSD_TIMER_SOURCES.ON_TIME,
   OSD_TIMER_SOURCES.TOTAL_ARMED_TIME,
   OSD_TIMER_SOURCES.LAST_ARMED_TIME,
-  ...(semver.gte(apiVersion, "1.42.0") ? [OSD_TIMER_SOURCES.ON_ARM_TIME] : [])
+  ...(semver.gte(apiVersion, "1.42.0") ? [OSD_TIMER_SOURCES.ON_ARM_TIME] : []),
 ];
 
 export const osdAlarms = (): OSD_ALARMS[] => [
   OSD_ALARMS.RSSI,
   OSD_ALARMS.CAP,
   OSD_ALARMS.TIME,
-  OSD_ALARMS.ALT
+  OSD_ALARMS.ALT,
 ];
 
 export const OSD_UNIT_VALUE_TO_TYPE = [
   OSD_UNIT_TYPES.IMPERIAL,
-  OSD_UNIT_TYPES.METRIC
+  OSD_UNIT_TYPES.METRIC,
 ];
 export const OSD_VIDEO_VALUE_TO_TYPE = [
   OSD_VIDEO_TYPES.AUTO,
   OSD_VIDEO_TYPES.PAL,
-  OSD_VIDEO_TYPES.NTSC
+  OSD_VIDEO_TYPES.NTSC,
 ];
 export const OSD_PRECISION_VALUE_TO_TYPE = [
   OSD_PRECISION_TYPES.SECOND,
   OSD_PRECISION_TYPES.HUNDREDTH,
-  OSD_PRECISION_TYPES.TENTH
+  OSD_PRECISION_TYPES.TENTH,
 ];
 
 export const OSD_VALUE_VISIBLE = 0x0800;

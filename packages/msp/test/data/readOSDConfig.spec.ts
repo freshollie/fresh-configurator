@@ -22,7 +22,7 @@ describe("readOSDConfig", () => {
     const config = await readOSDConfig("/dev/something");
     expect(config).toMatchSnapshot();
     expect(mockExecute).toHaveBeenCalledWith("/dev/something", {
-      code: codes.MSP_OSD_CONFIG
+      code: codes.MSP_OSD_CONFIG,
     });
   });
 });

@@ -8,7 +8,7 @@ const LogsView: React.FC = ({ children }) => {
   useLayoutEffect(() => {
     if (listRef.current) {
       listRef.current.scroll({
-        top: listRef.current.scrollHeight
+        top: listRef.current.scrollHeight,
       });
     }
   });
@@ -18,7 +18,7 @@ const LogsView: React.FC = ({ children }) => {
       const listElement = listRef.current;
       const scrollTop = (): void => {
         listElement.scroll({
-          top: listElement.scrollHeight
+          top: listElement.scrollHeight,
         });
       };
       listElement.addEventListener("transitionend", scrollTop);

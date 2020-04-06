@@ -7,10 +7,10 @@ const ChannelValuesProvider: React.FC = () => {
   const port = useSelectedPort();
   const { data, loading } = useRcChannelsQuery({
     variables: {
-      port: port ?? ""
+      port: port ?? "",
     },
     skip: !port,
-    pollInterval: 10
+    pollInterval: 10,
   });
 
   const activeChannels = data?.device.rc.channels ?? [];

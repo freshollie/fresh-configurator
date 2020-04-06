@@ -9,7 +9,7 @@ const WhiteBackground = styled.div`
 
 export default {
   component: Title,
-  title: "Components|Title"
+  title: "Components|Title",
 };
 
 export const asTitle = (): JSX.Element => (

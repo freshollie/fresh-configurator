@@ -8,7 +8,7 @@ import Paper from "../src/components/Paper";
 
 export default {
   component: SetupLayout,
-  title: "Layouts|Setup"
+  title: "Layouts|Setup",
 };
 
 const WhiteBackground = styled.div`

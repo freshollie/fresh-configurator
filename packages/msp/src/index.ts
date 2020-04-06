@@ -8,5 +8,5 @@ export {
   bytesRead,
   bytesWritten,
   packetErrors,
-  apiVersion
+  apiVersion,
 } from "./serial/connection";

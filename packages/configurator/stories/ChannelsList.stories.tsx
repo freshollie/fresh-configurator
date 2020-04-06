@@ -3,7 +3,7 @@ import ChannelsList from "../src/components/ChannelsList";
 
 export default {
   component: ChannelsList,
-  title: "Components|Channels List"
+  title: "Components|Channels List",
 };
 
 const useChannelValues = (number: number): number[] => {

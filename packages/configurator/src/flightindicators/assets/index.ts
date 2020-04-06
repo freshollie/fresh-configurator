@@ -32,5 +32,5 @@ export {
   FiNeedleSmall,
   AltitudePressure,
   AltitudeTicks,
-  SpeedMechanics
+  SpeedMechanics,
 };

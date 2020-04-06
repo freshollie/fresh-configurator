@@ -8,9 +8,9 @@ export default (
 } => {
   const { data: deviceData } = useConnectionStateQuery({
     variables: {
-      port: port || ""
+      port: port || "",
     },
-    skip: !port
+    skip: !port,
   });
 
   return (

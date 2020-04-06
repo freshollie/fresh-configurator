@@ -12,7 +12,7 @@ import {
   OSD_PRECISION_VALUE_TO_TYPE,
   osdWarnings,
   OSD_VALUE_VISIBLE,
-  osdAlarms
+  osdAlarms,
 } from "./constants";
 import WriteBuffer from "../../serial/writebuffer";
 import codes from "../../serial/codes";
@@ -32,7 +32,7 @@ import {
   OSDParameters,
   OSDStaticItem,
   OSDDisplayItem,
-  OSDTimer
+  OSDTimer,
 } from "./types";
 
 export * as OSDTypes from "./types";
@@ -45,7 +45,7 @@ const unpackPosition = (positionData: number): [number, number] =>
   positionData === -1
     ? [0, 0]
     : // eslint-disable-next-line no-bitwise
-    [positionData & 0x001f, (positionData >> 5) & 0x001f];
+      [positionData & 0x001f, (positionData >> 5) & 0x001f];
 
 const packLegacyPosition = (
   position: [number, number],
@@ -88,9 +88,9 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
   const alarms =
     hasOSD && semver.gte(api, "1.21.0") && flag0Active
       ? [
-        { key: OSD_ALARMS.RSSI, value: data.readU8() },
-        { key: OSD_ALARMS.CAP, value: data.readU16() }
-      ]
+          { key: OSD_ALARMS.RSSI, value: data.readU8() },
+          { key: OSD_ALARMS.CAP, value: data.readU16() },
+        ]
       : [];
 
   let displayItemsCount = expectedDisplayItems.length;
@@ -120,7 +120,7 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
       bitCheck(flagsData, 5) || (haveMax7456Video && semver.lt(api, "1.43.0")),
     haveOsdFeature:
       bitCheck(flagsData, 0) || (flagsData === 1 && semver.lt(api, "1.34.0")),
-    isOsdSlave: bitCheck(flagsData, 1) && semver.gte(api, "1.34.0")
+    isOsdSlave: bitCheck(flagsData, 1) && semver.gte(api, "1.34.0"),
   };
 
   // Read display element positions, the parsing is done later because we need the number of profiles
@@ -131,12 +131,12 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
   const expectedStaticFields = osdStaticFields(api);
   const staticItems = semver.gte(api, "1.36.0")
     ? times(
-      i => ({
-        key: expectedStaticFields[i] ?? OSD_STATIC_FIELDS.UNKNOWN,
-        enabled: data.readU8() === 1
-      }),
-      data.readU8()
-    )
+        (i) => ({
+          key: expectedStaticFields[i] ?? OSD_STATIC_FIELDS.UNKNOWN,
+          enabled: data.readU8() === 1,
+        }),
+        data.readU8()
+      )
     : [];
 
   // Parse configurable timers
@@ -144,14 +144,14 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
   const timerSources = osdTimerSources(api);
   const timers = semver.gte(api, "1.36.0")
     ? times((i) => {
-      const timerData = data.readU16();
-      return {
-        key: i,
-        src: timerSources[timerData & 0x0f] ?? OSD_TIMER_SOURCES.UNKNOWN,
-        precision: OSD_PRECISION_VALUE_TO_TYPE[(timerData >> 4) & 0x0f],
-        time: (timerData >> 8) & 0xff
-      };
-    }, timersCount)
+        const timerData = data.readU16();
+        return {
+          key: i,
+          src: timerSources[timerData & 0x0f] ?? OSD_TIMER_SOURCES.UNKNOWN,
+          precision: OSD_PRECISION_VALUE_TO_TYPE[(timerData >> 4) & 0x0f],
+          time: (timerData >> 8) & 0xff,
+        };
+      }, timersCount)
     : [];
 
   // Parse warning
@@ -165,37 +165,37 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
   }
   const warnings = semver.gte(api, "1.36.0")
     ? times(
-      i => ({
-        key: expectedWarnings[i] ?? OSD_WARNINGS.UNKNOWN,
-        enabled: (warningFlags & (1 << i)) !== 0
-      }),
-      warningCount
-    )
+        (i) => ({
+          key: expectedWarnings[i] ?? OSD_WARNINGS.UNKNOWN,
+          enabled: (warningFlags & (1 << i)) !== 0,
+        }),
+        warningCount
+      )
     : [];
 
   const osdProfiles = semver.gte(api, "1.41.0")
     ? {
-      count: data.readU8(),
-      selected: data.readU8() - 1
-    }
+        count: data.readU8(),
+        selected: data.readU8() - 1,
+      }
     : {
-      count: 1,
-      selected: 0
-    };
+        count: 1,
+        selected: 0,
+      };
 
   const parameters = {
     overlayRadioMode: semver.gte(api, "1.41.0") ? data.readU8() : 0,
     cameraFrameWidth: semver.gte(api, "1.43.0") ? data.readU8() : 24,
-    cameraFrameHeight: semver.gte(api, "1.43.0") ? data.readU8() : 11
+    cameraFrameHeight: semver.gte(api, "1.43.0") ? data.readU8() : 11,
   };
 
   const displayItems = itemPositions.map((positionData, i) => ({
     key: expectedDisplayItems[i] ?? OSD_FIELDS.UNKNOWN,
     position: unpackPosition(positionData),
     visibility: times(
-      profileIndex => isVisible(positionData, profileIndex),
+      (profileIndex) => isVisible(positionData, profileIndex),
       osdProfiles.count
-    )
+    ),
   }));
 
   return {
@@ -209,7 +209,7 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
     videoSystem,
     osdProfiles,
     parameters,
-    unitMode
+    unitMode,
   };
 };
 
@@ -229,13 +229,13 @@ export const writeOSDDisplayItem = async (
 
   const packedPosition = semver.gte(api, "1.21.0")
     ? reduce(
-      (packedVisible, visibilityProfile, i) =>
-        packedVisible | (visibilityProfile ? OSD_VALUE_VISIBLE << i : 0),
-      0,
-      visibility
-    ) |
-    ((position[1] & 0x001f) << 5) |
-    position[0]
+        (packedVisible, visibilityProfile, i) =>
+          packedVisible | (visibilityProfile ? OSD_VALUE_VISIBLE << i : 0),
+        0,
+        visibility
+      ) |
+      ((position[1] & 0x001f) << 5) |
+      position[0]
     : packLegacyPosition(position, visibility[0]);
 
   data.push8(index);
@@ -243,7 +243,7 @@ export const writeOSDDisplayItem = async (
 
   await execute(port, {
     code: codes.MSP_SET_OSD_CONFIG,
-    data
+    data,
   });
 };
 
@@ -256,7 +256,7 @@ const writeOSDOtherData = async (
     alarms,
     warnings,
     osdProfiles,
-    parameters
+    parameters,
   }: OSDOtherData
 ): Promise<void> => {
   const api = apiVersion(port);
@@ -312,7 +312,7 @@ export const writeOSDAlarm = async (
 
   await writeOSDOtherData(port, {
     ...osdConfig,
-    alarms: inWriteOrder([alarm], osdAlarms(), osdConfig.alarms)
+    alarms: inWriteOrder([alarm], osdAlarms(), osdConfig.alarms),
   });
 };
 
@@ -334,7 +334,7 @@ export const writeOSDWarning = async (
 
   await writeOSDOtherData(port, {
     ...osdConfig,
-    warnings: inWriteOrder([warning], osdWarnings(api), osdConfig.warnings)
+    warnings: inWriteOrder([warning], osdWarnings(api), osdConfig.warnings),
   });
 };
 
@@ -346,7 +346,7 @@ export const writeOSDSelectedProfile = async (
 
   await writeOSDOtherData(port, {
     ...osdConfig,
-    osdProfiles: { ...osdConfig.osdProfiles, selected: selectedIndex }
+    osdProfiles: { ...osdConfig.osdProfiles, selected: selectedIndex },
   });
 };
 
@@ -397,9 +397,16 @@ export const writeOSDStaticItem = async (
   await execute(port, { code: codes.MSP_SET_OSD_CONFIG, data });
 };
 
-export const writeOSDTimer = async (port: string, timer: OSDTimer): Promise<void> => {
+export const writeOSDTimer = async (
+  port: string,
+  timer: OSDTimer
+): Promise<void> => {
   const data = new WriteBuffer();
   data.push(-2, timer.key);
-  data.push16((timer.src & 0x0F) | ((timer.precision & 0x0F) << 4) | ((timer.time & 0xFF) << 8));
-  await execute(port, { code: codes.MSP_SET_OSD_CONFIG, data })
-}
+  data.push16(
+    (timer.src & 0x0f) |
+      ((timer.precision & 0x0f) << 4) |
+      ((timer.time & 0xff) << 8)
+  );
+  await execute(port, { code: codes.MSP_SET_OSD_CONFIG, data });
+};

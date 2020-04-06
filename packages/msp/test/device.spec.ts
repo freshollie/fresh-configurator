@@ -17,11 +17,11 @@ describe("readAttitude", () => {
     expect(await readAttitude("/dev/someport")).toEqual({
       heading: 268,
       pitch: 31,
-      roll: 9.9
+      roll: 9.9,
     });
 
     expect(mockExecute).toHaveBeenCalledWith("/dev/someport", {
-      code: codes.MSP_ATTITUDE
+      code: codes.MSP_ATTITUDE,
     });
   });
 });

@@ -5,20 +5,20 @@ import { SelectedTabDocument } from "../src/gql/__generated__";
 
 export default {
   component: TabRouter,
-  title: "Managers|Tab Router"
+  title: "Managers|Tab Router",
 };
 
 const selectedTab = (tab: string): MockedResponse => ({
   request: {
-    query: SelectedTabDocument
+    query: SelectedTabDocument,
   },
   result: {
     data: {
       configurator: {
-        tab
-      }
-    }
-  }
+        tab,
+      },
+    },
+  },
 });
 
 export const tabSelected = (): JSX.Element => (

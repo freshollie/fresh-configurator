@@ -5,7 +5,7 @@ module.exports = {
     "/node_modules/",
     "/dist/",
     "/storybook-static/",
-    "/__generated__/"
+    "/__generated__/",
   ],
   collectCoverage: true,
   collectCoverageFrom: [
@@ -14,6 +14,6 @@ module.exports = {
     "!**/stories/**",
     "!**/__generated__/**",
     "!**/dist/**",
-    "!*.d.ts"
-  ]
+    "!*.d.ts",
+  ],
 };

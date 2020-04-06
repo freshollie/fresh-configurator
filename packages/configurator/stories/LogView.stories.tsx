@@ -4,7 +4,7 @@ import LogLine from "../src/components/LogLine";
 
 export default {
   component: LogsView,
-  title: "Components|Logs View"
+  title: "Components|Logs View",
 };
 
 export const example = (): JSX.Element => (

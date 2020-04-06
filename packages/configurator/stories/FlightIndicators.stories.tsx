@@ -7,7 +7,7 @@ import Altimeter from "../src/flightindicators/Altimeter";
 
 export default {
   component: Attitude,
-  title: "Components|Flight Indicators"
+  title: "Components|Flight Indicators",
 };
 
 const useIndicatorValues = (): {
@@ -26,7 +26,7 @@ const useIndicatorValues = (): {
     vario: 0,
     altitude: 0,
     speed: 0,
-    pressure: 0
+    pressure: 0,
   });
   useEffect(() => {
     let increment = 0;
@@ -38,7 +38,7 @@ const useIndicatorValues = (): {
         vario: 2 * Math.sin(increment / 10),
         speed: 80 + 80 * Math.sin(increment / 10),
         altitude: 10 * increment,
-        pressure: 1000 + 3 * Math.sin(increment / 50)
+        pressure: 1000 + 3 * Math.sin(increment / 50),
       });
 
       increment += 1;
@@ -57,7 +57,7 @@ export const WithBoxes = (): JSX.Element => {
     vario,
     speed,
     altitude,
-    pressure
+    pressure,
   } = useIndicatorValues();
   return (
     <>
@@ -78,7 +78,7 @@ export const WithoutBoxes = (): JSX.Element => {
     vario,
     speed,
     altitude,
-    pressure
+    pressure,
   } = useIndicatorValues();
   return (
     <>

@@ -13,7 +13,7 @@ const LogLine: React.FC<LogLineProps> = ({ time, children }) => (
     // innerHTML has to be set
     // eslint-disable-next-line react/no-danger
     dangerouslySetInnerHTML={{
-      __html: `${format(time, "yyyy-MM-dd @ HH:mm:ss")} -- ${children}`
+      __html: `${format(time, "yyyy-MM-dd @ HH:mm:ss")} -- ${children}`,
     }}
   />
 );

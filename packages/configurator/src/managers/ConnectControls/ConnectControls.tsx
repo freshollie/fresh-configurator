@@ -4,7 +4,7 @@ import useConnectionState from "../../hooks/useConnectionState";
 import {
   useConnectMutation,
   useConnectionSettingsQuery,
-  useDisconnectMutation
+  useDisconnectMutation,
 } from "../../gql/__generated__";
 import BigButton from "../../components/BigButton";
 
@@ -16,13 +16,13 @@ const ConnectControls: React.FC = () => {
   const [connect] = useConnectMutation({
     variables: {
       port: port ?? "",
-      baudRate: baudRate ?? 0
-    }
+      baudRate: baudRate ?? 0,
+    },
   });
   const [disconnect] = useDisconnectMutation({
     variables: {
-      port: port ?? ""
-    }
+      port: port ?? "",
+    },
   });
 
   let statusText = "Connecting";
@@ -40,10 +40,10 @@ const ConnectControls: React.FC = () => {
       text={statusText}
       onClick={() =>
         !connected && !connecting
-          ? connect().catch(e => {
+          ? connect().catch((e) => {
               console.log(e);
             })
-          : disconnect().catch(e => {
+          : disconnect().catch((e) => {
               console.log(e);
             })
       }
