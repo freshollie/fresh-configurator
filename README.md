@@ -8,15 +8,16 @@
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://freshollie.github.io/fresh-configurator)
 
 <p align="center">
-  <img width="460" height="300" src="./docs/progress.png">
+  <img width="700" src="./docs/progress.png">
 </p>
 
 ## What is this?
 
-This is a new version of the [betaflight configurator](https://github.com/betaflight/betaflight-configurator) which is attempting to re-write the software in more modern technologies.
+This is a **from-scratch** re-write of the [betaflight configurator](https://github.com/betaflight/betaflight-configurator) which is attempting to replace the software with more a modern and
+correct approach.
 
-The current configurator is both written without a UI framework,
-and doesn't utilise any of the modern javascript packages and package management which
+The current configurator is both written without a UI framework (apart from jQuery),
+and doesn't utilise any of the modern javascript tooling and package management which
 exist today.
 
 The aim of this rewrite is to show how the software could be vastly improved
@@ -29,7 +30,7 @@ It would also allow for easier refactoring and redesigning of the UI.
 At the moment functionality is very minimal, and lots is changing all the time.
 
 - The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package.
-- Tests have been written for most of `@fresh/msp`
+- [Tests have been written](packages/msp/test) for most of `@fresh/msp`
 - The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written
 - [Storybook](https://freshollie.github.io/fresh-configurator) is utlised to develop components
 
@@ -37,7 +38,11 @@ At the moment functionality is very minimal, and lots is changing all the time.
 
 Idealy, to become feature complete with the current configurator. The overall goal of the project, however, is to simplify the requirements to develop your own configurator or customise an existing one.
 
+Because `@fresh/msp` is written separately it could be published as it's own package, available for anyone to build tools which can interact with flight controllers.
+
 ## Developing
+
+**PLEASE NOTE, THIS SOFTWARE IS WORK IN PROGRESS AND THINGS ARE CHANGING ALL THE TIME**
 
 ```bash
 $ yarn
@@ -49,7 +54,7 @@ $ yarn
 $ yarn start
 ```
 
-### Component development enviroment
+### Component development environment
 
 ```
 $ yarn storybook
