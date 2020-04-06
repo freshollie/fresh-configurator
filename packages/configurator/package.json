@@ -7,7 +7,8 @@
     "productName": "Fresh Configurator",
     "appId": "com.freshollie.configurator",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "your.app.category.type",
+      "artifactName": "fresh-configurator-${version}.${ext}"
     },
     "linux": {
       "category": "Settings",
@@ -15,7 +16,8 @@
       "artifactName": "fresh-configurator-${version}.${ext}"
     },
     "win": {
-      "target": "msi"
+      "target": "msi",
+      "artifactName": "fresh-configurator-${version}.${ext}"
     }
   },
   "scripts": {
