@@ -1,9 +1,6 @@
 module.exports = {
   resetMocks: true,
-  transform: {
-    "^.+\\.[t|j]sx?$": "babel-jest"
-  },
-  moduleFileExtensions: ["js", "ts", "tsx"],
+  preset: "ts-jest",
   testPathIgnorePatterns: [
     "/node_modules/",
     "/dist/",

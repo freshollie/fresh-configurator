@@ -1,0 +1,894 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readOSDConfig should read a 1.42.0 config correctly 1`] = `
+Object {
+  "alarms": Array [
+    Object {
+      "key": 0,
+      "value": 25,
+    },
+    Object {
+      "key": 1,
+      "value": 2200,
+    },
+    Object {
+      "key": 3,
+      "value": 100,
+    },
+  ],
+  "displayItems": Array [
+    Object {
+      "key": 0,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 1,
+      "position": Array [
+        22,
+        11,
+      ],
+      "visibility": Array [
+        true,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 2,
+      "position": Array [
+        13,
+        6,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 3,
+      "position": Array [
+        14,
+        2,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 4,
+      "position": Array [
+        14,
+        6,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 18,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 19,
+      "position": Array [
+        1,
+        11,
+      ],
+      "visibility": Array [
+        true,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 20,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 14,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 6,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 8,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 12,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 13,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 21,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 22,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 15,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 23,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 24,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 25,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 26,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 27,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 28,
+      "position": Array [
+        9,
+        9,
+      ],
+      "visibility": Array [
+        true,
+        true,
+        true,
+      ],
+    },
+    Object {
+      "key": 30,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 31,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 32,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 33,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 34,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 35,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 36,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 11,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 37,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 38,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 39,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 40,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 41,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 42,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 43,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 44,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 45,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 46,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 47,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 48,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 49,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 50,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 51,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 52,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 53,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 54,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 55,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 56,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 57,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 58,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 59,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 60,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 61,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        false,
+        false,
+        false,
+      ],
+    },
+    Object {
+      "key": 62,
+      "position": Array [
+        10,
+        7,
+      ],
+      "visibility": Array [
+        true,
+        false,
+        false,
+      ],
+    },
+  ],
+  "flags": Object {
+    "hasOSD": true,
+    "haveMax7456Video": true,
+    "haveOsdFeature": true,
+    "isMax7456Detected": true,
+    "isOsdSlave": false,
+  },
+  "osdProfiles": Object {
+    "count": 3,
+    "selected": 1,
+  },
+  "parameters": Object {
+    "cameraFrameHeight": 11,
+    "cameraFrameWidth": 24,
+    "overlayRadioMode": 2,
+  },
+  "staticItems": Array [
+    Object {
+      "enabled": false,
+      "key": 12,
+    },
+    Object {
+      "enabled": false,
+      "key": 8,
+    },
+    Object {
+      "enabled": true,
+      "key": 9,
+    },
+    Object {
+      "enabled": true,
+      "key": 0,
+    },
+    Object {
+      "enabled": false,
+      "key": 10,
+    },
+    Object {
+      "enabled": true,
+      "key": 1,
+    },
+    Object {
+      "enabled": false,
+      "key": 7,
+    },
+    Object {
+      "enabled": false,
+      "key": 13,
+    },
+    Object {
+      "enabled": true,
+      "key": 2,
+    },
+    Object {
+      "enabled": true,
+      "key": 3,
+    },
+    Object {
+      "enabled": true,
+      "key": 4,
+    },
+    Object {
+      "enabled": false,
+      "key": 5,
+    },
+    Object {
+      "enabled": true,
+      "key": 6,
+    },
+    Object {
+      "enabled": true,
+      "key": 11,
+    },
+    Object {
+      "enabled": false,
+      "key": 14,
+    },
+    Object {
+      "enabled": false,
+      "key": 15,
+    },
+    Object {
+      "enabled": false,
+      "key": 16,
+    },
+    Object {
+      "enabled": false,
+      "key": 17,
+    },
+    Object {
+      "enabled": false,
+      "key": 18,
+    },
+    Object {
+      "enabled": false,
+      "key": 19,
+    },
+    Object {
+      "enabled": false,
+      "key": 20,
+    },
+    Object {
+      "enabled": false,
+      "key": 21,
+    },
+    Object {
+      "enabled": false,
+      "key": 22,
+    },
+    Object {
+      "enabled": false,
+      "key": 23,
+    },
+  ],
+  "timerSources": Array [
+    0,
+    1,
+    2,
+    3,
+  ],
+  "timers": Array [
+    Object {
+      "precision": 0,
+      "src": 0,
+      "time": 10,
+    },
+    Object {
+      "precision": 0,
+      "src": 1,
+      "time": 10,
+    },
+  ],
+  "unitMode": 1,
+  "videoSystem": 2,
+  "warnings": Array [
+    Object {
+      "enabled": true,
+      "key": 0,
+    },
+    Object {
+      "enabled": true,
+      "key": 1,
+    },
+    Object {
+      "enabled": true,
+      "key": 2,
+    },
+    Object {
+      "enabled": true,
+      "key": 3,
+    },
+    Object {
+      "enabled": true,
+      "key": 4,
+    },
+    Object {
+      "enabled": true,
+      "key": 5,
+    },
+    Object {
+      "enabled": true,
+      "key": 6,
+    },
+    Object {
+      "enabled": true,
+      "key": 7,
+    },
+    Object {
+      "enabled": true,
+      "key": 8,
+    },
+    Object {
+      "enabled": true,
+      "key": 9,
+    },
+    Object {
+      "enabled": true,
+      "key": 10,
+    },
+    Object {
+      "enabled": true,
+      "key": 11,
+    },
+    Object {
+      "enabled": true,
+      "key": 12,
+    },
+    Object {
+      "enabled": false,
+      "key": 13,
+    },
+    Object {
+      "enabled": false,
+      "key": 14,
+    },
+    Object {
+      "enabled": false,
+      "key": 15,
+    },
+  ],
+}
+`;
