@@ -30,8 +30,8 @@ At the moment functionality is very minimal, and lots is changing all the time.
 
 - The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package.
 - Tests have been written for most of `@fresh/msp`
-- The main layout, device connection controls, model information, navigation, instruments have been written
-- Storybook is utlised to develop components
+- The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written
+- [Storybook](https://freshollie.github.io/fresh-configurator) is utlised to develop components
 
 ## What's the plan?
 
