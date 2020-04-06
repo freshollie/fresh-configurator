@@ -12,8 +12,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: Lint
+
+      - name: Install
         uses: bahmutov/npm-install@v1
+
+      - name: Lint
         run: yarn lint .
 
   test:
@@ -21,15 +24,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: "Test"
+
+      - name: Install
         uses: bahmutov/npm-install@v1
+
+      - name: Test
         run: yarn test
         env:
           CI: true
+
       - name: Publish Coverage
         uses: coverallsapp/github-action@master
         with:
@@ -40,13 +48,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+
+      - name: Install
+        uses: bahmutov/npm-install@v1
+
       - name: "Storybook"
         uses: bahmutov/npm-install@v1
         run: yarn build:storybook
+
       - name: Publish
         if: github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@releases/v3
@@ -73,8 +87,10 @@ jobs:
         with:
           node-version: 12
 
-      - name: Build configurator
+      - name: Install
         uses: bahmutov/npm-install@v1
+
+      - name: Build configurator
         run: yarn build
 
       - name: Publish
