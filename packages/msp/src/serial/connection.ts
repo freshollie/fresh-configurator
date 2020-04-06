@@ -40,10 +40,15 @@ export const execute = async (
     throw new Error(`${port} is not open`);
   }
 
+  const sendData = data ? Buffer.from([...data]) : undefined;
+
   const { parser, serial, requests } = connection;
 
   const request =
-    code > 254 ? encodeMessageV2(code, data) : encodeMessageV1(code, data);
+    code > 254
+      ? encodeMessageV2(code, sendData)
+      : encodeMessageV1(code, sendData);
+
   const requestKey = request.toString("utf-8");
   let dataRequest = requests[requestKey];
 

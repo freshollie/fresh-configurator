@@ -14,34 +14,13 @@ import {
   RcDeadband,
   AnalogValues,
   RawGpsData,
-  BoardInfo,
-  OSD_VIDEO_TYPES,
-  OSD_UNIT_TYPES,
-  OSD_PRECISION_TYPES,
-  OSDConfig
+  BoardInfo
 } from "./types";
-import {
-  getFeatureBits,
-  Features,
-  osdFields,
-  osdStaticFields,
-  OSD_STATIC_FIELDS,
-  osdTimerSources,
-  OSD_TIMER_SOURCES,
-  osdWarnings,
-  OSD_WARNINGS,
-  OSD_FIELDS,
-  OSD_ALARMS
-} from "./features";
-import { bitCheck } from "../serial/utils";
+import { getFeatureBits, Features } from "./features";
 
-export {
-  OSD_FIELDS,
-  OSD_ALARMS,
-  OSD_TIMER_SOURCES,
-  OSD_STATIC_FIELDS,
-  Features
-} from "./features";
+export * from "./osd";
+
+export { Features } from "./features";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -262,16 +241,6 @@ export const readRcTuning = async (port: string): Promise<RcTuning> => {
   return tuning;
 };
 
-const isVisible = (positionData: number, profile: number): boolean =>
-  // eslint-disable-next-line no-bitwise
-  positionData !== -1 && (positionData & (0x0800 << profile)) !== 0;
-
-const unpackPosition = (positionData: number): [number, number] =>
-  positionData === -1
-    ? [0, 0]
-    : // eslint-disable-next-line no-bitwise
-      [positionData & 0x001f, (positionData >> 5) & 0x001f];
-
 export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
   const data = await execute(port, { code: codes.MSP_RC_DEADBAND });
 
@@ -282,166 +251,5 @@ export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
     deadband3dThrottle: semver.gte(apiVersion(port), "1.17.0")
       ? data.readU16()
       : 0
-  };
-};
-
-const OSD_UNIT_VALUE_TO_TYPE = [OSD_UNIT_TYPES.IMPERIAL, OSD_UNIT_TYPES.METRIC];
-const OSD_VIDEO_VALUE_TO_TYPE = [
-  OSD_VIDEO_TYPES.AUTO,
-  OSD_VIDEO_TYPES.PAL,
-  OSD_VIDEO_TYPES.NTSC
-];
-const OSD_PRECISION_VALUE_TO_TYPE = [
-  OSD_PRECISION_TYPES.SECOND,
-  OSD_PRECISION_TYPES.HUNDREDTH,
-  OSD_PRECISION_TYPES.TENTH
-];
-
-export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
-  const api = apiVersion(port);
-  const data = await execute(port, { code: codes.MSP_OSD_CONFIG });
-
-  const expectedDisplayItems = osdFields(api);
-
-  const flagsData = data.readU8();
-  const hasOSD = flagsData !== 0;
-  const flag0Active = bitCheck(flagsData, 0);
-
-  const videoSystem = hasOSD
-    ? OSD_VIDEO_VALUE_TO_TYPE[data.readU8()]
-    : OSD_VIDEO_TYPES.AUTO;
-  const unitMode =
-    hasOSD && semver.gte(api, "1.21.0") && flag0Active
-      ? OSD_UNIT_VALUE_TO_TYPE[data.readU8()]
-      : OSD_UNIT_TYPES.IMPERIAL;
-
-  const alarms =
-    hasOSD && semver.gte(api, "1.21.0") && flag0Active
-      ? [
-          { key: OSD_ALARMS.RSSI, value: data.readU8() },
-          { key: OSD_ALARMS.CAP, value: data.readU16() }
-        ]
-      : [];
-
-  let displayItemsCount = expectedDisplayItems.length;
-
-  if (hasOSD && semver.gte(api, "1.36.0") && flag0Active) {
-    // This value was obsoleted by the introduction of configurable timers, and has been reused to encode the number of display elements sent in this command
-    data.readU8();
-    const tmp = data.readU8();
-    if (semver.gte(api, "1.37.0")) {
-      displayItemsCount = tmp;
-    }
-  } else {
-    alarms.push({ key: OSD_ALARMS.TIME, value: data.readU16() });
-  }
-
-  if (hasOSD && semver.gte(api, "1.36.0") && flag0Active) {
-    alarms.push({ key: OSD_ALARMS.ALT, value: data.readU16() });
-  }
-
-  const haveMax7456Video =
-    bitCheck(flagsData, 4) || (flagsData === 1 && semver.lt(api, "1.34.0"));
-
-  const flags = {
-    hasOSD,
-    haveMax7456Video,
-    isMax7456Detected:
-      bitCheck(flagsData, 5) || (haveMax7456Video && semver.lt(api, "1.43.0")),
-    haveOsdFeature:
-      bitCheck(flagsData, 0) || (flagsData === 1 && semver.lt(api, "1.34.0")),
-    isOsdSlave: bitCheck(flagsData, 1) && semver.gte(api, "1.34.0")
-  };
-
-  // Read display element positions, the parsing is done later because we need the number of profiles
-  const itemPositions = semver.gte(api, "1.21.0")
-    ? times(() => data.readU16(), displayItemsCount)
-    : times(() => data.read16(), displayItemsCount);
-
-  const expectedStaticFields = osdStaticFields(api);
-  const staticItems = semver.gte(api, "1.36.0")
-    ? times(
-        i => ({
-          key: expectedStaticFields[i] ?? OSD_STATIC_FIELDS.UNKNOWN,
-          enabled: data.readU8() === 1
-        }),
-        data.readU8()
-      )
-    : [];
-
-  // Parse configurable timers
-  const timersCount = data.readU8();
-  const timerSources = osdTimerSources(api);
-  const timers = semver.gte(api, "1.36.0")
-    ? times(() => {
-        const timerData = data.readU16();
-        return {
-          // eslint-disable-next-line no-bitwise
-          src: timerSources[timerData & 0x0f] ?? OSD_TIMER_SOURCES.UNKNOWN,
-          // eslint-disable-next-line no-bitwise
-          precision: OSD_PRECISION_VALUE_TO_TYPE[(timerData >> 4) & 0x0f],
-          // eslint-disable-next-line no-bitwise
-          time: (timerData >> 8) & 0xff
-        };
-      }, timersCount)
-    : [];
-
-  // Parse warning
-  const expectedWarnings = osdWarnings(api);
-  let warningCount = expectedWarnings.length;
-  let warningFlags = data.readU16();
-  if (semver.gte(api, "1.41.0")) {
-    warningCount = data.readU8();
-    // the flags were replaced with a 32bit version
-    warningFlags = data.readU32();
-  }
-  const warnings = semver.gte(api, "1.36.0")
-    ? times(
-        i => ({
-          key: expectedWarnings[i] ?? OSD_WARNINGS.UNKNOWN,
-          // eslint-disable-next-line no-bitwise
-          enabled: (warningFlags & (1 << i)) !== 0
-        }),
-        warningCount
-      )
-    : [];
-
-  const osdProfiles = semver.gte(api, "1.41.0")
-    ? {
-        count: data.readU8(),
-        selected: data.readU8() - 1
-      }
-    : {
-        count: 1,
-        selected: 0
-      };
-
-  const parameters = {
-    overlayRadioMode: semver.gte(api, "1.41.0") ? data.readU8() : 0,
-    cameraFrameWidth: semver.gte(api, "1.43.0") ? data.readU8() : 24,
-    cameraFrameHeight: semver.gte(api, "1.43.0") ? data.readU8() : 11
-  };
-
-  const displayItems = itemPositions.map((positionData, i) => ({
-    key: expectedDisplayItems[i] ?? OSD_FIELDS.UNKNOWN,
-    position: unpackPosition(positionData),
-    visibility: times(
-      profileIndex => isVisible(positionData, profileIndex),
-      osdProfiles.count
-    )
-  }));
-
-  return {
-    flags,
-    staticItems,
-    displayItems,
-    alarms,
-    timerSources,
-    warnings,
-    timers,
-    videoSystem,
-    osdProfiles,
-    parameters,
-    unitMode
   };
 };

@@ -812,11 +812,13 @@ Object {
   ],
   "timers": Array [
     Object {
+      "key": 0,
       "precision": 0,
       "src": 0,
       "time": 10,
     },
     Object {
+      "key": 1,
       "precision": 0,
       "src": 1,
       "time": 10,

@@ -1,5 +1,6 @@
 import SerialPort from "serialport";
 import { MspParser } from "./parser";
+import WriteBuffer from "./writebuffer";
 
 export interface MspInfo {
   mspProtocolVersion: number;
@@ -33,6 +34,6 @@ export interface OpenFunction {
 
 export interface MspCommand {
   code: number;
-  data?: Buffer;
+  data?: WriteBuffer | Buffer;
   timeout?: number;
 }
