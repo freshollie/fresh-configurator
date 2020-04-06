@@ -13,6 +13,9 @@
       "category": "Settings",
       "executableName": "fresh-configurator",
       "artifactName": "${productName}-${version}.${ext}"
+    },
+    "windows": {
+      "target": "msi"
     }
   },
   "scripts": {
