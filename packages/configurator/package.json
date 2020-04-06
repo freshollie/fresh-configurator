@@ -8,6 +8,9 @@
     "appId": "com.freshollie.configurator",
     "mac": {
       "category": "your.app.category.type"
+    },
+    "linux": {
+      "category": "Settings"
     }
   },
   "scripts": {
