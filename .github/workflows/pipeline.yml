@@ -91,11 +91,21 @@ jobs:
       - name: Build configurator
         run: yarn build
 
-      - name: Publish
+      - name: Publish Linux
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: Linux installer
+          path: packages/configurator/dist/*.snap
+
+      - name: Publish Windows
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: Windows installer
+          path: packages/configurator/dist/*.msi
+
+      - name: Publish MacOS
         uses: actions/upload-artifact@v2-preview
         with:
           name: installer
           path: |
             packages/configurator/dist/*.dmg
-            packages/configurator/dist/*.snap
-            packages/configurator/dist/*.msi
