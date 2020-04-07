@@ -17,6 +17,7 @@ import {
   BoardInfo,
 } from "./types";
 import { getFeatureBits, Features } from "./features";
+import WriteBuffer from "../serial/writebuffer";
 
 export * from "./osd";
 
@@ -252,4 +253,18 @@ export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
       ? data.readU16()
       : 0,
   };
+};
+
+export const writeArming = async (
+  port: string,
+  {
+    armingDisabled,
+    runawayTakeoffPreventionDisabled,
+  }: { armingDisabled: boolean; runawayTakeoffPreventionDisabled: boolean }
+): Promise<void> => {
+  const data = new WriteBuffer();
+  data.push8(Number(armingDisabled));
+  data.push8(Number(runawayTakeoffPreventionDisabled));
+
+  await execute(port, { code: codes.MSP_ARMING_DISABLE, data });
 };

@@ -41,11 +41,13 @@ const isVisible = (positionData: number, profile: number): boolean =>
   // eslint-disable-next-line no-bitwise
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;
 
-const unpackPosition = (positionData: number): [number, number] =>
-  positionData === -1
-    ? [0, 0]
-    : // eslint-disable-next-line no-bitwise
-      [positionData & 0x001f, (positionData >> 5) & 0x001f];
+const unpackPosition = (positionData: number): [number, number] => [
+  positionData & 0x001f,
+  (positionData >> 5) & 0x001f,
+];
+
+const unpackLegacyPosition = (positionData: number): [number, number] =>
+  positionData === -1 ? [0, 0] : [positionData, 0];
 
 const packLegacyPosition = (
   position: [number, number],
@@ -191,7 +193,9 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
 
   const displayItems = itemPositions.map((positionData, i) => ({
     key: expectedDisplayItems[i] ?? OSD_FIELDS.UNKNOWN,
-    position: unpackPosition(positionData),
+    position: semver.gte(api, "1.21.0")
+      ? unpackPosition(positionData)
+      : unpackLegacyPosition(positionData),
     visibility: times(
       (profileIndex) => isVisible(positionData, profileIndex),
       osdProfiles.count
