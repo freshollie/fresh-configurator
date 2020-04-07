@@ -94,18 +94,18 @@ jobs:
       - name: Publish Linux
         uses: actions/upload-artifact@v2-preview
         with:
-          name: Linux installer
+          name: linux
           path: packages/configurator/dist/*.snap
 
       - name: Publish Windows
         uses: actions/upload-artifact@v2-preview
         with:
-          name: Windows installer
+          name: windows
           path: packages/configurator/dist/*.msi
 
       - name: Publish MacOS
         uses: actions/upload-artifact@v2-preview
         with:
-          name: installer
+          name: macos
           path: |
             packages/configurator/dist/*.dmg
