@@ -39,7 +39,6 @@ const calcRate = (
   limit: number,
   apiVersion: string
 ): number => {
-  let angleRate;
   let fullRcRate = rcRate;
 
   if (rcRate > 2) {
@@ -49,16 +48,9 @@ const calcRate = (
   const maxRc = 500 * fullRcRate;
   let rcCommandf = rcCommand(rcData, fullRcRate, deadband) / maxRc;
   const rcCommandfAbs = Math.abs(rcCommandf);
-  let expoPower;
-  let rcRateConstant;
 
-  if (semver.gte(apiVersion, "1.20.0")) {
-    expoPower = 3;
-    rcRateConstant = 200;
-  } else {
-    expoPower = 2;
-    rcRateConstant = 205.85;
-  }
+  const expoPower = semver.gte(apiVersion, "1.20.0") ? 3 : 2;
+  const rcRateConstant = semver.gte(apiVersion, "1.20.0") ? 200 : 205.85;
 
   if (rcExpo > 0) {
     rcCommandf =
@@ -66,15 +58,15 @@ const calcRate = (
       rcCommandf * (1 - rcExpo);
   }
 
-  if (superExpoActive) {
-    const rcFactor = 1 / constrain(1 - rcCommandfAbs * rate, 0.01, 1);
-    angleRate = rcRateConstant * fullRcRate * rcCommandf; // 200 should be variable checked on version (older versions it's 205,9)
-    angleRate *= rcFactor;
-  } else {
-    angleRate = ((rate * 100 + 27) * rcCommandf) / 16 / 4.1; // Only applies to old versions ?
-  }
+  const rcFactor = 1 / constrain(1 - rcCommandfAbs * rate, 0.01, 1);
 
-  angleRate = constrain(angleRate, -1 * limit, limit); // Rate limit from profile
+  const angleRate = constrain(
+    superExpoActive
+      ? rcRateConstant * fullRcRate * rcCommandf * rcFactor // 200 should be variable checked on version (older versions it's 205,9)
+      : ((rate * 100 + 27) * rcCommandf) / 16 / 4.1, // Only applies to old versions ?
+    -1 * limit,
+    limit
+  ); // Rate limit from profile;
 
   return angleRate;
 };

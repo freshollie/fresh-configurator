@@ -23,7 +23,7 @@ const modelsCache = {} as Record<ModelType, Model | undefined>;
 /**
  * Load the given model
  */
-const useModel = (modelKey: ModelType): Model | undefined => {
+const useModelData = (modelKey: ModelType): Model | undefined => {
   const [data, setData] = useState<Model | undefined>(undefined);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const Model: React.FC<ModelProps> = ({
   name,
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
 }) => {
-  const data = useModel(name);
+  const data = useModelData(name);
 
   // Don't display anything until the model is loaded
   if (!data) {
