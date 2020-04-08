@@ -10,18 +10,19 @@ import {
   Kinematics,
   Status,
   ExtendedStatus,
-  RcTuning,
-  RcDeadband,
+  RCTuning,
+  RCDeadband,
   AnalogValues,
   RawGpsData,
   BoardInfo,
+  Features,
 } from "./types";
-import { getFeatureBits, Features } from "./features";
+import { getFeatureBits } from "./features";
 import WriteBuffer from "../serial/writebuffer";
 
 export * from "./osd";
 
-export { Features } from "./features";
+export { Features } from "./types";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -172,7 +173,7 @@ export const readRcValues = async (port: string): Promise<number[]> => {
   return new Array(data.byteLength / 2).fill(0).map(() => data.readU16());
 };
 
-export const readRcTuning = async (port: string): Promise<RcTuning> => {
+export const readRCTuning = async (port: string): Promise<RCTuning> => {
   const version = apiVersion(port);
   const data = await execute(port, { code: codes.MSP_RC_TUNING });
 
@@ -242,7 +243,7 @@ export const readRcTuning = async (port: string): Promise<RcTuning> => {
   return tuning;
 };
 
-export const readRcDeadband = async (port: string): Promise<RcDeadband> => {
+export const readRCDeadband = async (port: string): Promise<RCDeadband> => {
   const data = await execute(port, { code: codes.MSP_RC_DEADBAND });
 
   return {

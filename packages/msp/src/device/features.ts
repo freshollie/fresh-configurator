@@ -1,39 +1,5 @@
 import semver from "semver";
-
-export enum Features {
-  RX_PPM,
-  INFLIGHT_ACC_CAL,
-  RX_SERIAL,
-  MOTOR_STOP,
-  SERVO_TILT,
-  SOFTSERIAL,
-  GPS,
-  SONAR,
-  TELEMETRY,
-  "3D",
-  RX_PARALLEL_PWM,
-  RX_MSP,
-  RSSI_ADC,
-  LED_STRIP,
-  DISPLAY,
-  BLACKBOX,
-  CHANNEL_FORWARDING,
-  FAILSAFE,
-  TRANSPONDER,
-  AIRMODE,
-  SUPEREXPO_RATES,
-  SDCARD,
-  OSD,
-  VTX,
-  RX_SPI,
-  ESC_SENSOR,
-  ANTI_GRAVITY,
-  DYNAMIC_FILTER,
-  VBAT,
-  VCURRENT_METER,
-}
-
-type FeatureBits = Record<number, Features>;
+import { FeatureBits, Features } from "./types";
 
 const BASE_FEATURE_BITS: FeatureBits = {
   0: Features.RX_PPM,
@@ -53,6 +19,7 @@ const BASE_FEATURE_BITS: FeatureBits = {
   17: Features.DISPLAY,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const getFeatureBits = (apiVersion: string): FeatureBits => {
   const featureBits = { ...BASE_FEATURE_BITS };
   if (!semver.gte(apiVersion, "1.33.0")) {

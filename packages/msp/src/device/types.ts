@@ -64,7 +64,7 @@ export interface ExtendedStatus extends Status {
   armingDisableFlags?: number;
 }
 
-export interface RcTuning {
+export interface RCTuning {
   rcRate: number;
   rcExpo: number;
   rollPitchRate: number;
@@ -86,9 +86,44 @@ export interface RcTuning {
   yawRateLimit: number;
 }
 
-export interface RcDeadband {
+export interface RCDeadband {
   deadband: number;
   yawDeadband: number;
   altHoldDeadhand: number;
   deadband3dThrottle: number;
 }
+
+export enum Features {
+  RX_PPM,
+  INFLIGHT_ACC_CAL,
+  RX_SERIAL,
+  MOTOR_STOP,
+  SERVO_TILT,
+  SOFTSERIAL,
+  GPS,
+  SONAR,
+  TELEMETRY,
+  "3D",
+  RX_PARALLEL_PWM,
+  RX_MSP,
+  RSSI_ADC,
+  LED_STRIP,
+  DISPLAY,
+  BLACKBOX,
+  CHANNEL_FORWARDING,
+  FAILSAFE,
+  TRANSPONDER,
+  AIRMODE,
+  SUPEREXPO_RATES,
+  SDCARD,
+  OSD,
+  VTX,
+  RX_SPI,
+  ESC_SENSOR,
+  ANTI_GRAVITY,
+  DYNAMIC_FILTER,
+  VBAT,
+  VCURRENT_METER,
+}
+
+export type FeatureBits = Record<number, Features>;

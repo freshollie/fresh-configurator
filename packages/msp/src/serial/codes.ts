@@ -177,4 +177,4 @@ export default {
   // MSPv2
   MSP2_COMMON_SERIAL_CONFIG: 0x1009,
   MSP2_COMMON_SET_SERIAL_CONFIG: 0x100a,
-};
+} as const;

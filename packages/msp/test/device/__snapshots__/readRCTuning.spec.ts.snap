@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readRCTuning should respond correctly for version 1.42.0 1`] = `
+Object {
+  "dynamicThrottleBreakpoint": 1500,
+  "dynamicThrottlePid": 0.05,
+  "pitchRate": 0.05,
+  "pitchRateLimit": 1500,
+  "rcExpo": 0.05,
+  "rcPitchExpo": 0.06,
+  "rcPitchRate": 1.39,
+  "rcRate": 2.2,
+  "rcYawExpo": 2.2,
+  "rcYawRate": 0.05,
+  "rollPitchRate": 0,
+  "rollRate": 2.2,
+  "rollRateLimit": 1500,
+  "throttleExpo": 0.03,
+  "throttleLimitPercent": 5,
+  "throttleLimitType": 220,
+  "throttleMid": 1.17,
+  "yawRate": 2.2,
+  "yawRateLimit": 1500,
+}
+`;
