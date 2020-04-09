@@ -13,6 +13,7 @@ module.exports = {
     "!**/node_modules/**",
     "!**/stories/**",
     "!**/__generated__/**",
+    "!**/test/**",
     "!**/dist/**",
     "!*.d.ts",
   ],

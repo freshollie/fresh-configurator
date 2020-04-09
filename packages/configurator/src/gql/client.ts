@@ -11,8 +11,8 @@ import {
   packetErrors,
   readExtendedStatus,
   readRcValues,
-  readRcTuning,
-  readRcDeadband,
+  readRCTuning,
+  readRCDeadband,
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -234,12 +234,12 @@ const resolvers: Resolvers = {
   RC: {
     channels: ({ port }) => readRcValues(port),
     tuning: ({ port }) =>
-      readRcTuning(port).then((values) => ({
+      readRCTuning(port).then((values) => ({
         ...values,
         __typename: "RCTuning",
       })),
     deadband: ({ port }) =>
-      readRcDeadband(port).then((values) => ({
+      readRCDeadband(port).then((values) => ({
         ...values,
         __typename: "RCDeadband",
       })),
