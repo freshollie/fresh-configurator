@@ -19,6 +19,7 @@ export default styled.div`
     flex: 1;
     > .tab-content {
       overflow-y: scroll;
+      overflow-x: hidden;
       flex: 1;
       height: 100%;
     }

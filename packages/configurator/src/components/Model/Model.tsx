@@ -45,11 +45,20 @@ const useModelData = (modelKey: ModelType): Model | undefined => {
 
 interface ModelProps {
   name: ModelType;
+  /**
+   * The attitude which the model should
+   * represent, in degrees
+   */
   attitude?: {
     roll: number;
     pitch: number;
     heading: number;
   };
+  /**
+   * Are the attitude values the raw
+   * degrees for each axis, defaults to false
+   */
+  rawAttitude?: boolean;
 }
 
 const ambientColor = new Color(0x404040);
@@ -63,6 +72,7 @@ const whiteColor = new Color(1, 1, 1);
 const Model: React.FC<ModelProps> = ({
   name,
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
+  rawValues = false,
 }) => {
   const data = useModelData(name);
 
@@ -85,14 +95,23 @@ const Model: React.FC<ModelProps> = ({
         intensity={1.5}
         position={[0, 1, 0]}
       />
-      <mesh rotation-y={y}>
+      {rawValues ? (
         <mesh
           geometry={geometry}
           material={materials}
           scale={[15, 15, 15]}
-          rotation={[x, 0, z]}
+          rotation={[x, y, z]}
         />
-      </mesh>
+      ) : (
+        <mesh rotation-y={y}>
+          <mesh
+            geometry={geometry}
+            material={materials}
+            scale={[15, 15, 15]}
+            rotation={[x, 0, z]}
+          />
+        </mesh>
+      )}
     </Canvas>
   );
 };
