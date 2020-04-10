@@ -2,6 +2,10 @@ type Query {
   device(port: String!): FlightController!
 }
 
+type Mutation {
+  deviceCallibrateAccelerometer(port: String!): Boolean
+}
+
 type FlightController {
   connection: ConnectionStatus!
   attitude: Attitude!

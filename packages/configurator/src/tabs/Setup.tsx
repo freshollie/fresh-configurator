@@ -1,4 +1,5 @@
 import React from "react";
+import AccelerometerCallibrationManager from "../managers/AccelerometerCallibrationManager";
 import ModelViewProvider from "../providers/ModelViewProvider";
 import ModelInstrumentsProvider from "../providers/ModelInstrumentsProvider";
 
@@ -13,25 +14,28 @@ const SetupTab: React.FC = () => (
         <Title>Setup</Title>
       </header>
       <main>
-        <Widget>
-          <ModelViewProvider />
-        </Widget>
-        <aside>
+        <AccelerometerCallibrationManager />
+        <div className="status">
           <Widget>
-            <header>Info</header>
-            <div style={{ height: "150px" }} />
+            <ModelViewProvider />
           </Widget>
-          <Widget>
-            <header>GPS</header>
-            <div style={{ height: "120px" }} />
-          </Widget>
-          <Widget>
-            <header>Instruments</header>
-            <main>
-              <ModelInstrumentsProvider />
-            </main>
-          </Widget>
-        </aside>
+          <aside>
+            <Widget>
+              <header>Info</header>
+              <div style={{ height: "150px" }} />
+            </Widget>
+            <Widget>
+              <header>GPS</header>
+              <div style={{ height: "120px" }} />
+            </Widget>
+            <Widget>
+              <header>Instruments</header>
+              <main>
+                <ModelInstrumentsProvider />
+              </main>
+            </Widget>
+          </aside>
+        </div>
       </main>
     </SetupLayout>
   </div>

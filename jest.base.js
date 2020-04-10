@@ -14,6 +14,7 @@ module.exports = {
     "!**/stories/**",
     "!**/__generated__/**",
     "!**/test/**",
+    "!**/test-utils.*",
     "!**/dist/**",
     "!*.d.ts",
   ],

@@ -1,10 +1,10 @@
 import React from "react";
 import HeaderBar from "./components/HeaderBar";
 
-import ConnectionSettings from "./managers/ConnectionSettings";
-import ConnectControls from "./managers/ConnectControls";
-import Navigation from "./managers/Navigation";
-import TabRouter from "./managers/TabRouter";
+import ConnectionSettingsManager from "./managers/ConnectionSettingsManager";
+import ConnectControlsManager from "./managers/ConnectControlsManager";
+import NavigationManager from "./managers/NavigationManager";
+import { TabRouter } from "./routing";
 
 import FcStatusProvider from "./providers/FcStatusProvider";
 import LogsProvider from "./providers/LogsProvider";
@@ -19,15 +19,15 @@ const App: React.FC = () => (
     <header>
       <HeaderBar>
         <div className="tools">
-          <ConnectionSettings />
-          <ConnectControls />
+          <ConnectionSettingsManager />
+          <ConnectControlsManager />
         </div>
       </HeaderBar>
       <LogsProvider />
     </header>
     <main>
       <nav>
-        <Navigation />
+        <NavigationManager />
       </nav>
       <div className="tab-content">
         <TabRouter>

@@ -1,6 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 import React from "react";
 import { isElement } from "react-is";
-import { useSelectedTabQuery } from "../../gql/__generated__";
+import { useSelectedTabQuery } from "./gql/__generated__";
 
 type TabElement = React.ReactElement<{ id: string }>;
 
@@ -8,7 +9,9 @@ type TabElement = React.ReactElement<{ id: string }>;
  * The Tab router is a component which will display any given child
  * element, with the id equal to the selected tab in the graphql state
  */
-const TabRouter: React.FC = ({ children }) => {
+export const TabRouter: React.FC<{ children: TabElement | TabElement[] }> = ({
+  children,
+}) => {
   const { data } = useSelectedTabQuery();
   const selectedTab = data?.configurator.tab || undefined;
 
@@ -21,5 +24,3 @@ const TabRouter: React.FC = ({ children }) => {
 
   return visibleTab || null;
 };
-
-export default TabRouter;

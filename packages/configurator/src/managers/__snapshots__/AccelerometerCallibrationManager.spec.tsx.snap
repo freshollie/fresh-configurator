@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 1`] = `
+.c0 {
+  width: 100%;
+  padding: 5px 0px 5px 0px;
+  text-align: center;
+  background-color: #ffbb00;
+  border-radius: 4px;
+  border: 1px solid #dba718;
+  color: #000;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 13px;
+  display: block;
+  -webkit-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+}
+
+.c0:hover {
+  background-color: #ffcc3f;
+  color: #000;
+  text-shadow: 0px 1px rgba(255,255,255,0.25);
+  -webkit-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+}
+
+.c0:disabled {
+  background-color: #f1f1f1;
+  border: silver;
+  color: #ccc;
+}
+
+.c0:active {
+  background-color: #ffcc3f;
+  -webkit-transition: all ease 0s;
+  transition: all ease 0s;
+  box-shadow: inset 0px 1px 5px rgba(0,0,0,0.35);
+}
+
+<button
+  class="c0"
+  data-testid="calibrate-acc-button"
+>
+  Calibrate Accelerometer
+</button>
+`;
+
+exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 2`] = `
+<button
+  class="sc-AxjAm hQNijE"
+  data-testid="calibrate-acc-button"
+  disabled=""
+>
+  Calibrating...
+</button>
+`;
+
+exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 3`] = `
+<button
+  class="sc-AxjAm hQNijE"
+  data-testid="calibrate-acc-button"
+>
+  Calibrate Accelerometer
+</button>
+`;

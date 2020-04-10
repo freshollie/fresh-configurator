@@ -72,7 +72,7 @@ const whiteColor = new Color(1, 1, 1);
 const Model: React.FC<ModelProps> = ({
   name,
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
-  rawValues = false,
+  rawAttitude = false,
 }) => {
   const data = useModelData(name);
 
@@ -95,7 +95,7 @@ const Model: React.FC<ModelProps> = ({
         intensity={1.5}
         position={[0, 1, 0]}
       />
-      {rawValues ? (
+      {rawAttitude ? (
         <mesh
           geometry={geometry}
           material={materials}

@@ -6,24 +6,28 @@ export default styled.div`
   }
 
   > main {
-    display: flex;
-    flex-direction: row;
-
-    > :first-child {
-      margin-right: 12px;
-      height: 400px;
-      width: 100%;
+    > .settings {
     }
+    > .status {
+      display: flex;
+      flex-direction: row;
 
-    > aside {
-      width: 25%;
-
-      > * {
-        margin-bottom: 10px;
+      > :first-child {
+        margin-right: 12px;
+        height: 400px;
+        width: 100%;
       }
 
-      > :last-child {
-        margin-bottom: 0px;
+      > aside {
+        width: 25%;
+
+        > * {
+          margin-bottom: 10px;
+        }
+
+        > :last-child {
+          margin-bottom: 0px;
+        }
       }
     }
   }

@@ -22,7 +22,8 @@
     "__mocks__/**/*.tsx",
     "*.d.ts",
     ".storybook/*.ts",
-    ".storybook/*.tsx"
+    ".storybook/*.tsx",
+    ".jest/*.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

@@ -3,11 +3,11 @@ import {
   useSetConnectionSettingsMutation,
   useConnectionSettingsQuery,
   useAvailablePortsQuery,
-} from "../../gql/__generated__";
-import ConnectionSelector from "../../components/ConnectionSelector";
-import useConnectionState from "../../hooks/useConnectionState";
+} from "../gql/__generated__";
+import ConnectionSelector from "../components/ConnectionSelector";
+import useConnectionState from "../hooks/useConnectionState";
 
-const ConnectionSettings: React.FC = () => {
+const ConnectionSettingsManager: React.FC = () => {
   const [updateSettings] = useSetConnectionSettingsMutation();
 
   const { data: configuratorData, loading } = useConnectionSettingsQuery();
@@ -53,4 +53,4 @@ const ConnectionSettings: React.FC = () => {
   ) : null;
 };
 
-export default ConnectionSettings;
+export default ConnectionSettingsManager;

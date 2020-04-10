@@ -1,6 +1,6 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/react-testing";
-import Navigation from "../src/managers/Navigation";
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import Navigation from "../src/managers/NavigationManager";
 import styled from "../src/theme";
 import {
   NavigationDataDocument,

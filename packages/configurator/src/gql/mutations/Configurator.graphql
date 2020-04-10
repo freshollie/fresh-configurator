@@ -11,5 +11,5 @@ mutation SetExpertMode($enabled: Boolean!) {
 }
 
 mutation Log($message: String!) {
-  log(message: $message)
+  log(message: $message) @client
 }

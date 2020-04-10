@@ -65,3 +65,11 @@ $ yarn storybook
 ```
 $ yarn prepare
 ```
+
+### Tests
+
+Tests can be run across the entire codebase at once
+
+```
+$ yarn test
+```

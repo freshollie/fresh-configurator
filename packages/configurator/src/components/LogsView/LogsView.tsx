@@ -5,6 +5,7 @@ const LogsView: React.FC = ({ children }) => {
   const listRef = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
 
+  // Scroll to the bottom any time the component is updated
   useLayoutEffect(() => {
     if (listRef.current) {
       listRef.current.scroll({
@@ -13,16 +14,29 @@ const LogsView: React.FC = ({ children }) => {
     }
   });
 
+  // Create an event listener on the listRef on component mount
+  // to scroll to the bottom while the component is growing and shrinking
   useLayoutEffect(() => {
     if (listRef.current) {
       const listElement = listRef.current;
-      const scrollTop = (): void => {
-        listElement.scroll({
-          top: listElement.scrollHeight,
-        });
+      let scrollingInterval: number | undefined;
+
+      const handleStart = (): void => {
+        scrollingInterval = setInterval(() =>
+          listElement.scroll({
+            top: listElement.scrollHeight,
+          })
+        );
       };
-      listElement.addEventListener("transitionend", scrollTop);
-      return () => listElement.removeEventListener("transitionend", scrollTop);
+
+      const handleEnd = (): void => clearInterval(scrollingInterval);
+      listElement.addEventListener("transitionstart", handleStart);
+      listElement.addEventListener("transitionend", handleEnd);
+      return () => {
+        listElement.removeEventListener("transitionstart", handleStart);
+        listElement.removeEventListener("transitionend", handleEnd);
+        clearInterval(scrollingInterval);
+      };
     }
     return undefined;
   }, []);

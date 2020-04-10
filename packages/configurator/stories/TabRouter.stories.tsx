@@ -1,11 +1,11 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/react-testing";
-import TabRouter from "../src/managers/TabRouter";
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { TabRouter } from "../src/routing";
 import { SelectedTabDocument } from "../src/gql/__generated__";
 
 export default {
   component: TabRouter,
-  title: "Managers|Tab Router",
+  title: "Routing|Tab Router",
 };
 
 const selectedTab = (tab: string): MockedResponse => ({

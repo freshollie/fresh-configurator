@@ -13,6 +13,7 @@ import {
   readRcValues,
   readRCTuning,
   readRCDeadband,
+  calibrateAccelerometer,
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -207,6 +208,8 @@ const resolvers: Resolvers = {
       log(client, message);
       return true;
     },
+    deviceCallibrateAccelerometer: (_, { port }) =>
+      calibrateAccelerometer(port).then(() => null),
   },
 
   FlightController: {

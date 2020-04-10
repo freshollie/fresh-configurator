@@ -1,0 +1,3 @@
+mutation CallibrateAccelerometer($port: String!) {
+  deviceCallibrateAccelerometer(port: $port) @client
+}

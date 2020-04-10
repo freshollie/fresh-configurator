@@ -1,14 +1,14 @@
 import React from "react";
-import { UsbConnectIcon, UsbDisconnectIcon } from "../../icons";
-import useConnectionState from "../../hooks/useConnectionState";
+import { UsbConnectIcon, UsbDisconnectIcon } from "../icons";
+import useConnectionState from "../hooks/useConnectionState";
 import {
   useConnectMutation,
   useConnectionSettingsQuery,
   useDisconnectMutation,
-} from "../../gql/__generated__";
-import BigButton from "../../components/BigButton";
+} from "../gql/__generated__";
+import BigButton from "../components/BigButton";
 
-const ConnectControls: React.FC = () => {
+const ConnectControlsManager: React.FC = () => {
   const { data: configuratorQuery } = useConnectionSettingsQuery();
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
 
@@ -51,4 +51,4 @@ const ConnectControls: React.FC = () => {
   );
 };
 
-export default ConnectControls;
+export default ConnectControlsManager;

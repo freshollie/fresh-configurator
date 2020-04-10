@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import {
   useNavigationDataQuery,
   useSelectTabMutation,
-} from "../../gql/__generated__";
-import useConnectionState from "../../hooks/useConnectionState";
+} from "../gql/__generated__";
+import useConnectionState from "../hooks/useConnectionState";
 
-import NavLinks from "../../components/NavLinks";
+import NavLinks from "../components/NavLinks";
 import {
   WelcomeIcon,
   HelpIcon,
@@ -14,7 +14,7 @@ import {
   OSDIcon,
   SetupIcon,
   ReceiverIcon,
-} from "../../icons";
+} from "../icons";
 
 const DISCONNECTED_LINKS = [
   {
@@ -236,7 +236,7 @@ const CONNECTED_LINKS = [
 //     </li>
 //   </ul> */
 
-const Navigation: React.FC = () => {
+const NavigationManager: React.FC = () => {
   const { data: navigationQuery, loading } = useNavigationDataQuery();
   const selectedTab = navigationQuery?.configurator.tab ?? undefined;
 
@@ -274,4 +274,4 @@ const Navigation: React.FC = () => {
   );
 };
 
-export default Navigation;
+export default NavigationManager;
