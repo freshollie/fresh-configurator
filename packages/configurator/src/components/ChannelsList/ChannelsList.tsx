@@ -42,15 +42,13 @@ const ChannelsList: React.FC<ChannelsListProps> = ({ channels, disabled }) => {
     <Wrapper>
       <div>
         {channels.map((_, number) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Name key={number}>{getChannelName(number)}</Name>
+          <Name key={getChannelName(number)}>{getChannelName(number)}</Name>
         ))}
       </div>
       <div className="meters">
         {channels.map((value, number) => (
           <Meter
-            // eslint-disable-next-line react/no-array-index-key
-            key={number}
+            key={getChannelName(number)}
             max={CHANNEL_MAX}
             min={CHANNEL_MIN}
             value={value}

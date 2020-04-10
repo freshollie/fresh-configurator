@@ -14,6 +14,10 @@ import {
   readRCTuning,
   readRCDeadband,
   calibrateAccelerometer,
+  readFeatures,
+  readRawGPS,
+  readAnalogValues,
+  readBoardInfo,
 } from "@fresh/msp";
 import semver from "semver";
 import {
@@ -228,6 +232,35 @@ const resolvers: Resolvers = {
       __typename: "RC",
     }),
     apiVersion: ({ port }) => apiVersion(port),
+    profile: ({ port }) =>
+      readExtendedStatus(port).then(({ profile }) => profile),
+    numProfiles: ({ port }) =>
+      readExtendedStatus(port).then(({ numProfiles }) => numProfiles),
+    armingDisabledFlags: ({ port }) =>
+      readExtendedStatus(port).then(
+        ({ armingDisabledFlags }) => armingDisabledFlags
+      ),
+    sensors: ({ port }) =>
+      readExtendedStatus(port).then(({ sensors }) => sensors),
+    features: ({ port }) =>
+      readFeatures(port).then((features) =>
+        features.map((feature) => ({ ...feature, __typename: "Feature" }))
+      ),
+    gps: ({ port }) =>
+      readRawGPS(port).then((gpsData) => ({
+        ...gpsData,
+        __typename: "GpsData",
+      })),
+    power: ({ port }) =>
+      readAnalogValues(port).then((values) => ({
+        ...values,
+        __typename: "Power",
+      })),
+    boardInfo: ({ port }) =>
+      readBoardInfo(port).then((values) => ({
+        ...values,
+        __typename: "BoardInfo",
+      })),
   },
   ConnectionStatus: {
     bytesRead: ({ port }) => bytesRead(port),
@@ -246,6 +279,7 @@ const resolvers: Resolvers = {
         ...values,
         __typename: "RCDeadband",
       })),
+    rssi: ({ port }) => readAnalogValues(port).then(({ rssi }) => rssi),
   },
 };
 

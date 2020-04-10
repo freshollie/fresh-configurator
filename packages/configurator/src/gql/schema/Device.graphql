@@ -12,6 +12,19 @@ type FlightController {
   status: Status!
   rc: RC!
   apiVersion: String!
+  numProfiles: Int!
+  profile: Int!
+  armingDisabledFlags: [Int!]!
+  sensors: [Int!]!
+  features: [Feature!]!
+  boardInfo: BoardInfo!
+  gps: GpsData!
+  power: Power!
+}
+
+type Feature {
+  key: Int!
+  enabled: Boolean!
 }
 
 type ConnectionStatus {
@@ -31,7 +44,6 @@ type Attitude {
 type Status {
   cycleTime: Int!
   i2cError: Int!
-  activeSensors: Int!
   cpuload: Float!
 }
 
@@ -39,9 +51,7 @@ type RC {
   channels: [Int!]!
   tuning: RCTuning!
   deadband: RCDeadband!
-  analogValues: AnalogValues!
-  boardInfo: BoardInfo!
-  gps: GpsData!
+  rssi: Int!
 }
 
 type RCTuning {
@@ -73,10 +83,9 @@ type RCDeadband {
   deadband3dThrottle: Int!
 }
 
-type AnalogValues {
+type Power {
   voltage: Int!
   mahDrawn: Int!
-  rssi: Int!
   amperage: Int!
 }
 
