@@ -1,6 +1,9 @@
 # `@fresh/msp`
 
-> MultiWii parser and reader
+> MultiWii serial parser
+
+A library to handle reading and writing data from flight controllers
+which use the MultiWii Serial Protocol
 
 ## Usage
 

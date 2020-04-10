@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import { crc8DvbS2Data } from "./utils";
 
 export const encodeMessageV1 = (code: number, data?: Buffer): Buffer => {

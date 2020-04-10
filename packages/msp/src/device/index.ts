@@ -15,14 +15,16 @@ import {
   AnalogValues,
   RawGpsData,
   BoardInfo,
-  Features,
+  DisarmFlags,
+  Sensors,
+  Feature,
 } from "./types";
-import { getFeatureBits } from "./features";
+import { getFeatureBits, disarmFlagBits, sensorBits } from "./features";
 import WriteBuffer from "../serial/writebuffer";
 
 export * from "./osd";
 
-export { Features } from "./types";
+export { Features, DisarmFlags } from "./types";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -114,10 +116,13 @@ export const readAttitude = async (port: string): Promise<Kinematics> => {
   };
 };
 
+const activeSensors = (sensorFlags: number): Sensors[] =>
+  sensorBits().filter((_, i) => (sensorFlags >> i) % 2 !== 0);
+
 const extractStatus = (data: MspDataView): Status => ({
   cycleTime: data.readU16(),
   i2cError: data.readU16(),
-  activeSensors: data.readU16(),
+  sensors: activeSensors(data.readU16()),
   mode: data.readU32(),
   profile: data.readU8(),
 });
@@ -131,39 +136,45 @@ export const readExtendedStatus = async (
   port: string
 ): Promise<ExtendedStatus> => {
   const data = await execute(port, { code: codes.MSP_STATUS_EX });
+  const api = apiVersion(port);
   const status: ExtendedStatus = {
     ...extractStatus(data),
     cpuload: data.readU16(),
-    numProfiles: data.readU8(),
-    rateProfile: data.readU8(),
-    armingDisableCount: 0,
-    armingDisableFlags: 0,
+    numProfiles: 0,
+    rateProfile: 0,
+    armingDisabledFlags: [],
   };
 
-  try {
-    const byteCount = data.readU8();
-    for (let i = 0; i < byteCount; i += 1) {
-      data.readU8();
-    }
+  if (semver.gte(api, "1.16.0")) {
+    status.numProfiles = data.readU8();
+    status.rateProfile = data.readU8();
+  }
 
+  if (semver.gte(api, "1.36.0")) {
+    // skip all this data for some reason
+    times(() => data.readU8(), data.readU8());
+
+    const flags = disarmFlagBits(api);
     // Read arming disable flags
-    status.armingDisableCount = data.readU8(); // Flag count
-    status.armingDisableFlags = data.readU32();
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+    const numFlags = data.readU8();
+    const flagBits = data.readU32();
+
+    // read the enabled disarm flags from the mask
+    status.armingDisabledFlags = times(
+      (i) => (flagBits & (1 << i)) !== 0 && (flags[i] ?? DisarmFlags.UNKNOWN),
+      numFlags
+    ).filter((flag): flag is DisarmFlags => typeof flag === "number");
+  }
   return status;
 };
 
-export const readFeatures = async (
-  port: string
-): Promise<{ name: Features; enabled: boolean }[]> => {
+export const readFeatures = async (port: string): Promise<Feature[]> => {
   const featureBits = getFeatureBits(apiVersion(port));
   const data = await execute(port, { code: codes.MSP_FEATURE_CONFIG });
 
   const featureMask = data.readU32();
-  return Object.entries(featureBits).map(([bit, name]) => ({
-    name,
-    // eslint-disable-next-line no-bitwise
+  return Object.entries(featureBits).map(([bit, key]) => ({
+    key,
     enabled: (featureMask >> parseInt(bit, 10)) % 2 !== 0,
   }));
 };

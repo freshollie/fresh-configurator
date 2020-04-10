@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 export const crc8DvbS2 = (currCRC: number, ch: number): number => {
   let crc = currCRC;
   crc ^= ch;

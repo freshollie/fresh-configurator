@@ -19,7 +19,7 @@ import {
   ConnectionOptions,
   OpenConnectionFunction,
   OnCloseCallback,
-} from "./connection.d";
+} from "./types";
 import codes from "./codes";
 
 const log = debug("connection");

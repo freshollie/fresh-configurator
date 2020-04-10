@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readExtendedStatus should correctly read the status and arming flags for api verion 1.40.0 1`] = `
+Object {
+  "armingDisabledFlags": Array [
+    2,
+    6,
+  ],
+  "cpuload": 40,
+  "cycleTime": 250,
+  "i2cError": 0,
+  "mode": 0,
+  "numProfiles": 3,
+  "profile": 0,
+  "rateProfile": 0,
+  "sensors": Array [
+    0,
+    5,
+  ],
+}
+`;

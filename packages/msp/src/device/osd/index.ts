@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import semver from "semver";
 import { times, reduce } from "rambda";
 import { bitCheck } from "../../serial/utils";
@@ -38,7 +37,6 @@ import {
 export * as OSDTypes from "./types";
 
 const isVisible = (positionData: number, profile: number): boolean =>
-  // eslint-disable-next-line no-bitwise
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;
 
 const unpackPosition = (positionData: number): [number, number] => [

@@ -40,7 +40,6 @@ const realSetTimeout = setTimeout;
  */
 const handleMspInfoReply = async (port: string): Promise<void> => {
   let currentPort = raw(port);
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       if (
@@ -53,10 +52,8 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
         // Reply with some mock MSP info
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
       }
-      // eslint-disable-next-line no-empty
     } catch (e) {}
     // wait 10 miliseconds
-    // eslint-disable-next-line no-await-in-loop
     await new Promise((resolve) => realSetTimeout(resolve, 10));
   }
 };

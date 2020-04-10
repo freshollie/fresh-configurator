@@ -1,5 +1,5 @@
 import semver from "semver";
-import { FeatureBits, Features } from "./types";
+import { FeatureBits, Features, DisarmFlags, Sensors } from "./types";
 
 const BASE_FEATURE_BITS: FeatureBits = {
   0: Features.RX_PPM,
@@ -74,3 +74,45 @@ export const getFeatureBits = (apiVersion: string): FeatureBits => {
 
   return featureBits;
 };
+
+export const disarmFlagBits = (apiVersion: string): DisarmFlags[] => [
+  DisarmFlags.NO_GYRO,
+  DisarmFlags.FAILSAFE,
+  DisarmFlags.RX_FAILSAFE,
+  DisarmFlags.BAD_RX_RECOVERY,
+  DisarmFlags.BOXFAILSAFE,
+  DisarmFlags.THROTTLE,
+  ...(semver.gte(apiVersion, "1.38.0") ? [DisarmFlags.RUNAWAY_TAKEOFF] : []),
+
+  ...(semver.gte(apiVersion, "1.42.0") ? [DisarmFlags.CRASH] : []),
+  DisarmFlags.ANGLE,
+  DisarmFlags.BOOT_GRACE_TIME,
+  DisarmFlags.NOPREARM,
+  DisarmFlags.LOAD,
+  DisarmFlags.CALIBRATING,
+  DisarmFlags.CLI,
+  DisarmFlags.CMS_MENU,
+  ...(semver.lt(apiVersion, "1.41.0") ? [DisarmFlags.OSD_MENU] : []),
+  DisarmFlags.BST,
+  DisarmFlags.MSP,
+  ...(semver.gte(apiVersion, "1.39.0")
+    ? [DisarmFlags.PARALYZE, DisarmFlags.GPS]
+    : []),
+  ...(semver.gte(apiVersion, "1.41.0")
+    ? [DisarmFlags.RESC, DisarmFlags.RPMFILTER]
+    : []),
+  ...(semver.gte(apiVersion, "1.42.0")
+    ? [DisarmFlags.REBOOT_REQD, DisarmFlags.DSHOT_BBANG]
+    : []),
+  ...(semver.gte(apiVersion, "1.43.0") ? [DisarmFlags.NO_ACC_CAL] : []),
+  DisarmFlags.ARM_SWITCH,
+];
+
+export const sensorBits = (): Sensors[] => [
+  Sensors.ACCELEROMETER,
+  Sensors.BAROMETER,
+  Sensors.MAGNETOMETER,
+  Sensors.GPS,
+  Sensors.SONAR,
+  Sensors.GYRO,
+];

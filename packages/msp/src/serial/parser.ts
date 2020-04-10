@@ -11,7 +11,6 @@
  * with node-serialport
  */
 
-/* eslint-disable no-bitwise */
 import { Transform } from "stream";
 import debug from "debug";
 import { crc8DvbS2 } from "./utils";

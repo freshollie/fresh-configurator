@@ -51,7 +51,7 @@ export interface Kinematics {
 export interface Status {
   cycleTime: number;
   i2cError: number;
-  activeSensors: number;
+  sensors: Sensors[];
   mode: number;
   profile: number;
 }
@@ -60,8 +60,7 @@ export interface ExtendedStatus extends Status {
   cpuload: number;
   numProfiles: number;
   rateProfile: number;
-  armingDisableCount?: number;
-  armingDisableFlags?: number;
+  armingDisabledFlags: DisarmFlags[];
 }
 
 export interface RCTuning {
@@ -126,4 +125,49 @@ export enum Features {
   VCURRENT_METER,
 }
 
+export enum DisarmFlags {
+  NO_GYRO,
+  FAILSAFE,
+  RX_FAILSAFE,
+  BAD_RX_RECOVERY,
+  BOXFAILSAFE,
+  THROTTLE,
+  ANGLE,
+  BOOT_GRACE_TIME,
+  NOPREARM,
+  LOAD,
+  CALIBRATING,
+  CLI,
+  CMS_MENU,
+  OSD_MENU,
+  BST,
+  MSP,
+  RUNAWAY_TAKEOFF,
+  PARALYZE,
+  GPS,
+  RESC,
+  RPMFILTER,
+  CRASH,
+  REBOOT_REQD,
+  DSHOT_BBANG,
+  NO_ACC_CAL,
+  ARM_SWITCH,
+  UNKNOWN,
+}
+
+export enum Sensors {
+  ACCELEROMETER,
+  BAROMETER,
+  MAGNETOMETER,
+  GPS,
+  SONAR,
+  GYRO,
+  UNKNOWN,
+}
+
 export type FeatureBits = Record<number, Features>;
+
+export interface Feature {
+  key: Features;
+  enabled: boolean;
+}

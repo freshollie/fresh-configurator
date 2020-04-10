@@ -46,12 +46,15 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["**/*.spec.{ts,tsx}"],
+      files: ["**/*.spec.{ts,tsx}", "**/__mocks__/**/*"],
       env: {
         jest: true,
       },
       rules: {
         "@typescript-eslint/no-explicit-any": "off",
+        "no-constant-condition": "off",
+        "no-empty": "off",
+        "no-await-in-loop": "off",
       },
     },
     {

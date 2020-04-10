@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 export default class WriteBuffer extends Array {
   public push8(val: number): WriteBuffer {
     this.push(0xff & val);
