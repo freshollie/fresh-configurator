@@ -17,9 +17,9 @@ import {
   Connection,
   MspCommand,
   ConnectionOptions,
-  OpenFunction as OpenConnectionFunction,
+  OpenConnectionFunction,
   OnCloseCallback,
-} from "./types";
+} from "./connection.d";
 import codes from "./codes";
 
 const log = debug("connection");

@@ -269,3 +269,10 @@ export const writeArming = async (
 
   await execute(port, { code: codes.MSP_ARMING_DISABLE, data });
 };
+
+export const calibrateAccelerometer = async (port: string): Promise<void> => {
+  await execute(port, { code: codes.MSP_ACC_CALIBRATION });
+  // This command executes on the device, but doesn't actually produce anything
+  // for about 2 seconds, so resolve after 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+};

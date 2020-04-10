@@ -194,43 +194,46 @@ describe("execute", () => {
   it("should write the given command and data for v2 commands", async () => {
     await open("/dev/something");
     execute("/dev/something", {
-      code: 255,
+      code: codes.MSP2_COMMON_SERIAL_CONFIG,
       data: Buffer.from("This is a v2 message"),
     });
     await flushPromises();
 
     expect(writtenData("/dev/something")).toEqual(
-      encodeMessageV2(255, Buffer.from("This is a v2 message"))
+      encodeMessageV2(
+        codes.MSP2_COMMON_SERIAL_CONFIG,
+        Buffer.from("This is a v2 message")
+      )
     );
   });
 
   it("should deduplicate requests, if the same request is already in flight", async () => {
     await open("/dev/something");
     execute("/dev/something", {
-      code: 255,
-      data: Buffer.from("This is a v2 message"),
+      code: 254,
+      data: Buffer.from("This is a message"),
     });
 
     await flushPromises();
     execute("/dev/something", {
-      code: 255,
-      data: Buffer.from("This is a v2 message"),
+      code: 254,
+      data: Buffer.from("This is a message"),
     });
 
     await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
-      encodeMessageV2(255, Buffer.from("This is a v2 message"))
+      encodeMessageV1(254, Buffer.from("This is a message"))
     );
 
     execute("/dev/something", {
-      code: 255,
+      code: 254,
       data: Buffer.from("This is a different request"),
     });
     await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
       Buffer.concat([
-        encodeMessageV2(255, Buffer.from("This is a v2 message")),
-        encodeMessageV2(255, Buffer.from("This is a different request")),
+        encodeMessageV1(254, Buffer.from("This is a message")),
+        encodeMessageV1(254, Buffer.from("This is a different request")),
       ])
     );
   });
@@ -377,13 +380,13 @@ describe("bytesWritten", () => {
   it("should count the number of bytes written to the device", async () => {
     await open("/dev/something");
     execute("/dev/something", {
-      code: 255,
-      data: Buffer.from("This is a v2 message"),
+      code: 54,
+      data: Buffer.from("This is a v1 message"),
     });
 
     expect(bytesWritten("/dev/something")).toEqual(
       Buffer.byteLength(
-        encodeMessageV2(255, Buffer.from("This is a v2 message"))
+        encodeMessageV1(54, Buffer.from("This is a v1 message"))
       )
     );
   });

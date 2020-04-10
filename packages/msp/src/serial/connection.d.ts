@@ -1,11 +1,16 @@
 import SerialPort from "serialport";
 import { MspParser } from "./parser";
 import WriteBuffer from "./writebuffer";
+import codes from "./codes";
 
 export interface MspInfo {
   mspProtocolVersion: number;
   apiVersion: string;
 }
+
+export type Codes = typeof codes[keyof typeof codes];
+
+export type ExecutionLocks = Record<Codes, Promise<void> | undefined>;
 
 export interface Connection {
   serial: SerialPort;
@@ -23,7 +28,7 @@ export interface ConnectionOptions {
 
 export type OnCloseCallback = () => void;
 
-export interface OpenFunction {
+export interface OpenConnectionFunction {
   (
     port: string,
     options?: ConnectionOptions,
@@ -33,7 +38,7 @@ export interface OpenFunction {
 }
 
 export interface MspCommand {
-  code: number;
+  code: Codes;
   data?: WriteBuffer | Buffer;
   timeout?: number;
 }
