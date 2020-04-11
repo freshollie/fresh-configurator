@@ -18,7 +18,7 @@ query ConnectionDetails($port: String!) {
 }
 
 query ApiVersion($port: String!) {
-  device(port: $port) {
+  device(port: $port) @client {
     apiVersion
   }
 }
@@ -43,6 +43,23 @@ query Status($port: String!) {
   }
 }
 
+query Sensors($port: String!) {
+  device(port: $port) @client {
+    sensors
+  }
+}
+
+query GpsSummary($port: String!) {
+  device(port: $port) @client {
+    gps {
+      fix
+      numSat
+      lat
+      lon
+    }
+  }
+}
+
 query RcChannels($port: String!) {
   device(port: $port) @client {
     rc {
@@ -51,7 +68,7 @@ query RcChannels($port: String!) {
   }
 }
 
-query FcInfo($port: String!) {
+query FcSummary($port: String!) {
   device(port: $port) @client {
     armingDisabledFlags
     power {

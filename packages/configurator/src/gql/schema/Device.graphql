@@ -90,7 +90,7 @@ type Power {
 }
 
 type GpsData {
-  fix: Int!
+  fix: Boolean!
   numSat: Int!
   lat: Int!
   lon: Int!

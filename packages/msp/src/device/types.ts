@@ -11,7 +11,7 @@ export interface AnalogValues {
 }
 
 export interface RawGpsData {
-  fix: number;
+  fix: boolean;
   numSat: number;
   lat: number;
   lon: number;

@@ -1,5 +1,6 @@
 import React from "react";
-import FcInfoProvider from "../providers/FcInfoProvider";
+import FcSummaryProvider from "../providers/FcSummaryProvider";
+import GpsSummaryProvider from "../providers/GpsSummaryProvider";
 import AccelerometerCallibrationManager from "../managers/AccelerometerCallibrationManager";
 import ModelViewProvider from "../providers/ModelViewProvider";
 import ModelInstrumentsProvider from "../providers/ModelInstrumentsProvider";
@@ -24,12 +25,14 @@ const SetupTab: React.FC = () => (
             <Widget>
               <header>Info</header>
               <main>
-                <FcInfoProvider />
+                <FcSummaryProvider />
               </main>
             </Widget>
             <Widget>
               <header>GPS</header>
-              <div style={{ height: "120px" }} />
+              <main>
+                <GpsSummaryProvider />
+              </main>
             </Widget>
             <Widget>
               <header>Instruments</header>

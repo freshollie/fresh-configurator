@@ -24,7 +24,7 @@ import WriteBuffer from "../serial/writebuffer";
 
 export * from "./osd";
 
-export { Features, DisarmFlags } from "./types";
+export { Features, DisarmFlags, Sensors } from "./types";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -83,7 +83,7 @@ export const readRawGPS = async (port: string): Promise<RawGpsData> => {
   const data = await execute(port, { code: codes.MSP_RAW_GPS });
 
   return {
-    fix: data.readU8(),
+    fix: !!data.readU8(),
     numSat: data.readU8(),
     lat: data.read32(),
     lon: data.read32(),

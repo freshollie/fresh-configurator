@@ -9,7 +9,7 @@ export default {
 
 export const example = (): JSX.Element => (
   <LogsView>
-    {new Array(20).map((_, i) => (
+    {new Array(20).fill(true).map((_, i) => (
       <LogLine time={new Date()}>Some Log {i}</LogLine>
     ))}
   </LogsView>

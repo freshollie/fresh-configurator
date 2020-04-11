@@ -1,13 +1,14 @@
 import React from "react";
 import { DisarmFlags } from "@fresh/msp";
 import useSelectedPort from "../hooks/useSelectedPort";
-import { useFcInfoQuery } from "../gql/__generated__";
+import { useFcSummaryQuery } from "../gql/__generated__";
+import Table from "../components/Table";
 
 const ARM_SWITCH_KEY = DisarmFlags[DisarmFlags.ARM_SWITCH];
 
-const FcInfoProvider: React.FC = () => {
+const FcSummaryProvider: React.FC = () => {
   const port = useSelectedPort();
-  const { data } = useFcInfoQuery({
+  const { data } = useFcSummaryQuery({
     variables: {
       port: port ?? "",
     },
@@ -25,7 +26,7 @@ const FcInfoProvider: React.FC = () => {
     data?.device.armingDisabledFlags.includes(DisarmFlags.ARM_SWITCH) ?? false;
 
   return (
-    <table>
+    <Table>
       <tbody>
         <tr>
           <td>Arming Disable Flags:</td>
@@ -58,8 +59,8 @@ const FcInfoProvider: React.FC = () => {
           <td>{data?.device.rc.rssi ?? ""}%</td>
         </tr>
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-export default FcInfoProvider;
+export default FcSummaryProvider;
