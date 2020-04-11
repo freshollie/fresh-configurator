@@ -38,15 +38,7 @@ const ConnectControlsManager: React.FC = () => {
         !connected && !connecting ? <UsbConnectIcon /> : <UsbDisconnectIcon />
       }
       text={statusText}
-      onClick={() =>
-        !connected && !connecting
-          ? connect().catch((e) => {
-              console.log(e);
-            })
-          : disconnect().catch((e) => {
-              console.log(e);
-            })
-      }
+      onClick={() => (!connected && !connecting ? connect() : disconnect())}
     />
   );
 };
