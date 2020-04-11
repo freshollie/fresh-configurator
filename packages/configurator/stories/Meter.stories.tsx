@@ -30,7 +30,16 @@ const useMeterValue = (min: number, max: number, step = 1): number => {
   return value;
 };
 
-export const Example = (): JSX.Element => {
-  const value = useMeterValue(900, 2000, 20);
-  return <Meter value={value} min={900} max={2000} color="red" />;
+const MeterDemo: React.FC<{
+  max: number;
+  min: number;
+  step: number;
+  color: string;
+}> = ({ max, min, step, color }) => {
+  const value = useMeterValue(min, max, step);
+  return <Meter value={value} min={min} max={max} color={color} />;
 };
+
+export const Example = (): JSX.Element => (
+  <MeterDemo max={2000} min={900} step={20} color="red" />
+);

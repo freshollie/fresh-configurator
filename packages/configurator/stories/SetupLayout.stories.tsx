@@ -22,25 +22,27 @@ export const example = (): JSX.Element => (
         <Title>Setup</Title>
       </header>
       <main>
-        <Widget>
-          <Paper>
-            <ModelView modelType="quadx" />
-          </Paper>
-        </Widget>
-        <aside>
+        <div className="status">
           <Widget>
-            <header>Info</header>
-            <div style={{ height: "150px" }} />
+            <Paper>
+              <ModelView modelType="quadx" />
+            </Paper>
           </Widget>
-          <Widget>
-            <header>GPS</header>
-            <div style={{ height: "120px" }} />
-          </Widget>
-          <Widget>
-            <header>Instruments</header>
-            <div style={{ height: "80px" }} />
-          </Widget>
-        </aside>
+          <aside>
+            <Widget>
+              <header>Info</header>
+              <div style={{ height: "150px" }} />
+            </Widget>
+            <Widget>
+              <header>GPS</header>
+              <div style={{ height: "120px" }} />
+            </Widget>
+            <Widget>
+              <header>Instruments</header>
+              <div style={{ height: "80px" }} />
+            </Widget>
+          </aside>
+        </div>
       </main>
     </SetupLayout>
   </WhiteBackground>

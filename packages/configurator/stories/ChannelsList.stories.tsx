@@ -22,7 +22,7 @@ const useChannelValues = (number: number): number[] => {
           directions[i] = 1;
         }
 
-        return (i + 1) * directions[i];
+        return lastValue + i * directions[i];
       });
       setValues(lastValues);
     }, 10);
@@ -32,8 +32,10 @@ const useChannelValues = (number: number): number[] => {
   return values;
 };
 
-export const AllPossibleChannels = (): JSX.Element => {
+const ChannelsDemo = (): JSX.Element => {
   const channels = useChannelValues(18);
 
   return <ChannelsList channels={channels} />;
 };
+
+export const AllPossibleChannels = (): JSX.Element => <ChannelsDemo />;

@@ -49,7 +49,11 @@ const useIndicatorValues = (): {
   return values;
 };
 
-export const WithBoxes = (): JSX.Element => {
+const FlightIndicatorsDemo = ({
+  showBox,
+}: {
+  showBox: boolean;
+}): JSX.Element => {
   const {
     roll,
     pitch,
@@ -61,32 +65,17 @@ export const WithBoxes = (): JSX.Element => {
   } = useIndicatorValues();
   return (
     <>
-      <Attitude showBox roll={roll} pitch={pitch} />
-      <Heading showBox heading={heading} />
-      <Variometer showBox verticalSpeed={vario} />
-      <Airspeed showBox speed={speed} />
-      <Altimeter showBox altitude={altitude} pressure={pressure} />
+      <Attitude showBox={showBox} roll={roll} pitch={pitch} />
+      <Heading showBox={showBox} heading={heading} />
+      <Variometer showBox={showBox} verticalSpeed={vario} />
+      <Airspeed showBox={showBox} speed={speed} />
+      <Altimeter showBox={showBox} altitude={altitude} pressure={pressure} />
     </>
   );
 };
 
-export const WithoutBoxes = (): JSX.Element => {
-  const {
-    roll,
-    pitch,
-    heading,
-    vario,
-    speed,
-    altitude,
-    pressure,
-  } = useIndicatorValues();
-  return (
-    <>
-      <Attitude roll={roll} pitch={pitch} />
-      <Heading heading={heading} />
-      <Variometer verticalSpeed={vario} />
-      <Airspeed speed={speed} />
-      <Altimeter altitude={altitude} pressure={pressure} />
-    </>
-  );
-};
+export const WithBoxes = (): JSX.Element => <FlightIndicatorsDemo showBox />;
+
+export const WithoutBoxes = (): JSX.Element => (
+  <FlightIndicatorsDemo showBox={false} />
+);

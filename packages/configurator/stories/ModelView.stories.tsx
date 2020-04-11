@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "../src/theme";
 import ModelView from "../src/components/ModelView";
+import { ModelType } from "../src/components/Model";
 
 export default {
   component: ModelView,
@@ -29,20 +30,24 @@ const useRollingAttitude = (): {
   };
 };
 
+const MovingModel = ({ modelType }: { modelType: ModelType }): JSX.Element => (
+  <ModelView attitude={useRollingAttitude()} modelType={modelType} />
+);
+
 export const QuadX = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} modelType="quadx" />
+    <MovingModel modelType="quadx" />
   </Container>
 );
 
 export const Tricopter = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} modelType="tricopter" />
+    <MovingModel modelType="tricopter" />
   </Container>
 );
 
 export const HexX = (): JSX.Element => (
   <Container>
-    <ModelView attitude={useRollingAttitude()} modelType="hexx" />
+    <MovingModel modelType="hexx" />
   </Container>
 );

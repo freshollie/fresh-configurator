@@ -1,13 +1,14 @@
 /**
  * This is the base theme to all components of this APP
  */
-import React from "react";
+import React, { useContext } from "react";
 import styled, {
   createGlobalStyle,
   css as defaultCss,
   ThemedStyledInterface,
   ThemedCssFunction,
   ThemeProvider as DefaultThemeProvider,
+  ThemeContext,
 } from "styled-components";
 
 import openSansLight2 from "./fonts/opensans-light-webfont.woff2";
@@ -152,16 +153,21 @@ const darkColors: ThemeColors = {
 export default styled as ThemedStyledInterface<Theme>;
 export const css = defaultCss as ThemedCssFunction<Theme>;
 
-export const ThemeProvider: React.FC<{ dark?: boolean }> = ({
-  dark,
+export const ThemeProvider: React.FC<{ theme?: { dark: boolean } }> = ({
+  theme,
   children,
 }) => (
   <>
     <GlobalStyle />
     <DefaultThemeProvider
-      theme={{ dark: !!dark, colors: dark ? darkColors : lightColors }}
+      theme={{
+        dark: !!theme?.dark,
+        colors: theme?.dark ? darkColors : lightColors,
+      }}
     >
       {children}
     </DefaultThemeProvider>
   </>
 );
+
+export const useTheme = (): Theme => useContext<Theme>(ThemeContext);
