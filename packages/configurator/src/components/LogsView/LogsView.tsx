@@ -21,23 +21,25 @@ const LogsView: React.FC = ({ children }) => {
       const listElement = listRef.current;
       let scrollingInterval: number | undefined;
 
+      const scrollBottom = (): void =>
+        listElement.scroll({
+          top: listElement.scrollHeight,
+        });
+
       const handleStart = (): void => {
         // only make a new interval if one doesn't exist
-        scrollingInterval =
-          scrollingInterval ??
-          setInterval(() =>
-            listElement.scroll({
-              top: listElement.scrollHeight,
-            })
-          );
+        scrollingInterval = scrollingInterval ?? setInterval(scrollBottom);
       };
 
       const handleEnd = (): void => {
         clearInterval(scrollingInterval);
         scrollingInterval = undefined;
+        scrollBottom();
       };
+
       listElement.addEventListener("transitionstart", handleStart);
       listElement.addEventListener("transitionend", handleEnd);
+
       return () => {
         listElement.removeEventListener("transitionstart", handleStart);
         listElement.removeEventListener("transitionend", handleEnd);
