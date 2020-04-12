@@ -4,6 +4,8 @@ type Query {
 
 type Mutation {
   setConnectionSettings(port: String!, baudRate: Int): Boolean
+  setConnection(connection: ID): Boolean
+  setConnecting(value: Boolean!): Boolean
   setTab(tabId: String!): Boolean
   setExpertMode(enabled: Boolean!): Boolean
   log(message: String!): Boolean
@@ -11,6 +13,8 @@ type Mutation {
 
 type Configurator {
   port: String
+  connection: ID
+  connecting: Boolean!
   baudRate: Int!
   tab: String
   expertMode: Boolean!

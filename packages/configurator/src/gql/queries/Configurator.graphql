@@ -5,6 +5,18 @@ query ConnectionSettings {
   }
 }
 
+query ConnectionId {
+  configurator @client {
+    connection
+  }
+}
+
+query IsConnecting {
+  configurator @client {
+    connecting
+  }
+}
+
 query SelectedTab {
   configurator @client {
     tab

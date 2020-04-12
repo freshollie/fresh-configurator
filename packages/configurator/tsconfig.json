@@ -11,7 +11,8 @@
     "rootDirs": ["src", "stories"],
     "baseUrl": "./src",
     "paths": {
-      "@fresh/msp": ["../../msp/src"]
+      "@fresh/msp": ["../../msp/src"],
+      "@fresh/backend": ["../../backend/src"]
     }
   },
   "include": [

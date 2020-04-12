@@ -4,7 +4,6 @@ import {
   useNavigationDataQuery,
   useSelectTabMutation,
 } from "../gql/__generated__";
-import useConnectionState from "../hooks/useConnectionState";
 
 import NavLinks from "../components/NavLinks";
 import {
@@ -15,6 +14,7 @@ import {
   SetupIcon,
   ReceiverIcon,
 } from "../icons";
+import useConnectionState from "../hooks/useConnectionState";
 
 const DISCONNECTED_LINKS = [
   {
@@ -240,9 +240,7 @@ const NavigationManager: React.FC = () => {
   const { data: navigationQuery, loading } = useNavigationDataQuery();
   const selectedTab = navigationQuery?.configurator.tab ?? undefined;
 
-  const { connected } = useConnectionState(
-    navigationQuery?.configurator.port ?? undefined
-  );
+  const { connected } = useConnectionState();
   const [selectTab] = useSelectTabMutation();
 
   const links = connected ? CONNECTED_LINKS : DISCONNECTED_LINKS;

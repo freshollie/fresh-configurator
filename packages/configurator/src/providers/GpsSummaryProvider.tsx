@@ -2,24 +2,25 @@ import React from "react";
 import { Sensors } from "@fresh/msp";
 import Status from "../components/Status";
 import Table from "../components/Table";
-import useSelectedPort from "../hooks/useSelectedPort";
 import { useSensorsQuery, useGpsSummaryQuery } from "../gql/__generated__";
+import useConnectionId from "../hooks/useConnectionId";
 
 const GpsSummaryProvider: React.FC = () => {
-  const port = useSelectedPort();
+  const connectionId = useConnectionId();
 
   const { data: sensorsData } = useSensorsQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
+    skip: !connectionId,
   });
   const sensors = sensorsData?.device.sensors ?? [];
 
   const { data } = useGpsSummaryQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
-    skip: !sensors.includes(Sensors.GPS),
+    skip: !sensors.includes(Sensors.GPS) || !connectionId,
     pollInterval: 100,
   });
 

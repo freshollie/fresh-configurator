@@ -1,8 +1,0 @@
-type Query {
-  ports: [String!]!
-}
-
-type Mutation {
-  connect(port: String!, baudRate: Int!): Boolean
-  disconnect(port: String!): Boolean
-}

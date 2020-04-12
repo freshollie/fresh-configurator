@@ -8,8 +8,8 @@ import {
   GpsSensorIcon,
   SonarSensorIcon,
 } from "../icons";
-import useSelectedPort from "../hooks/useSelectedPort";
-import { useSensorsQuery, useConnectionStateQuery } from "../gql/__generated__";
+import useConnectionState from "../hooks/useConnectionState";
+import { useSensorsQuery } from "../gql/__generated__";
 import SensorStatusPanel from "../components/SensorStatusPanel";
 
 const SENSOR_ELEMENTS = {
@@ -31,22 +31,13 @@ const SENSORS_ORDER = [
 ] as (keyof typeof SENSOR_ELEMENTS)[];
 
 const SensorsListProvider: React.FC = () => {
-  const port = useSelectedPort();
-
-  const { data: connectionData } = useConnectionStateQuery({
-    variables: {
-      port: port ?? "",
-    },
-    skip: !port,
-  });
-
-  const connected = connectionData?.device.connection.connected ?? false;
+  const { connected, connection } = useConnectionState();
 
   const { data } = useSensorsQuery({
     variables: {
-      port: port ?? "",
+      connection: connection ?? "",
     },
-    skip: !port || !connected,
+    skip: !connection || !connected,
   });
 
   if (!data || !connected) {

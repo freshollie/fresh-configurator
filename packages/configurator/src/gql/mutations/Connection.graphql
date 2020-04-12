@@ -1,7 +1,7 @@
 mutation Connect($port: String!, $baudRate: Int!) {
-  connect(port: $port, baudRate: $baudRate) @client
+  connect(port: $port, baudRate: $baudRate)
 }
 
-mutation Disconnect($port: String!) {
-  disconnect(port: $port) @client
+mutation Disconnect($connection: ID!) {
+  disconnect(connection: $connection)
 }

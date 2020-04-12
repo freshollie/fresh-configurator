@@ -1,0 +1,8 @@
+extend type Query {
+  device(connection: ID!): FlightController!
+}
+
+type FlightController {
+  port: String!
+  apiVersion: String!
+}

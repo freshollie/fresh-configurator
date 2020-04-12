@@ -13,12 +13,12 @@ const ConnectionSettingsManager: React.FC = () => {
   const { data: configuratorData, loading } = useConnectionSettingsQuery();
   const { port, baudRate } = configuratorData?.configurator ?? {};
 
-  const { connected, connecting } = useConnectionState(port || undefined);
+  const { connected, connecting } = useConnectionState();
 
   // Constantly query the available ports, unless we have already
   // selected a port
   const { data: portsData, loading: loadingPorts } = useAvailablePortsQuery({
-    pollInterval: !connected ? 1000 : undefined,
+    pollInterval: 1000,
     skip: connected,
   });
 

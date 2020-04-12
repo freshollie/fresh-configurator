@@ -13,3 +13,11 @@ mutation SetExpertMode($enabled: Boolean!) {
 mutation Log($message: String!) {
   log(message: $message) @client
 }
+
+mutation SetConnection($connection: ID) {
+  setConnection(connection: $connection) @client
+}
+
+mutation SetConnecting($value: Boolean!) {
+  setConnecting(value: $value) @client
+}

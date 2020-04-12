@@ -2,6 +2,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
+import backend from "@fresh/backend";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -79,7 +80,11 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  backend.listen(9000, () => {
+    createWindow();
+  });
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {

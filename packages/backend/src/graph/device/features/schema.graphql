@@ -1,0 +1,8 @@
+extend type FlightController {
+  features: [Feature!]!
+}
+
+type Feature {
+  key: Int!
+  enabled: Boolean!
+}

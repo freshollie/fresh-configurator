@@ -1,19 +1,16 @@
 import React from "react";
 import Attitude from "../flightindicators/Attitude";
 import Heading from "../flightindicators/Heading";
-import {
-  useConnectionSettingsQuery,
-  useAttitudeQuery,
-} from "../gql/__generated__";
+import { useAttitudeQuery } from "../gql/__generated__";
+import useConnectionId from "../hooks/useConnectionId";
 
 const ModelInstrumentsProvider: React.FC = () => {
-  const { data: portsData } = useConnectionSettingsQuery();
-  const port = portsData?.configurator.port;
+  const connectionId = useConnectionId();
   const { data: deviceData } = useAttitudeQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
-    skip: !port,
+    skip: !connectionId,
     pollInterval: 5,
   });
 

@@ -1,29 +1,29 @@
 import React from "react";
 import { DisarmFlags } from "@fresh/msp";
-import useSelectedPort from "../hooks/useSelectedPort";
 import { useFcSummaryQuery } from "../gql/__generated__";
 import Table from "../components/Table";
+import useConnectionId from "../hooks/useConnectionId";
 
 const ARM_SWITCH_KEY = DisarmFlags[DisarmFlags.ARM_SWITCH];
 
 const FcSummaryProvider: React.FC = () => {
-  const port = useSelectedPort();
+  const connectionId = useConnectionId();
   const { data } = useFcSummaryQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
     pollInterval: 100,
-    skip: !port,
+    skip: !connectionId,
   });
 
   const flagNames =
-    data?.device.armingDisabledFlags
+    data?.device.arming.disabledFlags
       .filter((flag) => flag !== DisarmFlags.ARM_SWITCH)
       .map((flag) => DisarmFlags[flag])
       .sort() ?? [];
 
   const armSwitchInactive =
-    data?.device.armingDisabledFlags.includes(DisarmFlags.ARM_SWITCH) ?? false;
+    data?.device.arming.disabledFlags.includes(DisarmFlags.ARM_SWITCH) ?? false;
 
   return (
     <Table>

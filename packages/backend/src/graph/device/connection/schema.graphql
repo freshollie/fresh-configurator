@@ -1,0 +1,11 @@
+extend type FlightController {
+  connection: ConnectionStatus!
+}
+
+type ConnectionStatus {
+  connected: Boolean!
+  connecting: Boolean!
+  bytesRead: Int!
+  bytesWritten: Int!
+  packetErrors: Int!
+}

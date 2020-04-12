@@ -1,0 +1,9 @@
+extend type FlightController {
+  attitude: Attitude!
+}
+
+type Attitude {
+  roll: Float!
+  pitch: Float!
+  heading: Float!
+}

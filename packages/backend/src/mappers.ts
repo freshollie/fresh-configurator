@@ -1,6 +1,6 @@
 export interface FlightControllerPartial {
   port: string;
-  connection: { connecting: boolean; connected: boolean };
+  apiVersion: string;
 }
 
 export interface FlightControllerQuery {

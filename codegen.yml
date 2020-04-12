@@ -2,15 +2,23 @@ overwrite: true
 schema: "./packages/**/*.graphql"
 documents: "./packages/**/*.graphql"
 generates:
+  ./packages/backend/src/graph/__generated__/index.ts:
+    config:
+      contextType: ../../context#Context
+      mappers:
+        FlightController: ../../mappers#FlightControllerPartial
+        ConnectionStatus: ../../mappers#FlightControllerQuery
+        RC: ../../mappers#FlightControllerQuery
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+
   ./packages/configurator/src/gql/__generated__/index.tsx:
     config:
       withHooks: true
       withComponent: false
       withHOC: false
-      mappers:
-        FlightController: ../models#FlightControllerPartial
-        ConnectionStatus: ../models#FlightControllerQuery
-        RC: ../models#FlightControllerQuery
+
       nonOptionalTypename: true
       reactApolloVersion: 3
     plugins:

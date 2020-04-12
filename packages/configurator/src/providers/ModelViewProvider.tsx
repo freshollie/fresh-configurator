@@ -1,20 +1,17 @@
 import React from "react";
-import {
-  useAttitudeQuery,
-  useConnectionSettingsQuery,
-} from "../gql/__generated__";
+import { useAttitudeQuery } from "../gql/__generated__";
 import ModelView from "../components/ModelView";
+import useConnectionId from "../hooks/useConnectionId";
 
 const ModelViewProvider: React.FC = () => {
-  const { data: configuratorData } = useConnectionSettingsQuery();
-  const port = configuratorData?.configurator?.port;
+  const connectionId = useConnectionId();
 
   const { data: attitudeData } = useAttitudeQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
     pollInterval: 5,
-    skip: !port,
+    skip: !connectionId,
   });
 
   return (

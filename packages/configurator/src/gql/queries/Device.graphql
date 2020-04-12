@@ -1,14 +1,9 @@
-query ConnectionState($port: String!) {
-  device(port: $port) @client {
-    connection {
-      connected
-      connecting
-    }
-  }
+subscription ConnectionState($connection: ID!) {
+  connected(connection: $connection)
 }
 
-query ConnectionDetails($port: String!) {
-  device(port: $port) @client {
+query ConnectionDetails($connection: ID!) {
+  device(connection: $connection) {
     connection {
       bytesWritten
       bytesRead
@@ -17,14 +12,14 @@ query ConnectionDetails($port: String!) {
   }
 }
 
-query ApiVersion($port: String!) {
-  device(port: $port) @client {
+query ApiVersion($connection: ID!) {
+  device(connection: $connection) {
     apiVersion
   }
 }
 
-query Attitude($port: String!) {
-  device(port: $port) @client {
+query Attitude($connection: ID!) {
+  device(connection: $connection) {
     attitude {
       roll
       pitch
@@ -33,8 +28,8 @@ query Attitude($port: String!) {
   }
 }
 
-query Status($port: String!) {
-  device(port: $port) @client {
+query Status($connection: ID!) {
+  device(connection: $connection) {
     status {
       cycleTime
       i2cError
@@ -43,14 +38,14 @@ query Status($port: String!) {
   }
 }
 
-query Sensors($port: String!) {
-  device(port: $port) @client {
+query Sensors($connection: ID!) {
+  device(connection: $connection) {
     sensors
   }
 }
 
-query GpsSummary($port: String!) {
-  device(port: $port) @client {
+query GpsSummary($connection: ID!) {
+  device(connection: $connection) {
     gps {
       fix
       numSat
@@ -60,17 +55,19 @@ query GpsSummary($port: String!) {
   }
 }
 
-query RcChannels($port: String!) {
-  device(port: $port) @client {
+query RcChannels($connection: ID!) {
+  device(connection: $connection) {
     rc {
       channels
     }
   }
 }
 
-query FcSummary($port: String!) {
-  device(port: $port) @client {
-    armingDisabledFlags
+query FcSummary($connection: ID!) {
+  device(connection: $connection) {
+    arming {
+      disabledFlags
+    }
     power {
       voltage
       mahDrawn
@@ -82,8 +79,8 @@ query FcSummary($port: String!) {
   }
 }
 
-query RcSettings($port: String!) {
-  device(port: $port) @client {
+query RcSettings($connection: ID!) {
+  device(connection: $connection) {
     rc {
       tuning {
         rcRate

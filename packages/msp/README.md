@@ -3,7 +3,8 @@
 > MultiWii serial parser
 
 A library to handle reading and writing data from flight controllers
-which use the MultiWii Serial Protocol
+which use the MultiWii Serial Protocol. This library has been written for
+the betaflight MultiWii API,
 
 ## Usage
 

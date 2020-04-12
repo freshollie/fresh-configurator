@@ -1,19 +1,27 @@
-import { useConnectionStateQuery } from "../gql/__generated__";
+import {
+  useConnectionStateSubscription,
+  useIsConnectingQuery,
+} from "../gql/__generated__";
+import useConnectionId from "./useConnectionId";
 
-export default (
-  port?: string
-): {
+export default (): {
   connected: boolean;
   connecting: boolean;
+  connection: string | undefined;
 } => {
-  const { data: deviceData } = useConnectionStateQuery({
+  const connectionId = useConnectionId();
+  const { data } = useConnectionStateSubscription({
     variables: {
-      port: port || "",
+      connection: connectionId ?? "",
     },
-    skip: !port,
+    skip: !connectionId,
   });
 
-  return (
-    deviceData?.device.connection ?? { connected: false, connecting: false }
-  );
+  const { data: connectingData } = useIsConnectingQuery();
+
+  return {
+    connected: data?.connected ?? false,
+    connecting: connectingData?.configurator.connecting ?? false,
+    connection: connectionId,
+  };
 };

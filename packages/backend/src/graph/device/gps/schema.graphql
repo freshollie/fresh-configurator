@@ -1,0 +1,13 @@
+extend type FlightController {
+  gps: GpsData!
+}
+
+type GpsData {
+  fix: Boolean!
+  numSat: Int!
+  lat: Int!
+  lon: Int!
+  alt: Int!
+  speed: Int!
+  groundCourse: Int!
+}

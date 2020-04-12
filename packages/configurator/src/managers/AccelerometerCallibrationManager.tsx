@@ -1,20 +1,20 @@
 import React from "react";
 import { useCallibrateAccelerometerMutation } from "../gql/__generated__";
-import useSelectedPort from "../hooks/useSelectedPort";
 import Button from "../components/Button";
+import useConnectionId from "../hooks/useConnectionId";
 
 const AccelerometerCallibrationManager: React.FC = () => {
-  const port = useSelectedPort();
+  const connection = useConnectionId();
   const [calibrate, { loading }] = useCallibrateAccelerometerMutation({
     variables: {
-      port: port ?? "",
+      connection: connection ?? "",
     },
   });
 
   return (
     <Button
       data-testid="calibrate-acc-button"
-      disabled={loading || !port}
+      disabled={loading || !connection}
       onClick={() => calibrate()}
     >
       {loading ? "Calibrating..." : "Calibrate Accelerometer"}

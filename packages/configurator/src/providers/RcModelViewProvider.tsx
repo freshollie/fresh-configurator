@@ -1,37 +1,37 @@
 import React from "react";
 import semver from "semver";
 import Model from "../components/Model";
-import useSelectedPort from "../hooks/useSelectedPort";
 import {
   useRcChannelsQuery,
   useRcSettingsQuery,
   useApiVersionQuery,
 } from "../gql/__generated__";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
+import useConnectionId from "../hooks/useConnectionId";
 
 const RcModelViewProvider: React.FC = () => {
-  const port = useSelectedPort();
+  const connectionId = useConnectionId();
   const { data: rcSettingsData } = useRcSettingsQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
-    skip: !port,
+    skip: !connectionId,
   });
 
   const { data: apiVersionData } = useApiVersionQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
-    skip: !port,
+    skip: !connectionId,
   });
 
   const apiVersion = apiVersionData?.device.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useRcChannelsQuery({
     variables: {
-      port: port ?? "",
+      connection: connectionId ?? "",
     },
-    skip: !port,
+    skip: !connectionId,
     pollInterval: 10,
   });
 
