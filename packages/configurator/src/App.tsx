@@ -1,4 +1,5 @@
 import React from "react";
+import SensorsListProvider from "./providers/SensorListProvider";
 import HeaderBar from "./components/HeaderBar";
 
 import ConnectionSettingsManager from "./managers/ConnectionSettingsManager";
@@ -19,6 +20,7 @@ const App: React.FC = () => (
     <header>
       <HeaderBar>
         <div className="tools">
+          <SensorsListProvider />
           <ConnectionSettingsManager />
           <ConnectControlsManager />
         </div>

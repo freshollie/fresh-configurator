@@ -1,6 +1,8 @@
 import styled from "../../theme";
 
 export default styled.ul`
+  display: flex;
+  flex-direction: row;
   height: 67px;
   width: min-content;
   border-radius: 5px;
@@ -12,6 +14,8 @@ export default styled.ul`
     transparent,
     rgba(0, 0, 0, 0.55)
   );
+
+  overflow: hidden;
 
   list-style-type: none;
   padding-inline-start: initial;
@@ -42,11 +46,10 @@ export default styled.ul`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    .icon {
-      margin-top: 13px;
-      flex: 1;
+    svg {
+      margin-top: 10px;
       path {
         fill: #272727;
         stroke: #272727;
@@ -56,7 +59,7 @@ export default styled.ul`
     &.active {
       color: #818181;
 
-      .icon {
+      svg {
         path {
           fill: ${({ theme }) => theme.colors.accent};
           stroke: ${({ theme }) => theme.colors.accent};

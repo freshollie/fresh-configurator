@@ -8,3 +8,8 @@ export { default as OSDIcon } from "./assets/icon_osd.svg";
 export { default as ScrollIcon } from "./assets/scroll.svg";
 export { default as ReceiverIcon } from "./assets/cf_icon_rx_grey.svg";
 export { default as GyroSensorIcon } from "./assets/sensor_gyro.svg";
+export { default as AccelerometerSensorIcon } from "./assets/sensor_acc.svg";
+export { default as MagnetometerSensorIcon } from "./assets/sensor_mag.svg";
+export { default as BarometerSensorIcon } from "./assets/sensor_baro.svg";
+export { default as GpsSensorIcon } from "./assets/sensor_sat.svg";
+export { default as SonarSensorIcon } from "./assets/sensor_sonar.svg";
