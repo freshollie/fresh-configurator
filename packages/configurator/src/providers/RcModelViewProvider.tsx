@@ -7,31 +7,31 @@ import {
   useApiVersionQuery,
 } from "../gql/__generated__";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
-import useConnectionId from "../hooks/useConnectionId";
+import useConnectionState from "../hooks/useConnectionState";
 
 const RcModelViewProvider: React.FC = () => {
-  const connectionId = useConnectionId();
+  const { connection } = useConnectionState();
   const { data: rcSettingsData } = useRcSettingsQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !connectionId,
+    skip: !connection,
   });
 
   const { data: apiVersionData } = useApiVersionQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !connectionId,
+    skip: !connection,
   });
 
   const apiVersion = apiVersionData?.device.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useRcChannelsQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !connectionId,
+    skip: !connection,
     pollInterval: 10,
   });
 

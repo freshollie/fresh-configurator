@@ -1,6 +1,6 @@
 import { PubSub } from "apollo-server";
 
-const connections = new PubSub();
+const closeEvents = new PubSub();
 const connectionsMap: Record<string, string | undefined> = {};
 const connectingLocks: Record<string, Promise<unknown> | undefined> = {};
 
@@ -26,12 +26,11 @@ export const remove = (port: string): void => {
   Object.entries(connectionsMap).forEach(([connectionId, connectionPort]) => {
     if (port === connectionPort) {
       connectionsMap[connectionId] = undefined;
-      connections.publish(connectionId, false);
+      closeEvents.publish(connectionId, connectionId);
     }
   });
 };
 
-export const subscribe = (connectionId: string): unknown => {
-  connections.publish(connectionId, connectionsMap[connectionId]);
-  return connections.asyncIterator(connectionId);
+export const onClosed = (connectionId: string): AsyncIterator<string> => {
+  return closeEvents.asyncIterator<string>(connectionId);
 };

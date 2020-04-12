@@ -21,18 +21,20 @@
     }
   },
   "scripts": {
-    "start": "webpack --mode development --config ./webpack.main.js && webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.js",
+    "start": "yarn build:electron && yarn watch:renderer",
+    "watch:renderer": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.js",
+    "build:electron": "tsc -p tsconfig.main.json",
     "build": "webpack --mode production --config ./webpack.config.js && electron-builder",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@apollo/client": "3.0.0-beta.37",
+    "@apollo/link-ws": "^2.0.0-beta.3",
     "@fresh/backend": "^1.0.0",
     "@fresh/msp": "^1.0.0",
-    "apollo-link-ws": "^1.0.20",
     "date-fns": "^2.11.0",
-    "graphql": "^14.6.0",
+    "graphql": "14.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-is": "^16.12.0",
@@ -42,7 +44,8 @@
     "semver": "^7.1.3",
     "styled-components": "^5.0.1",
     "subscriptions-transport-ws": "^0.9.16",
-    "three": "0.98.0"
+    "three": "0.98.0",
+    "ts-node": "^8.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

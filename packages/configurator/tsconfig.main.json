@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./app",
+    "paths": {}
+  },
+  "include": ["src/main.ts"],
+  "exclude": ["node_modules", "dist"]
+}

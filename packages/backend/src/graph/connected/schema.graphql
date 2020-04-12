@@ -1,8 +1,8 @@
 type Subscription {
-  connected(connection: ID!): Boolean!
+  onClosed(connection: ID!): ID!
 }
 
 type Mutation {
   connect(port: String!, baudRate: Int!): ID!
-  disconnect(connection: ID!): Boolean
+  close(connection: ID!): ID!
 }

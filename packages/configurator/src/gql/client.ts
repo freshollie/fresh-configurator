@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { WebSocketLink } from "apollo-link-ws";
+import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import {
   Resolvers,
@@ -21,6 +21,8 @@ const selectedBaud = cache.makeVar<number>(115200);
 
 const expertMode = cache.makeVar<boolean>(false);
 const selectedTab = cache.makeVar<string | null>(null);
+const connecting = cache.makeVar<boolean>(false);
+const connectionId = cache.makeVar<string | null>(null);
 
 cache.policies.addTypePolicies({
   Configurator: {
@@ -29,6 +31,8 @@ cache.policies.addTypePolicies({
       baudRate: () => selectedBaud(),
       tab: () => selectedTab(),
       expertMode: () => expertMode(),
+      connecting: () => connecting(),
+      connection: () => connectionId(),
     },
   },
 });
@@ -65,6 +69,8 @@ const resolvers: Resolvers = {
         baudRate: selectedBaud(),
         tab: selectedTab(),
         expertMode: expertMode(),
+        connecting: connecting(),
+        connection: connectionId(),
         logs: [
           {
             time: new Date().toISOString(),
@@ -84,6 +90,11 @@ const resolvers: Resolvers = {
         selectedBaud(baudRate);
       }
       return true;
+    },
+    setConnecting: (_, { value }) => connecting(value),
+    setConnection: (_, { connection }) => {
+      connectionId(connection ?? null);
+      return null;
     },
     setExpertMode: (_, { enabled }) => !!expertMode(enabled),
     log: (_, { message }, { client }: Context) => {

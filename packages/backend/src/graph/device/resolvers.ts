@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server";
 import { Resolvers } from "../__generated__";
 
 const resolvers: Resolvers = {
@@ -5,15 +6,15 @@ const resolvers: Resolvers = {
     device: (_, { connection }, { msp, connections }) => {
       const port = connections.getPort(connection);
       if (!port) {
-        throw new Error("device is not connected");
+        throw new ApolloError("Connection is not active");
       }
 
       return {
         port,
-        apiVersion: msp.apiVersion(port),
+        apiVersion: msp.apiVersion(port)
       };
-    },
-  },
+    }
+  }
 };
 
 export default resolvers;

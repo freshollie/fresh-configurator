@@ -1,10 +1,10 @@
 import React from "react";
 import { useCallibrateAccelerometerMutation } from "../gql/__generated__";
 import Button from "../components/Button";
-import useConnectionId from "../hooks/useConnectionId";
+import useConnectionState from "../hooks/useConnectionState";
 
 const AccelerometerCallibrationManager: React.FC = () => {
-  const connection = useConnectionId();
+  const { connection } = useConnectionState();
   const [calibrate, { loading }] = useCallibrateAccelerometerMutation({
     variables: {
       connection: connection ?? "",

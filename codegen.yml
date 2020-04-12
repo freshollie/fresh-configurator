@@ -4,6 +4,7 @@ documents: "./packages/**/*.graphql"
 generates:
   ./packages/backend/src/graph/__generated__/index.ts:
     config:
+      overwrite: true
       contextType: ../../context#Context
       mappers:
         FlightController: ../../mappers#FlightControllerPartial

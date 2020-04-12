@@ -1,15 +1,15 @@
 import React from "react";
-import useSelectedPort from "../hooks/useSelectedPort";
 import { useRcChannelsQuery } from "../gql/__generated__";
 import ChannelsList from "../components/ChannelsList";
+import useConnectionState from "../hooks/useConnectionState";
 
 const ChannelValuesProvider: React.FC = () => {
-  const port = useSelectedPort();
+  const { connection } = useConnectionState();
   const { data, loading } = useRcChannelsQuery({
     variables: {
-      port: port ?? "",
+      connection: connection ?? "",
     },
-    skip: !port,
+    skip: !connection,
     pollInterval: 10,
   });
 

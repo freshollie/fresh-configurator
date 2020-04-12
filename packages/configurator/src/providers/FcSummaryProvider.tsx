@@ -2,18 +2,18 @@ import React from "react";
 import { DisarmFlags } from "@fresh/msp";
 import { useFcSummaryQuery } from "../gql/__generated__";
 import Table from "../components/Table";
-import useConnectionId from "../hooks/useConnectionId";
+import useConnectionState from "../hooks/useConnectionState";
 
 const ARM_SWITCH_KEY = DisarmFlags[DisarmFlags.ARM_SWITCH];
 
 const FcSummaryProvider: React.FC = () => {
-  const connectionId = useConnectionId();
+  const { connection } = useConnectionState();
   const { data } = useFcSummaryQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
     pollInterval: 100,
-    skip: !connectionId,
+    skip: !connection,
   });
 
   const flagNames =

@@ -12,7 +12,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "test-script.ts",
+    "start.ts",
     "src/**/*.ts",
     "test/**/*.ts",
     "__mocks__/**/*.ts",

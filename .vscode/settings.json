@@ -12,5 +12,10 @@
     "source.fixAll.eslint": true
   },
   "eslint.format.enable": false,
-  "eslint.enable": true
+  "eslint.enable": true,
+  "prettier.packageManager": "yarn",
+  "prettier.prettierPath": "node_modules/prettier",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnPaste": true
 }

@@ -1,7 +1,6 @@
 import React from "react";
-import useConnectionState from "../hooks/useConnectionState";
 import useUtilisation from "../hooks/useUtilisation";
-import useConnectionId from "../hooks/useConnectionId";
+import useConnectionState from "../hooks/useConnectionState";
 
 import {
   useConnectionSettingsQuery,
@@ -13,24 +12,22 @@ import StatusList from "../components/StatusList";
 const FcStatusProvider: React.FC = () => {
   const { data: connectionSettingsData } = useConnectionSettingsQuery();
   const baudRate = connectionSettingsData?.configurator.baudRate;
-  const connectionId = useConnectionId();
-
-  const { connected } = useConnectionState();
+  const { connection } = useConnectionState();
   const { data: deviceStatus } = useStatusQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
     pollInterval: 100,
-    skip: !connectionId || !connected,
+    skip: !connection,
   });
 
   const { cycleTime, cpuload, i2cError } = deviceStatus?.device.status ?? {};
 
   const { data: connectionData } = useConnectionDetailsQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !connectionId || !connected,
+    skip: !connection,
     pollInterval: 250,
   });
 

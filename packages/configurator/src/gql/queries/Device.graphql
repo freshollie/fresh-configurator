@@ -1,5 +1,5 @@
-subscription ConnectionState($connection: ID!) {
-  connected(connection: $connection)
+subscription OnConnectionClosed($connection: ID!) {
+  onClosed(connection: $connection)
 }
 
 query ConnectionDetails($connection: ID!) {

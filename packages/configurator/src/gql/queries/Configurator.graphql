@@ -5,14 +5,9 @@ query ConnectionSettings {
   }
 }
 
-query ConnectionId {
+query ConnectionState {
   configurator @client {
     connection
-  }
-}
-
-query IsConnecting {
-  configurator @client {
     connecting
   }
 }

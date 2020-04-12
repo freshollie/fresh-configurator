@@ -7,7 +7,7 @@
   "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "yarn workspace @fresh/msp run build && yarn workspace @fresh/configurator start",
+    "start": "yarn prepare && yarn workspace @fresh/configurator start",
     "test": "jest",
     "build": "wsrun -t build",
     "storybook": "yarn workspace @fresh/configurator storybook",

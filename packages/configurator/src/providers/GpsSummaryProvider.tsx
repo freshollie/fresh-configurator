@@ -3,24 +3,24 @@ import { Sensors } from "@fresh/msp";
 import Status from "../components/Status";
 import Table from "../components/Table";
 import { useSensorsQuery, useGpsSummaryQuery } from "../gql/__generated__";
-import useConnectionId from "../hooks/useConnectionId";
+import useConnectionState from "../hooks/useConnectionState";
 
 const GpsSummaryProvider: React.FC = () => {
-  const connectionId = useConnectionId();
+  const { connection } = useConnectionState();
 
   const { data: sensorsData } = useSensorsQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !connectionId,
+    skip: !connection,
   });
   const sensors = sensorsData?.device.sensors ?? [];
 
   const { data } = useGpsSummaryQuery({
     variables: {
-      connection: connectionId ?? "",
+      connection: connection ?? "",
     },
-    skip: !sensors.includes(Sensors.GPS) || !connectionId,
+    skip: !sensors.includes(Sensors.GPS) || !connection,
     pollInterval: 100,
   });
 

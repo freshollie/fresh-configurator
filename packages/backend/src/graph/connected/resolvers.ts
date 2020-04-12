@@ -4,7 +4,11 @@ import { Resolvers } from "../__generated__";
 
 const resolvers: Resolvers = {
   Subscription: {
-    connected: (_, { id }, { connections }) => connections.subscribe(id),
+    onClosed: {
+      subscribe: (_, { connection }, { connections }) =>
+        connections.onClosed(connection),
+      resolve: (connectionId: string) => connectionId,
+    },
   },
 
   Mutation: {
@@ -28,20 +32,20 @@ const resolvers: Resolvers = {
 
         // start a new connection with a new connection id
         const connectionId = uuid.v4();
-        connections.add(connectionId, port);
+        connections.add(port, connectionId);
 
         return connectionId;
       }),
 
-    disconnect: async (_, { connection }, { connections, msp }) => {
+    close: async (_, { connection }, { connections, msp }) => {
       const port = connections.getPort(connection);
       if (!port) {
-        throw new ApolloError(`{id} is not a valid connection`);
+        throw new ApolloError(`${connection} is not a valid connection`);
       }
 
       await msp.close(port);
       connections.remove(port);
-      return null;
+      return connection;
     },
   },
 };

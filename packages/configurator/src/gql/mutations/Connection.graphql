@@ -3,5 +3,5 @@ mutation Connect($port: String!, $baudRate: Int!) {
 }
 
 mutation Disconnect($connection: ID!) {
-  disconnect(connection: $connection)
+  close(connection: $connection)
 }
