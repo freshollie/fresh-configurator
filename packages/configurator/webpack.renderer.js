@@ -7,17 +7,17 @@ module.exports = (_, { mode }) => ({
   entry: "./src/index.tsx",
   target: "electron-renderer",
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js"],
   },
   externals: {
-    serialport: "commonjs serialport"
+    serialport: "commonjs serialport",
   },
   module: {
     rules: [
       {
         test: /\.ts(x?)$/,
         include: /src/,
-        use: [{ loader: "ts-loader" }]
+        use: [{ loader: "ts-loader" }],
       },
       {
         test: /\.svg$/,
@@ -28,50 +28,50 @@ module.exports = (_, { mode }) => ({
               svgo: {
                 plugins: [
                   {
-                    removeViewBox: false
+                    removeViewBox: false,
                   },
                   {
-                    cleanupIDs: false
-                  }
-                ]
-              }
-            }
-          }
-        ]
+                    cleanupIDs: false,
+                  },
+                ],
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
-        loader: "file-loader"
-      }
-    ]
+        loader: "file-loader",
+      },
+    ],
   },
   output: {
     path: `${__dirname}/app`,
-    filename: "renderer.js"
+    filename: "renderer.js",
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html"
+      template: "./src/index.html",
     }),
     new DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(mode)
-    })
+      "process.env.NODE_ENV": JSON.stringify(mode),
+    }),
   ],
   devtool: "cheap-source-map",
   devServer: {
     stats: {
       colors: true,
       chunks: false,
-      children: false
+      children: false,
     },
     before() {
       spawn("electron", ["./app/main.js"], {
         shell: true,
         env: { NODE_ENV: "development", ...process.env },
-        stdio: "inherit"
+        stdio: "inherit",
       })
         .on("close", () => process.exit(0))
-        .on("error", spawnError => console.error(spawnError));
-    }
-  }
+        .on("error", (spawnError) => console.error(spawnError));
+    },
+  },
 });

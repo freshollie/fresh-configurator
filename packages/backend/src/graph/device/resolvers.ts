@@ -11,10 +11,10 @@ const resolvers: Resolvers = {
 
       return {
         port,
-        apiVersion: msp.apiVersion(port)
+        apiVersion: msp.apiVersion(port),
       };
-    }
-  }
+    },
+  },
 };
 
 export default resolvers;
