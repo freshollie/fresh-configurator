@@ -1,5 +1,10 @@
 overwrite: true
-schema: "./packages/**/*.graphql"
+
+schema:
+  - "./packages/*/src/**/{gql,graph}/**/*.ts":
+      noRequire: true
+  - "!**/__generated__/*.ts" 
+
 documents: "./packages/**/*.graphql"
 generates:
   ./packages/backend/src/graph/__generated__/index.ts:
@@ -8,7 +13,7 @@ generates:
       contextType: ../../context#Context
       mappers:
         FlightController: ../../mappers#FlightControllerPartial
-        ConnectionStatus: ../../mappers#FlightControllerQuery
+        ConnectionStats: ../../mappers#FlightControllerQuery
         RC: ../../mappers#FlightControllerQuery
     plugins:
       - "typescript"

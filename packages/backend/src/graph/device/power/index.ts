@@ -1,4 +1,17 @@
+import gql from "graphql-tag";
 import { Resolvers } from "../../__generated__";
+
+const typeDefs = gql`
+  extend type FlightController {
+    power: Power!
+  }
+
+  type Power {
+    voltage: Int!
+    mahDrawn: Int!
+    amperage: Int!
+  }
+`;
 
 const resolvers: Resolvers = {
   FlightController: {
@@ -10,4 +23,4 @@ const resolvers: Resolvers = {
   },
 };
 
-export default resolvers;
+export default { resolvers, typeDefs };

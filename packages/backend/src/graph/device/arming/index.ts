@@ -1,4 +1,15 @@
+import gql from "graphql-tag";
 import { Resolvers } from "../../__generated__";
+
+const typeDefs = gql`
+  extend type FlightController {
+    arming: Arming!
+  }
+
+  type Arming {
+    disabledFlags: [Int!]!
+  }
+`;
 
 const resolvers: Resolvers = {
   FlightController: {
@@ -10,4 +21,7 @@ const resolvers: Resolvers = {
   },
 };
 
-export default resolvers;
+export default {
+  typeDefs,
+  resolvers,
+};

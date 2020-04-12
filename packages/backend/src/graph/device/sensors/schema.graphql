@@ -1,7 +1,0 @@
-extend type FlightController {
-  sensors: [Int!]!
-}
-
-type Mutation {
-  deviceCallibrateAccelerometer(connection: ID!): Boolean
-}

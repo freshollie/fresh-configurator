@@ -5,7 +5,7 @@ import useConnectionState from "../hooks/useConnectionState";
 import {
   useConnectionSettingsQuery,
   useStatusQuery,
-  useConnectionDetailsQuery,
+  useConnectionStatsQuery,
 } from "../gql/__generated__";
 import StatusList from "../components/StatusList";
 
@@ -23,7 +23,7 @@ const FcStatusProvider: React.FC = () => {
 
   const { cycleTime, cpuload, i2cError } = deviceStatus?.device.status ?? {};
 
-  const { data: connectionData } = useConnectionDetailsQuery({
+  const { data: connectionStatsData } = useConnectionStatsQuery({
     variables: {
       connection: connection ?? "",
     },
@@ -31,8 +31,15 @@ const FcStatusProvider: React.FC = () => {
     pollInterval: 250,
   });
 
-  const { bytesRead, bytesWritten, packetErrors } = connectionData?.device
-    .connection ?? { bytesRead: 0, bytesWritten: 0, packetErrors: 0 };
+  const {
+    bytesRead,
+    bytesWritten,
+    packetErrors,
+  } = connectionStatsData?.connectionStats ?? {
+    bytesRead: 0,
+    bytesWritten: 0,
+    packetErrors: 0,
+  };
 
   // Read the sent and received bytes every second in order to
   // determine the port usage compared to the baudRate

@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
+import gql from "graphql-tag";
 import {
   Resolvers,
   LogsQuery,
@@ -8,6 +9,36 @@ import {
   LogsDocument,
 } from "./__generated__";
 import { versionInfo } from "../util";
+
+const typeDefs = gql`
+  type Query {
+    configurator: Configurator!
+  }
+
+  type Mutation {
+    setConnectionSettings(port: String!, baudRate: Int): Boolean
+    setConnection(connection: ID): Boolean
+    setConnecting(value: Boolean!): Boolean
+    setTab(tabId: String!): Boolean
+    setExpertMode(enabled: Boolean!): Boolean
+    log(message: String!): Boolean
+  }
+
+  type Configurator {
+    port: String
+    connection: ID
+    connecting: Boolean!
+    baudRate: Int!
+    tab: String
+    expertMode: Boolean!
+    logs: [Log!]!
+  }
+
+  type Log {
+    time: String!
+    message: String!
+  }
+`;
 
 interface Context {
   client: ApolloClient<object>;
@@ -112,6 +143,7 @@ const subscriptionClient = new SubscriptionClient(GRAPHQL_ENDPOINT, {
 
 const client = new ApolloClient({
   cache,
+  typeDefs,
   // generated resolvers are not compatible with apollo
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: resolvers as any,

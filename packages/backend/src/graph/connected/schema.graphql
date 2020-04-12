@@ -1,8 +1,0 @@
-type Subscription {
-  onClosed(connection: ID!): ID!
-}
-
-type Mutation {
-  connect(port: String!, baudRate: Int!): ID!
-  close(connection: ID!): ID!
-}

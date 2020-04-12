@@ -1,7 +1,0 @@
-extend type FlightController {
-  arming: Arming!
-}
-
-type Arming {
-  disabledFlags: [Int!]!
-}

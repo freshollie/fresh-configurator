@@ -1,8 +1,0 @@
-extend type FlightController {
-  profiles: Profiles!
-}
-
-type Profiles {
-  length: Int!
-  selected: Int!
-}

@@ -1,9 +1,0 @@
-extend type FlightController {
-  power: Power!
-}
-
-type Power {
-  voltage: Int!
-  mahDrawn: Int!
-  amperage: Int!
-}

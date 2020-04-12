@@ -2,13 +2,11 @@ subscription OnConnectionClosed($connection: ID!) {
   onClosed(connection: $connection)
 }
 
-query ConnectionDetails($connection: ID!) {
-  device(connection: $connection) {
-    connection {
-      bytesWritten
-      bytesRead
-      packetErrors
-    }
+query ConnectionStats($connection: ID!) {
+  connectionStats(connection: $connection) {
+    bytesWritten
+    bytesRead
+    packetErrors
   }
 }
 

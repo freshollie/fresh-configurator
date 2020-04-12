@@ -66,17 +66,18 @@ const ConnectControlsManager: React.FC = () => {
         },
       });
 
-      try {
-        const { data } = await client.query<
-          ApiVersionQuery,
-          ApiVersionQueryVariables
-        >({
-          query: ApiVersionDocument,
-          variables: {
-            connection: connectionId,
-          },
-        });
-        const { apiVersion } = data.device;
+      const { data } = await client.query<
+        ApiVersionQuery,
+        ApiVersionQueryVariables
+      >({
+        query: ApiVersionDocument,
+        variables: {
+          connection: connectionId,
+        },
+      });
+
+      const apiVersion = data?.device.apiVersion;
+      if (apiVersion) {
         log({
           variables: {
             message: `MultiWii API version: <strong>${apiVersion}</strong>`,
@@ -100,10 +101,10 @@ const ConnectControlsManager: React.FC = () => {
             },
           });
         }
-      } catch (e) {
+      } else {
         log({
           variables: {
-            message: `Error reading api version for ${connectionId}: <strong>${e.message}</strong>`,
+            message: `Error reading api version for ${connectionId}`,
           },
         });
         disconnect({

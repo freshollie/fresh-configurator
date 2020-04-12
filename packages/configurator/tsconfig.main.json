@@ -1,3 +1,5 @@
+// ts-config main, used to compile the electron main process without
+// bundling all the typescript 
 {
   "extends": "./tsconfig",
   "compilerOptions": {

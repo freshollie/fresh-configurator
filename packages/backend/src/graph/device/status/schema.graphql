@@ -1,9 +1,0 @@
-extend type FlightController {
-  status: Status!
-}
-
-type Status {
-  cycleTime: Int!
-  i2cError: Int!
-  cpuload: Float!
-}

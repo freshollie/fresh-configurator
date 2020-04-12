@@ -1,5 +1,16 @@
 import { ApolloError } from "apollo-server";
+import gql from "graphql-tag";
 import { Resolvers } from "../../__generated__";
+
+const typeDefs = gql`
+  extend type FlightController {
+    sensors: [Int!]!
+  }
+
+  type Mutation {
+    deviceCallibrateAccelerometer(connection: ID!): Boolean
+  }
+`;
 
 const resolvers: Resolvers = {
   FlightController: {
@@ -22,4 +33,4 @@ const resolvers: Resolvers = {
   },
 };
 
-export default resolvers;
+export default { resolvers, typeDefs };

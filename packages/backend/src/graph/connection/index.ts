@@ -1,6 +1,28 @@
 import * as uuid from "uuid";
 import { ApolloError } from "apollo-server";
+import gql from "graphql-tag";
 import { Resolvers } from "../__generated__";
+
+const typeDefs = gql`
+  type Subscription {
+    onClosed(connection: ID!): ID!
+  }
+
+  type Mutation {
+    connect(port: String!, baudRate: Int!): ID!
+    close(connection: ID!): ID!
+  }
+
+  type Query {
+    connectionStats(connection: ID!): ConnectionStats!
+  }
+
+  type ConnectionStats {
+    bytesRead: Int!
+    bytesWritten: Int!
+    packetErrors: Int!
+  }
+`;
 
 const resolvers: Resolvers = {
   Subscription: {
@@ -48,6 +70,22 @@ const resolvers: Resolvers = {
       return connection;
     },
   },
+
+  Query: {
+    connectionStats: (_, { connection }, { connections }) => {
+      const port = connections.getPort(connection);
+
+      if (!port) {
+        throw new ApolloError("Connection is not active");
+      }
+      return { __typename: "ConnectionStats", port };
+    },
+  },
+  ConnectionStats: {
+    bytesRead: ({ port }, _, { msp }) => msp.bytesRead(port),
+    bytesWritten: ({ port }, _, { msp }) => msp.bytesWritten(port),
+    packetErrors: ({ port }, _, { msp }) => msp.packetErrors(port),
+  },
 };
 
-export default resolvers;
+export default { resolvers, typeDefs };
