@@ -135,9 +135,12 @@ const resolvers: Resolvers = {
   },
 };
 
-const GRAPHQL_ENDPOINT = "ws://localhost:9000/graphql";
+// extract the backend address from the URL search query, as this can
+// be dynamically passed to us by electron
+const searchParams = new URLSearchParams(window.location.search.slice(1));
+const BACKEND = searchParams.get("backend") ?? "localhost:9000";
 
-const subscriptionClient = new SubscriptionClient(GRAPHQL_ENDPOINT, {
+const subscriptionClient = new SubscriptionClient(`ws://${BACKEND}/graphql`, {
   reconnect: true,
 });
 

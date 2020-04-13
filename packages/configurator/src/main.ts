@@ -2,6 +2,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
+import getPort from "get-port";
 import backend from "@fresh/backend";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -10,6 +11,14 @@ let mainWindow: BrowserWindow | undefined;
 
 const DEV_MODE =
   process.env.NODE_ENV !== undefined && process.env.NODE_ENV === "development";
+
+let backendPort = 9000;
+
+const startBackend = async (): Promise<void> => {
+  backendPort = await getPort({ port: backendPort });
+  console.log(`Starting backend on ${backendPort}`);
+  await backend.listen(backendPort);
+};
 
 // Temporary fix broken high-dpi scale factor on Windows (125% scaling)
 // info: https://github.com/electron/electron/issues/9691
@@ -29,19 +38,23 @@ const createWindow = (): void => {
     },
   });
 
+  const backendAddress = `0.0.0.0:${backendPort}`;
   const indexPath = DEV_MODE
     ? url.format({
         protocol: "http:",
         host: "localhost:8080",
         pathname: "index.html",
+        search: `backend=${backendAddress}`,
         slashes: true,
       })
     : url.format({
         protocol: "file:",
         pathname: path.join(__dirname, "index.html"),
+        search: `backend=${backendAddress}`,
         slashes: true,
       });
 
+  console.log(`Loading app: ${indexPath}`);
   mainWindow.loadURL(indexPath);
 
   // Don't show until we are ready and loaded
@@ -80,10 +93,9 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
-  backend.listen(9000, () => {
-    createWindow();
-  });
+app.on("ready", async () => {
+  await startBackend();
+  createWindow();
 });
 
 // Quit when all windows are closed.

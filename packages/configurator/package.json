@@ -34,6 +34,7 @@
     "@fresh/backend": "^1.0.0",
     "@fresh/msp": "^1.0.0",
     "date-fns": "^2.11.0",
+    "get-port": "^5.1.1",
     "graphql": "14.6.0",
     "graphql-tag": "^2.10.3",
     "react": "^16.12.0",
