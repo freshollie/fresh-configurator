@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Info, ResetButton } from "./ModelView.styles";
-import Model, { ModelType } from "../Model";
+import Model, { ModelTypes } from "../Model";
 import Paper from "../Paper";
 
 const ModelView: React.FC<{
-  modelType: ModelType;
+  modelType: ModelTypes;
   attitude?: { roll: number; pitch: number; heading: number };
 }> = ({
   attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },

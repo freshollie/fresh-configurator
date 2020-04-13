@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "../src/theme";
 import ModelView from "../src/components/ModelView";
-import { ModelType } from "../src/components/Model";
+import { ModelTypes } from "../src/components/Model";
 
 export default {
   component: ModelView,
@@ -30,7 +30,7 @@ const useRollingAttitude = (): {
   };
 };
 
-const MovingModel = ({ modelType }: { modelType: ModelType }): JSX.Element => (
+const MovingModel = ({ modelType }: { modelType: ModelTypes }): JSX.Element => (
   <ModelView attitude={useRollingAttitude()} modelType={modelType} />
 );
 

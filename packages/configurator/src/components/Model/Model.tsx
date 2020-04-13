@@ -17,13 +17,13 @@ const MODEL_MAP = {
   hexx,
 };
 
-export type ModelType = keyof typeof MODEL_MAP;
-const modelsCache = {} as Record<ModelType, Model | undefined>;
+export type ModelTypes = keyof typeof MODEL_MAP;
+const modelsCache = {} as Record<ModelTypes, Model | undefined>;
 
 /**
  * Load the given model
  */
-const useModelData = (modelKey: ModelType): Model | undefined => {
+const useModelData = (modelKey: ModelTypes): Model | undefined => {
   const [data, setData] = useState<Model | undefined>(undefined);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const useModelData = (modelKey: ModelType): Model | undefined => {
 };
 
 interface ModelProps {
-  name: ModelType;
+  name: ModelTypes;
   /**
    * The attitude which the model should
    * represent, in degrees
