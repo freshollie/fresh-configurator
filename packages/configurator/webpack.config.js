@@ -65,7 +65,7 @@ module.exports = (_, { mode }) => ({
       "process.env.NODE_ENV": JSON.stringify(mode),
     }),
     new ForkTsCheckerWebpackPlugin({
-      reportFiles: ["src/**/*.{ts,tsx}"],
+      reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
     }),
   ],
   devtool: "cheap-source-map",

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const path = require("path");
 
 module.exports = {
   stories: ["../stories/**/*.stories.tsx"],
@@ -49,9 +50,14 @@ module.exports = {
       ],
     });
     config.resolve.extensions.push(".ts", ".tsx");
+    // remove the old ts checker and add our own
+    config.plugins = config.plugins.filter(
+      (plugin) => !(plugin instanceof ForkTsCheckerWebpackPlugin)
+    );
     config.plugins.push(
       new ForkTsCheckerWebpackPlugin({
-        reportFiles: ["stories/*.stories.tsx"],
+        tsconfig: path.join(__dirname, "../tsconfig.json"),
+        reportFiles: [path.join(__dirname, "../stories/*.tsx")],
       })
     );
     return config;
