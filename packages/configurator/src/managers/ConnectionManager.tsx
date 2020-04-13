@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useRef, useEffect, useReducer } from "react";
 import semver from "semver";
-import { useApolloClient } from "@apollo/client";
 import config from "../config";
 import { UsbConnectIcon, UsbDisconnectIcon } from "../icons";
 import useConnectionState from "../hooks/useConnectionState";
@@ -9,9 +8,6 @@ import {
   useConnectMutation,
   useConnectionSettingsQuery,
   useDisconnectMutation,
-  ApiVersionQueryVariables,
-  ApiVersionQuery,
-  ApiVersionDocument,
   useOnConnectionClosedSubscription,
 } from "../gql/__generated__";
 import BigButton from "../components/BigButton";
@@ -22,8 +18,18 @@ import BigButton from "../components/BigButton";
  * for the user to "connect" or "disconect"
  */
 const ConnectionManager: React.FC = () => {
-  const client = useApolloClient();
   const log = useLogger();
+
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const attempt = useRef(0);
+  const connectionAttempt = attempt.current;
+  const isCurrentAttempt = (): boolean => attempt.current === connectionAttempt;
+
+  const handleAborted = (): void => {
+    attempt.current += 1;
+    forceUpdate();
+  };
+
   const { data: configuratorQuery } = useConnectionSettingsQuery();
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
 
@@ -40,12 +46,18 @@ const ConnectionManager: React.FC = () => {
       connection: connection ?? "",
     },
     onCompleted: ({ close: connectionId }) => {
+      if (!isCurrentAttempt()) {
+        return;
+      }
       log(
         `Serial port <span class="message-positive">successfully</span> closed for connectionId=${connectionId}`
       );
       setConnection(null);
     },
     onError: () => {
+      if (!isCurrentAttempt()) {
+        return;
+      }
       setConnection(null);
     },
   });
@@ -55,53 +67,31 @@ const ConnectionManager: React.FC = () => {
       port: port ?? "",
       baudRate: baudRate ?? 0,
     },
-    onCompleted: async ({ connect: connectionId }) => {
-      if (!connecting) {
+    onCompleted: ({ connect: { id: connectionId, apiVersion } }) => {
+      if (!connecting || !isCurrentAttempt()) {
         return;
       }
 
       log(
         `Serial port <span class="message-positive">successfully</span> opened, connectionId=${connectionId}`
       );
-
-      const { data } = await client.query<
-        ApiVersionQuery,
-        ApiVersionQueryVariables
-      >({
-        query: ApiVersionDocument,
-        variables: {
-          connection: connectionId,
-        },
-      });
-
-      const apiVersion = data?.device.apiVersion;
-      if (apiVersion) {
-        log(`MultiWii API version: <strong>${apiVersion}</strong>`);
-        if (semver.lt(apiVersion, config.apiVersionAccepted)) {
-          log(
-            `MSP version not supported: <span class="message-negative">${apiVersion}</span>`
-          );
-          disconnect({
-            variables: {
-              connection: connectionId,
-            },
-          });
-        } else {
-          setConnection(connectionId);
-        }
-      } else {
-        log(`Error reading api version for ${connectionId}`);
+      log(`MultiWii API version: <strong>${apiVersion}</strong>`);
+      if (semver.lt(apiVersion, config.apiVersionAccepted)) {
+        log(
+          `MSP version not supported: <span class="message-negative">${apiVersion}</span>`
+        );
         disconnect({
           variables: {
             connection: connectionId,
           },
         });
+      } else {
+        setConnection(connectionId);
       }
-
       setConnecting(false);
     },
     onError: (e) => {
-      if (!connecting) {
+      if (!connecting || !isCurrentAttempt()) {
         return;
       }
       log(
@@ -114,7 +104,7 @@ const ConnectionManager: React.FC = () => {
   // Create a subscription to the current connection
   // and handle updating the app state when connection
   // is closed
-  useOnConnectionClosedSubscription({
+  const { error: subscriptionError } = useOnConnectionClosedSubscription({
     variables: {
       connection: connection ?? "",
     },
@@ -128,18 +118,26 @@ const ConnectionManager: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (subscriptionError && connection) {
+      setConnection(null);
+      log(`Serial port closed unexpectedly for connectionId=${connection}`);
+    }
+  }, [connection, log, setConnection, subscriptionError]);
+
   const handleClicked = (): void => {
     if (!connected && !connecting) {
       log(`Opening connection on ${port}`);
       setConnecting(true);
       connect();
     } else {
-      if (connecting && !connected) {
-        log(`Connection attempt to ${port} aborted`);
-      }
       setConnecting(false);
       if (connection) {
         disconnect();
+      }
+      if (connecting && !connected) {
+        log(`Connection attempt to ${port} aborted`);
+        handleAborted();
       }
     }
   };

@@ -1,5 +1,8 @@
 mutation Connect($port: String!, $baudRate: Int!) {
-  connect(port: $port, baudRate: $baudRate)
+  connect(port: $port, baudRate: $baudRate) {
+    id
+    apiVersion
+  }
 }
 
 mutation Disconnect($connection: ID!) {

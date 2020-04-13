@@ -1,29 +1,28 @@
 import { PubSub } from "apollo-server";
-import { Mutex } from "async-mutex";
 
 const closeEvents = new PubSub();
-const connectionsMap: Record<string, string | undefined> = {};
-const connectingLocks: Record<string, Mutex | undefined> = {};
+let connectionsMap: Record<string, string | undefined> = {};
+let connectingAttempts: Record<string, Promise<void> | undefined> = {};
 
 export const getPort = (connnectionId: string): string | undefined =>
   connectionsMap[connnectionId];
 
-export const lock = async <T>(
+export const connectLock = async (
   port: string,
-  lockFunction: () => Promise<T>
-): Promise<T> => {
-  const mutex = connectingLocks[port] ?? new Mutex();
-  connectingLocks[port] = mutex;
-
-  const release = await mutex.acquire();
-  try {
-    const result = await lockFunction();
-    release();
-    return result;
-  } catch (e) {
-    release();
-    throw e;
+  connectFunction: () => Promise<void>
+): Promise<void> => {
+  if (connectingAttempts[port]) {
+    return connectingAttempts[port];
   }
+
+  const connectPromise = connectFunction();
+  connectingAttempts[port] = connectPromise;
+
+  return connectPromise.finally(() => {
+    if (connectingAttempts[port] === connectPromise) {
+      connectingAttempts[port] = undefined;
+    }
+  });
 };
 
 export const add = (port: string, connnectionId: string): void => {
@@ -41,4 +40,9 @@ export const remove = (port: string): void => {
 
 export const onClosed = (connectionId: string): AsyncIterator<string> => {
   return closeEvents.asyncIterator<string>(connectionId);
+};
+
+export const reset = (): void => {
+  connectionsMap = {};
+  connectingAttempts = {};
 };
