@@ -2,36 +2,28 @@ import React from "react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 
 import { render, fireEvent, waitFor } from "../test-utils";
-import {
-  ConnectionSettingsDocument,
-  CallibrateAccelerometerDocument,
-} from "../gql/__generated__";
+import { CallibrateAccelerometerDocument } from "../gql/__generated__";
 import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager";
 
-const ConnectionSettingsMock: MockedResponse = {
-  request: {
-    query: ConnectionSettingsDocument,
-  },
-  result: {
-    data: {
-      __typename: "Query",
-      configurator: {
-        __typename: "Configurator",
-        port: "/dev/someport",
-        baudRate: 1111,
-      },
-    },
+const mockConnectionId = "someconnectionid";
+
+const clientResolvers = {
+  Query: {
+    configurator: () => ({
+      connection: mockConnectionId,
+      connecting: false,
+    }),
   },
 };
 
 const mockCallibrateMutation = (
-  port: string,
+  connection: string,
   callback: () => void
 ): MockedResponse => ({
   request: {
     query: CallibrateAccelerometerDocument,
     variables: {
-      port,
+      connection,
     },
   },
   result: () => {
@@ -48,11 +40,8 @@ describe("AccelerometerCallibrationManager", () => {
     const callibrate = jest.fn();
     const { getByTestId } = render(
       <MockedProvider
-        addTypename
-        mocks={[
-          ConnectionSettingsMock,
-          mockCallibrateMutation("/dev/someport", callibrate),
-        ]}
+        resolvers={clientResolvers}
+        mocks={[mockCallibrateMutation(mockConnectionId, callibrate)]}
       >
         <AccelerometerCallibrationManager />
       </MockedProvider>
