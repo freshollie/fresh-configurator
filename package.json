@@ -41,7 +41,7 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
-    "husky": "^4.2.1",
+    "husky": "^4.2.5",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
     "prettier": "^2.0.4",
@@ -55,12 +55,15 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "**/*.{json,graphql}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
