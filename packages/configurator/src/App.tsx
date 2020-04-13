@@ -3,7 +3,7 @@ import SensorsListProvider from "./providers/SensorListProvider";
 import HeaderBar from "./components/HeaderBar";
 
 import ConnectionSettingsManager from "./managers/ConnectionSettingsManager";
-import ConnectControlsManager from "./managers/ConnectControlsManager";
+import ConnectionManager from "./managers/ConnectionManager";
 import NavigationManager from "./managers/NavigationManager";
 import { TabRouter } from "./routing";
 
@@ -22,7 +22,7 @@ const App: React.FC = () => (
         <div className="tools">
           <SensorsListProvider />
           <ConnectionSettingsManager />
-          <ConnectControlsManager />
+          <ConnectionManager />
         </div>
       </HeaderBar>
       <LogsProvider />
