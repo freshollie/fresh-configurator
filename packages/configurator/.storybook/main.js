@@ -49,7 +49,11 @@ module.exports = {
       ],
     });
     config.resolve.extensions.push(".ts", ".tsx");
-    config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    config.plugins.push(
+      new ForkTsCheckerWebpackPlugin({
+        reportFiles: ["stories/*.stories.tsx"],
+      })
+    );
     return config;
   },
 };

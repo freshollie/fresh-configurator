@@ -7,9 +7,9 @@ const typeDefs = gql`
   }
 
   type Power {
-    voltage: Int!
+    voltage: Float!
     mahDrawn: Int!
-    amperage: Int!
+    amperage: Float!
   }
 `;
 

@@ -1,13 +1,16 @@
 /* eslint-disable max-classes-per-file */
 
 declare module "@serialport/stream" {
+  // In this case we are just dealing with types, which are still available
+  // with the @types/serialport package
+  // eslint-disable-next-line import/no-extraneous-dependencies,import/no-unresolved
   import SerialPort from "serialport";
 
   export default SerialPort;
 }
 
-declare module "@serialport/binding-mock" {
-  class AbstractBinding {
+declare module "@serialport/bindings" {
+  export class AbstractBinding {
     static list(): Promise<PortInfo[]>;
 
     constructor(opt: OpenOptions);
@@ -99,6 +102,14 @@ declare module "@serialport/binding-mock" {
      */
     drain(): Promise<void>;
   }
+
+  declare const Binding: AbstractBinding;
+  export default Binding;
+}
+
+declare module "@serialport/binding-mock" {
+  import { AbstractBinding } from "@serialport/bindings";
+
   class MockBinding extends AbstractBinding {
     // if record is true this buffer will have all data that has been written to this port
     readonly recording: Buffer;

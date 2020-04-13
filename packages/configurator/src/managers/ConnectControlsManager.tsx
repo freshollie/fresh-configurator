@@ -60,6 +60,10 @@ const ConnectControlsManager: React.FC = () => {
       baudRate: baudRate ?? 0,
     },
     onCompleted: async ({ connect: connectionId }) => {
+      if (!connecting) {
+        return;
+      }
+
       log({
         variables: {
           message: `Serial port <span class="message-positive">successfully</span> opened, connectionId=${connectionId}`,
@@ -121,6 +125,9 @@ const ConnectControlsManager: React.FC = () => {
       });
     },
     onError: (e) => {
+      if (!connecting) {
+        return;
+      }
       log({
         variables: {
           message: `Could not open connection (<span class="message-negative">${e.message}</span>), communication <span class="message-negative">failed</span>`,
@@ -165,12 +172,21 @@ const ConnectControlsManager: React.FC = () => {
       });
       connect();
     } else {
+      if (connecting && !connected) {
+        log({
+          variables: {
+            message: `Connection attempt to ${port} aborted`,
+          },
+        });
+      }
       setConnecting({
         variables: {
           value: false,
         },
       });
-      disconnect();
+      if (connection) {
+        disconnect();
+      }
     }
   };
 

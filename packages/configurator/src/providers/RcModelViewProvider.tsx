@@ -42,7 +42,7 @@ const RcModelViewProvider: React.FC = () => {
     semver.lte(apiVersion, "1.20.0")
   );
 
-  return <Model name="quadx" attitude={attitude} rawAttitude />;
+  return <Model name="quadx" attitude={attitude} />;
 };
 
 export default RcModelViewProvider;

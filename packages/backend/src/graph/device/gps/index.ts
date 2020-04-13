@@ -9,11 +9,11 @@ const typeDefs = gql`
   type GpsData {
     fix: Boolean!
     numSat: Int!
-    lat: Int!
-    lon: Int!
-    alt: Int!
-    speed: Int!
-    groundCourse: Int!
+    lat: Float!
+    lon: Float!
+    alt: Float!
+    speed: Float!
+    groundCourse: Float!
   }
 `;
 

@@ -1,4 +1,6 @@
 import MockBinding from "@serialport/binding-mock";
+import binding from "@serialport/bindings";
+import SerialPort from "@serialport/stream";
 import flushPromises from "flush-promises";
 import { raw, reset, execute, apiVersion } from "../src/serial/connection";
 import {
@@ -61,6 +63,9 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
 mockMspDevices.forEach((port) => handleMspInfoReply(port));
 
 beforeEach(() => {
+  // Reset the bindings every iteration to ensure
+  // that every function can start from an empty state
+  SerialPort.Binding = undefined as any;
   jest.useRealTimers();
 });
 
@@ -79,6 +84,7 @@ describe("open", () => {
   it("should open an MSP connection to the given port", async () => {
     await open("/dev/something");
     expect(isOpen("/dev/something")).toBe(true);
+    expect(SerialPort.Binding).toEqual(binding);
   });
 
   it("should allow multiple ports to be opened", async () => {

@@ -7,7 +7,7 @@
  * making one of the same request at a time.
  */
 
-import SerialPort from "serialport";
+import SerialPort from "@serialport/stream";
 import debug from "debug";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
@@ -21,6 +21,14 @@ import {
   OnCloseCallback,
 } from "./types";
 import codes from "./codes";
+
+// Import bindings when we actually need them, so that libraries
+// can import this library without the bindings needing to be available
+// at import time
+const initialiseBindings = async (): Promise<void> => {
+  const { default: Binding } = await import("@serialport/bindings");
+  SerialPort.Binding = Binding;
+};
 
 const log = debug("connection");
 
@@ -111,8 +119,12 @@ export const reset = (): void => {
   });
 };
 
-export const ports = (): Promise<string[]> =>
-  SerialPort.list().then((data) => data.map(({ path }) => path));
+export const ports = async (): Promise<string[]> => {
+  if (!SerialPort.Binding) {
+    await initialiseBindings();
+  }
+  return SerialPort.list().then((data) => data.map(({ path }) => path));
+};
 
 /**
  * Close the given port
@@ -153,6 +165,10 @@ export const open: OpenConnectionFunction = async (
   if (typeof connectionOptions === "function") {
     onCloseCallback = connectionOptions;
     connectionOptions = {};
+  }
+
+  if (!SerialPort.Binding) {
+    await initialiseBindings();
   }
 
   const serial = new SerialPort(port, {

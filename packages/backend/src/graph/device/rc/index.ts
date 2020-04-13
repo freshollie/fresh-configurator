@@ -14,25 +14,25 @@ const typeDefs = gql`
   }
 
   type RCTuning {
-    rcRate: Int!
-    rcExpo: Int!
-    rollPitchRate: Int!
-    pitchRate: Int!
-    rollRate: Int!
-    yawRate: Int!
-    dynamicThrottlePid: Int!
-    throttleMid: Int!
-    throttleExpo: Int!
-    dynamicThrottleBreakpoint: Int!
-    rcYawExpo: Int!
-    rcYawRate: Int!
-    rcPitchRate: Int!
-    rcPitchExpo: Int!
-    throttleLimitType: Int!
-    throttleLimitPercent: Int!
-    rollRateLimit: Int!
-    pitchRateLimit: Int!
-    yawRateLimit: Int!
+    rcRate: Float!
+    rcExpo: Float!
+    rollPitchRate: Float!
+    pitchRate: Float!
+    rollRate: Float!
+    yawRate: Float!
+    dynamicThrottlePid: Float!
+    throttleMid: Float!
+    throttleExpo: Float!
+    dynamicThrottleBreakpoint: Float!
+    rcYawExpo: Float!
+    rcYawRate: Float!
+    rcPitchRate: Float!
+    rcPitchExpo: Float!
+    throttleLimitType: Float!
+    throttleLimitPercent: Float!
+    rollRateLimit: Float!
+    pitchRateLimit: Float!
+    yawRateLimit: Float!
   }
 
   type RCDeadband {

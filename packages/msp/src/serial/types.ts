@@ -1,4 +1,4 @@
-import SerialPort from "serialport";
+import SerialPort from "@serialport/stream";
 import { MspParser } from "./parser";
 import WriteBuffer from "./writebuffer";
 import codes from "./codes";

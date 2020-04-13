@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { spawn } = require("child_process");
 
@@ -17,7 +18,14 @@ module.exports = (_, { mode }) => ({
       {
         test: /\.ts(x?)$/,
         include: /src/,
-        use: [{ loader: "ts-loader" }],
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.svg$/,
@@ -55,6 +63,9 @@ module.exports = (_, { mode }) => ({
     }),
     new DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(mode),
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      reportFiles: ["src/**/*.{ts,tsx}"],
     }),
   ],
   devtool: "cheap-source-map",

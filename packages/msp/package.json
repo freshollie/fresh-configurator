@@ -10,14 +10,14 @@
     "prepare": "yarn build"
   },
   "dependencies": {
+    "@serialport/bindings": "^8.0.7",
+    "@serialport/stream": "^8.0.6",
     "debug": "^4.1.1",
     "rambda": "^4.5.0",
-    "semver": "^7.1.3",
-    "serialport": "^8.0.7"
+    "semver": "^7.1.3"
   },
   "devDependencies": {
     "@serialport/binding-mock": "^8.0.6",
-    "@serialport/stream": "^8.0.6",
     "@types/debug": "^4.1.5",
     "@types/react-is": "^16.7.1",
     "@types/serialport": "^8.0.0",
