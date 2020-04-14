@@ -47,7 +47,7 @@ Project | Description
 [@betaflight/configurator](packages/configurator) | The betaflight configurator electron application, built using the rest of the libraries
 [@betaflight/api-server](packages/api-server) | A GraphQL server to read data from betaflight flight controllers, built using the @betaflight/api
 [@betaflight/api](packages/api) | The betaflight API, built using @betaflight/msp
-[@betaflight/api](packages/msp) | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers
+[@betaflight/msp](packages/msp) | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers
 
 ## Developing
 
