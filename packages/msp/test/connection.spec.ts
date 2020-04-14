@@ -53,7 +53,7 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
         // Reply with some mock MSP info
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
       }
-    } catch (e) { }
+    } catch (e) {}
     // wait 10 miliseconds
     await new Promise((resolve) => realSetTimeout(resolve, 10));
   }

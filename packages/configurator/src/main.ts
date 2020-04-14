@@ -41,18 +41,18 @@ const createWindow = (): void => {
   const backendAddress = `localhost:${backendPort}`;
   const indexPath = DEV_MODE
     ? url.format({
-      protocol: "http:",
-      host: "localhost:8080",
-      pathname: "index.html",
-      search: `backend=${backendAddress}`,
-      slashes: true,
-    })
+        protocol: "http:",
+        host: "localhost:8080",
+        pathname: "index.html",
+        search: `backend=${backendAddress}`,
+        slashes: true,
+      })
     : url.format({
-      protocol: "file:",
-      pathname: path.join(__dirname, "index.html"),
-      search: `backend=${backendAddress}`,
-      slashes: true,
-    });
+        protocol: "file:",
+        pathname: path.join(__dirname, "index.html"),
+        search: `backend=${backendAddress}`,
+        slashes: true,
+      });
 
   console.log(`Loading app: ${indexPath}`);
   mainWindow.loadURL(indexPath);

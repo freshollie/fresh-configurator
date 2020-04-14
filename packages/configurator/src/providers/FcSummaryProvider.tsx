@@ -10,16 +10,16 @@ const FcSummaryProvider: React.FC = () => {
   const { connection } = useConnectionState();
   const { data } = useFcSummaryQuery({
     variables: {
-      connection: connection ?? ""
+      connection: connection ?? "",
     },
     pollInterval: 100,
-    skip: !connection
+    skip: !connection,
   });
 
   const flagNames =
     data?.device.arming.disabledFlags
-      .filter(flag => flag !== DisarmFlags.ARM_SWITCH)
-      .map(flag => DisarmFlags[flag])
+      .filter((flag) => flag !== DisarmFlags.ARM_SWITCH)
+      .map((flag) => DisarmFlags[flag])
       .sort() ?? [];
 
   const armSwitchInactive =
@@ -31,7 +31,7 @@ const FcSummaryProvider: React.FC = () => {
         <tr>
           <td>Arming Disable Flags:</td>
           <td>
-            {flagNames.map(flag => (
+            {flagNames.map((flag) => (
               <span key={flag}>{flag}</span>
             ))}
             {armSwitchInactive && <span>{ARM_SWITCH_KEY}</span>}

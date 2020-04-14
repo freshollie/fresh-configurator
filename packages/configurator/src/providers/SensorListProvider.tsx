@@ -6,7 +6,7 @@ import {
   MagnetometerSensorIcon,
   BarometerSensorIcon,
   GpsSensorIcon,
-  SonarSensorIcon
+  SonarSensorIcon,
 } from "../icons";
 import useConnectionState from "../hooks/useConnectionState";
 import { useSensorsQuery } from "../gql/__generated__";
@@ -18,7 +18,7 @@ const SENSOR_ELEMENTS = {
   [Sensors.MAGNETOMETER]: [<MagnetometerSensorIcon />, "Mag"],
   [Sensors.BAROMETER]: [<BarometerSensorIcon />, "Baro"],
   [Sensors.GPS]: [<GpsSensorIcon />, "GPS"],
-  [Sensors.SONAR]: [<SonarSensorIcon />, "Sonar"]
+  [Sensors.SONAR]: [<SonarSensorIcon />, "Sonar"],
 } as const;
 
 const SENSORS_ORDER = [
@@ -27,7 +27,7 @@ const SENSORS_ORDER = [
   Sensors.MAGNETOMETER,
   Sensors.BAROMETER,
   Sensors.GPS,
-  Sensors.SONAR
+  Sensors.SONAR,
 ] as (keyof typeof SENSOR_ELEMENTS)[];
 
 const SensorsListProvider: React.FC = () => {
@@ -35,9 +35,9 @@ const SensorsListProvider: React.FC = () => {
 
   const { data } = useSensorsQuery({
     variables: {
-      connection: connection ?? ""
+      connection: connection ?? "",
     },
-    skip: !connection || !connected
+    skip: !connection || !connected,
   });
 
   if (!data || !connected) {
@@ -46,7 +46,7 @@ const SensorsListProvider: React.FC = () => {
 
   return (
     <SensorStatusPanel>
-      {SENSORS_ORDER.map(sensor => (
+      {SENSORS_ORDER.map((sensor) => (
         <li
           key={sensor}
           className={

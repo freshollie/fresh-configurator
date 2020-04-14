@@ -79,7 +79,7 @@ export const execute = async (
           }
           log(
             `${request.toJSON().data} response: ${
-            Buffer.from(message.data).toJSON().data
+              Buffer.from(message.data).toJSON().data
             }`
           );
 

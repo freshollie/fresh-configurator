@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import { ApolloError } from "apollo-server";
 import gql from "graphql-tag";
-import { apiVersion } from "@betaflight/msp";
+import { apiVersion } from "@betaflight/api";
 import { Resolvers } from "../__generated__";
 
 const typeDefs = gql`
