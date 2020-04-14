@@ -1,6 +1,6 @@
-import mockDevice from "./mockDevice";
-import { writeArming } from "../../src";
-import codes from "../../src/serial/codes";
+import mockMsp from "./mockMsp";
+import { writeArming } from "../src";
+import codes from "../src/codes";
 
 describe("writeArming", () => {
   it("should write the given arming states", async () => {
@@ -9,7 +9,7 @@ describe("writeArming", () => {
       runawayTakeoffPreventionDisabled: true,
     });
 
-    expect(mockDevice.execute).toHaveBeenCalledWith("/dev/something", {
+    expect(mockMsp.execute).toHaveBeenCalledWith("/dev/something", {
       code: codes.MSP_ARMING_DISABLE,
       data: [1, 1],
     });
@@ -20,7 +20,7 @@ describe("writeArming", () => {
       armingDisabled: false,
       runawayTakeoffPreventionDisabled: true,
     });
-    expect(mockDevice.execute).toHaveBeenCalledWith("/dev/something", {
+    expect(mockMsp.execute).toHaveBeenCalledWith("/dev/something", {
       code: codes.MSP_ARMING_DISABLE,
       data: [0, 1],
     });

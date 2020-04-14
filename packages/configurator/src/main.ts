@@ -3,7 +3,7 @@ import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
 import getPort from "get-port";
-import backend from "@fresh/backend";
+import backend from "@betaflight/api-server";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

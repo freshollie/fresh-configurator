@@ -20,7 +20,6 @@ import {
   OpenConnectionFunction,
   OnCloseCallback,
 } from "./types";
-import codes from "./codes";
 
 // Import bindings when we actually need them, so that libraries
 // can import this library without the bindings needing to be available
@@ -80,7 +79,7 @@ export const execute = async (
           }
           log(
             `${request.toJSON().data} response: ${
-              Buffer.from(message.data).toJSON().data
+            Buffer.from(message.data).toJSON().data
             }`
           );
 
@@ -208,7 +207,7 @@ export const open: OpenConnectionFunction = async (
 
   log(`reading API version from ${port}`);
   try {
-    const response = await execute(port, { code: codes.MSP_API_VERSION });
+    const response = await execute(port, { code: 1 });
     connection.mspInfo = {
       mspProtocolVersion: response.readU8(),
       apiVersion: `${response.readU8()}.${response.readU8()}.0`,

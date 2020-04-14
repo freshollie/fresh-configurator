@@ -2,7 +2,7 @@ import MockBinding from "@serialport/binding-mock";
 import binding from "@serialport/bindings";
 import SerialPort from "@serialport/stream";
 import flushPromises from "flush-promises";
-import { raw, reset, execute, apiVersion } from "../src/serial/connection";
+import { raw, reset, execute, apiVersion } from "../src/connection";
 import {
   open,
   connections,
@@ -13,14 +13,13 @@ import {
   bytesWritten,
   packetErrors,
 } from "../src";
-import codes from "../src/serial/codes";
 
-import { encodeMessageV1, encodeMessageV2 } from "../src/serial/encoders";
+import { encodeMessageV1, encodeMessageV2 } from "../src/encoders";
 
 const mockMspDevices = ["/dev/something", "/dev/somethingelse"];
 const mockPorts = ["/dev/non-msp-device", ...mockMspDevices];
 
-const mspInfoRequest = encodeMessageV1(codes.MSP_API_VERSION);
+const mspInfoRequest = encodeMessageV1(1);
 
 /**
  * Get the data written to the given port
@@ -54,7 +53,7 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
         // Reply with some mock MSP info
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
       }
-    } catch (e) {}
+    } catch (e) { }
     // wait 10 miliseconds
     await new Promise((resolve) => realSetTimeout(resolve, 10));
   }
@@ -197,16 +196,13 @@ describe("execute", () => {
   it("should write the given command and data for v2 commands", async () => {
     await open("/dev/something");
     execute("/dev/something", {
-      code: codes.MSP2_COMMON_SERIAL_CONFIG,
+      code: 256,
       data: Buffer.from("This is a v2 message"),
     });
     await flushPromises();
 
     expect(writtenData("/dev/something")).toEqual(
-      encodeMessageV2(
-        codes.MSP2_COMMON_SERIAL_CONFIG,
-        Buffer.from("This is a v2 message")
-      )
+      encodeMessageV2(256, Buffer.from("This is a v2 message"))
     );
   });
 
@@ -341,7 +337,7 @@ describe("execute", () => {
     execute("/dev/something", {
       code: 108,
       timeout: 500,
-    }).catch((err) => {
+    }).catch((err: Error) => {
       rejected = err;
     });
 

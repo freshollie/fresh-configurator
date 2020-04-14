@@ -1,8 +1,8 @@
 import { times } from "rambda";
 import semver from "semver";
-import codes from "../serial/codes";
-import { execute, apiVersion } from "../serial/connection";
-import MspDataView from "../serial/dataview";
+import { MspDataView, execute, apiVersion, WriteBuffer } from "@betaflight/msp";
+import codes from "./codes";
+
 import {
   VoltageMeters,
   ImuData,
@@ -20,11 +20,20 @@ import {
   Feature,
 } from "./types";
 import { getFeatureBits, disarmFlagBits, sensorBits } from "./features";
-import WriteBuffer from "../serial/writebuffer";
 
 export * from "./osd";
 
 export { Features, DisarmFlags, Sensors } from "./types";
+export {
+  apiVersion,
+  open,
+  close,
+  isOpen,
+  bytesRead,
+  bytesWritten,
+  packetErrors,
+  ports,
+} from "@betaflight/msp";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });

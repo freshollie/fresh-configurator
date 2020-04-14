@@ -1,5 +1,5 @@
 import React from "react";
-import { Sensors } from "@fresh/msp";
+import { Sensors } from "@betaflight/api";
 import Status from "../components/Status";
 import Table from "../components/Table";
 import { useSensorsQuery, useGpsSummaryQuery } from "../gql/__generated__";

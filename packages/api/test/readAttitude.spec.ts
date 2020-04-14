@@ -1,10 +1,10 @@
-import mockDevice from "./mockDevice";
-import { readAttitude } from "../../src";
-import codes from "../../src/serial/codes";
+import mockMsp from "./mockMsp";
+import { readAttitude } from "../src";
+import codes from "../src/codes";
 
 describe("readAttitude", () => {
   it("should read attitude data from the device", async () => {
-    mockDevice.setResponse([99, 0, 54, 1, 12, 1]);
+    mockMsp.setResponse([99, 0, 54, 1, 12, 1]);
 
     expect(await readAttitude("/dev/someport")).toEqual({
       heading: 268,
@@ -12,7 +12,7 @@ describe("readAttitude", () => {
       roll: 9.9,
     });
 
-    expect(mockDevice.execute).toHaveBeenCalledWith("/dev/someport", {
+    expect(mockMsp.execute).toHaveBeenCalledWith("/dev/someport", {
       code: codes.MSP_ATTITUDE,
     });
   });

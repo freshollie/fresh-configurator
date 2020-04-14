@@ -1,6 +1,6 @@
-import mockDevice from "./mockDevice";
-import { calibrateAccelerometer } from "../../src";
-import codes from "../../src/serial/codes";
+import mockMsp from "./mockMsp";
+import { calibrateAccelerometer } from "../src";
+import codes from "../src/codes";
 
 describe("callibrateAccelerometer", () => {
   it("should callibrate the accelerometer for the given device", async () => {
@@ -15,7 +15,7 @@ describe("callibrateAccelerometer", () => {
     await calibrateAccelerometer("/dev/something");
     clearInterval(interval);
 
-    expect(mockDevice.execute).toHaveBeenCalledWith("/dev/something", {
+    expect(mockMsp.execute).toHaveBeenCalledWith("/dev/something", {
       code: codes.MSP_ACC_CALIBRATION,
     });
 

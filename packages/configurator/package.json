@@ -1,5 +1,5 @@
 {
-  "name": "@fresh/configurator",
+  "name": "@betaflight/configurator",
   "version": "1.0.0",
   "main": "./app/main.js",
   "license": "MIT",
@@ -31,8 +31,8 @@
   "dependencies": {
     "@apollo/client": "3.0.0-beta.42",
     "@apollo/link-ws": "^2.0.0-beta.3",
-    "@fresh/backend": "^1.0.0",
-    "@fresh/msp": "^1.0.0",
+    "@betaflight/api": "^1.0.0",
+    "@betaflight/api-server": "^1.0.0",
     "date-fns": "^2.11.0",
     "get-port": "^5.1.1",
     "graphql": "14.6.0",
@@ -61,6 +61,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "@types/react-is": "^16.7.1",
     "@types/semver": "^7.1.0",
     "@types/styled-components": "^4.4.2",
     "@types/three": "0.93.31",
@@ -81,11 +82,9 @@
     "themeprovider-storybook": "^1.5.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.8.2",
+    "typescript": ">=3.7",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.3"
-  },
-  "peerDependencies": {
-    "typescript": ">=3.7"
   }
 }

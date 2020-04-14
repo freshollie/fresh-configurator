@@ -29,8 +29,9 @@ It would also allow for easier refactoring and redesigning of the UI.
 
 At the moment functionality is very minimal, and lots is changing all the time.
 
-- The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@fresh/msp](packages/msp) package.
-- [Tests have been written](packages/msp/test) for most of `@fresh/msp`
+- The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@betaflight/msp](packages/msp) package.
+- [Tests have been written](packages/msp/test) for all of `@betaflight/msp`
+- The Betaflight API has been ported into [`@betaflight/api`](packages/api), and has some tests
 - The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written
 - [Storybook](https://freshollie.github.io/fresh-configurator) is utlised to develop components
 
@@ -38,7 +39,15 @@ At the moment functionality is very minimal, and lots is changing all the time.
 
 Idealy, to become feature complete with the current configurator. The overall goal of the project, however, is to simplify the requirements to develop your own configurator or customise an existing one.
 
-Because `@fresh/msp` is written separately it could be published as it's own package, available for anyone to build tools which can interact with flight controllers.
+Because `@betaflight/msp` is written separately it could be published as it's own package, available for anyone to build tools which can interact with flight controllers. As `@betaflight/api` is also separate, it provides the ability for people to publish tools which can integrate with betaflight, just by using the API.
+
+## Packages
+Project | Description
+--- | ---
+[@betaflight/configurator](packages/configurator) | The betaflight configurator electron application, built using the rest of the libraries
+[@betaflight/api-server](packages/api-server) | A GraphQL server to read data from betaflight flight controllers, built using the @betaflight/api
+[@betaflight/api](packages/api) | The betaflight API, built using @betaflight/msp
+[@betaflight/api](packages/msp) | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers
 
 ## Developing
 
@@ -60,7 +69,7 @@ $ yarn start
 $ yarn storybook
 ```
 
-### Compile `@fresh/msp` changes
+### Compile library changes
 
 ```
 $ yarn prepare

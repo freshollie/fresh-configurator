@@ -1,11 +1,11 @@
-import mockDevice from "./mockDevice";
-import { readExtendedStatus } from "../../src";
-import codes from "../../src/serial/codes";
+import mockMsp from "./mockMsp";
+import { readExtendedStatus } from "../src";
+import codes from "../src/codes";
 
 describe("readExtendedStatus", () => {
   it("should correctly read the status and arming flags for api verion 1.40.0", async () => {
-    mockDevice.setApiVersion("1.40.0");
-    mockDevice.setResponse([
+    mockMsp.setApiVersion("1.40.0");
+    mockMsp.setResponse([
       250,
       0,
       0,
@@ -32,7 +32,7 @@ describe("readExtendedStatus", () => {
     const config = await readExtendedStatus("/dev/someport");
 
     expect(config).toMatchSnapshot();
-    expect(mockDevice.execute).toHaveBeenCalledWith("/dev/someport", {
+    expect(mockMsp.execute).toHaveBeenCalledWith("/dev/someport", {
       code: codes.MSP_STATUS_EX,
     });
   });

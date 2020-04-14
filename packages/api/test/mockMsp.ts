@@ -1,7 +1,11 @@
-import { execute, apiVersion } from "../../src/serial/connection";
-import MspDataView from "../../src/serial/dataview";
+import { execute, apiVersion, MspDataView } from "@betaflight/msp";
 
-jest.mock("../../src/serial/connection");
+jest.mock("@betaflight/msp", () => ({
+  ...require.requireActual("@betaflight/msp"),
+  execute: jest.fn(),
+  apiVersion: jest.fn(),
+}));
+
 const mockExecute = (execute as unknown) as jest.MockedFunction<typeof execute>;
 const mockApiVersion = (apiVersion as unknown) as jest.MockedFunction<
   typeof apiVersion

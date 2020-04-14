@@ -1,4 +1,4 @@
-import { encodeMessageV1, encodeMessageV2 } from "../src/serial/encoders";
+import { encodeMessageV1, encodeMessageV2 } from "../src/encoders";
 
 describe("v1", () => {
   it("should encode v1 messages as expected", () => {

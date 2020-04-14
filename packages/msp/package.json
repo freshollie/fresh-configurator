@@ -1,6 +1,7 @@
 {
-  "name": "@fresh/msp",
+  "name": "@betaflight/msp",
   "version": "1.0.0",
+  "description": "A MultiWii Serial Protocol api to connect and read data from flight controllers",
   "license": "MIT",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -12,19 +13,14 @@
   "dependencies": {
     "@serialport/bindings": "^8.0.7",
     "@serialport/stream": "^8.0.6",
-    "debug": "^4.1.1",
-    "rambda": "^4.5.0",
-    "semver": "^7.1.3"
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "@serialport/binding-mock": "^8.0.6",
     "@types/debug": "^4.1.5",
-    "@types/react-is": "^16.7.1",
     "@types/serialport": "^8.0.0",
     "flush-promises": "^1.0.2",
-    "rimraf": "^3.0.2"
-  },
-  "peerDependencies": {
+    "rimraf": "^3.0.2",
     "typescript": ">=3.7"
   }
 }

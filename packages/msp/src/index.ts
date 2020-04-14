@@ -1,6 +1,5 @@
 /* eslint-disable import/first */
 process.env.DEBUG = "connection";
-export * from "./device";
 export {
   ports,
   connections,
@@ -11,4 +10,7 @@ export {
   bytesWritten,
   packetErrors,
   apiVersion,
-} from "./serial/connection";
+  execute,
+} from "./connection";
+export { default as WriteBuffer } from "./writebuffer";
+export { default as MspDataView } from "./dataview";

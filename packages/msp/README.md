@@ -1,15 +1,14 @@
-# `@fresh/msp`
+# `@betaflight/msp`
 
-> MultiWii serial parser
+> MultiWii serial protocol api
 
 A library to handle reading and writing data from flight controllers
-which use the MultiWii Serial Protocol. This library has been written for
-the betaflight MultiWii API,
+which use the MultiWii Serial Protocol.
 
 ## Usage
 
 ```typescript
-import { ports, open, readAttitude, close } from "@fresh/msp";
+import { ports, open, execute, close } from "@betaflight/msp";
 
 (async () => {
   const portsList = await ports();
@@ -18,12 +17,13 @@ import { ports, open, readAttitude, close } from "@fresh/msp";
 
   const port = portsList[0];
 
-  // Connect to the device, estabilsh it's an MSP device and its API version
+  // Connect to the device, estabilsh it's an MSP device and read its API version
   await open(port);
+  console.log(apiVersion(port));
 
   while (true) {
-    const attitude = await readAttitude(port);
-
+    const data = await execute(port, {code: 1 });
+    console.log(data.readU8());
     ...
   }
 
@@ -32,11 +32,11 @@ import { ports, open, readAttitude, close } from "@fresh/msp";
 })();
 ```
 
-This MSP library supports sending multiple commands in parrallel:
+This MSP library supports sending multiple commands in parallel:
 
 ```typescript
-const [osdConfig, rcTuningConfig] = await Promise.all([
-  readOSDConfig(port),
-  readRCTuning(port),
+const [data1, data2] = await Promise.all([
+  execute(port, {code: 1 }),
+  execute(port, {code: 2 }),
 ]);
 ```

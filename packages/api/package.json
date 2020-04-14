@@ -1,0 +1,19 @@
+{
+  "name": "@betaflight/api",
+  "version": "1.0.0",
+  "description": "The betaflight API to read data from betaflight flight controllers",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "prepare": "yarn build"
+  },
+  "dependencies": {
+    "@betaflight/msp": "^1.0.0",
+    "rambda": "^4.5.0",
+    "semver": "^7.1.3"
+  },
+  "devDependencies": {
+    "typescript": ">=3.7"
+  }
+}
