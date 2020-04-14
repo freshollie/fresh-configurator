@@ -19,8 +19,8 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    gps: ({ port }, _, { msp }) =>
-      msp.readRawGPS(port).then((gpsData) => ({
+    gps: ({ port }, _, { api }) =>
+      api.readRawGPS(port).then((gpsData) => ({
         ...gpsData,
         __typename: "GpsData",
       })),

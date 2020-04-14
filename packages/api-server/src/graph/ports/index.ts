@@ -9,7 +9,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   Query: {
-    ports: (_, __, { msp }) => msp.ports(),
+    ports: (_, __, { api }) => api.ports(),
   },
 };
 

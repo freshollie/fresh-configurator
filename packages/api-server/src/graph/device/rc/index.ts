@@ -52,19 +52,19 @@ const resolvers: Resolvers = {
   },
 
   RC: {
-    channels: ({ port }, _, { msp }) => msp.readRcValues(port),
-    tuning: ({ port }, _, { msp }) =>
-      msp.readRCTuning(port).then((values) => ({
+    channels: ({ port }, _, { api }) => api.readRcValues(port),
+    tuning: ({ port }, _, { api }) =>
+      api.readRCTuning(port).then((values) => ({
         ...values,
         __typename: "RCTuning",
       })),
-    deadband: ({ port }, _, { msp }) =>
-      msp.readRCDeadband(port).then((values) => ({
+    deadband: ({ port }, _, { api }) =>
+      api.readRCDeadband(port).then((values) => ({
         ...values,
         __typename: "RCDeadband",
       })),
-    rssi: ({ port }, _, { msp }) =>
-      msp.readAnalogValues(port).then(({ rssi }) => rssi),
+    rssi: ({ port }, _, { api }) =>
+      api.readAnalogValues(port).then(({ rssi }) => rssi),
   },
 };
 

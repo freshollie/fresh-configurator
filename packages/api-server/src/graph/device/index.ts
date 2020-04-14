@@ -27,7 +27,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   Query: {
-    device: (_, { connection: connectionId }, { msp, connections }) => {
+    device: (_, { connection: connectionId }, { api, connections }) => {
       const port = connections.getPort(connectionId);
       if (!port) {
         throw new ApolloError("Connection is not active");
@@ -35,7 +35,7 @@ const resolvers: Resolvers = {
 
       return {
         port,
-        apiVersion: msp.apiVersion(port),
+        apiVersion: api.apiVersion(port),
       };
     },
   },

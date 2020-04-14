@@ -1,1 +1,1 @@
-jest.mock("@betaflight/msp");
+jest.mock("@betaflight/api");

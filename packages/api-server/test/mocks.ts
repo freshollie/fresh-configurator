@@ -1,4 +1,4 @@
-import * as msp from "@betaflight/api";
+import * as api from "@betaflight/api";
 
 // eslint-disable-next-line import/prefer-default-export
-export const mockMsp = msp as jest.Mocked<typeof msp>;
+export const mockApi = api as jest.Mocked<typeof api>;

@@ -1,11 +1,11 @@
 import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import server from "../src";
-import { mockMsp } from "./mocks";
+import { mockApi } from "./mocks";
 
 describe("ports", () => {
   it("should return the available ports", async () => {
-    mockMsp.ports.mockResolvedValue(["/dev/something", "/dev/anotherport"]);
+    mockApi.ports.mockResolvedValue(["/dev/something", "/dev/anotherport"]);
 
     const { query } = createTestClient(server);
 
@@ -19,6 +19,6 @@ describe("ports", () => {
 
     expect(errors).toBeFalsy();
     expect(data?.ports).toEqual(["/dev/something", "/dev/anotherport"]);
-    expect(mockMsp.ports).toHaveBeenCalled();
+    expect(mockApi.ports).toHaveBeenCalled();
   });
 });

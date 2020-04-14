@@ -14,21 +14,21 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    sensors: ({ port }, _, { msp }) =>
-      msp.readExtendedStatus(port).then(({ sensors }) => sensors),
+    sensors: ({ port }, _, { api }) =>
+      api.readExtendedStatus(port).then(({ sensors }) => sensors),
   },
 
   Mutation: {
     deviceCallibrateAccelerometer: (
       _,
       { connection },
-      { msp, connections }
+      { api, connections }
     ) => {
       const port = connections.getPort(connection);
       if (!port) {
         throw new ApolloError(`${connection} is not connected`);
       }
-      return msp.calibrateAccelerometer(port).then(() => null);
+      return api.calibrateAccelerometer(port).then(() => null);
     },
   },
 };

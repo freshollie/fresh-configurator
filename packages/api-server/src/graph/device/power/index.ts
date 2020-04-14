@@ -15,8 +15,8 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    power: ({ port }, _, { msp }) =>
-      msp.readAnalogValues(port).then((values) => ({
+    power: ({ port }, _, { api }) =>
+      api.readAnalogValues(port).then((values) => ({
         ...values,
         __typename: "Power",
       })),

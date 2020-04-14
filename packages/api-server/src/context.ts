@@ -2,8 +2,8 @@ import * as api from "@betaflight/api";
 import * as connections from "./connections";
 
 export interface Context {
-  msp: typeof api;
+  api: typeof api;
   connections: typeof connections;
 }
 
-export default (): Context => ({ msp: api, connections });
+export default (): Context => ({ api, connections });

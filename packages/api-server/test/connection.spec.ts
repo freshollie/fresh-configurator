@@ -1,6 +1,6 @@
 import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
-import { mockMsp } from "./mocks";
+import { mockApi } from "./mocks";
 import server from "../src";
 import { reset } from "../src/connections";
 
@@ -13,7 +13,7 @@ describe("connections", () => {
     it("should initialise a connection on the given port with given baudrate", async () => {
       const { mutate } = createTestClient(server);
 
-      mockMsp.apiVersion.mockReturnValue("1.32.0");
+      mockApi.apiVersion.mockReturnValue("1.32.0");
 
       const { data, errors } = await mutate({
         mutation: gql`
@@ -35,7 +35,7 @@ describe("connections", () => {
         id: expect.any(String),
         apiVersion: "1.32.0",
       });
-      expect(mockMsp.open).toHaveBeenCalledWith(
+      expect(mockApi.open).toHaveBeenCalledWith(
         "/dev/someport",
         {
           baudRate: 99922,
@@ -46,7 +46,7 @@ describe("connections", () => {
 
     it("should return a unique connection id for every connection", async () => {
       const { mutate } = createTestClient(server);
-      mockMsp.apiVersion.mockReturnValue("1.32.0");
+      mockApi.apiVersion.mockReturnValue("1.32.0");
 
       const { data: connection1 } = await mutate({
         mutation: gql`

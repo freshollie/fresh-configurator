@@ -44,12 +44,12 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
-    connect: (_, { port, baudRate }, { connections, msp }) =>
+    connect: (_, { port, baudRate }, { connections, api }) =>
       connections
         .connectLock(port, async () => {
-          if (!msp.isOpen(port)) {
+          if (!api.isOpen(port)) {
             try {
-              await msp.open(port, { baudRate }, () => {
+              await api.open(port, { baudRate }, () => {
                 // remove any connections if the port closes
                 connections.remove(port);
               });
@@ -74,13 +74,13 @@ const resolvers: Resolvers = {
           };
         }),
 
-    close: async (_, { connection }, { connections, msp }) => {
+    close: async (_, { connection }, { connections, api }) => {
       const port = connections.getPort(connection);
       if (!port) {
         throw new ApolloError(`${connection} is not a valid connection`);
       }
 
-      await msp.close(port);
+      await api.close(port);
       connections.remove(port);
       return connection;
     },
@@ -97,9 +97,9 @@ const resolvers: Resolvers = {
     },
   },
   ConnectionStats: {
-    bytesRead: ({ port }, _, { msp }) => msp.bytesRead(port),
-    bytesWritten: ({ port }, _, { msp }) => msp.bytesWritten(port),
-    packetErrors: ({ port }, _, { msp }) => msp.packetErrors(port),
+    bytesRead: ({ port }, _, { api }) => api.bytesRead(port),
+    bytesWritten: ({ port }, _, { api }) => api.bytesWritten(port),
+    packetErrors: ({ port }, _, { api }) => api.packetErrors(port),
   },
 };
 

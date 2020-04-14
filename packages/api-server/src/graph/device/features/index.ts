@@ -14,8 +14,8 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    features: ({ port }, _, { msp }) =>
-      msp
+    features: ({ port }, _, { api }) =>
+      api
         .readFeatures(port)
         .then((features) =>
           features.map((feature) => ({ ...feature, __typename: "Feature" }))

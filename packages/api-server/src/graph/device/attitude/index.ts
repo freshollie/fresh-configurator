@@ -15,8 +15,8 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    attitude: ({ port }, _, { msp }) =>
-      msp.readAttitude(port).then((values) => ({
+    attitude: ({ port }, _, { api }) =>
+      api.readAttitude(port).then((values) => ({
         ...values,
         __typename: "Attitude",
       })),

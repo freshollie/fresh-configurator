@@ -14,8 +14,8 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    profiles: ({ port }, _, { msp }) =>
-      msp.readExtendedStatus(port).then(({ profile, numProfiles }) => ({
+    profiles: ({ port }, _, { api }) =>
+      api.readExtendedStatus(port).then(({ profile, numProfiles }) => ({
         __typename: "Profiles",
         selected: profile,
         length: numProfiles,
