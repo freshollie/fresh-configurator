@@ -2,12 +2,12 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import gql from "graphql-tag";
+import { Resolvers } from "./__generated__";
 import {
-  Resolvers,
   LogsQuery,
   LogsQueryVariables,
   LogsDocument,
-} from "./__generated__";
+} from "./queries/Configurator.graphql";
 import { versionInfo } from "../util";
 
 const typeDefs = gql`

@@ -1,4 +1,4 @@
-import { useConnectionSettingsQuery } from "../gql/__generated__";
+import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
 
 export default (): string | undefined => {
   const { data: portsData } = useConnectionSettingsQuery();

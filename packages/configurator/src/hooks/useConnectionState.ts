@@ -1,8 +1,8 @@
+import { useConnectionStateQuery } from "../gql/queries/Configurator.graphql";
 import {
-  useConnectionStateQuery,
   useSetConnectionMutation,
   useSetConnectingMutation,
-} from "../gql/__generated__";
+} from "../gql/mutations/Configurator.graphql";
 
 export default (): {
   connected: boolean;

@@ -1,4 +1,4 @@
-import { useLogMutation } from "../gql/__generated__";
+import { useLogMutation } from "../gql/mutations/Configurator.graphql";
 
 export default (): ((message: string) => void) => {
   const [log] = useLogMutation();

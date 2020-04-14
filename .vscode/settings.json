@@ -16,6 +16,5 @@
   "prettier.packageManager": "yarn",
   "prettier.prettierPath": "node_modules/prettier",
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.formatOnPaste": true
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }

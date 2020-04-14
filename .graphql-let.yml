@@ -1,0 +1,15 @@
+generateDir: "./packages/configurator/src/gql/__generated__"
+schema: "./packages/configurator/src/gql/__generated__/schema.graphql"
+documents: "./packages/configurator/src/gql/**/*.graphql"
+plugins:
+  - typescript
+  - typescript-operations
+  - typescript-react-apollo
+config:
+  withHooks: true
+  withComponent: false
+  withHOC: false
+  apolloReactHooksImportFrom: "apollo"
+  nonOptionalTypename: true
+  reactApolloVersion: 3
+respectGitIgnore: true

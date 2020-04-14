@@ -1,7 +1,3 @@
-subscription OnConnectionClosed($connection: ID!) {
-  onClosed(connection: $connection)
-}
-
 query ConnectionStats($connection: ID!) {
   connectionStats(connection: $connection) {
     bytesWritten

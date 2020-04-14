@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  useSetConnectionSettingsMutation,
-  useConnectionSettingsQuery,
-  useAvailablePortsQuery,
-} from "../gql/__generated__";
+import { useAvailablePortsQuery } from "../gql/queries/Connection.graphql";
+import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
+import { useSetConnectionSettingsMutation } from "../gql/mutations/Configurator.graphql";
 import ConnectionSelector from "../components/ConnectionSelector";
 import useConnectionState from "../hooks/useConnectionState";
 

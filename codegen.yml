@@ -24,7 +24,7 @@ generates:
       withHooks: true
       withComponent: false
       withHOC: false
-      apolloReactHooksImportFrom: "../apollo"
+      apolloReactHooksImportFrom: "apollo"
 
       nonOptionalTypename: true
       reactApolloVersion: 3
@@ -33,3 +33,7 @@ generates:
       - "typescript-resolvers"
       - "typescript-operations"
       - "typescript-react-apollo"
+  
+  ./packages/configurator/src/gql/__generated__/schema.graphql:
+    plugins:
+      - schema-ast

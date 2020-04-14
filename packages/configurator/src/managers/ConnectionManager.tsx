@@ -4,12 +4,13 @@ import config from "../config";
 import { UsbConnectIcon, UsbDisconnectIcon } from "../icons";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
+import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
 import {
   useConnectMutation,
-  useConnectionSettingsQuery,
   useDisconnectMutation,
   useOnConnectionClosedSubscription,
-} from "../gql/__generated__";
+} from "../gql/mutations/Connection.graphql";
+
 import BigButton from "../components/BigButton";
 
 /**

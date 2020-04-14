@@ -2,7 +2,7 @@ import React from "react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 
 import { render, fireEvent, waitFor } from "../test-utils";
-import { CallibrateAccelerometerDocument } from "../gql/__generated__";
+import { CallibrateAccelerometerDocument } from "../gql/queries/Device.graphql";
 import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager";
 
 const mockConnectionId = "someconnectionid";

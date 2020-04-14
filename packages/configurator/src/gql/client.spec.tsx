@@ -1,24 +1,26 @@
 import { advanceTo, advanceBy } from "jest-date-mock";
 import client from "./client";
 import {
-  ConnectionSettingsQueryVariables,
-  ConnectionSettingsQuery,
-  ConnectionSettingsDocument,
   SetConnectionSettingsMutation,
   SetConnectionSettingsMutationVariables,
   SetConnectionSettingsDocument,
-  SelectedTabQuery,
-  SelectedTabQueryVariables,
   SelectedTabDocument,
   SelectTabDocument,
   SelectTabMutation,
   SelectTabMutationVariables,
-  LogsDocument,
-  LogsQuery,
   LogMutation,
   LogMutationVariables,
   LogDocument,
-} from "./__generated__";
+} from "./mutations/Configurator.graphql";
+import {
+  SelectedTabQuery,
+  SelectedTabQueryVariables,
+  ConnectionSettingsQueryVariables,
+  ConnectionSettingsQuery,
+  ConnectionSettingsDocument,
+  LogsDocument,
+  LogsQuery,
+} from "./queries/Configurator.graphql";
 import { versionInfo } from "../util";
 
 beforeEach(async () => {

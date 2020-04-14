@@ -1,5 +1,5 @@
 import React from "react";
-import { useCallibrateAccelerometerMutation } from "../gql/__generated__";
+import { useCallibrateAccelerometerMutation } from "../gql/queries/Device.graphql";
 import Button from "../components/Button";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";

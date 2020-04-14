@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React from "react";
 import { isElement } from "react-is";
-import { useSelectedTabQuery } from "./gql/__generated__";
+import { useSelectedTabQuery } from "./gql/documents/Configurator.graphql";
 
 type TabElement = React.ReactElement<{ id: string }>;
 
