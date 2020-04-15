@@ -6,10 +6,10 @@ import quadx from "./models/quad_x.model";
 import tricopter from "./models/tricopter.model";
 import hexx from "./models/hex_x.model";
 
-interface Model {
+type Model = {
   geometry: Geometry;
   materials?: Material[] | undefined;
-}
+};
 
 const MODEL_MAP = {
   quadx,
@@ -43,7 +43,7 @@ const useModelData = (modelKey: ModelTypes): Model | undefined => {
   return data;
 };
 
-interface ModelProps {
+type ModelProps = {
   name: ModelTypes;
   /**
    * The attitude which the model should
@@ -59,7 +59,7 @@ interface ModelProps {
    * degrees for each axis, defaults to false
    */
   rawAttitude?: boolean;
-}
+};
 
 const ambientColor = new Color(0x404040);
 const whiteColor = new Color(1, 1, 1);

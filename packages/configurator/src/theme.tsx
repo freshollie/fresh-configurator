@@ -88,7 +88,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-interface ThemeColors {
+type ThemeColors = {
   accent: string;
   error: string;
   subtleAccent: string;
@@ -105,12 +105,12 @@ interface ThemeColors {
   gimbalBackground: string;
   gimbalCrosshair: string;
   switcherysecond: string;
-}
+};
 
-interface Theme {
+type Theme = {
   dark: boolean;
   colors: ThemeColors;
-}
+};
 
 const lightColors: ThemeColors = {
   accent: "#ffbb00",

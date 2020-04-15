@@ -53,13 +53,13 @@ enum DECODER_STATES {
   CHECKSUM_V2 = 17,
 }
 
-export interface MspMessage {
+export type MspMessage = {
   code: number;
   data: ArrayBuffer;
   crcError: boolean;
   unsupported: number;
   direction: number;
-}
+};
 
 export class MspParser extends Transform {
   private state: DECODER_STATES;

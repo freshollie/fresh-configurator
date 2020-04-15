@@ -1,17 +1,17 @@
 import React from "react";
 import { NavLink, List } from "./NavLinks.styles";
 
-export interface LinkDetails {
+export type LinkDetails = {
   title: string;
   icon: JSX.Element;
   id: string;
-}
+};
 
-export interface NavLinksProps {
+export type NavLinksProps = {
   links: LinkDetails[];
   activeLink?: string;
   onClick?: (id: string) => void;
-}
+};
 
 /**
  * A component to generate a list of navlinks

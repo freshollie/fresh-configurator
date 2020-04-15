@@ -1,16 +1,16 @@
-export interface VoltageMeters {
+export type VoltageMeters = {
   id: number;
   voltage: number;
-}
+};
 
-export interface AnalogValues {
+export type AnalogValues = {
   voltage: number;
   mahDrawn: number;
   rssi: number;
   amperage: number;
-}
+};
 
-export interface RawGpsData {
+export type RawGpsData = {
   fix: boolean;
   numSat: number;
   lat: number;
@@ -18,9 +18,9 @@ export interface RawGpsData {
   alt: number;
   speed: number;
   groundCourse: number;
-}
+};
 
-export interface BoardInfo {
+export type BoardInfo = {
   boardIdentifier: string;
   boardVersion: number;
   boardType: number;
@@ -32,38 +32,38 @@ export interface BoardInfo {
   mcuTypeId: number;
   configurationState: number | undefined;
   sampleRateHz: number | undefined;
-}
+};
 
 export type ImuUnit = [number, number, number];
 
-export interface ImuData {
+export type ImuData = {
   accelerometer: ImuUnit;
   gyroscope: ImuUnit;
   magnetometer: ImuUnit;
-}
+};
 
-export interface Kinematics {
+export type Kinematics = {
   roll: number;
   pitch: number;
   heading: number;
-}
+};
 
-export interface Status {
+export type Status = {
   cycleTime: number;
   i2cError: number;
   sensors: Sensors[];
   mode: number;
   profile: number;
-}
+};
 
-export interface ExtendedStatus extends Status {
+export type ExtendedStatus = Status & {
   cpuload: number;
   numProfiles: number;
   rateProfile: number;
   armingDisabledFlags: DisarmFlags[];
-}
+};
 
-export interface RCTuning {
+export type RCTuning = {
   rcRate: number;
   rcExpo: number;
   rollPitchRate: number;
@@ -83,14 +83,14 @@ export interface RCTuning {
   rollRateLimit: number;
   pitchRateLimit: number;
   yawRateLimit: number;
-}
+};
 
-export interface RCDeadband {
+export type RCDeadband = {
   deadband: number;
   yawDeadband: number;
   altHoldDeadhand: number;
   deadband3dThrottle: number;
-}
+};
 
 export enum Features {
   RX_PPM,
@@ -167,7 +167,7 @@ export enum Sensors {
 
 export type FeatureBits = Record<number, Features>;
 
-export interface Feature {
+export type Feature = {
   key: Features;
   enabled: boolean;
-}
+};

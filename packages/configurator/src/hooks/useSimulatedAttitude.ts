@@ -5,20 +5,10 @@ const MID_RC = 1500;
 const constrain = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(value, max));
 
-const rcCommand = (
-  rcData: number,
-  rcRate: number,
-  deadband: number
-): number => {
-  let result =
-    Math.min(Math.max(Math.abs(rcData - MID_RC) - deadband, 0), 500) * rcRate;
-
-  if (rcData < MID_RC) {
-    result = -result;
-  }
-
-  return result;
-};
+const rcCommand = (rcData: number, rcRate: number, deadband: number): number =>
+  Math.min(Math.max(Math.abs(rcData - MID_RC) - deadband, 0), 500) *
+  rcRate *
+  (rcData < MID_RC ? -1 : 1);
 
 const calcRate = (
   rcData: number,
@@ -62,11 +52,11 @@ const calcRate = (
   return angleRate;
 };
 
-interface DeadbandData {
+type DeadbandData = {
   deadband: number;
   yawDeadband: number;
-}
-interface TuningData {
+};
+type TuningData = {
   rollRate: number;
   rcRate: number;
   rcExpo: number;
@@ -81,7 +71,7 @@ interface TuningData {
   rcYawRate: number;
   rcYawExpo: number;
   yawRateLimit: number;
-}
+};
 
 export default (
   channels?: number[],

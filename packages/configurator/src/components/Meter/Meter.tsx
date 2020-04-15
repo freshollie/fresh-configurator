@@ -1,12 +1,12 @@
 import React from "react";
 import { Bar, BarLabel } from "./Meter.styles";
 
-export interface MeterProps {
+export type MeterProps = {
   value: number;
   max: number;
   min: number;
   color: string;
-}
+};
 
 const Meter: React.FC<MeterProps> = ({ value, min, max, color }) => {
   const clampedValue = Math.max(min, Math.min(max, value));

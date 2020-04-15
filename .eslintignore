@@ -6,3 +6,4 @@
 **/app
 **/storybook-static
 !.jest
+!.eslintrc.js

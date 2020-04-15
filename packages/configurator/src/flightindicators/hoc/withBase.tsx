@@ -22,10 +22,10 @@ const InstrumentContainer = styled.div<{ size?: number }>`
   }
 `;
 
-interface BaseInstrumentProps {
+type BaseInstrumentProps = {
   showBox?: boolean;
   size?: number;
-}
+};
 
 /**
  * WithBase: a HOC which should be used as a Base to create instruments from

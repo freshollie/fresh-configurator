@@ -2,14 +2,14 @@ import SerialPort from "@serialport/stream";
 import { MspParser } from "./parser";
 import WriteBuffer from "./writebuffer";
 
-export interface MspInfo {
+export type MspInfo = {
   mspProtocolVersion: number;
   apiVersion: string;
-}
+};
 
 export type ExecutionLocks = Record<number, Promise<void> | undefined>;
 
-export interface Connection {
+export type Connection = {
   serial: SerialPort;
   parser: MspParser;
   requests: Record<string, Promise<ArrayBuffer> | undefined>;
@@ -17,25 +17,25 @@ export interface Connection {
   bytesRead: number;
   packetErrors: number;
   mspInfo: MspInfo;
-}
+};
 
-export interface ConnectionOptions {
+export type ConnectionOptions = {
   baudRate?: number;
-}
+};
 
 export type OnCloseCallback = () => void;
 
-export interface OpenConnectionFunction {
+export type OpenConnectionFunction = {
   (
     port: string,
     options?: ConnectionOptions,
     onClose?: OnCloseCallback
   ): Promise<void>;
   (port: string, onClose?: OnCloseCallback): Promise<void>;
-}
+};
 
-export interface MspCommand {
+export type MspCommand = {
   code: number;
   data?: WriteBuffer | Buffer;
   timeout?: number;
-}
+};

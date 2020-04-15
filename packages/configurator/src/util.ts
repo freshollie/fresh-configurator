@@ -8,11 +8,11 @@ type OsVersion =
   | "UNIX"
   | "Unknown";
 
-interface VersionInfo {
+type VersionInfo = {
   os: OsVersion;
   chromeVersion: string;
   version: string;
-}
+};
 
 const os = (): OsVersion => {
   if (navigator.appVersion.includes("Win")) return "Windows";

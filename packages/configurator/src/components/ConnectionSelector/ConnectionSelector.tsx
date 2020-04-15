@@ -22,10 +22,10 @@ const BAUDRATES = [
   1200,
 ];
 
-interface ConnectionDetails {
+type ConnectionDetails = {
   port: string;
   baud: number;
-}
+};
 
 const ConnectionSelector: React.FC<{
   ports?: string[];

@@ -1,8 +1,8 @@
-export interface FlightControllerPartial {
+export type FlightControllerPartial = {
   port: string;
   apiVersion: string;
-}
+};
 
-export interface FlightControllerQuery {
+export type FlightControllerQuery = {
   port: string;
-}
+};

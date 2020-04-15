@@ -1,8 +1,8 @@
 import styled, { css } from "../../theme";
 
-interface StatusProps {
+type StatusProps = {
   positive: boolean;
-}
+};
 
 export default styled.span<StatusProps>`
   background-color: ${({ positive }) =>

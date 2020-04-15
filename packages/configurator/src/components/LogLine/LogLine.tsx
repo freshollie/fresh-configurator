@@ -2,10 +2,10 @@ import React from "react";
 import { format } from "date-fns";
 import { Wrapper } from "./LogLine.styles";
 
-export interface LogLineProps {
+export type LogLineProps = {
   time: Date;
   children: React.ReactText | React.ReactText[];
-}
+};
 
 const LogLine: React.FC<LogLineProps> = ({ time, children }) => (
   <Wrapper

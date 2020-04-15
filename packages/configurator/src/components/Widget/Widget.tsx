@@ -1,8 +1,8 @@
 import styled, { css } from "../../theme";
 
-interface WidgetProps {
+type WidgetProps = {
   type?: "warning" | "note" | "white";
-}
+};
 
 export default styled.article<WidgetProps>`
   border: 1px solid #ccc;

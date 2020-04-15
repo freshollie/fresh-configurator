@@ -8,12 +8,12 @@ const SIZES = {
   large: [66, 40],
 };
 
-export interface SwitchProps {
+export type SwitchProps = {
   checked: boolean;
   onChange?: (checked: boolean) => unknown;
   disabled?: boolean;
   size?: keyof typeof SIZES;
-}
+};
 
 const Switch: React.FC<SwitchProps> = ({
   checked,

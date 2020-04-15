@@ -40,9 +40,9 @@ const typeDefs = gql`
   }
 `;
 
-interface Context {
+type Context = {
   client: ApolloClient<object>;
-}
+};
 
 const cache = new InMemoryCache();
 

@@ -1,9 +1,9 @@
 import styled from "../../theme";
 
-export interface BarProps {
+export type BarProps = {
   color: string;
   percentage: number;
-}
+};
 
 export const Bar = styled.div.attrs<BarProps>(
   ({ color, percentage, theme }) => ({
@@ -26,9 +26,9 @@ export const Bar = styled.div.attrs<BarProps>(
   box-sizing: border-box;
 `;
 
-export interface BarLabelProps {
+export type BarLabelProps = {
   percentage: number;
-}
+};
 
 export const BarLabel = styled.div.attrs<BarLabelProps>(
   ({ percentage, theme }) => ({

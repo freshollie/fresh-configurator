@@ -1,50 +1,50 @@
-export interface OSDProfileConfig {
+export type OSDProfileConfig = {
   count: number;
   selected: number;
-}
+};
 
-export interface OSDTimer {
+export type OSDTimer = {
   key: number;
   src: OSD_TIMER_SOURCES;
   precision: OSD_PRECISION_TYPES;
   time: number;
-}
+};
 
-export interface OSDAlarm {
+export type OSDAlarm = {
   key: OSD_ALARMS;
   value: number;
-}
+};
 
-export interface OSDWarning {
+export type OSDWarning = {
   key: OSD_WARNINGS;
   enabled: boolean;
-}
+};
 
-export interface OSDDisplayItem {
+export type OSDDisplayItem = {
   key: OSD_FIELDS;
   position: [number, number];
   visibility: boolean[];
-}
+};
 
-export interface OSDStaticItem {
+export type OSDStaticItem = {
   key: OSD_STATIC_FIELDS;
   enabled: boolean;
-}
+};
 
-export interface OSDFlags {
+export type OSDFlags = {
   hasOSD: boolean;
   haveMax7456Video: boolean;
   haveOsdFeature: boolean;
   isOsdSlave: boolean;
-}
+};
 
-export interface OSDParameters {
+export type OSDParameters = {
   cameraFrameWidth: number;
   cameraFrameHeight: number;
   overlayRadioMode: number;
-}
+};
 
-export interface OSDConfig {
+export type OSDConfig = {
   flags: OSDFlags;
   unitMode: OSD_UNIT_TYPES;
   displayItems: OSDDisplayItem[];
@@ -56,9 +56,9 @@ export interface OSDConfig {
   videoSystem: OSD_VIDEO_TYPES;
   alarms: OSDAlarm[];
   parameters: OSDParameters;
-}
+};
 
-export interface OSDOtherData {
+export type OSDOtherData = {
   flags: OSDFlags;
   videoSystem: OSD_VIDEO_TYPES;
   unitMode: OSD_UNIT_TYPES;
@@ -66,7 +66,7 @@ export interface OSDOtherData {
   warnings: OSDWarning[];
   osdProfiles: OSDProfileConfig;
   parameters: OSDParameters;
-}
+};
 
 export enum OSD_WARNINGS {
   ARMING_DISABLED,

@@ -1,5 +1,12 @@
 module.exports = {
-  plugins: ["react", "react-hooks", "@typescript-eslint", "prettier", "import"],
+  plugins: [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier",
+    "import",
+    "functional",
+  ],
   extends: [
     "plugin:@typescript-eslint/recommended",
     "airbnb-typescript",
@@ -8,21 +15,31 @@ module.exports = {
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
     "prettier/react",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
   ],
   rules: {
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
-      { allowExpressions: true, allowTypedFunctionExpressions: true }
+      { allowExpressions: true, allowTypedFunctionExpressions: true },
     ],
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
-        checksVoidReturn: false
-      }
+        checksVoidReturn: false,
+      },
     ],
     "react/prop-types": ["off"],
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: "arrow-function",
+        unnamedComponents: "arrow-function",
+      },
+    ],
+    "functional/no-class": "error",
+    "functional/prefer-type-literal": "error",
+    "functional/no-this-expression": "error",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -33,36 +50,36 @@ module.exports = {
           "**/.jest/*.{ts,tsx}",
           "**/webpack.*.js",
           "**/.storybook/*.{js,ts}",
-          "**/__mocks__/**/*.{ts,tsx}"
-        ]
-      }
+          "**/__mocks__/**/*.{ts,tsx}",
+        ],
+      },
     ],
     "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
-    "@typescript-eslint/no-require-imports": "error"
+    "@typescript-eslint/no-require-imports": "error",
   },
   parserOptions: {
     project: ["./packages/*/tsconfig.json"],
-    warnOnUnsupportedTypeScriptVersion: false
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   overrides: [
     {
       files: ["**/*.spec.{ts,tsx}", "**/__mocks__/**/*"],
       env: {
-        jest: true
+        jest: true,
       },
       rules: {
         "@typescript-eslint/no-explicit-any": "off",
         "no-constant-condition": "off",
         "no-empty": "off",
-        "no-await-in-loop": "off"
-      }
+        "no-await-in-loop": "off",
+      },
     },
     {
       files: ["*.d.ts"],
       rules: {
         // Fix to /// imports in .d.ts
-        "spaced-comment": ["error", "always", { markers: ["/"] }]
-      }
+        "spaced-comment": ["error", "always", { markers: ["/"] }],
+      },
     },
     {
       files: ["*.js", "*.json"],
@@ -77,8 +94,8 @@ module.exports = {
         "@typescript-eslint/prefer-string-starts-ends-with": "off",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/unbound-method": "off",
-        "@typescript-eslint/no-var-requires": "off"
-      }
-    }
-  ]
+        "@typescript-eslint/no-var-requires": "off",
+      },
+    },
+  ],
 };

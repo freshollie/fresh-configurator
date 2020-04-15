@@ -25,10 +25,10 @@ const CHANNEL_COLORS = [
 
 const CHANNEL_NAMES = ["Roll [A]", "Pitch [E]", "Yaw [R]", "Throttle [T]"];
 
-export interface ChannelsListProps {
+export type ChannelsListProps = {
   channels: number[];
   disabled?: boolean;
-}
+};
 
 const ChannelsList: React.FC<ChannelsListProps> = ({ channels, disabled }) => {
   const getChannelName = (number: number): string => {
