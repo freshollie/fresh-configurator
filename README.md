@@ -105,10 +105,10 @@ $ yarn test
 
 
 This is a monorepo application, with the design being to allow a single feature
-to make changes to my, but for the packages to be separate enough
+to be able to make changes to the entire application stack, but for the packages to be separate enough
 to exist on their own. 
 
-By segrating the idependent logic into their own component peices, code barriers are
+By segrating logic into their own packages, code barriers are
 automatically added to discourage interdependency. Because parts of the
 application are publishable, they must be written to exist on their own and thus
 create even less interdependency.
@@ -116,24 +116,24 @@ create even less interdependency.
 The only package which cannot exist outside of the monorepo is 
 `@betaflight/configurator` as it is the final export of this repo.
 
-Heavy use of `graphql-code-generator` is made throughout the monorepo to ensure
+Heavy use of TypeScript and `graphql-code-generator` is made throughout the monorepo to ensure
 the datatypes transmitted between the flight controller and the configurator are
-consistent at compile time, with `graphql` ensuring the datatypes are consistent at
+consistent at compile time and `graphql` ensuring the datatypes are consistent at
 runtime. This means that there are many checks in place before even testing the 
 application.
 
 ### Configurator 
 
 The configurator is built with React and uses GraphQL as the core state of the application. 
-[`@apollo/client`](https://github.com/apollographql/apollo-client) is at the core of this. It
-provides the [hooks](https://reactjs.org/docs/hooks-intro.html) and rerender triggers
- for the components which triggers redraws when state is changed.
+[`@apollo/client`](https://github.com/apollographql/apollo-client) is the magic behind all of this. 
+It provides the [hooks](https://reactjs.org/docs/hooks-intro.html) and rerender triggers for the 
+components when application state changes, which means no render loop.
 
 Client and Device state is held in the same graph, and can be queried from any component in the application.
 The client state graph is described in the [client schema](packages/configurator/src/gql/client.ts), and device
 state is described in the [device schema](packages/api-server/src/graph).
 
-Because retreiving state from the device is expensive, the client will cache all device state in it's graph
+Because retreiving state from the device is expensive, the client will cache all device state in its graph
 so that queries are only executed for data which is not available in the graph.
 
 The schema of the client and device state are used to enforce that all code which uses the state is 
