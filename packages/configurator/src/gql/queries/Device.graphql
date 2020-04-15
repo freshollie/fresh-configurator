@@ -1,11 +1,3 @@
-query ConnectionStats($connection: ID!) {
-  connectionStats(connection: $connection) {
-    bytesWritten
-    bytesRead
-    packetErrors
-  }
-}
-
 query ApiVersion($connection: ID!) {
   device(connection: $connection) {
     apiVersion

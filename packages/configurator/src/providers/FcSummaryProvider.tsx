@@ -1,6 +1,6 @@
 import React from "react";
 import { DisarmFlags } from "@betaflight/api";
-import { useFcSummaryQuery } from "../gql/__generated__";
+import { useFcSummaryQuery } from "../gql/queries/Device.graphql";
 import Table from "../components/Table";
 import useConnectionState from "../hooks/useConnectionState";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRcChannelsQuery } from "../gql/__generated__";
+import { useRcChannelsQuery } from "../gql/queries/Device.graphql";
 import ChannelsList from "../components/ChannelsList";
 import useConnectionState from "../hooks/useConnectionState";
 

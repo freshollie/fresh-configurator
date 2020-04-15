@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { DefinePlugin } = require("webpack");
+const { DefinePlugin, NormalModuleReplacementPlugin } = require("webpack");
 const { spawn } = require("child_process");
+const path = require("path");
 
 module.exports = (_, { mode }) => ({
   entry: "./src/index.tsx",
@@ -58,6 +59,10 @@ module.exports = (_, { mode }) => ({
     filename: "renderer.js",
   },
   plugins: [
+    new NormalModuleReplacementPlugin(
+      /\.graphql$/,
+      path.resolve(__dirname, "src/gql/__generated__/index.tsx")
+    ),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),

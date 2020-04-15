@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 
-import {
-  useNavigationDataQuery,
-  useSelectTabMutation,
-} from "../gql/__generated__";
+import { useNavigationDataQuery } from "../gql/queries/Configurator.graphql";
+import { useSelectTabMutation } from "../gql/mutations/Configurator.graphql";
 
 import NavLinks from "../components/NavLinks";
 import {

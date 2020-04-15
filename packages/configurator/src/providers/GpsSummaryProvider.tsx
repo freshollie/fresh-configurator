@@ -2,7 +2,10 @@ import React from "react";
 import { Sensors } from "@betaflight/api";
 import Status from "../components/Status";
 import Table from "../components/Table";
-import { useSensorsQuery, useGpsSummaryQuery } from "../gql/__generated__";
+import {
+  useSensorsQuery,
+  useGpsSummaryQuery,
+} from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
 const GpsSummaryProvider: React.FC = () => {

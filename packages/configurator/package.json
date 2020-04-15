@@ -4,20 +4,20 @@
   "main": "./app/main.js",
   "license": "MIT",
   "build": {
-    "productName": "Fresh Configurator",
-    "appId": "com.freshollie.configurator",
+    "productName": "Betaflight Configurator",
+    "appId": "com.betaflight.configurator",
     "mac": {
       "category": "your.app.category.type",
-      "artifactName": "fresh-configurator-${version}.${ext}"
+      "artifactName": "betaflight-configurator-${version}.${ext}"
     },
     "linux": {
       "category": "Settings",
-      "executableName": "fresh-configurator",
-      "artifactName": "fresh-configurator-${version}.${ext}"
+      "executableName": "betaflight-configurator",
+      "artifactName": "betaflight-configurator-${version}.${ext}"
     },
     "win": {
       "target": "msi",
-      "artifactName": "fresh-configurator-${version}.${ext}"
+      "artifactName": "betaflight-configurator-${version}.${ext}"
     }
   },
   "scripts": {
@@ -72,7 +72,6 @@
     "electron-devtools-installer": "^3.0.0",
     "file-loader": "^5.1.0",
     "fork-ts-checker-webpack-plugin": "^4.0.3",
-    "graphql-let": "^0.9.5",
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest-date-mock": "^1.0.8",

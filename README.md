@@ -82,3 +82,117 @@ Tests can be run across the entire codebase at once
 ```
 $ yarn test
 ```
+
+## Architecture
+
+```
+ - - - - - - - - - - - - - - - - - - - -
+|          Electron Application         |
+|                   |                   |
+|     renderer      |        main       |
+|                   |                   |
+|   configurator <----->  api-server    |
+|                   |          |        |
+|                   |          V        |
+|                   |         api       |
+|                   |          |        |
+|                   |          V        |
+|                   |         msp       |
+|_ _ _ _ _ _ _ _ _ _|_ _ _ _ _ | _ _ _ _|
+                               V
+                       Flight Controller
+```
+
+
+This is a monorepo application, with the design being to allow a single feature
+to make changes to my, but for the packages to be separate enough
+to exist on their own. 
+
+By segrating the idependent logic into their own component peices, code barriers are
+automatically added to discourage interdependency. Because parts of the
+application are publishable, they must be written to exist on their own and thus
+create even less interdependency.
+
+The only package which cannot exist outside of the monorepo is 
+`@betaflight/configurator` as it is the final export of this repo.
+
+Heavy use of `graphql-code-generator` is made throughout the monorepo to ensure
+the datatypes transmitted between the flight controller and the configurator are
+consistent at compile time, with `graphql` ensuring the datatypes are consistent at
+runtime. This means that there are many checks in place before even testing the 
+application.
+
+### Configurator 
+
+The configurator is built with React and uses GraphQL as the core state of the application. 
+[`@apollo/client`](https://github.com/apollographql/apollo-client) is at the core of this. It
+provides the [hooks](https://reactjs.org/docs/hooks-intro.html) and rerender triggers
+ for the components which triggers redraws when state is changed.
+
+Client and Device state is held in the same graph, and can be queried from any component in the application.
+The client state graph is described in the [client schema](packages/configurator/src/gql/client.ts), and device
+state is described in the [device schema](packages/api-server/src/graph).
+
+Because retreiving state from the device is expensive, the client will cache all device state in it's graph
+so that queries are only executed for data which is not available in the graph.
+
+The schema of the client and device state are used to enforce that all code which uses the state is 
+type-safe. This means that changes to the API will not compile unless the configurator and api-server
+schema is updated to match the types from the API.
+
+
+#### Queries
+
+Querying the state is as simple as describing the data you want to retreive:
+
+```graphql
+query Status($connection: ID!) {
+  device(connection: $connection) {
+    status {
+      cycleTime
+      i2cError
+      cpuload
+    }
+  }
+}
+```
+
+Running [codegen](https://github.com/dotansimha/graphql-code-generator) (`yarn codegen`) to generate the types
+for the query.
+
+And importing the query as a [hook](https://reactjs.org/docs/hooks-intro.html) into the relevant component
+
+```tsx
+...
+
+import { useStatusQuery } from "./queries/Device.graphql";
+import useConnectionState from "../hooks/useConnectionState";
+
+const FcStatusProvider: React.FC = () => {
+  const { connection } = useConnectionState();
+  const { data: deviceStatus } = useStatusQuery({
+    variables: {
+      // Connection can be null, so stop the compiler from
+      // complaining with an empty string
+      connection: connection ?? "",
+    },
+    // Fetch this data every 100ms
+    pollInterval: 100,
+    // Don't execute this query if there is no connection
+    skip: !connection,
+  });
+
+  ...
+
+  // display all 0 values while the device status is loading
+  // or has not been queried
+  return (
+    <StatusList>
+      ...
+      <li>I2C error: {device?.status.i2cError ?? 0}</li>
+      <li>Cycle Time: {device?.status.cycleTime ?? 0}</li>
+      <li>CPU Load: {device?.status.cpuload ?? 0}%</li>
+    </StatusList>
+  )
+};
+```

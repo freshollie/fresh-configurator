@@ -1,11 +1,8 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { Resolvers } from "@apollo/client";
+import { MockedProvider } from "@apollo/client/testing";
 import Navigation from "../src/managers/NavigationManager";
 import styled from "../src/theme";
-import {
-  NavigationDataDocument,
-  ConnectionStateDocument,
-} from "../src/gql/__generated__";
 
 export default {
   component: Navigation,
@@ -16,62 +13,25 @@ const Page = styled.div`
   height: 100vh;
 `;
 
-const navigationData = ({
-  port,
-  tab,
-}: {
-  port: string;
-  tab: string;
-}): MockedResponse => ({
-  request: {
-    query: NavigationDataDocument,
-  },
-  result: {
-    data: {
-      configurator: {
-        port,
-        tab,
-      },
-    },
-  },
-});
-
-const device = ({
-  port,
-  connected,
-  connecting = false,
-}: {
-  port: string;
-  connected: boolean;
-  connecting?: boolean;
-}): MockedResponse => ({
-  request: {
-    query: ConnectionStateDocument,
-    variables: {
+const configuratorResolvers = (
+  port: string,
+  tab: string,
+  connection: string | undefined,
+  connecting: boolean
+): Resolvers => ({
+  Query: {
+    configurator: () => ({
       port,
-    },
-  },
-  result: {
-    data: {
-      device: {
-        connection: {
-          connected,
-          connecting,
-        },
-      },
-    },
+      tab,
+      connection,
+      connecting,
+    }),
   },
 });
 
 export const landing = (): JSX.Element => (
   <MockedProvider
-    mocks={[
-      navigationData({
-        port: "a",
-        tab: "landing",
-      }),
-      device({ port: "a", connected: false }),
-    ]}
+    resolvers={configuratorResolvers("a", "landing", undefined, false)}
   >
     <Page>
       <Navigation />
@@ -81,13 +41,7 @@ export const landing = (): JSX.Element => (
 
 export const firmwareFlasher = (): JSX.Element => (
   <MockedProvider
-    mocks={[
-      navigationData({
-        port: "a",
-        tab: "flasher",
-      }),
-      device({ port: "a", connected: false }),
-    ]}
+    resolvers={configuratorResolvers("a", "flasher", undefined, false)}
   >
     <Page>
       <Navigation />
@@ -97,13 +51,7 @@ export const firmwareFlasher = (): JSX.Element => (
 
 export const connected = (): JSX.Element => (
   <MockedProvider
-    mocks={[
-      navigationData({
-        port: "a",
-        tab: "setup",
-      }),
-      device({ port: "a", connected: true }),
-    ]}
+    resolvers={configuratorResolvers("a", "setup", "someId", false)}
   >
     <Page>
       <Navigation />

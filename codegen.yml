@@ -24,7 +24,7 @@ generates:
       withHooks: true
       withComponent: false
       withHOC: false
-      apolloReactHooksImportFrom: "apollo"
+      apolloReactHooksImportFrom: "../apollo"
 
       nonOptionalTypename: true
       reactApolloVersion: 3

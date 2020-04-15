@@ -1,28 +1,23 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { Resolvers } from "@apollo/client";
+import { MockedProvider } from "@apollo/client/testing";
 import { TabRouter } from "../src/routing";
-import { SelectedTabDocument } from "../src/gql/__generated__";
 
 export default {
   component: TabRouter,
   title: "Routing|Tab Router",
 };
 
-const selectedTab = (tab: string): MockedResponse => ({
-  request: {
-    query: SelectedTabDocument,
-  },
-  result: {
-    data: {
-      configurator: {
-        tab,
-      },
-    },
+const selectedTab = (tab: string): Resolvers => ({
+  Query: {
+    configurator: () => ({
+      tab,
+    }),
   },
 });
 
 export const tabSelected = (): JSX.Element => (
-  <MockedProvider mocks={[selectedTab("sometabid")]}>
+  <MockedProvider resolvers={selectedTab("sometabid")}>
     <TabRouter>
       <div id="sometabid" style={{ backgroundColor: "white", width: "100%" }}>
         It works
@@ -33,7 +28,7 @@ export const tabSelected = (): JSX.Element => (
 );
 
 export const tabNotSelected = (): JSX.Element => (
-  <MockedProvider mocks={[selectedTab("someothertabid")]}>
+  <MockedProvider resolvers={selectedTab("someothertabid")}>
     <TabRouter>
       <div id="sometabid" style={{ backgroundColor: "white", width: "100%" }}>
         This should not be visible

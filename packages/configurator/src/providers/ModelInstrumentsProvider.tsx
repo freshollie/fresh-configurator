@@ -1,7 +1,7 @@
 import React from "react";
 import Attitude from "../flightindicators/Attitude";
 import Heading from "../flightindicators/Heading";
-import { useAttitudeQuery } from "../gql/__generated__";
+import { useAttitudeQuery } from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
 const ModelInstrumentsProvider: React.FC = () => {

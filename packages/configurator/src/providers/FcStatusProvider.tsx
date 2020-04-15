@@ -2,11 +2,9 @@ import React from "react";
 import useUtilisation from "../hooks/useUtilisation";
 import useConnectionState from "../hooks/useConnectionState";
 
-import {
-  useConnectionSettingsQuery,
-  useStatusQuery,
-  useConnectionStatsQuery,
-} from "../gql/__generated__";
+import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
+import { useStatusQuery } from "../gql/queries/Device.graphql";
+import { useConnectionStatsQuery } from "../gql/queries/Connection.graphql";
 import StatusList from "../components/StatusList";
 
 const FcStatusProvider: React.FC = () => {

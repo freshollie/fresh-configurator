@@ -1,3 +1,11 @@
 query AvailablePorts {
   ports
 }
+
+query ConnectionStats($connection: ID!) {
+  connectionStats(connection: $connection) {
+    bytesWritten
+    bytesRead
+    packetErrors
+  }
+}

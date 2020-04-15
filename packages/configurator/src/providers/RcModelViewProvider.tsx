@@ -5,7 +5,7 @@ import {
   useRcChannelsQuery,
   useRcSettingsQuery,
   useApiVersionQuery,
-} from "../gql/__generated__";
+} from "../gql/queries/Device.graphql";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
 import useConnectionState from "../hooks/useConnectionState";
 

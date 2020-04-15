@@ -1,5 +1,5 @@
 import React from "react";
-import { useAttitudeQuery } from "../gql/__generated__";
+import { useAttitudeQuery } from "../gql/queries/Device.graphql";
 import ModelView from "../components/ModelView";
 import useConnectionState from "../hooks/useConnectionState";
 

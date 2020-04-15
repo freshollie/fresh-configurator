@@ -1,7 +1,7 @@
 import React from "react";
 import LogsView from "../components/LogsView";
 import LogLine from "../components/LogLine";
-import { useLogsQuery } from "../gql/__generated__";
+import { useLogsQuery } from "../gql/queries/Configurator.graphql";
 
 const LogsProvider: React.FC = () => {
   const { data } = useLogsQuery();

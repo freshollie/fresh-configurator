@@ -9,7 +9,7 @@ import {
   SonarSensorIcon,
 } from "../icons";
 import useConnectionState from "../hooks/useConnectionState";
-import { useSensorsQuery } from "../gql/__generated__";
+import { useSensorsQuery } from "../gql/queries/Device.graphql";
 import SensorStatusPanel from "../components/SensorStatusPanel";
 
 const SENSOR_ELEMENTS = {
