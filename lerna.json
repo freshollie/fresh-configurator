@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "indepdendent",
   "npmClient": "yarn",
   "packages": [
     "packages/*"
@@ -16,7 +16,7 @@
         "**/jest.config.js",
         "**/.eslintrc.js"
       ],
-      "message": "chore(release): publish %s"
+      "message": "chore(release): publish"
     }
   }
 }
