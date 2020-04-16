@@ -18,7 +18,7 @@
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn build:lib",
-    "publish": "lerna publish"
+    "publish": "lerna publish --conventional-commits -y"
   },
   "workspaces": [
     "packages/*"
