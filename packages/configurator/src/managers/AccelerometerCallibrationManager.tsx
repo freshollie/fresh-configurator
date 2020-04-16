@@ -11,6 +11,11 @@ const AccelerometerCallibrationManager: React.FC = () => {
     variables: {
       connection: connection ?? "",
     },
+    onCompleted: () => {
+      log(
+        'Accelerometer calibration <span class="message-positive">finished</span>'
+      );
+    },
     onError: (e) => {
       log(`Error callibrating accelerometer: ${e.message}`);
     },
@@ -20,7 +25,10 @@ const AccelerometerCallibrationManager: React.FC = () => {
     <Button
       data-testid="calibrate-acc-button"
       disabled={loading || !connection}
-      onClick={() => calibrate()}
+      onClick={() => {
+        calibrate();
+        log("Accelerometer calibration started");
+      }}
     >
       {loading ? "Calibrating..." : "Calibrate Accelerometer"}
     </Button>

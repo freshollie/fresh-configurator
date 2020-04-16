@@ -7,12 +7,17 @@ import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager
 
 const mockConnectionId = "someconnectionid";
 
+const log = jest.fn();
+
 const clientResolvers = {
   Query: {
     configurator: () => ({
       connection: mockConnectionId,
       connecting: false,
     }),
+  },
+  Mutation: {
+    log,
   },
 };
 
