@@ -17,8 +17,8 @@
     "codegen": "yarn codegen:clean && graphql-codegen --config codegen.yml && graphql-let",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "prepare": "yarn codegen && wsrun -mt prepare",
-    "publish": "yarn build:lib && lerna publish"
+    "prepare": "yarn codegen && wsrun -mt build",
+    "publish": "lerna publish"
   },
   "workspaces": [
     "packages/*"

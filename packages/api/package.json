@@ -19,8 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "prepare": "yarn build"
+    "build": "rimraf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@betaflight/msp": "^0.1.0",

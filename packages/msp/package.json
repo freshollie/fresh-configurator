@@ -21,8 +21,7 @@
   ],
   "scripts": {
     "testscript": "ts-node -T test-script.ts",
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "prepare": "yarn build"
+    "build": "rimraf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@serialport/bindings": "^8.0.7",

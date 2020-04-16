@@ -21,8 +21,7 @@
   ],
   "scripts": {
     "start": "ts-node -T start.ts",
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "prepare": "yarn build"
+    "build": "rimraf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@betaflight/api": "^0.1.0",
