@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/configurator",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "./app/main.js",
   "license": "MIT",
   "private": true,
@@ -33,7 +33,7 @@
     "@apollo/client": "3.0.0-beta.42",
     "@apollo/link-ws": "^2.0.0-beta.3",
     "@betaflight/api": "^0.1.1",
-    "@betaflight/api-server": "^0.1.1",
+    "@betaflight/api-server": "^0.2.0",
     "date-fns": "^2.11.0",
     "get-port": "^5.1.1",
     "graphql": "14.6.0",
