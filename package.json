@@ -10,6 +10,7 @@
     "start": "yarn prepare && yarn workspace @betaflight/configurator start",
     "test": "jest",
     "build": "wsrun -t build",
+    "build:lib": "wsrun -t -x @betaflight/configurator build",
     "storybook": "yarn workspace @betaflight/configurator storybook",
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
     "codegen:clean": "rimraf packages/*/src/**/__generated__",
@@ -17,7 +18,7 @@
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn codegen && wsrun -mt prepare",
-    "publish": "lerna publish"
+    "publish": "yarn build:lib && lerna publish"
   },
   "workspaces": [
     "packages/*"
