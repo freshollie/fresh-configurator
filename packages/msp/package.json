@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/msp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A MultiWii Serial Protocol api to connect and read data from flight controllers",
   "license": "MIT",
   "main": "./dist/index.js",

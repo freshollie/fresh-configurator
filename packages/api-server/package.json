@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/api-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A GraphQL server to retreive data from betaflight flight controllers",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -12,7 +12,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@betaflight/api": "^1.0.0",
+    "@betaflight/api": "^0.1.0",
     "apollo-server": "^2.12.0",
     "graphql-tag": "^2.10.3",
     "graphql-tools": "^4.0.7",
