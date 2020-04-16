@@ -7,17 +7,17 @@
   "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "yarn prepare && yarn workspace @betaflight/configurator start",
+    "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
     "test": "jest",
-    "build": "wsrun -t build",
-    "build:lib": "wsrun -t -x @betaflight/configurator build",
+    "build": "yarn codegen && wsrun -t build",
+    "build:lib": "yarn codegen && wsrun -t -x @betaflight/configurator build",
     "storybook": "yarn workspace @betaflight/configurator storybook",
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
     "codegen:clean": "rimraf packages/*/src/**/__generated__",
     "codegen": "yarn codegen:clean && graphql-codegen --config codegen.yml && graphql-let",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
-    "prepare": "yarn codegen && wsrun -mt build",
+    "prepare": "yarn build:lib",
     "publish": "lerna publish"
   },
   "workspaces": [

@@ -18,4 +18,5 @@ module.exports = {
     "!**/dist/**",
     "!*.d.ts",
   ],
+  modulePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/dist/"],
 };
