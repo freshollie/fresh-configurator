@@ -14,7 +14,8 @@ export default styled.button`
   display: block;
   transition: all ease 0.2s;
 
-  &:hover {
+  &:hover:enabled {
+    cursor: pointer;
     background-color: #ffcc3f;
     color: #000;
     text-shadow: 0px 1px rgba(255, 255, 255, 0.25);
@@ -23,8 +24,9 @@ export default styled.button`
 
   &:disabled {
     background-color: #f1f1f1;
-    border: ${({ theme }) => theme.colors.subtleAccent};
+    border-color: ${({ theme }) => theme.colors.subtleAccent};
     color: #ccc;
+
     ${({ theme }) =>
       theme.dark &&
       css`
@@ -32,6 +34,7 @@ export default styled.button`
         border: 1px solid #ffbb2a;
       `}
   }
+
   &:active {
     background-color: #ffcc3f;
     transition: all ease 0s;

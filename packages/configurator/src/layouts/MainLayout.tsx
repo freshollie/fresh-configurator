@@ -12,7 +12,7 @@ export default styled.div`
   }
 
   > main {
-    background-color: white;
+    background-color: ${({ theme }) => (theme.dark ? "#3d3f3e" : "white")};
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -36,6 +36,6 @@ export default styled.div`
     height: 20px;
     padding: 0 10px 0 10px;
     border-top: 1px solid #7d7d79;
-    background-color: #bfbeb5;
+    background-color: ${({ theme }) => (theme.dark ? "#414443" : "#bfbeb5")};
   }
 `;

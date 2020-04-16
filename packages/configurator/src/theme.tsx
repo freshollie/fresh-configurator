@@ -2,14 +2,8 @@
  * This is the base theme to all components of this APP
  */
 import React, { useContext } from "react";
-import styled, {
-  createGlobalStyle,
-  css as defaultCss,
-  ThemedStyledInterface,
-  ThemedCssFunction,
-  ThemeProvider as DefaultThemeProvider,
-  ThemeContext,
-} from "styled-components";
+import * as styledComponents from "styled-components";
+import { ThemedStyledComponentsModule } from "styled-components";
 
 import openSansLight2 from "./fonts/opensans-light-webfont.woff2";
 import openSansLight from "./fonts/opensans-light-webfont.woff";
@@ -23,6 +17,63 @@ import openSansBold2 from "./fonts/opensans-bold-webfont.woff2";
 import openSansBold from "./fonts/opensans-bold-webfont.woff";
 import openSansBoldItalic2 from "./fonts/opensans-bolditalic-webfont.woff2";
 import openSansBoldItalic from "./fonts/opensans-bolditalic-webfont.woff";
+
+const lightColors = {
+  accent: "#ffbb00",
+  secondary: "#3d3f3e",
+  borderAccent: "#ffbb2a",
+  error: "red",
+  subtleAccent: "silver",
+  quietText: "#ffffff",
+  quietHeader: "#828885",
+  defaultText: "#303030",
+  subtleText: "#c0c0c0",
+  mutedText: "#616161",
+  boxBackground: "#ffffff",
+  alternativeBackground: "#f9f9f9",
+  sideBackground: "#ffffff",
+  ledAccent: "#adadad",
+  ledBackground: "#e9e9e9",
+  gimbalBackground: "#eee",
+  gimbalCrosshair: "silver",
+  switcherysecond: "#c4c4c4",
+};
+
+type ThemeColors = typeof lightColors;
+
+const darkColors: ThemeColors = {
+  accent: "#ffbb00",
+  secondary: "#3d3f3e",
+  borderAccent: "#ffbb2a",
+  error: "red",
+  subtleAccent: "#9c9c9c",
+  quietText: "#ffffff",
+  quietHeader: "#bf8606",
+  defaultText: "#ffffff",
+  subtleText: "#c0c0c0",
+  mutedText: "#d6d6d6",
+  boxBackground: "#3a3a3a",
+  alternativeBackground: "#4e4e4e",
+  sideBackground: "#404040",
+  ledAccent: "#6e6e6e",
+  ledBackground: "#424242",
+  gimbalBackground: "#9c9c9c",
+  gimbalCrosshair: "#d6d6d6",
+  switcherysecond: "#858585",
+};
+
+type Theme = {
+  dark: boolean;
+  colors: ThemeColors;
+};
+
+const {
+  default: styled,
+  createGlobalStyle,
+  ThemeProvider,
+  ThemeContext,
+  css,
+} = styledComponents as ThemedStyledComponentsModule<Theme>;
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -77,10 +128,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
     font-size: 12px;
-    color: #303030;
-    background-color: #3d3f3e;
     margin: 0px;
     padding: 0px;
+    color: ${({ theme }) => theme.colors.defaultText}
   }
 
   .content {
@@ -88,86 +138,32 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-type ThemeColors = {
-  accent: string;
-  error: string;
-  subtleAccent: string;
-  quietText: string;
-  quietHeader: string;
-  defaultText: string;
-  subtleText: string;
-  mutedText: string;
-  boxBackground: string;
-  alternativeBackground: string;
-  sideBackground: string;
-  ledAccent: string;
-  ledBackground: string;
-  gimbalBackground: string;
-  gimbalCrosshair: string;
-  switcherysecond: string;
-};
+export default styled;
 
-type Theme = {
-  dark: boolean;
-  colors: ThemeColors;
-};
-
-const lightColors: ThemeColors = {
-  accent: "#ffbb00",
-  error: "red",
-  subtleAccent: "silver",
-  quietText: "#ffffff",
-  quietHeader: "#828885",
-  defaultText: "#000000",
-  subtleText: "#c0c0c0",
-  mutedText: "#616161",
-  boxBackground: "#ffffff",
-  alternativeBackground: "#f9f9f9",
-  sideBackground: "#ffffff",
-  ledAccent: "#adadad",
-  ledBackground: "#e9e9e9",
-  gimbalBackground: "#eee",
-  gimbalCrosshair: "silver",
-  switcherysecond: "#c4c4c4",
-};
-
-const darkColors: ThemeColors = {
-  accent: "#ffbb00",
-  error: "red",
-  subtleAccent: "silver",
-  quietText: "#ffffff",
-  quietHeader: "#828885",
-  defaultText: "#000000",
-  subtleText: "#c0c0c0",
-  mutedText: "#616161",
-  boxBackground: "#ffffff",
-  alternativeBackground: "#f9f9f9",
-  sideBackground: "#ffffff",
-  ledAccent: "#adadad",
-  ledBackground: "#e9e9e9",
-  gimbalBackground: "#eee",
-  gimbalCrosshair: "silver",
-  switcherysecond: "#c4c4c4",
-};
-
-export default styled as ThemedStyledInterface<Theme>;
-export const css = defaultCss as ThemedCssFunction<Theme>;
-
-export const ThemeProvider: React.FC<{ theme?: { dark: boolean } }> = ({
+const BetaflightThemeProvider: React.FC<{ theme?: { dark: boolean } }> = ({
   theme,
   children,
 }) => (
   <>
-    <GlobalStyle />
-    <DefaultThemeProvider
+    <ThemeProvider
       theme={{
         dark: !!theme?.dark,
         colors: theme?.dark ? darkColors : lightColors,
       }}
     >
-      {children}
-    </DefaultThemeProvider>
+      <>
+        <GlobalStyle />
+        {children}
+      </>
+    </ThemeProvider>
   </>
 );
 
-export const useTheme = (): Theme => useContext<Theme>(ThemeContext);
+const useTheme = (): Theme => useContext<Theme>(ThemeContext);
+
+export {
+  css,
+  useTheme,
+  BetaflightThemeProvider as ThemeProvider,
+  ThemeContext,
+};

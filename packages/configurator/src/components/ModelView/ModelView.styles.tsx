@@ -32,12 +32,18 @@ export const ResetButton = styled.a`
   text-align: center;
   font-weight: bold;
   border: 1px solid ${({ theme }) => theme.colors.subtleAccent};
-  background-color: #ececec;
+  background-color: ${({ theme }) => (theme.dark ? "#575757" : "#ececec")};
   user-select: none;
   z-index: 2;
   cursor: pointer;
 
+  ${({ theme }) =>
+    theme.dark &&
+    css`
+      color: white;
+    `}
+
   &:hover {
-    background-color: #dedcdc;
+    background-color: ${({ theme }) => (theme.dark ? "#393b3a" : "#dedcdc")};
   }
 `;

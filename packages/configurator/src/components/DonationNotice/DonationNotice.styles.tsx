@@ -2,10 +2,10 @@ import styled from "../../theme";
 
 export const Box = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.subtleAccent};
+  background-color: ${({ theme }) => (theme.dark ? "#5f5f5f" : "white")};
   border-radius: 5px;
-  background: white;
   min-height: 187px;
-  width: 220px;
+  max-width: 220px;
   font-size: 11px;
   padding: 5px;
 
@@ -14,9 +14,9 @@ export const Box = styled.div`
     margin-block-end: 0;
   }
 
-  a {
+  p > a {
     text-decoration: none;
-    color: black;
+    color: ${({ theme }) => (theme.dark ? theme.colors.accent : "black")};
   }
 `;
 

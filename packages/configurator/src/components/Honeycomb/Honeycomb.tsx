@@ -8,7 +8,7 @@ const Background = (
       x="0"
       y="0"
       width="16"
-      height="27"
+      height="28"
       patternUnits="userSpaceOnUse"
       viewBox="56 -254 112 190"
     >

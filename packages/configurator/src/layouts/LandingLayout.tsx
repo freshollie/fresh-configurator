@@ -27,7 +27,8 @@ export default styled.div`
   }
 
   > main {
-    background-color: ${({ theme }) => theme.colors.accent};
+    background-color: ${({ theme }) =>
+      theme.dark ? theme.colors.secondary : theme.colors.accent};
 
     h3 {
       margin-block-start: 0em;
@@ -41,18 +42,18 @@ export default styled.div`
       font-weight: normal;
       font-size: 12px;
       > * {
-        flex: 1;
+        flex: 2;
         margin: 15px;
       }
 
       > *:last-child {
-        flex: 0;
+        flex: 1;
       }
     }
   }
 
   > footer {
     flex: 1;
-    background-color: ${({ theme }) => theme.colors.accent};
+    background-color: #2e2e2e;
   }
 `;
