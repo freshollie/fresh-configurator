@@ -1,9 +1,23 @@
 {
   "name": "@betaflight/api",
   "version": "0.1.0",
-  "description": "The betaflight API to read data from betaflight flight controllers",
-  "main": "dist/index.js",
+  "description": "A high-level API to read data from betaflight flight controllers",
+  "author": "freshollie@gmail.com",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api",
+  "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api#readme",
   "license": "MIT",
+  "keywords": [
+    "betaflight",
+    "api",
+    "flightcontroller",
+    "msp",
+    "reader"
+  ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "prepare": "yarn build"

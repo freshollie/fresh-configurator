@@ -1,7 +1,6 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
-import gql from "graphql-tag";
 import { Resolvers, Log } from "./__generated__";
 import { versionInfo } from "../util";
 
@@ -34,10 +33,6 @@ const typeDefs = gql`
     message: String!
   }
 `;
-
-type Context = {
-  client: ApolloClient<object>;
-};
 
 const cache = new InMemoryCache();
 

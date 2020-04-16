@@ -2,10 +2,23 @@
   "name": "@betaflight/api-server",
   "version": "0.1.0",
   "description": "A GraphQL server to retreive data from betaflight flight controllers",
-  "main": "dist/index.js",
+  "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server",
+  "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server#readme",
+  "main": "./dist/index.js",
   "typings": "dist/index.d.ts",
-  "author": "freshollie",
+  "author": "freshollie@gmail.com",
   "license": "MIT",
+  "keywords": [
+    "flight controller",
+    "graphql",
+    "server",
+    "apollo",
+    "betaflight",
+    "api"
+  ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "ts-node -T start.ts",
     "build": "rimraf dist && tsc -p tsconfig.build.json",

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "./app/main.js",
   "license": "MIT",
+  "private": true,
   "build": {
     "productName": "Betaflight Configurator",
     "appId": "com.betaflight.configurator",

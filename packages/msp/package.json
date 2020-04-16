@@ -1,10 +1,24 @@
 {
   "name": "@betaflight/msp",
   "version": "0.1.0",
-  "description": "A MultiWii Serial Protocol api to connect and read data from flight controllers",
+  "description": "A MultiWii Serial Protocol library to connect and communicate with flight controllers",
   "license": "MIT",
+  "author": "freshollie@gmail.com",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
+  "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/msp",
+  "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/msp#readme",
+  "keywords": [
+    "betaflight",
+    "flight controller",
+    "msp",
+    "multiwii",
+    "parser",
+    "multiwii protocol"
+  ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "testscript": "ts-node -T test-script.ts",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
