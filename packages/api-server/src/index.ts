@@ -16,3 +16,4 @@ const server = new ApolloServer({
 });
 
 export default server;
+module.exports = server;
