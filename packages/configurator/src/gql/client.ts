@@ -2,12 +2,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import gql from "graphql-tag";
-import { Resolvers } from "./__generated__";
-import {
-  LogsQuery,
-  LogsQueryVariables,
-  LogsDocument,
-} from "./queries/Configurator.graphql";
+import { Resolvers, Log } from "./__generated__";
 import { versionInfo } from "../util";
 
 const typeDefs = gql`
@@ -55,6 +50,8 @@ const selectedTab = cache.makeVar<string | null>(null);
 const connecting = cache.makeVar<boolean>(false);
 const connectionId = cache.makeVar<string | null>(null);
 
+const logs = cache.makeVar<Log[]>([]);
+
 cache.policies.addTypePolicies({
   Configurator: {
     fields: {
@@ -64,32 +61,10 @@ cache.policies.addTypePolicies({
       expertMode: () => expertMode(),
       connecting: () => connecting(),
       connection: () => connectionId(),
+      logs: () => logs(),
     },
   },
 });
-
-const log = (client: ApolloClient<object>, message: string): void => {
-  const data = client.readQuery<LogsQuery, LogsQueryVariables>({
-    query: LogsDocument,
-  });
-
-  client.writeQuery<LogsQuery, LogsQueryVariables>({
-    query: LogsDocument,
-    data: {
-      configurator: {
-        logs: [
-          ...(data?.configurator.logs ?? []).concat({
-            time: new Date().toISOString(),
-            message,
-            __typename: "Log" as const,
-          }),
-        ],
-        __typename: "Configurator",
-      },
-      __typename: "Query",
-    },
-  });
-};
 
 const resolvers: Resolvers = {
   Query: {
@@ -102,13 +77,13 @@ const resolvers: Resolvers = {
         expertMode: expertMode(),
         connecting: connecting(),
         connection: connectionId(),
-        logs: [
+        logs: logs([
           {
             time: new Date().toISOString(),
             message: `Running - OS: <strong>${os}</strong>, Chrome: <strong>${chromeVersion}</strong>, Configurator: <strong>${version}</strong>`,
             __typename: "Log",
           },
-        ],
+        ]),
         __typename: "Configurator",
       };
     },
@@ -128,8 +103,14 @@ const resolvers: Resolvers = {
       return null;
     },
     setExpertMode: (_, { enabled }) => !!expertMode(enabled),
-    log: (_, { message }, { client }: Context) => {
-      log(client, message);
+    log: (_, { message }) => {
+      logs(
+        logs().concat({
+          time: new Date().toISOString(),
+          message,
+          __typename: "Log" as const,
+        })
+      );
       return true;
     },
   },
