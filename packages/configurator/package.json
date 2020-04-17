@@ -37,7 +37,8 @@
     "start": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
     "build": "webpack --progress --mode production --config ./webpack.config.js && electron-builder",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "install-deps": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@apollo/client": "3.0.0-beta.42",
@@ -78,7 +79,7 @@
     "@types/three": "0.93.31",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.6",
-    "electron": "7.1.11",
+    "electron": "7.2.3",
     "electron-builder": "^22.4.1",
     "electron-devtools-installer": "^3.0.0",
     "file-loader": "^5.1.0",

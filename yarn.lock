@@ -7349,9 +7349,10 @@ electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.341:
   version "1.3.345"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.345.tgz#2569d0d54a64ef0f32a4b7e8c80afa5fe57c5d98"
 
-electron@7.1.11:
-  version "7.1.11"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-7.1.11.tgz#3a95e35804af083d58b590513afea5e2290c4b66"
+electron@7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-7.2.3.tgz#d69d0984fdfa3f0deeeb1d698bf63dc52e1d2d1d"
+  integrity sha512-DqPjMLyNYROsvVCIZH84aWYs4AG9p2dlYhwLhyrtOJVXLbibzy0YXP2IPHMCC9GV2j2Z2hA9vR+frYHwpOsaDg==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"

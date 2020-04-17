@@ -15,7 +15,7 @@
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
     "codegen:clean": "rimraf packages/*/src/**/__generated__",
     "codegen": "yarn codegen:clean && graphql-codegen --config codegen.yml && graphql-let",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "yarn workspace @betaflight/configurator install-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn build:lib",
     "publish": "lerna publish --conventional-commits -y"
@@ -34,8 +34,6 @@
     "@types/jest": "^25.1.2",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
-    "electron": "7.1.11",
-    "electron-builder": "^22.4.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^6.3.1",
     "eslint-config-prettier": "^6.10.0",
@@ -58,9 +56,6 @@
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3",
     "wsrun": "^5.2.0"
-  },
-  "dependencies": {
-    "@serialport/bindings": "^8.0.7"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
