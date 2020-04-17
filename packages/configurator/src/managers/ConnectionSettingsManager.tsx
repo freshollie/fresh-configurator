@@ -4,9 +4,12 @@ import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql"
 import { useSetConnectionSettingsMutation } from "../gql/mutations/Configurator.graphql";
 import ConnectionSelector from "../components/ConnectionSelector";
 import useConnectionState from "../hooks/useConnectionState";
+import useLogger from "../hooks/useLogger";
 
 const ConnectionSettingsManager: React.FC = () => {
   const [updateSettings] = useSetConnectionSettingsMutation();
+
+  const log = useLogger();
 
   const { data: configuratorData, loading } = useConnectionSettingsQuery();
   const { port, baudRate } = configuratorData?.configurator ?? {};
@@ -18,6 +21,9 @@ const ConnectionSettingsManager: React.FC = () => {
   const { data: portsData, loading: loadingPorts } = useAvailablePortsQuery({
     pollInterval: 1000,
     skip: connected,
+    onError: (e) => {
+      log(`Error reading available ports: ${e.message}`);
+    },
   });
 
   // If this is the first load, and the currently selected port is null

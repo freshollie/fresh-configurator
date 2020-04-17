@@ -130,7 +130,8 @@ const GlobalStyle = createGlobalStyle`
     font-size: 12px;
     margin: 0px;
     padding: 0px;
-    color: ${({ theme }) => theme.colors.defaultText}
+    color: ${({ theme }) => theme.colors.defaultText};
+    background-color: initial;
   }
 
   .content {
