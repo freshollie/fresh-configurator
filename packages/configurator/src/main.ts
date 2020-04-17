@@ -39,23 +39,21 @@ const createWindow = (): void => {
   });
 
   const backendAddress = `localhost:${backendPort}`;
-  const indexPath = DEV_MODE
-    ? url.format({
+  if (DEV_MODE) {
+    mainWindow.loadURL(
+      url.format({
         protocol: "http:",
         host: "localhost:8080",
         pathname: "index.html",
         search: `backend=${backendAddress}`,
         slashes: true,
       })
-    : url.format({
-        protocol: "file:",
-        pathname: path.join(__dirname, "index.html"),
-        search: `backend=${backendAddress}`,
-        slashes: true,
-      });
-
-  console.log(`Loading app: ${indexPath}`);
-  mainWindow.loadURL(indexPath);
+    );
+  } else {
+    mainWindow.loadFile(path.join(__dirname, "index.html"), {
+      search: `backend=${backendAddress}`,
+    });
+  }
 
   // Don't show until we are ready and loaded
   mainWindow.once("ready-to-show", async () => {
