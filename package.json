@@ -9,8 +9,8 @@
   "scripts": {
     "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
     "test": "jest",
-    "build": "yarn codegen && wsrun -t build",
-    "build:lib": "yarn codegen && wsrun -t -x @betaflight/configurator build",
+    "build": "yarn codegen && wsrun -mt build",
+    "build:lib": "yarn codegen && wsrun -mt -x @betaflight/configurator build",
     "storybook": "yarn workspace @betaflight/configurator storybook",
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
     "codegen:clean": "rimraf packages/*/src/**/__generated__",
@@ -22,7 +22,8 @@
     "release": "yarn build:lib && yarn workspace @betaflight/configurator release"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "tools/*"
   ],
   "devDependencies": {
     "@graphql-codegen/add": "^1.13.2",

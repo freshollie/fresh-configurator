@@ -32,14 +32,15 @@
     },
     "files": [
       "!**/*",
-      "./app/*",
-      "**/node_modules/@serialport/bindings/"
-    ]
+      "./app/*"
+    ],
+    "npmRebuild": false
   },
   "scripts": {
     "start": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
     "compile": "webpack --progress --mode production --config ./webpack.config.js",
-    "build": "yarn compile && electron-builder --publish never",
+    "pack": "electron-builder --publish never",
+    "build": "yarn install-deps && yarn compile && yarn run pack",
     "release": "yarn compile && electron-builder --publish always",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
+    "@betaflight-tools/bindings-loader": "^0.1.0",
     "@storybook/addon-actions": "^5.3.12",
     "@storybook/addon-docs": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
@@ -93,6 +95,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-date-mock": "^1.0.8",
     "jest-styled-components": "^7.0.2",
+    "node-loader": "^0.6.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-svg-loader": "^3.0.3",
     "svg-inline-loader": "^0.8.0",

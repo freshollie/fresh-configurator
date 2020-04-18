@@ -2,14 +2,21 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
 module.exports = (_, { mode }) => ({
-  entry: "./src/main.ts",
+  entry: require.resolve("./src/main.ts"),
   target: "electron-main",
   resolve: {
-    extensions: [".ts", ".mjs", ".js"],
+    extensions: [".ts", ".mjs", ".js", ".node"],
   },
-  externals: {
-    "@serialport/bindings": "commonjs @serialport/bindings",
-  },
+  externals: [
+    // Don't try to pack referenced .node files
+    (__, request, callback) => {
+      if (/\.node$/.test(request)) {
+        return callback(null, `commonjs ${request}`);
+      }
+      return callback();
+    },
+  ],
+
   node: {
     __filename: false,
     __dirname: false,
@@ -27,6 +34,14 @@ module.exports = (_, { mode }) => ({
             },
           },
         ],
+      },
+      {
+        test: /\.js$/,
+        loader: "@betaflight-tools/bindings-loader",
+      },
+      {
+        test: /\.node$/,
+        loader: "node-loader",
       },
     ],
   },
