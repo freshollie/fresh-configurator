@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.3.0...@betaflight/configurator@0.3.1) (2020-04-18)
+
+
+### Bug Fixes
+
+* **configurator:** correctly bundle serialport bindings ([16aca93](https://github.com/freshollie/fresh-configurator/commit/16aca93239f0dd662571f31a0b9ac5852cce387f))
+
+
+
+
+
 # [0.3.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.2.1...@betaflight/configurator@0.3.0) (2020-04-18)
 
 
