@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.2.1...@betaflight/configurator@0.3.0) (2020-04-18)
+
+
+### Features
+
+* **configurator:** added error log for when ports cannot be queried, fix background theme ([8e8ccff](https://github.com/freshollie/fresh-configurator/commit/8e8ccff29c794b7778286e73a0098690a715dcc5))
+
+
+
+
+
 ## [0.2.1](https://github.com/freshollie/electron-configurator/compare/@betaflight/configurator@0.2.0...@betaflight/configurator@0.2.1) (2020-04-17)
 
 **Note:** Version bump only for package @betaflight/configurator
