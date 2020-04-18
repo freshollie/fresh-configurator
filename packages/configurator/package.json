@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/configurator",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "./app/main.js",
   "license": "MIT",
   "repository": "https://github.com/freshollie/fresh-configurator.git",
