@@ -9,34 +9,38 @@
     "productName": "Betaflight Configurator",
     "appId": "com.betaflight.configurator",
     "mac": {
+      "publish": [
+        "github"
+      ],
       "category": "your.app.category.type",
       "artifactName": "betaflight-configurator-${version}.${ext}"
     },
     "linux": {
+      "publish": [
+        "github"
+      ],
       "category": "Settings",
       "executableName": "betaflight-configurator",
       "artifactName": "betaflight-configurator-${version}.${ext}"
     },
     "win": {
+      "publish": [
+        "github"
+      ],
       "target": "msi",
       "artifactName": "betaflight-configurator-${version}.${ext}"
     },
     "files": [
+      "!**/*",
       "./app/*",
-      "**/node_modules/@serialport/bindings/",
-      "!**/node_modules/@serialport/bindings/**/{test,__tests__,tests,powered-test,example,examples}",
-      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
-      "!.editorconfig",
-      "!**/._*",
-      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
-      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
-      "!**/{appveyor.yml,.travis.yml,circle.yml}",
-      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      "**/node_modules/@serialport/bindings/"
     ]
   },
   "scripts": {
     "start": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
-    "build": "webpack --progress --mode production --config ./webpack.config.js && electron-builder",
+    "compile": "webpack --progress --mode production --config ./webpack.config.js",
+    "build": "yarn compile && electron-builder --publish never",
+    "release": "yarn compile && electron-builder --publish always",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "install-deps": "electron-builder install-app-deps"

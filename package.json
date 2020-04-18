@@ -18,7 +18,8 @@
     "postinstall": "yarn workspace @betaflight/configurator install-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "prepare": "yarn build:lib",
-    "publish": "lerna publish --conventional-commits -y"
+    "publish": "lerna publish --conventional-commits -y",
+    "release": "yarn build:lib && yarn workspace @betaflight/configurator release"
   },
   "workspaces": [
     "packages/*"
