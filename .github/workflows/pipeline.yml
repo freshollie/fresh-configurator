@@ -91,11 +91,11 @@ jobs:
 
       - name: Build configurator
         if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        run: yarn build
+        run: yarn workspace @betaflight/configurator build
 
       - name: Release configurator
         if: startsWith(github.ref, 'refs/tags/@betaflight/configurator@')
-        run: yarn release
+        run: yarn workspace @betaflight/configurator run publish
         env:
           GH_TOKEN: ${{ secrets.github_token }}
           
