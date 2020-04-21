@@ -1,6 +1,7 @@
 import styled from "../../theme";
 
 export default styled.table`
+  width: 100%;
   td {
     border: 0px;
     padding-top: 2px;

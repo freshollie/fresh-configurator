@@ -11,6 +11,7 @@ export default {
 const selectedTab = (tab: string): Resolvers => ({
   Query: {
     configurator: () => ({
+      __typename: "Configurator",
       tab,
     }),
   },

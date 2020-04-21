@@ -21,6 +21,7 @@ const configuratorResolvers = (
 ): Resolvers => ({
   Query: {
     configurator: () => ({
+      __typename: "Configurator",
       port,
       tab,
       connection,

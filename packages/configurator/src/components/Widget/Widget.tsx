@@ -136,6 +136,10 @@ export default styled.article<WidgetProps>`
   > main {
     padding: 10px;
     margin-bottom: 3px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 
   > footer {
