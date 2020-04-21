@@ -1,5 +1,4 @@
 /* eslint-disable import/first */
-process.env.DEBUG = "connection";
 export {
   ports,
   connections,

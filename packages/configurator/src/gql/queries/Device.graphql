@@ -1,97 +1,111 @@
 query ApiVersion($connection: ID!) {
-  device(connection: $connection) {
+  connection(connectionId: $connection) {
     apiVersion
   }
 }
 
 query Attitude($connection: ID!) {
-  device(connection: $connection) {
-    attitude {
-      roll
-      pitch
-      heading
+  connection(connectionId: $connection) {
+    device {
+      attitude {
+        roll
+        pitch
+        heading
+      }
     }
   }
 }
 
 query Status($connection: ID!) {
-  device(connection: $connection) {
-    status {
-      cycleTime
-      i2cError
-      cpuload
+  connection(connectionId: $connection) {
+    device {
+      status {
+        cycleTime
+        i2cError
+        cpuload
+      }
     }
   }
 }
 
 query Sensors($connection: ID!) {
-  device(connection: $connection) {
-    sensors
+  connection(connectionId: $connection) {
+    device {
+      sensors
+    }
   }
 }
 
 query GpsSummary($connection: ID!) {
-  device(connection: $connection) {
-    gps {
-      fix
-      numSat
-      lat
-      lon
+  connection(connectionId: $connection) {
+    device {
+      gps {
+        fix
+        numSat
+        lat
+        lon
+      }
     }
   }
 }
 
 query RcChannels($connection: ID!) {
-  device(connection: $connection) {
-    rc {
-      channels
+  connection(connectionId: $connection) {
+    device {
+      rc {
+        channels
+      }
     }
   }
 }
 
 query FcSummary($connection: ID!) {
-  device(connection: $connection) {
-    arming {
-      disabledFlags
-    }
-    power {
-      voltage
-      mahDrawn
-      amperage
-    }
-    rc {
-      rssi
+  connection(connectionId: $connection) {
+    device {
+      arming {
+        disabledFlags
+      }
+      power {
+        voltage
+        mahDrawn
+        amperage
+      }
+      rc {
+        rssi
+      }
     }
   }
 }
 
 query RcSettings($connection: ID!) {
-  device(connection: $connection) {
-    rc {
-      tuning {
-        rcRate
-        rcExpo
-        rollPitchRate
-        pitchRate
-        rollRate
-        yawRate
-        dynamicThrottlePid
-        throttleMid
-        throttleExpo
-        dynamicThrottleBreakpoint
-        rcYawExpo
-        rcYawRate
-        rcPitchRate
-        rcPitchExpo
-        throttleLimitType
-        throttleLimitPercent
-        rollRateLimit
-        pitchRateLimit
-        yawRateLimit
-      }
-      deadband {
-        deadband
-        yawDeadband
+  connection(connectionId: $connection) {
+    device {
+      rc {
+        tuning {
+          rcRate
+          rcExpo
+          rollPitchRate
+          pitchRate
+          rollRate
+          yawRate
+          dynamicThrottlePid
+          throttleMid
+          throttleExpo
+          dynamicThrottleBreakpoint
+          rcYawExpo
+          rcYawRate
+          rcPitchRate
+          rcPitchExpo
+          throttleLimitType
+          throttleLimitPercent
+          rollRateLimit
+          pitchRateLimit
+          yawRateLimit
+        }
+        deadband {
+          deadband
+          yawDeadband
+        }
       }
     }
   }

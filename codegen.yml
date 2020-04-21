@@ -5,29 +5,29 @@ schema:
       noRequire: true
   - "!**/__generated__/*.ts" 
 
-documents: "./packages/**/*.graphql"
 generates:
   ./packages/api-server/src/graph/__generated__/index.ts:
     config:
       overwrite: true
       contextType: ../../context#Context
       mappers:
-        FlightController: ../../mappers#FlightControllerPartial
-        ConnectionStats: ../../mappers#FlightControllerQuery
-        RC: ../../mappers#FlightControllerQuery
+        Connection: ../../mappers#ConnectionMapping
+        FlightController: ../../mappers#FlightControllerMapping
+        RC: ../../mappers#FlightControllerMapping
     plugins:
       - "typescript"
       - "typescript-resolvers"
 
   ./packages/configurator/src/gql/__generated__/index.tsx:
+    documents: "./packages/configurator/src/gql/**/*.graphql"
     config:
       withHooks: true
       withComponent: false
       withHOC: false
+      contextType: ../apollo#ApolloContext
       apolloReactHooksImportFrom: "../apollo"
 
       nonOptionalTypename: true
-      reactApolloVersion: 3
     plugins:
       - "typescript"
       - "typescript-resolvers"

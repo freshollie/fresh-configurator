@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { Resolvers } from "../../__generated__";
+import { Resolvers } from "../../../__generated__";
 
 const typeDefs = gql`
   extend type FlightController {

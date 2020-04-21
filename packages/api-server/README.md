@@ -49,13 +49,18 @@ subscription OnClosed($id: ID!) {
 ### Querying
 
 ```graphql
-query Attitude($connectionId: ID!) {
-    device(connection: $connectionId) {
-        attitude {
-            roll
-            pitch
-            heading
+query Attitude($connection: ID!) {
+    connection(connectionId: $connection) {
+        device {
+            attitude {
+                roll
+                pitch
+                heading
+            }
         }
+        bytesRead
+        bytesWritten
+        packetErrors
     }
 }
 ```

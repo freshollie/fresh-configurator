@@ -7,9 +7,11 @@ const path = require("path");
 
 module.exports = (_, { mode }) => ({
   entry: "./src/index.tsx",
-  target: "electron-renderer",
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
+  },
+  externals: {
+    "@serialport/bindings": "commonjs @serialport/bindings",
   },
   module: {
     rules: [

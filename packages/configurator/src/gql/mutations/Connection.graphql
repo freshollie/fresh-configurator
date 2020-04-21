@@ -6,9 +6,9 @@ mutation Connect($port: String!, $baudRate: Int!) {
 }
 
 mutation Disconnect($connection: ID!) {
-  close(connection: $connection)
+  close(connectionId: $connection)
 }
 
 subscription OnConnectionClosed($connection: ID!) {
-  onClosed(connection: $connection)
+  onClosed(connectionId: $connection)
 }

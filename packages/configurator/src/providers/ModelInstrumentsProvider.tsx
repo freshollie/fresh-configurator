@@ -4,18 +4,22 @@ import Heading from "../flightindicators/Heading";
 import { useAttitudeQuery } from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
-const ModelInstrumentsProvider: React.FC = () => {
+type Props = {
+  refreshRate: number;
+};
+
+const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
   const { data: deviceData } = useAttitudeQuery({
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
-    pollInterval: 5,
+    pollInterval: 1000 / refreshRate,
   });
 
   const { roll = 0, pitch = 0, heading = 0 } =
-    deviceData?.device?.attitude ?? {};
+    deviceData?.connection.device.attitude ?? {};
 
   return (
     <>

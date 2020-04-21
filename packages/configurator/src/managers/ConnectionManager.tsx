@@ -10,6 +10,7 @@ import {
   useDisconnectMutation,
   useOnConnectionClosedSubscription,
 } from "../gql/mutations/Connection.graphql";
+import { useSetArmingMutation } from "../gql/mutations/Device.graphql";
 
 import BigButton from "../components/BigButton";
 
@@ -21,11 +22,13 @@ import BigButton from "../components/BigButton";
 const ConnectionManager: React.FC = () => {
   const log = useLogger();
 
+  // Handle keeping track of what connection attempt we are
+  // on so we can ignore responses from mutations against
+  // different attempts
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const attempt = useRef(0);
   const connectionAttempt = attempt.current;
   const isCurrentAttempt = (): boolean => attempt.current === connectionAttempt;
-
   const handleAborted = (): void => {
     attempt.current += 1;
     forceUpdate();
@@ -41,6 +44,17 @@ const ConnectionManager: React.FC = () => {
     setConnection,
     setConnecting,
   } = useConnectionState();
+
+  const [disableArming] = useSetArmingMutation({
+    onCompleted: () => {
+      log("<b>Arming disabled</b>");
+    },
+    onError: (e) => {
+      log(
+        `<span class="message-negative">Error disabling arming: ${e.message}</span>`
+      );
+    },
+  });
 
   const [disconnect] = useDisconnectMutation({
     variables: {
@@ -88,6 +102,13 @@ const ConnectionManager: React.FC = () => {
         });
       } else {
         setConnection(connectionId);
+        disableArming({
+          variables: {
+            connection: connectionId,
+            armingDisabled: true,
+            runawayTakeoffPreventionDisabled: false,
+          },
+        });
       }
       setConnecting(false);
     },
@@ -113,7 +134,7 @@ const ConnectionManager: React.FC = () => {
     onSubscriptionData: ({ subscriptionData }) => {
       const connectionId = subscriptionData.data?.onClosed;
       if (connectionId === connection) {
-        setConnection(null);
+        // setConnection(null);
         log(`Serial port closed unexpectedly for connectionId=${connectionId}`);
       }
     },
@@ -121,7 +142,7 @@ const ConnectionManager: React.FC = () => {
 
   useEffect(() => {
     if (subscriptionError && connection) {
-      setConnection(null);
+      // setConnection(null);
       log(`Serial port closed unexpectedly for connectionId=${connection}`);
     }
   }, [connection, log, setConnection, subscriptionError]);

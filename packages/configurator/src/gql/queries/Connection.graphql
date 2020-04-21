@@ -3,7 +3,7 @@ query AvailablePorts {
 }
 
 query ConnectionStats($connection: ID!) {
-  connectionStats(connection: $connection) {
+  connection(connectionId: $connection) {
     bytesWritten
     bytesRead
     packetErrors

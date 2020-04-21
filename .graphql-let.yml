@@ -10,5 +10,4 @@ config:
   withComponent: false
   withHOC: false
   nonOptionalTypename: true
-  reactApolloVersion: 3
 respectGitIgnore: true

@@ -1,11 +1,21 @@
-import { PubSub } from "apollo-server";
+import { PubSub, ApolloError } from "apollo-server";
 
 const closeEvents = new PubSub();
 let connectionsMap: Record<string, string | undefined> = {};
 let connectingAttempts: Record<string, Promise<void> | undefined> = {};
 
-export const getPort = (connnectionId: string): string | undefined =>
-  connectionsMap[connnectionId];
+export const getPort = (connectionId: string): string => {
+  const port = connectionsMap[connectionId];
+
+  if (!port) {
+    throw new ApolloError("Connection is not active");
+  }
+
+  return port;
+};
+
+export const isOpen = (connectionId: string): boolean =>
+  !!connectionsMap[connectionId];
 
 export const connectLock = async (
   port: string,

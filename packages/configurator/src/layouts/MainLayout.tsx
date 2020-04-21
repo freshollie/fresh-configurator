@@ -12,7 +12,6 @@ export default styled.div`
   }
 
   > main {
-    background-color: ${({ theme }) => (theme.dark ? "#3d3f3e" : "white")};
     display: flex;
     flex-direction: row;
     overflow: hidden;

@@ -9,8 +9,8 @@ const ReceiverTab: React.FC = () => (
       <Title>Receiver</Title>
     </header>
     <main>
-      <ChannelsListProvider />
-      <RcModelViewProvider />
+      <ChannelsListProvider refreshRate={60} />
+      <RcModelViewProvider refreshRate={60} />
     </main>
   </div>
 );

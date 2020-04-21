@@ -7,7 +7,9 @@ import { useStatusQuery } from "../gql/queries/Device.graphql";
 import { useConnectionStatsQuery } from "../gql/queries/Connection.graphql";
 import StatusList from "../components/StatusList";
 
-const FcStatusProvider: React.FC = () => {
+const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
+  refreshRate,
+}) => {
   const { data: connectionSettingsData } = useConnectionSettingsQuery();
   const baudRate = connectionSettingsData?.configurator.baudRate;
   const { connection } = useConnectionState();
@@ -15,11 +17,12 @@ const FcStatusProvider: React.FC = () => {
     variables: {
       connection: connection ?? "",
     },
-    pollInterval: 100,
+    pollInterval: 1000 / refreshRate,
     skip: !connection,
   });
 
-  const { cycleTime, cpuload, i2cError } = deviceStatus?.device.status ?? {};
+  const { cycleTime, cpuload, i2cError } =
+    deviceStatus?.connection.device.status ?? {};
 
   const { data: connectionStatsData } = useConnectionStatsQuery({
     variables: {
@@ -33,7 +36,7 @@ const FcStatusProvider: React.FC = () => {
     bytesRead,
     bytesWritten,
     packetErrors,
-  } = connectionStatsData?.connectionStats ?? {
+  } = connectionStatsData?.connection ?? {
     bytesRead: 0,
     bytesWritten: 0,
     packetErrors: 0,

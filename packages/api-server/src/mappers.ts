@@ -1,8 +1,8 @@
-export type FlightControllerPartial = {
+export type ConnectionMapping = {
   port: string;
-  apiVersion: string;
+  id: string;
 };
 
-export type FlightControllerQuery = {
+export type FlightControllerMapping = {
   port: string;
 };

@@ -1,8 +1,15 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { WebSocketLink } from "@apollo/link-ws";
+import { ApolloClient } from "apollo-client";
+import gql from "graphql-tag";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { WebSocketLink } from "apollo-link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
-import { Resolvers, Log } from "./__generated__";
+import { Resolvers, Configurator } from "./__generated__";
 import { versionInfo } from "../util";
+import {
+  LogsQueryResult,
+  LogsQuery,
+  LogsDocument,
+} from "./queries/Configurator.graphql";
 
 const typeDefs = gql`
   type Query {
@@ -36,77 +43,103 @@ const typeDefs = gql`
 
 const cache = new InMemoryCache();
 
-const selectedPort = cache.makeVar<string | null>(null);
-// default baudrate
-const selectedBaud = cache.makeVar<number>(115200);
-
-const expertMode = cache.makeVar<boolean>(false);
-const selectedTab = cache.makeVar<string | null>(null);
-const connecting = cache.makeVar<boolean>(false);
-const connectionId = cache.makeVar<string | null>(null);
-
-const logs = cache.makeVar<Log[]>([]);
-
-cache.policies.addTypePolicies({
-  Configurator: {
-    fields: {
-      port: () => selectedPort(),
-      baudRate: () => selectedBaud(),
-      tab: () => selectedTab(),
-      expertMode: () => expertMode(),
-      connecting: () => connecting(),
-      connection: () => connectionId(),
-      logs: () => logs(),
-    },
-  },
-});
-
 const resolvers: Resolvers = {
-  Query: {
-    configurator: () => {
-      const { os, version, chromeVersion } = versionInfo();
-      return {
-        port: selectedPort(),
-        baudRate: selectedBaud(),
-        tab: selectedTab(),
-        expertMode: expertMode(),
-        connecting: connecting(),
-        connection: connectionId(),
-        logs: logs([
-          {
-            time: new Date().toISOString(),
-            message: `Running - OS: <strong>${os}</strong>, Chrome: <strong>${chromeVersion}</strong>, Configurator: <strong>${version}</strong>`,
-            __typename: "Log",
-          },
-        ]),
-        __typename: "Configurator",
-      };
-    },
-  },
   Mutation: {
-    setTab: (_, { tabId }) => !!selectedTab(tabId),
-    setConnectionSettings: (_, { port, baudRate }) => {
-      selectedPort(port);
-      if (typeof baudRate === "number") {
-        selectedBaud(baudRate);
-      }
-      return true;
-    },
-    setConnecting: (_, { value }) => connecting(value),
-    setConnection: (_, { connection }) => {
-      connectionId(connection ?? null);
+    setTab: (_, { tabId }, { client }) => {
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            tab: tabId,
+          } as Configurator,
+        },
+      });
       return null;
     },
-    setExpertMode: (_, { enabled }) => !!expertMode(enabled),
-    log: (_, { message }) => {
-      logs(
-        logs().concat({
-          time: new Date().toISOString(),
-          message,
-          __typename: "Log" as const,
-        })
-      );
-      return true;
+    setConnectionSettings: (_, { port, baudRate }, { client }) => {
+      const data: { port: string; baudRate?: number } = {
+        port,
+      };
+
+      if (typeof baudRate === "number") {
+        data.baudRate = baudRate;
+      }
+
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            ...data,
+          } as Configurator,
+        },
+      });
+
+      return null;
+    },
+    setConnecting: (_, { value }, { client }) => {
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            connecting: value,
+          } as Configurator,
+        },
+      });
+
+      return null;
+    },
+    setConnection: (_, { connection }, { client }) => {
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            connection,
+          } as Configurator,
+        },
+      });
+
+      return null;
+    },
+    setExpertMode: (_, { enabled }, { client }) => {
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            expertMode: enabled,
+          } as Configurator,
+        },
+      });
+
+      return null;
+    },
+    log: (_, { message }, { client }) => {
+      const logs =
+        client.readQuery<LogsQuery, LogsQueryResult>({
+          query: LogsDocument,
+        })?.configurator.logs ?? [];
+
+      client.writeData({
+        data: {
+          __typename: "Query",
+          configurator: {
+            __typename: "Configurator",
+            logs: logs.concat([
+              {
+                time: new Date().toISOString(),
+                message,
+                __typename: "Log" as const,
+              },
+            ]),
+          } as Configurator,
+        },
+      });
+
+      return null;
     },
   },
 };
@@ -126,8 +159,35 @@ const client = new ApolloClient({
   // generated resolvers are not compatible with apollo
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: resolvers as any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  link: new WebSocketLink(subscriptionClient) as any,
+  link: new WebSocketLink(subscriptionClient),
 });
+
+const writeInitial = (): void => {
+  const { os, version, chromeVersion } = versionInfo();
+  client.writeData({
+    data: {
+      __typename: "Query",
+      configurator: {
+        port: null,
+        baudRate: 115200,
+        tab: null,
+        expertMode: false,
+        connecting: false,
+        connection: null,
+        logs: [
+          {
+            time: new Date().toISOString(),
+            message: `Running - OS: <strong>${os}</strong>, Chrome: <strong>${chromeVersion}</strong>, Configurator: <strong>${version}</strong>`,
+            __typename: "Log",
+          },
+        ],
+        __typename: "Configurator",
+      } as Configurator,
+    },
+  });
+};
+
+writeInitial();
+client.onResetStore(() => Promise.resolve(writeInitial()));
 
 export default client;

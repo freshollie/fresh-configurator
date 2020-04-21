@@ -1,8 +1,11 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { MockedProvider, MockedResponse } from "@apollo/react-testing";
 
 import { render, fireEvent, waitFor } from "../test-utils";
-import { CallibrateAccelerometerDocument } from "../gql/queries/Device.graphql";
+import {
+  CallibrateAccelerometerDocument,
+  CallibrateAccelerometerMutationResult,
+} from "../gql/queries/Device.graphql";
 import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager";
 
 const mockConnectionId = "someconnectionid";
@@ -14,6 +17,7 @@ const clientResolvers = {
     configurator: () => ({
       connection: mockConnectionId,
       connecting: false,
+      __typename: "Configurator",
     }),
   },
   Mutation: {
@@ -31,10 +35,15 @@ const mockCallibrateMutation = (
       connection,
     },
   },
-  result: () => {
+  result: (): CallibrateAccelerometerMutationResult => {
     callback();
     return {
-      data: null,
+      data: {
+        __typename: "Mutation",
+        deviceCallibrateAccelerometer: null,
+      },
+      loading: false,
+      called: true,
     };
   },
   delay: 100,

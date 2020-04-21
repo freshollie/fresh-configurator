@@ -8,7 +8,11 @@ import {
 } from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
-const GpsSummaryProvider: React.FC = () => {
+type Props = {
+  refreshRate: number;
+};
+
+const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
 
   const { data: sensorsData } = useSensorsQuery({
@@ -17,14 +21,14 @@ const GpsSummaryProvider: React.FC = () => {
     },
     skip: !connection,
   });
-  const sensors = sensorsData?.device.sensors ?? [];
+  const sensors = sensorsData?.connection.device.sensors ?? [];
 
   const { data } = useGpsSummaryQuery({
     variables: {
       connection: connection ?? "",
     },
     skip: !sensors.includes(Sensors.GPS) || !connection,
-    pollInterval: 100,
+    pollInterval: 1000 / refreshRate,
   });
 
   return (
@@ -34,23 +38,23 @@ const GpsSummaryProvider: React.FC = () => {
           <td>3D Fix:</td>
           <td>
             {data && (
-              <Status positive={data.device.gps.fix}>
-                {data.device.gps.fix ? "True" : "False"}
+              <Status positive={data.connection.device.gps.fix}>
+                {data.connection.device.gps.fix ? "True" : "False"}
               </Status>
             )}
           </td>
         </tr>
         <tr>
           <td>Sats:</td>
-          <td>{data?.device.gps.numSat}</td>
+          <td>{data?.connection.device.gps.numSat}</td>
         </tr>
         <tr>
           <td>Latitude:</td>
-          <td>{data?.device.gps.lat}</td>
+          <td>{data?.connection.device.gps.lat}</td>
         </tr>
         <tr>
           <td>Longitude:</td>
-          <td>{data?.device.gps.lon}</td>
+          <td>{data?.connection.device.gps.lon}</td>
         </tr>
       </tbody>
     </Table>

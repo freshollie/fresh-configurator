@@ -2,7 +2,7 @@ import styled, { css } from "../../theme";
 
 export default styled.button`
   width: 100%;
-  padding: 5px 0px 5px 0px;
+  padding: 5px;
   text-align: center;
   background-color: ${({ theme }) => theme.colors.accent};
   border-radius: 4px;

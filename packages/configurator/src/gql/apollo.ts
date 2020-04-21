@@ -3,15 +3,16 @@
  * skip is set: https://github.com/apollographql/react-apollo/issues/2127
  */
 
+import { ApolloClient } from "apollo-client";
+import { InMemoryCache } from "apollo-cache-inmemory";
 import {
   useQuery as useQueryOrig,
-  OperationVariables,
-  QueryResult,
   QueryHookOptions,
-  DocumentNode,
-} from "@apollo/client";
+} from "@apollo/react-hooks";
+import { OperationVariables, QueryResult } from "@apollo/react-common";
+import { DocumentNode } from "graphql";
 
-export * from "@apollo/client";
+export * from "@apollo/react-hooks";
 
 // We are following the definitions from apollo, so any has to be used here
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,3 +27,5 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
       : undefined
   );
 }
+
+export type ApolloContext = { client: ApolloClient<InMemoryCache> };

@@ -25,7 +25,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ links, activeLink, onClick }) => (
         onClick={() => onClick?.(id)}
       >
         {icon}
-        <div>{title}</div>
+        <div className="text">{title}</div>
       </NavLink>
     ))}
   </List>

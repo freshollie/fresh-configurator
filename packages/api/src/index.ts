@@ -296,3 +296,10 @@ export const calibrateAccelerometer = async (port: string): Promise<void> => {
   // for about 2 seconds, so resolve after 2 seconds
   await new Promise((resolve) => setTimeout(resolve, 2000));
 };
+
+export const resetConfig = async (port: string): Promise<void> => {
+  await execute(port, { code: codes.MSP_RESET_CONF });
+  // This command executes on the device, but doesn't actually produce anything
+  // for about 2 seconds, so resolve after 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+};

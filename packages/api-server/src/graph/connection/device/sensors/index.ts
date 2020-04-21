@@ -1,6 +1,5 @@
-import { ApolloError } from "apollo-server";
 import gql from "graphql-tag";
-import { Resolvers } from "../../__generated__";
+import { Resolvers } from "../../../__generated__";
 
 const typeDefs = gql`
   extend type FlightController {
@@ -8,7 +7,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    deviceCallibrateAccelerometer(connection: ID!): Boolean
+    deviceCallibrateAccelerometer(connectionId: ID!): Boolean
   }
 `;
 
@@ -21,15 +20,12 @@ const resolvers: Resolvers = {
   Mutation: {
     deviceCallibrateAccelerometer: (
       _,
-      { connection },
+      { connectionId },
       { api, connections }
-    ) => {
-      const port = connections.getPort(connection);
-      if (!port) {
-        throw new ApolloError(`${connection} is not connected`);
-      }
-      return api.calibrateAccelerometer(port).then(() => null);
-    },
+    ) =>
+      api
+        .calibrateAccelerometer(connections.getPort(connectionId))
+        .then(() => null),
   },
 };
 

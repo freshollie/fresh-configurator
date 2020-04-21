@@ -9,7 +9,9 @@ import {
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
 import useConnectionState from "../hooks/useConnectionState";
 
-const RcModelViewProvider: React.FC = () => {
+const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
+  refreshRate,
+}) => {
   const { connection } = useConnectionState();
   const { data: rcSettingsData } = useRcSettingsQuery({
     variables: {
@@ -25,20 +27,20 @@ const RcModelViewProvider: React.FC = () => {
     skip: !connection,
   });
 
-  const apiVersion = apiVersionData?.device.apiVersion ?? "0.0.0";
+  const apiVersion = apiVersionData?.connection.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useRcChannelsQuery({
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
-    pollInterval: 10,
+    pollInterval: 1000 / refreshRate,
   });
 
   const attitude = useSimulatedAttitude(
-    channelsData?.device.rc.channels,
-    rcSettingsData?.device.rc.tuning,
-    rcSettingsData?.device.rc.deadband,
+    channelsData?.connection.device.rc.channels,
+    rcSettingsData?.connection.device.rc.tuning,
+    rcSettingsData?.connection.device.rc.deadband,
     semver.lte(apiVersion, "1.20.0")
   );
 

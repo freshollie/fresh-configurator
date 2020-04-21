@@ -2,12 +2,31 @@ import styled from "../theme";
 
 export default styled.div`
   > header {
-    margin-bottom: 5px;
+    > .settings {
+      > * {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 5px;
+        > * {
+          flex: 1;
+          margin-right: 10px;
+        }
+        > .info {
+          margin-left: 5px;
+          height: 28px;
+          line-height: 25px;
+          vertical-align: middle;
+          flex: initial;
+          width: 75%;
+          border-bottom: solid 1px ${({ theme }) => theme.colors.subtleAccent};
+        }
+      }
+    }
+    margin-bottom: 15px;
   }
 
   > main {
-    > .settings {
-    }
     > .status {
       display: flex;
       flex-direction: row;

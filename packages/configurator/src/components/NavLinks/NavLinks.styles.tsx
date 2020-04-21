@@ -10,11 +10,17 @@ export const List = styled.ul`
   margin-block-start: 0rem;
   margin-block-end: 0rem;
   padding-inline-start: 0px;
+
+  transition: width ease-in-out 0.5s;
+  @media only screen and (max-width: 1055px),
+    only screen and (max-device-width: 1055px) {
+    width: 42px;
+  }
 `;
 
 export const NavLink = styled.li<{ active?: boolean }>`
   font-weight: normal;
-  padding-left: 15px;
+  padding-left: 12px;
   padding-top: 5px;
   padding-bottom: 3px;
 
@@ -25,10 +31,9 @@ export const NavLink = styled.li<{ active?: boolean }>`
         `
       : css`transparent`};
   color: ${({ active }) => (active ? css`#000` : css`#999999`)};
-  text-shadow: ${({ active }) =>
-    active
-      ? css`0px 1px rgba(255, 255, 255, 0.45)`
-      : css`0px 1px rgba(0, 0, 0, 0.45)`};
+  text-shadow: 0px 1px
+    ${({ active }) =>
+      active ? css` rgba(255, 255, 255, 0.45)` : css`rgba(0, 0, 0, 0.45)`};
 
   cursor: ${({ active }) => (active ? css`default` : css`pointer`)};
 
@@ -53,6 +58,7 @@ export const NavLink = styled.li<{ active?: boolean }>`
 
   svg {
     width: 16px;
+    min-width: 16px;
     height: 16px;
     padding-right: 5px;
   }
@@ -73,4 +79,15 @@ export const NavLink = styled.li<{ active?: boolean }>`
         }
       }
     `}
+
+  @media only screen and (max-width: 1055px),
+    only screen and (max-device-width: 1055px) {
+    .text {
+      padding-left: 10px;
+
+      text-overflow: clip;
+      white-space: nowrap;
+    }
+    overflow: hidden;
+  }
 `;

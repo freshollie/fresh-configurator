@@ -47,7 +47,7 @@ const App: React.FC = () => (
     </main>
     <footer>
       <div>
-        <FcStatusProvider />
+        <FcStatusProvider refreshRate={10} />
       </div>
     </footer>
   </MainLayout>

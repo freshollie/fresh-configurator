@@ -1,3 +1,19 @@
 mutation CallibrateAccelerometer($connection: ID!) {
-  deviceCallibrateAccelerometer(connection: $connection)
+  deviceCallibrateAccelerometer(connectionId: $connection)
+}
+
+mutation SetArming(
+  $connection: ID!
+  $armingDisabled: Boolean!
+  $runawayTakeoffPreventionDisabled: Boolean!
+) {
+  deviceSetArming(
+    connectionId: $connection
+    armingDisabled: $armingDisabled
+    runawayTakeoffPreventionDisabled: $runawayTakeoffPreventionDisabled
+  )
+}
+
+mutation Reset($connection: ID!) {
+  deviceReset(connectionId: $connection)
 }

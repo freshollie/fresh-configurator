@@ -33,12 +33,16 @@ const SENSORS_ORDER = [
 const SensorsListProvider: React.FC = () => {
   const { connected, connection } = useConnectionState();
 
-  const { data } = useSensorsQuery({
+  const { data, error } = useSensorsQuery({
     variables: {
       connection: connection ?? "",
     },
     skip: !connection || !connected,
   });
+
+  console.log(data, error);
+
+  console.log(data, error);
 
   if (!data || !connected) {
     return null;
@@ -50,7 +54,9 @@ const SensorsListProvider: React.FC = () => {
         <li
           key={sensor}
           className={
-            data.device.sensors.includes(sensor) ? "active" : undefined
+            data.connection.device.sensors.includes(sensor)
+              ? "active"
+              : undefined
           }
         >
           {SENSOR_ELEMENTS[sensor][0]}

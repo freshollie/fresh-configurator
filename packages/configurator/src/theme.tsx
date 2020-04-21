@@ -131,7 +131,8 @@ const GlobalStyle = createGlobalStyle`
     margin: 0px;
     padding: 0px;
     color: ${({ theme }) => theme.colors.defaultText};
-    background-color: initial;
+    background-color: ${({ theme }) =>
+      theme.dark ? theme.colors.secondary : "white"};
   }
 
   .content {

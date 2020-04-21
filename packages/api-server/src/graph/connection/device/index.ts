@@ -1,7 +1,6 @@
 import gql from "graphql-tag";
 import { mergeTypes, mergeResolvers } from "merge-graphql-schemas";
-import { ApolloError } from "apollo-server";
-import { Resolvers } from "../__generated__";
+import { Resolvers } from "../../__generated__";
 
 import arming from "./arming";
 import attitude from "./attitude";
@@ -15,29 +14,28 @@ import sensors from "./sensors";
 import status from "./status";
 
 const typeDefs = gql`
-  extend type Query {
-    device(connection: ID!): FlightController!
+  extend type Connection {
+    device: FlightController!
+  }
+
+  extend type Mutation {
+    deviceReset(connectionId: ID!): Boolean
   }
 
   type FlightController {
     port: String!
-    apiVersion: String!
   }
 `;
 
 const resolvers: Resolvers = {
-  Query: {
-    device: (_, { connection: connectionId }, { api, connections }) => {
-      const port = connections.getPort(connectionId);
-      if (!port) {
-        throw new ApolloError("Connection is not active");
-      }
-
-      return {
-        port,
-        apiVersion: api.apiVersion(port),
-      };
-    },
+  Connection: {
+    device: ({ port }) => ({
+      port,
+    }),
+  },
+  Mutation: {
+    deviceReset: (_, { connectionId }, { api, connections }) =>
+      api.resetConfig(connections.getPort(connectionId)).then(() => null),
   },
 };
 

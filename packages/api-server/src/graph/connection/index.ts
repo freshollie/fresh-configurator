@@ -1,29 +1,28 @@
 import * as uuid from "uuid";
-import { ApolloError } from "apollo-server";
 import gql from "graphql-tag";
-import { apiVersion } from "@betaflight/api";
+import { ApolloError } from "apollo-server";
+import { mergeResolvers, mergeTypes } from "merge-graphql-schemas";
+import device from "./device";
 import { Resolvers } from "../__generated__";
 
 const typeDefs = gql`
   type Subscription {
-    onClosed(connection: ID!): ID!
+    onClosed(connectionId: ID!): ID!
   }
 
   type Mutation {
-    connect(port: String!, baudRate: Int!): ConnectionDetails!
-    close(connection: ID!): ID!
+    connect(port: String!, baudRate: Int!): Connection!
+    close(connectionId: ID!): ID!
   }
 
   type Query {
-    connectionStats(connection: ID!): ConnectionStats!
+    connection(connectionId: ID!): Connection!
   }
 
-  type ConnectionDetails {
+  type Connection {
     id: ID!
+    port: String!
     apiVersion: String!
-  }
-
-  type ConnectionStats {
     bytesRead: Int!
     bytesWritten: Int!
     packetErrors: Int!
@@ -33,11 +32,11 @@ const typeDefs = gql`
 const resolvers: Resolvers = {
   Subscription: {
     onClosed: {
-      subscribe: (_, { connection }, { connections }) => {
-        if (!connections.getPort(connection)) {
+      subscribe: (_, { connectionId }, { connections }) => {
+        if (!connections.isOpen(connectionId)) {
           throw new ApolloError("Connection is not open");
         }
-        return connections.onClosed(connection);
+        return connections.onClosed(connectionId);
       },
       resolve: (connectionId: string) => connectionId,
     },
@@ -70,37 +69,33 @@ const resolvers: Resolvers = {
 
           return {
             id: connectionId,
-            apiVersion: apiVersion(port),
+            port,
           };
         }),
 
-    close: async (_, { connection }, { connections, api }) => {
-      const port = connections.getPort(connection);
-      if (!port) {
-        throw new ApolloError(`${connection} is not a valid connection`);
-      }
-
+    close: async (_, { connectionId }, { connections, api }) => {
+      const port = connections.getPort(connectionId);
       await api.close(port);
       connections.remove(port);
-      return connection;
+      return connectionId;
     },
   },
 
   Query: {
-    connectionStats: (_, { connection }, { connections }) => {
-      const port = connections.getPort(connection);
-
-      if (!port) {
-        throw new ApolloError("Connection is not active");
-      }
-      return { __typename: "ConnectionStats", port };
-    },
+    connection: (_, { connectionId }, { connections }) => ({
+      id: connectionId,
+      port: connections.getPort(connectionId),
+    }),
   },
-  ConnectionStats: {
+  Connection: {
+    apiVersion: ({ port }, _, { api }) => api.apiVersion(port),
     bytesRead: ({ port }, _, { api }) => api.bytesRead(port),
     bytesWritten: ({ port }, _, { api }) => api.bytesWritten(port),
     packetErrors: ({ port }, _, { api }) => api.packetErrors(port),
   },
 };
 
-export default { resolvers, typeDefs };
+export default {
+  resolvers: mergeResolvers([device.resolvers, resolvers]),
+  typeDefs: mergeTypes([device.typeDefs, typeDefs]),
+};
