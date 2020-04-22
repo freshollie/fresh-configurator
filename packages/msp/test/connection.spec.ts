@@ -91,38 +91,42 @@ describe("open", () => {
     expect(mockMspDevices.every((port) => isOpen(port))).toBe(true);
   });
 
-  it("should throw an error when trying to open a port which doesn't respond with api version", (done) => {
-    jest.useFakeTimers();
+  it("should throw an error when trying to open a port which doesn't respond with api version", () =>
+    new Promise((done) => {
+      jest.useFakeTimers();
 
-    open("/dev/non-msp-device")
-      .then(() => {
-        throw new Error("should not have resolved");
-      })
-      .catch((e) => {
-        expect(e).toMatchSnapshot();
+      open("/dev/non-msp-device")
+        .then(() => {
+          throw new Error("should not have resolved");
+        })
+        .catch((e) => {
+          expect(e).toMatchSnapshot();
+          done();
+        });
+
+      realSetTimeout(() => {
+        jest.runTimersToTime(2500);
+      }, 100);
+    }));
+
+  it("should provide a callback and close the connection when the connection closes", () => {
+    return new Promise((done) => {
+      open("/dev/something", () => {
+        expect(isOpen("/dev/something")).toBe(false);
         done();
-      });
-
-    realSetTimeout(() => {
-      jest.runTimersToTime(2500);
-    }, 100);
+      }).then(() => raw("/dev/something")?.close());
+    });
   });
 
-  it("should provide a callback and close the connection when the connection closes", (done) => {
-    open("/dev/something", () => {
-      expect(isOpen("/dev/something")).toBe(false);
-      done();
-    }).then(() => raw("/dev/something")?.close());
-  });
-
-  it("should close the connection when an error occurs", (done) => {
-    open("/dev/something", () => {
-      expect(isOpen("/dev/something")).toBe(false);
-      done();
-    }).then(() =>
-      raw("/dev/something")?.emit("error", new Error("Oh no some error"))
-    );
-  });
+  it("should close the connection when an error occurs", () =>
+    new Promise((done) => {
+      open("/dev/something", () => {
+        expect(isOpen("/dev/something")).toBe(false);
+        done();
+      }).then(() =>
+        raw("/dev/something")?.emit("error", new Error("Oh no some error"))
+      );
+    }));
 
   it("should throw an error when port cannot be opened", async () => {
     await expect(open("/something/wrong")).rejects.toEqual(expect.any(Error));
