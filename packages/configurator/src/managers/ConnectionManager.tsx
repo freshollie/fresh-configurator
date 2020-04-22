@@ -38,7 +38,6 @@ const ConnectionManager: React.FC = () => {
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
 
   const {
-    connected,
     connecting,
     connection,
     setConnection,
@@ -67,13 +66,6 @@ const ConnectionManager: React.FC = () => {
       log(
         `Serial port <span class="message-positive">successfully</span> closed for connectionId=${connectionId}`
       );
-      setConnection(null);
-    },
-    onError: () => {
-      if (!isCurrentAttempt()) {
-        return;
-      }
-      setConnection(null);
     },
   });
 
@@ -130,11 +122,11 @@ const ConnectionManager: React.FC = () => {
     variables: {
       connection: connection ?? "",
     },
-    skip: !connection || !connected,
+    skip: !connection,
     onSubscriptionData: ({ subscriptionData }) => {
       const connectionId = subscriptionData.data?.onClosed;
       if (connectionId === connection) {
-        // setConnection(null);
+        setConnection(null);
         log(`Serial port closed unexpectedly for connectionId=${connectionId}`);
       }
     },
@@ -142,13 +134,13 @@ const ConnectionManager: React.FC = () => {
 
   useEffect(() => {
     if (subscriptionError && connection) {
-      // setConnection(null);
+      setConnection(null);
       log(`Serial port closed unexpectedly for connectionId=${connection}`);
     }
   }, [connection, log, setConnection, subscriptionError]);
 
   const handleClicked = (): void => {
-    if (!connected && !connecting) {
+    if (!connection && !connecting) {
       log(`Opening connection on ${port}`);
       setConnecting(true);
       connect();
@@ -156,8 +148,9 @@ const ConnectionManager: React.FC = () => {
       setConnecting(false);
       if (connection) {
         disconnect();
+        setConnection(null);
       }
-      if (connecting && !connected) {
+      if (connecting && !connection) {
         log(`Connection attempt to ${port} aborted`);
         handleAborted();
       }
@@ -167,18 +160,16 @@ const ConnectionManager: React.FC = () => {
   let statusText = "Connecting";
 
   if (!connecting) {
-    statusText = connected ? "Disconnect" : "Connect";
+    statusText = connection ? "Disconnect" : "Connect";
   }
+
+  const disconnected = !connection && !connecting;
 
   return (
     <BigButton
-      active={connected}
-      data-testid="connect"
-      icon={
-        <Icon
-          name={!connected && !connecting ? "usb-connect" : "usb-disconnect"}
-        />
-      }
+      active={!!connection}
+      data-testid={disconnected ? "connect-button" : "disconnect-button"}
+      icon={<Icon name={disconnected ? "usb-connect" : "usb-disconnect"} />}
       text={statusText}
       onClick={handleClicked}
     />

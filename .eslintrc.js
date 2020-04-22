@@ -6,6 +6,7 @@ module.exports = {
     "prettier",
     "import",
     "functional",
+    "jest",
   ],
   extends: [
     "plugin:@typescript-eslint/recommended",
@@ -13,6 +14,7 @@ module.exports = {
     "airbnb/hooks",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "prettier/react",
     "prettier/@typescript-eslint",
@@ -69,6 +71,7 @@ module.exports = {
       },
       rules: {
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "no-constant-condition": "off",
         "no-empty": "off",
         "no-await-in-loop": "off",

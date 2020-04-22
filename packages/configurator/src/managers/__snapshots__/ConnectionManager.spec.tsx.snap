@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ConnectionManager should close the active connection when onClosed event occurs for the active connection 1`] = `
+Array [
+  "Serial port closed unexpectedly for connectionId=238478234",
+]
+`;
+
+exports[`ConnectionManager should close the connection when the disconnect button is clicked 1`] = `
+Array [
+  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=null",
+]
+`;
+
 exports[`ConnectionManager should connect with the connection settings and set the new connection id when connect clicked 1`] = `
 <DocumentFragment>
   .c0 {
@@ -69,7 +81,7 @@ exports[`ConnectionManager should connect with the connection settings and set t
   >
     <button
       class="c1"
-      data-testid="connect"
+      data-testid="connect-button"
       type="button"
     >
       <svg
@@ -81,4 +93,185 @@ exports[`ConnectionManager should connect with the connection settings and set t
     </div>
   </div>
 </DocumentFragment>
+`;
+
+exports[`ConnectionManager should connect with the connection settings and set the new connection id when connect clicked 2`] = `
+<DocumentFragment>
+  .c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  height: 70px;
+  width: 70px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
+  text-shadow: 0px 1px rgba(0,0,0,0.25);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-color: #ffbb00;
+  border: 1px solid #dba718;
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  cursor: pointer;
+  background-color: #e60000;
+  border: 1px solid #fe0000;
+}
+
+.c1 svg {
+  width: 44px;
+  height: 44px;
+}
+
+.c1:hover {
+  background-color: #ffcc3f;
+  background-color: #f21212;
+}
+
+<div
+    class="c0"
+  >
+    <button
+      class="c1"
+      data-testid="disconnect-button"
+      type="button"
+    >
+      <svg
+        data-name="usb-disconnect"
+      />
+    </button>
+    <div>
+      Disconnect
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ConnectionManager should connect with the connection settings and set the new connection id when connect clicked 3`] = `
+<DocumentFragment>
+  .c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  height: 70px;
+  width: 70px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
+  text-shadow: 0px 1px rgba(0,0,0,0.25);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-color: #ffbb00;
+  border: 1px solid #dba718;
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  cursor: pointer;
+  background-color: #e60000;
+  border: 1px solid #fe0000;
+}
+
+.c1 svg {
+  width: 44px;
+  height: 44px;
+}
+
+.c1:hover {
+  background-color: #ffcc3f;
+  background-color: #f21212;
+}
+
+<div
+    class="c0"
+  >
+    <button
+      class="c1"
+      data-testid="disconnect-button"
+      type="button"
+    >
+      <svg
+        data-name="usb-disconnect"
+      />
+    </button>
+    <div>
+      Disconnect
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ConnectionManager should connect with the connection settings and set the new connection id when connect clicked 4`] = `
+Array [
+  "Opening connection on /dev/something",
+  "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=23455",
+  "MultiWii API version: <strong>1.40.1</strong>",
+  "<b>Arming disabled</b>",
+]
 `;
