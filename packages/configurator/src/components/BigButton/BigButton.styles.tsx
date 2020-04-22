@@ -15,7 +15,7 @@ export const Container = styled.div`
   user-select: none;
 `;
 
-export const Button = styled.button<{ active: boolean }>`
+export const RoundButton = styled.button<{ active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;

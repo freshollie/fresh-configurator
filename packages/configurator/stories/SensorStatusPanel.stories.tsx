@@ -1,13 +1,6 @@
 import React from "react";
 import SensorStatusPanel from "../src/components/SensorStatusPanel";
-import {
-  GyroSensorIcon,
-  AccelerometerSensorIcon,
-  MagnetometerSensorIcon,
-  BarometerSensorIcon,
-  GpsSensorIcon,
-  SonarSensorIcon,
-} from "../src/icons";
+import Icon from "../src/components/Icon";
 
 export default {
   component: SensorStatusPanel,
@@ -17,27 +10,27 @@ export default {
 export const ExampleSensors = (): JSX.Element => (
   <SensorStatusPanel>
     <li className="active">
-      <GyroSensorIcon />
+      <Icon name="gyro-sensor" />
       <span>Gyro</span>
     </li>
     <li className="active">
-      <AccelerometerSensorIcon />
+      <Icon name="acc-sensor" />
       <span>Accel</span>
     </li>
     <li className="active">
-      <MagnetometerSensorIcon />
+      <Icon name="mag-sensor" />
       <span>Mag</span>
     </li>
     <li className="active">
-      <BarometerSensorIcon />
+      <Icon name="bar-sensor" />
       <span>Baro</span>
     </li>
     <li className="active">
-      <GpsSensorIcon />
+      <Icon name="gps-sensor" />
       <span>GPS</span>
     </li>
     <li className="">
-      <SonarSensorIcon />
+      <Icon name="sonar-sensor" />
       <span>Sonar</span>
     </li>
   </SensorStatusPanel>
@@ -46,27 +39,27 @@ export const ExampleSensors = (): JSX.Element => (
 export const ExampleInactiveSensors = (): JSX.Element => (
   <SensorStatusPanel>
     <li className="active">
-      <GyroSensorIcon />
+      <Icon name="gps-sensor" />
       <span>Gyro</span>
     </li>
     <li className="active">
-      <AccelerometerSensorIcon />
+      <Icon name="acc-sensor" />
       <span>Accel</span>
     </li>
     <li>
-      <MagnetometerSensorIcon />
+      <Icon name="mag-sensor" />
       <span>Mag</span>
     </li>
     <li>
-      <BarometerSensorIcon />
+      <Icon name="bar-sensor" />
       <span>Baro</span>
     </li>
     <li className="active">
-      <GpsSensorIcon />
+      <Icon name="gps-sensor" />
       <span>GPS</span>
     </li>
     <li>
-      <SonarSensorIcon />
+      <Icon name="sonar-sensor" />
       <span>Sonar</span>
     </li>
   </SensorStatusPanel>
@@ -75,7 +68,7 @@ export const ExampleInactiveSensors = (): JSX.Element => (
 export const SingleItemActive = (): JSX.Element => (
   <SensorStatusPanel>
     <li className="active">
-      <GyroSensorIcon />
+      <Icon name="gyro-sensor" />
       <span>Gyro</span>
     </li>
   </SensorStatusPanel>
@@ -84,7 +77,7 @@ export const SingleItemActive = (): JSX.Element => (
 export const SingleItemInactive = (): JSX.Element => (
   <SensorStatusPanel>
     <li>
-      <GyroSensorIcon />
+      <Icon name="gyro-sensor" />
       <span>Gyro</span>
     </li>
   </SensorStatusPanel>

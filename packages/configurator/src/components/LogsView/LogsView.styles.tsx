@@ -1,5 +1,5 @@
 import styled, { css } from "../../theme";
-import { ScrollIcon } from "../../icons";
+import Icon from "../Icon";
 
 export const Wrapper = styled.div`
   position: relative;
@@ -42,7 +42,7 @@ export const OpenSwitch = styled.a`
   }
 `;
 
-export const Scroll = styled(ScrollIcon)<{ open?: boolean }>`
+export const ScrollIcon = styled(Icon)<{ open?: boolean }>`
   position: absolute;
   right: 10px;
   height: 27px;

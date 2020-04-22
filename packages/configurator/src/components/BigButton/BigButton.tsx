@@ -1,18 +1,32 @@
 import React from "react";
 
-import { Container, Button } from "./BigButton.styles";
+import { Container, RoundButton } from "./BigButton.styles";
 
 const BigButton: React.FC<{
   text?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
   active?: boolean;
+  "data-testid"?: string;
   onClick?: () => void;
-}> = ({ text, icon, active = false, onClick, disabled }) => (
+}> = ({
+  text,
+  icon,
+  active = false,
+  onClick,
+  disabled,
+  "data-testid": testId,
+}) => (
   <Container>
-    <Button type="button" active={active} onClick={onClick} disabled={disabled}>
+    <RoundButton
+      data-testid={testId}
+      type="button"
+      active={active}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {icon}
-    </Button>
+    </RoundButton>
     {text && <div>{text}</div>}
   </Container>
 );

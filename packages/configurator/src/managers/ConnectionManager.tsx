@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useReducer } from "react";
 import semver from "semver";
 import config from "../config";
-import { UsbConnectIcon, UsbDisconnectIcon } from "../icons";
+import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
 import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
@@ -44,6 +44,8 @@ const ConnectionManager: React.FC = () => {
     setConnection,
     setConnecting,
   } = useConnectionState();
+
+  console.log(connecting);
 
   const [disableArming] = useSetArmingMutation({
     onCompleted: () => {
@@ -173,8 +175,11 @@ const ConnectionManager: React.FC = () => {
   return (
     <BigButton
       active={connected}
+      data-testid="connect"
       icon={
-        !connected && !connecting ? <UsbConnectIcon /> : <UsbDisconnectIcon />
+        <Icon
+          name={!connected && !connecting ? "usb-connect" : "usb-disconnect"}
+        />
       }
       text={statusText}
       onClick={handleClicked}

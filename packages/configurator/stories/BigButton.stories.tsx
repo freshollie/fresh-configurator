@@ -1,6 +1,6 @@
 import React from "react";
 import BigButton from "../src/components/BigButton";
-import { UsbConnectIcon, UsbDisconnectIcon } from "../src/icons";
+import Icon from "../src/components/Icon";
 
 export default {
   component: BigButton,
@@ -8,8 +8,8 @@ export default {
 };
 
 export const connectButton = (): JSX.Element => (
-  <BigButton icon={<UsbConnectIcon />} text="Connect" />
+  <BigButton icon={<Icon name="usb-connect" />} text="Connect" />
 );
 export const disconnectButton = (): JSX.Element => (
-  <BigButton icon={<UsbDisconnectIcon />} text="Disconnect" active />
+  <BigButton icon={<Icon name="usb-disconnect" />} text="Disconnect" active />
 );

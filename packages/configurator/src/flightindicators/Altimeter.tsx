@@ -21,7 +21,6 @@ export default withBase<{
       style={{ transform: `rotate(${(altitude / 10000) * 360}deg)` }}
     />
     <FiNeedle
-      className="needle box"
       style={{
         transform: `rotate(${90 + ((altitude % 1000) * 360) / 1000}deg)`,
       }}

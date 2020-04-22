@@ -1,24 +1,17 @@
 import React from "react";
 import { Sensors } from "@betaflight/api";
-import {
-  GyroSensorIcon,
-  AccelerometerSensorIcon,
-  MagnetometerSensorIcon,
-  BarometerSensorIcon,
-  GpsSensorIcon,
-  SonarSensorIcon,
-} from "../icons";
+import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
 import { useSensorsQuery } from "../gql/queries/Device.graphql";
 import SensorStatusPanel from "../components/SensorStatusPanel";
 
 const SENSOR_ELEMENTS = {
-  [Sensors.GYRO]: [<GyroSensorIcon />, "Gyro"],
-  [Sensors.ACCELEROMETER]: [<AccelerometerSensorIcon />, "Accel"],
-  [Sensors.MAGNETOMETER]: [<MagnetometerSensorIcon />, "Mag"],
-  [Sensors.BAROMETER]: [<BarometerSensorIcon />, "Baro"],
-  [Sensors.GPS]: [<GpsSensorIcon />, "GPS"],
-  [Sensors.SONAR]: [<SonarSensorIcon />, "Sonar"],
+  [Sensors.GYRO]: [<Icon name="gyro-sensor" />, "Gyro"],
+  [Sensors.ACCELEROMETER]: [<Icon name="acc-sensor" />, "Accel"],
+  [Sensors.MAGNETOMETER]: [<Icon name="mag-sensor" />, "Mag"],
+  [Sensors.BAROMETER]: [<Icon name="bar-sensor" />, "Baro"],
+  [Sensors.GPS]: [<Icon name="gps-sensor" />, "GPS"],
+  [Sensors.SONAR]: [<Icon name="sonar-sensor" />, "Sonar"],
 } as const;
 
 const SENSORS_ORDER = [
@@ -33,16 +26,12 @@ const SENSORS_ORDER = [
 const SensorsListProvider: React.FC = () => {
   const { connected, connection } = useConnectionState();
 
-  const { data, error } = useSensorsQuery({
+  const { data } = useSensorsQuery({
     variables: {
       connection: connection ?? "",
     },
     skip: !connection || !connected,
   });
-
-  console.log(data, error);
-
-  console.log(data, error);
 
   if (!data || !connected) {
     return null;

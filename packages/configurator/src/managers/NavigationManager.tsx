@@ -4,36 +4,29 @@ import { useNavigationDataQuery } from "../gql/queries/Configurator.graphql";
 import { useSelectTabMutation } from "../gql/mutations/Configurator.graphql";
 
 import NavLinks from "../components/NavLinks";
-import {
-  WelcomeIcon,
-  HelpIcon,
-  FlasherIcon,
-  OSDIcon,
-  SetupIcon,
-  ReceiverIcon,
-} from "../icons";
+import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
 
 const DISCONNECTED_LINKS = [
   {
     title: "Welcome",
-    icon: <WelcomeIcon />,
+    icon: <Icon name="welcome" />,
     id: "landing",
   },
   {
     title: "Change log",
-    icon: <HelpIcon />,
+    icon: <Icon name="help" />,
     id: "change-log",
   },
-  { title: "Privacy Policy", icon: <HelpIcon />, id: "privary-policy" },
+  { title: "Privacy Policy", icon: <Icon name="help" />, id: "privary-policy" },
   {
     title: "Documentation & Support",
-    icon: <HelpIcon />,
+    icon: <Icon name="help" />,
     id: "documentation",
   },
   {
     title: "Firmware Flasher",
-    icon: <FlasherIcon />,
+    icon: <Icon name="flasher" />,
     id: "flasher",
   },
 ];
@@ -41,17 +34,17 @@ const DISCONNECTED_LINKS = [
 const CONNECTED_LINKS = [
   {
     title: "Setup",
-    icon: <SetupIcon />,
+    icon: <Icon name="setup" />,
     id: "setup",
   },
   {
     title: "OSD",
-    icon: <OSDIcon />,
+    icon: <Icon name="osd" />,
     id: "osd",
   },
   {
     title: "Receiver",
-    icon: <ReceiverIcon />,
+    icon: <Icon name="receiver" />,
     id: "receiver",
   },
 ];

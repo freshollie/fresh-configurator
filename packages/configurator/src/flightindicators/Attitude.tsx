@@ -18,13 +18,10 @@ export default withBase<{
 }>(({ roll, pitch }) => (
   <>
     <div style={{ transform: `rotate(${roll}deg)` }}>
-      <HorizonBack className="horizon-back" />
-      <HorizonBall
-        className="horizen-ball"
-        style={{ top: `${boundedPitch(pitch) * 0.7}%` }}
-      />
+      <HorizonBack />
+      <HorizonBall style={{ top: `${boundedPitch(pitch) * 0.7}%` }} />
 
-      <HorizonCircle className="horizen-circle" />
+      <HorizonCircle />
     </div>
     <HorizonMechanics />
   </>
