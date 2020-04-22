@@ -24,16 +24,16 @@ const SENSORS_ORDER = [
 ] as (keyof typeof SENSOR_ELEMENTS)[];
 
 const SensorsListProvider: React.FC = () => {
-  const { connected, connection } = useConnectionState();
+  const { connection } = useConnectionState();
 
   const { data } = useSensorsQuery({
     variables: {
       connection: connection ?? "",
     },
-    skip: !connection || !connected,
+    skip: !connection,
   });
 
-  if (!data || !connected) {
+  if (!data || !connection) {
     return null;
   }
 

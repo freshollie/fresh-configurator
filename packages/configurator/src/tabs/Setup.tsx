@@ -49,7 +49,7 @@ const SetupTab: React.FC = () => (
             <Widget>
               <header>Instruments</header>
               <main>
-                <ModelInstrumentsProvider refreshRate={10} />
+                <ModelInstrumentsProvider refreshRate={60} />
               </main>
             </Widget>
           </aside>

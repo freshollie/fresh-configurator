@@ -45,8 +45,6 @@ const ConnectionManager: React.FC = () => {
     setConnecting,
   } = useConnectionState();
 
-  console.log(connecting);
-
   const [disableArming] = useSetArmingMutation({
     onCompleted: () => {
       log("<b>Arming disabled</b>");

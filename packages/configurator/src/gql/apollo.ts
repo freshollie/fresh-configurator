@@ -23,7 +23,15 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
   return useQueryOrig(
     query,
     options
-      ? { ...options, pollInterval: options.skip ? 0 : options.pollInterval }
+      ? {
+          ...options,
+          pollInterval:
+            options.skip && options.pollInterval ? 0 : options.pollInterval,
+
+          // IMPORTANT: Apollo has some bug where components don't rerender when
+          // they should unless this is enabled!
+          notifyOnNetworkStatusChange: !options.pollInterval,
+        }
       : undefined
   );
 }
