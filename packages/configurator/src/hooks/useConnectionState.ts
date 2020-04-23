@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useConnectionStateQuery } from "../gql/queries/Configurator.graphql";
 import {
   useSetConnectionMutation,
@@ -20,17 +21,23 @@ export default (): {
       !!data?.configurator.connection && !data?.configurator.connecting,
     connecting: data?.configurator.connecting ?? false,
     connection: data?.configurator.connection ?? undefined,
-    setConnection: (connectionId) =>
-      setConnection({
-        variables: {
-          connection: connectionId,
-        },
-      }),
-    setConnecting: (value) =>
-      setConnecting({
-        variables: {
-          value,
-        },
-      }),
+    setConnection: useCallback(
+      (connectionId) =>
+        setConnection({
+          variables: {
+            connection: connectionId,
+          },
+        }),
+      [setConnection]
+    ),
+    setConnecting: useCallback(
+      (value) =>
+        setConnecting({
+          variables: {
+            value,
+          },
+        }),
+      [setConnecting]
+    ),
   };
 };

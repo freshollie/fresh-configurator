@@ -1,14 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConnectionManager should close the active connection when onClosed event occurs for the active connection 1`] = `
+exports[`ConnectionManager should close the connection if api version is less than minimum version 1`] = `
 Array [
-  "Serial port closed unexpectedly for connectionId=238478234",
+  "Opening connection on /dev/something",
+  "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=23432423",
+  "MultiWii API version: <strong>1.0.1</strong>",
+  "MSP version not supported: <span class=\\"message-negative\\">1.0.1</span>",
+  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=23432423",
 ]
 `;
 
 exports[`ConnectionManager should close the connection when the disconnect button is clicked 1`] = `
 Array [
-  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=null",
+  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=435345",
 ]
 `;
 
@@ -148,8 +152,6 @@ exports[`ConnectionManager should connect with the connection settings and set t
   padding-bottom: 0px;
   padding-left: 0px;
   cursor: pointer;
-  background-color: #e60000;
-  border: 1px solid #fe0000;
 }
 
 .c1 svg {
@@ -159,7 +161,6 @@ exports[`ConnectionManager should connect with the connection settings and set t
 
 .c1:hover {
   background-color: #ffcc3f;
-  background-color: #f21212;
 }
 
 <div
@@ -175,7 +176,7 @@ exports[`ConnectionManager should connect with the connection settings and set t
       />
     </button>
     <div>
-      Disconnect
+      Connecting
     </div>
   </div>
 </DocumentFragment>
@@ -273,5 +274,24 @@ Array [
   "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=23455",
   "MultiWii API version: <strong>1.40.1</strong>",
   "<b>Arming disabled</b>",
+]
+`;
+
+exports[`ConnectionManager should handle failing to connect 1`] = `
+Array [
+  "Opening connection on /dev/something",
+  "Could not open connection (<span class=\\"message-negative\\">Network error: some error</span>), communication <span class=\\"message-negative\\">failed</span>",
+]
+`;
+
+exports[`ConnectionManager should remove the active connection if onClosed event subscription fails 1`] = `
+Array [
+  "Serial port closed unexpectedly for connectionId=238478234",
+]
+`;
+
+exports[`ConnectionManager should remove the connection when onClosed event occurs for the active connection 1`] = `
+Array [
+  "Serial port closed unexpectedly for connectionId=238478234",
 ]
 `;

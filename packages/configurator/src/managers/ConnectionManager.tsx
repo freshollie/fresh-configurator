@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useReducer } from "react";
+import React, { useRef, useEffect, useReducer, useCallback } from "react";
 import semver from "semver";
 import config from "../config";
 import Icon from "../components/Icon";
@@ -15,24 +15,50 @@ import { useSetArmingMutation } from "../gql/mutations/Device.graphql";
 import BigButton from "../components/BigButton";
 
 /**
+ * Useful for conncurrency tracking, where a given response
+ * might come back after a new request has been submitted.
+ *
+ * Use this hook when you want to know if a new request has been
+ * sent in the time you were waiting for the response.
+ *
+ * This works by using a ref to keep track of the latest attempt,
+ * vs the in memory attempt of the given render.
+ */
+const useAttemptTracking = (): {
+  /**
+   * Called when you want to invalidate all previous attempts
+   */
+  newAttempt: () => void;
+  /**
+   * Called when you want to check if the current attempt
+   * is the last valid attempt
+   */
+  isCurrentAttempt: () => boolean;
+} => {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const attempt = useRef(0);
+  const currentAttempt = attempt.current;
+
+  return {
+    newAttempt: useCallback(() => {
+      attempt.current += 1;
+      forceUpdate();
+    }, [forceUpdate, attempt]),
+
+    isCurrentAttempt: useCallback(() => attempt.current === currentAttempt, [
+      currentAttempt,
+    ]),
+  };
+};
+
+/**
  * Handle all aspects of tracking the app connection
  * to the device, as well as providing an interface
- * for the user to "connect" or "disconect"
+ * for the user to "connect" or "disconnect"
  */
 const ConnectionManager: React.FC = () => {
   const log = useLogger();
-
-  // Handle keeping track of what connection attempt we are
-  // on so we can ignore responses from mutations against
-  // different attempts
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const attempt = useRef(0);
-  const connectionAttempt = attempt.current;
-  const isCurrentAttempt = (): boolean => attempt.current === connectionAttempt;
-  const handleAborted = (): void => {
-    attempt.current += 1;
-    forceUpdate();
-  };
+  const { isCurrentAttempt, newAttempt } = useAttemptTracking();
 
   const { data: configuratorQuery } = useConnectionSettingsQuery();
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
@@ -66,6 +92,12 @@ const ConnectionManager: React.FC = () => {
       log(
         `Serial port <span class="message-positive">successfully</span> closed for connectionId=${connectionId}`
       );
+    },
+    onError: (e) => {
+      if (!isCurrentAttempt()) {
+        return;
+      }
+      log(`Error closing connection: ${e.message}`);
     },
   });
 
@@ -118,26 +150,26 @@ const ConnectionManager: React.FC = () => {
   // Create a subscription to the current connection
   // and handle updating the app state when connection
   // is closed
-  const { error: subscriptionError } = useOnConnectionClosedSubscription({
+  const {
+    error: subscriptionError,
+    data: onClosedData,
+  } = useOnConnectionClosedSubscription({
     variables: {
       connection: connection ?? "",
     },
+    shouldResubscribe: false,
     skip: !connection,
-    onSubscriptionData: ({ subscriptionData }) => {
-      const connectionId = subscriptionData.data?.onClosed;
-      if (connectionId === connection) {
-        setConnection(null);
-        log(`Serial port closed unexpectedly for connectionId=${connectionId}`);
-      }
-    },
   });
 
+  const connectionClosed =
+    onClosedData && connection && onClosedData.onClosed === connection;
+
   useEffect(() => {
-    if (subscriptionError && connection) {
+    if ((subscriptionError || connectionClosed) && connection) {
       setConnection(null);
       log(`Serial port closed unexpectedly for connectionId=${connection}`);
     }
-  }, [connection, log, setConnection, subscriptionError]);
+  }, [connection, connectionClosed, log, setConnection, subscriptionError]);
 
   const handleClicked = (): void => {
     if (!connection && !connecting) {
@@ -152,7 +184,7 @@ const ConnectionManager: React.FC = () => {
       }
       if (connecting && !connection) {
         log(`Connection attempt to ${port} aborted`);
-        handleAborted();
+        newAttempt();
       }
     }
   };
