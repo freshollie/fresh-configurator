@@ -77,7 +77,7 @@ const connectMock = (
   baudRate: number,
   connectionId: string,
   apiVersion: string,
-  onConnect: () => void
+  onConnect = () => {}
 ): MockedResponse => ({
   request: {
     query: ConnectDocument,
@@ -418,39 +418,25 @@ describe("ConnectionManager", () => {
     expect(logs).toMatchSnapshot();
   });
 
-  it.skip("should handle aborting connection attempts", async () => {
-    const connect = jest.fn();
+  it("should handle aborting connection attempts", async () => {
+    const disconnect = jest.fn();
     const setDisarmed = jest.fn();
     const onSubscribed = jest.fn();
-    const mockConnectionId = "23455";
+    const mockConnectionId1 = "435543";
+    const mockConnectionId2 = "243455";
 
-    const cache = new InMemoryCache();
-    const { getByTestId, asFragment } = render(
+    const { getByTestId, rerender } = render(
       <MockedProvider
-        cache={cache}
         resolvers={configuratorState({
           connecting: false,
           connection: null,
           port: "/dev/something",
           baudRate: 115200,
         })}
+        key={1}
         mocks={[
-          connectMock(
-            "/dev/something",
-            115200,
-            mockConnectionId,
-            "1.40.1",
-            connect
-          ),
-          connectMock(
-            "/dev/something",
-            115200,
-            mockConnectionId,
-            "1.40.1",
-            connect
-          ),
-          onClosedMock(mockConnectionId, null, onSubscribed),
-          setArmingMock(mockConnectionId, true, false, setDisarmed),
+          connectMock("/dev/something", 115200, mockConnectionId1, "1.40.1"),
+          disconnectMock(mockConnectionId1, disconnect),
         ]}
       >
         <ConnectionManager />
@@ -458,29 +444,48 @@ describe("ConnectionManager", () => {
     );
 
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
-
-    // expect the button to look correct
-    expect(asFragment()).toMatchSnapshot();
-
     fireEvent.click(getByTestId("connect-button"));
 
-    await waitFor(() => expect(connectionState(cache).connecting).toBeTruthy());
-    expect(getByTestId("disconnect-button")).toBeVisible();
+    fireEvent.click(await waitFor(() => getByTestId("disconnect-button")));
+    await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
+    await waitFor(() => expect(disconnect).toHaveBeenCalled());
 
-    // expect the button to have connecting text
-    expect(asFragment()).toMatchSnapshot();
+    const cache = new InMemoryCache();
+    rerender(
+      <MockedProvider
+        cache={cache}
+        resolvers={configuratorState({
+          connecting: false,
+          connection: null,
+          port: "/dev/someotherport",
+          baudRate: 115200,
+        })}
+        key={2}
+        mocks={[
+          connectMock(
+            "/dev/someotherport",
+            115200,
+            mockConnectionId2,
+            "1.40.1"
+          ),
+          onClosedMock(mockConnectionId2, null, onSubscribed),
+          setArmingMock(mockConnectionId2, true, false, setDisarmed),
+        ]}
+      >
+        <ConnectionManager />
+      </MockedProvider>
+    );
 
-    await waitFor(() => expect(connect).toHaveBeenCalled());
+    await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
+    fireEvent.click(getByTestId("connect-button"));
+
+    await waitFor(() => expect(getByTestId("disconnect-button")).toBeVisible());
     await waitFor(() =>
-      expect(connectionState(cache).connection).toEqual(mockConnectionId)
+      expect(connectionState(cache).connection).toEqual(mockConnectionId2)
     );
     await waitFor(() => expect(setDisarmed).toHaveBeenCalled());
     expect(connectionState(cache).connecting).toBeFalsy();
     expect(onSubscribed).toHaveBeenCalled();
-
-    // expect disconnect button
-    expect(getByTestId("disconnect-button")).toBeVisible();
-    expect(asFragment()).toMatchSnapshot();
 
     // The correct things should have been logged
     expect(logs).toMatchSnapshot();

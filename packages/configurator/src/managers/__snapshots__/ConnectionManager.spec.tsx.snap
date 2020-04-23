@@ -12,7 +12,7 @@ Array [
 
 exports[`ConnectionManager should close the connection when the disconnect button is clicked 1`] = `
 Array [
-  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=435345",
+  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=undefined",
 ]
 `;
 
@@ -272,6 +272,17 @@ exports[`ConnectionManager should connect with the connection settings and set t
 Array [
   "Opening connection on /dev/something",
   "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=23455",
+  "MultiWii API version: <strong>1.40.1</strong>",
+  "<b>Arming disabled</b>",
+]
+`;
+
+exports[`ConnectionManager should handle aborting connection attempts 1`] = `
+Array [
+  "Opening connection on /dev/something",
+  "Connection attempt to /dev/something aborted",
+  "Opening connection on /dev/someotherport",
+  "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=243455",
   "MultiWii API version: <strong>1.40.1</strong>",
   "<b>Arming disabled</b>",
 ]
