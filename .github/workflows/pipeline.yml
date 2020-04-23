@@ -56,7 +56,7 @@ jobs:
         run: heroku container:login 
 
       - name: Build
-        run: docker build -t mock-api -f mock-api.Dockerfile .
+        run: docker build -t mock-api -f Dockerfile.web .
 
       - name: Push
         if: github.ref == 'refs/heads/master'
