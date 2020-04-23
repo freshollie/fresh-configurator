@@ -3,6 +3,8 @@
 
 A GraphQL server for querying, and mutatating betaflight flight controllers
 
+[Try it out!](https://betaflight-mock-api.herokuapp.com/graphql)
+
 ## Usage
 
 ```bash
@@ -10,12 +12,25 @@ $ yarn add @betaflight/api-server graphql@14
 ```
 
 ```typescript
-import server from "@betaflight/api-server";
+import { createServer } from "@betaflight/api-server";
 
-server.listen(9000)
+createServer().listen(9000)
 ```
 
 Then, you can query the graph at `http://localhost:9000/graphql`
+
+### Mocked mode
+
+Mocked mode simulates a device and USB ports instead of actually
+connecting to them. This way, software can be developed without having to
+have a flight controller to hand.
+
+```typescript
+import { createServer } from "@betaflight/api-server";
+
+// Start in mocked mode
+server.listen(9000, true)
+```
 
 ### Ports
 

@@ -3,7 +3,7 @@ import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
 import getPort from "get-port";
-import backend from "@betaflight/api-server";
+import { createServer } from "@betaflight/api-server";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -15,8 +15,14 @@ const DEV_MODE =
 let backendPort = 9000;
 
 const startBackend = async (): Promise<void> => {
+  const mocked = process.env.MOCKED === "true";
+  if (mocked) {
+    console.log("Creating backend in mocked mode");
+  }
+  const backend = createServer({ mocked });
   backendPort = await getPort({ port: backendPort });
   console.log(`Starting backend on ${backendPort}`);
+
   await backend.listen(backendPort);
 };
 
@@ -38,7 +44,7 @@ const createWindow = (): void => {
     },
   });
 
-  const backendAddress = `localhost:${backendPort}`;
+  const backendAddress = `ws://localhost:${backendPort}`;
   if (DEV_MODE) {
     mainWindow.loadURL(
       url.format({

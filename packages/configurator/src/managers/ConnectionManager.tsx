@@ -43,22 +43,17 @@ const ConnectionManager: React.FC = () => {
     },
   });
 
-  const [disconnectMutation] = useDisconnectMutation({
-    variables: {
-      connection: connection ?? "",
-    },
-  });
+  const [disconnectMutation] = useDisconnectMutation();
 
-  const disconnect = (notify = true, connectionId?: string): Promise<void> =>
-    disconnectMutation(
-      connectionId
-        ? {
-            variables: {
-              connection: connectionId,
-            },
-          }
-        : undefined
-    )
+  const disconnect = (
+    notify = true,
+    connectionId = connection
+  ): Promise<void> =>
+    disconnectMutation({
+      variables: {
+        connection: connectionId ?? "",
+      },
+    })
       .then(() => {
         if (notify) {
           log(
@@ -125,7 +120,6 @@ const ConnectionManager: React.FC = () => {
     variables: {
       connection: connection ?? "",
     },
-    shouldResubscribe: false,
     skip: !connection,
   });
 

@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
+    "start:mocked": "MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
     "compile": "webpack --progress --mode production --config ./webpack.config.js",
     "pack": "electron-builder --publish never",
     "build": "yarn install-deps && yarn compile && yarn run pack",

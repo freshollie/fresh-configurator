@@ -1,7 +1,9 @@
 import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
-import server from "../src";
+import { createServer } from "../src";
 import { mockApi } from "./mocks";
+
+const server = createServer();
 
 describe("ports", () => {
   it("should return the available ports", async () => {

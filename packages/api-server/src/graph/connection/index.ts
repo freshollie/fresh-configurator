@@ -46,25 +46,24 @@ const resolvers: Resolvers = {
     connect: (_, { port, baudRate }, { connections, api }) =>
       connections
         .connectLock(port, async () => {
+          const connectionId = uuid.v4();
           if (!api.isOpen(port)) {
             try {
               await api.open(port, { baudRate }, () => {
                 // remove any connections if the port closes
-                connections.remove(port);
+                connections.closeConnections(port);
               });
             } catch (e) {
-              throw new ApolloError(
-                `Could not open connection to ${port}: ${e.message}`
-              );
+              throw new ApolloError(`Could not open port: ${e.message}`);
             }
           }
+          return connectionId;
         })
-        .then(() => {
+        .then((connectionId) => {
           // Close any existing connections
-          connections.remove(port);
+          connections.closeConnections(port);
 
           // start a new connection with a new connection id
-          const connectionId = uuid.v4();
           connections.add(port, connectionId);
 
           return {
@@ -76,7 +75,7 @@ const resolvers: Resolvers = {
     close: async (_, { connectionId }, { connections, api }) => {
       const port = connections.getPort(connectionId);
       await api.close(port);
-      connections.remove(port);
+      connections.closeConnections(port);
       return connectionId;
     },
   },

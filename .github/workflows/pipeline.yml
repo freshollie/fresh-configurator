@@ -43,32 +43,34 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  storybook:
+  deploy-mock-api:
     runs-on: ubuntu-latest
+    needs: [test, lint]
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 12
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
+      - name: Login to Heroku
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
+        run: heroku container:login 
 
-      - name: Install
-        uses: bahmutov/npm-install@v1
+      - name: Build
+        run: docker build -t mock-api -f mock-api.Dockerfile .
 
-      - name: "Storybook"
-        run: yarn build:storybook
-
-      - name: Publish
+      - name: Push
         if: github.ref == 'refs/heads/master'
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages
-          CLEAN: true
-          FOLDER: packages/configurator/storybook-static
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
+        run: 
+          heroku container:push -a betaflight-mock-api web --recursive
 
+      - name: Release
+        if: github.ref == 'refs/heads/master'
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
+        run: heroku container:release -a betaflight-mock-api web
+  
   release:
     runs-on: ${{ matrix.os }}
 

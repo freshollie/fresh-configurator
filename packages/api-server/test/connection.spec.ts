@@ -1,8 +1,10 @@
 import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { mockApi } from "./mocks";
-import server from "../src";
+import { createServer } from "../src";
 import { reset } from "../src/connections";
+
+const server = createServer();
 
 afterEach(() => {
   reset();

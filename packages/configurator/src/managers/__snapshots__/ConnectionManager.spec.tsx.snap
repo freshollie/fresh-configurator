@@ -12,7 +12,7 @@ Array [
 
 exports[`ConnectionManager should close the connection when the disconnect button is clicked 1`] = `
 Array [
-  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=undefined",
+  "Serial port <span class=\\"message-positive\\">successfully</span> closed for connectionId=435345",
 ]
 `;
 

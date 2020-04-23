@@ -17,6 +17,7 @@ module.exports = {
     "!**/test/**",
     "!**/test-utils.*",
     "!**/dist/**",
+    "!**/mocks/**",
     "!*.d.ts",
   ],
   modulePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/dist/"],

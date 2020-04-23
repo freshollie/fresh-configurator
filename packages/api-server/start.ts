@@ -1,6 +1,6 @@
-import backend from "./src";
+import { createServer } from "./src";
 
-backend.listen(9000, () => {
+createServer().listen(9000, () => {
   // eslint-disable-next-line no-console
   console.log("listening");
 });
