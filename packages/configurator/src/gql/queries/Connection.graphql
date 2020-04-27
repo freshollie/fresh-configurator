@@ -9,3 +9,7 @@ query ConnectionStats($connection: ID!) {
     packetErrors
   }
 }
+
+subscription OnConnectionClosed($connection: ID!) {
+  onClosed(connectionId: $connection)
+}

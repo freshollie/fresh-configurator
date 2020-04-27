@@ -9002,10 +9002,10 @@ graphql-extensions@^0.11.1:
     apollo-server-env "^2.4.3"
     apollo-server-types "^0.3.1"
 
-graphql-let@^0.9.5:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/graphql-let/-/graphql-let-0.9.5.tgz#47890a0e10de969c5e1aebb9fc74f8eb9cd7a62b"
-  integrity sha512-I92cMtEx002A73EtBjVTFh4Mbefm7Iq6enDDRDZkhr2rWnay44AtVFfBXT7qOvGvhTVj7v4KqpqZ7yiq57iPpA==
+graphql-let@^0.10.0-canary.1:
+  version "0.10.0-canary.1"
+  resolved "https://registry.yarnpkg.com/graphql-let/-/graphql-let-0.10.0-canary.1.tgz#1176a8daf3febc3320e08775039da879fc0a326c"
+  integrity sha512-6FXH2mfOBmn1AjDDiDdb5O5aw1+bNVeeD4C8AalMsGzkMc1cc2bc7D9zy0IFz6lQKUg9o0+/JWz9Rac3Xp2BWw==
   dependencies:
     globby "^11.0.0"
     loader-utils "^2.0.0"

@@ -13,8 +13,7 @@
     "paths": {
       "@betaflight/api": ["../../api/src"],
       "@betaflight/api-server": ["../../api-server/src"]
-    },
-    "typeRoots": ["node_modules/@types", "src/gql/__generated__/types"]
+    }
   },
   "include": [
     "src/**/*.tsx",

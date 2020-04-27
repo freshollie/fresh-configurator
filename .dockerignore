@@ -113,3 +113,4 @@ storybook-static
 **/dist
 .git
 *.Dockerfile
+*.graphql.d.ts

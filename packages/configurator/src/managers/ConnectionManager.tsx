@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import semver from "semver";
+import { useOnConnectionClosedSubscription } from "../gql/queries/Connection.graphql";
 import config from "../config";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
@@ -8,7 +9,6 @@ import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql"
 import {
   useConnectMutation,
   useDisconnectMutation,
-  useOnConnectionClosedSubscription,
 } from "../gql/mutations/Connection.graphql";
 import { useSetArmingMutation } from "../gql/mutations/Device.graphql";
 

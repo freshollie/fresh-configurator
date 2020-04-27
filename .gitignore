@@ -109,3 +109,4 @@ dist
 __generated__/
 storybook-static
 **/app
+*.graphql.d.ts

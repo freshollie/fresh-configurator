@@ -4,7 +4,6 @@ import {
   SetConnectionSettingsMutation,
   SetConnectionSettingsMutationVariables,
   SetConnectionSettingsDocument,
-  SelectedTabDocument,
   SelectTabDocument,
   SelectTabMutation,
   SelectTabMutationVariables,
@@ -15,6 +14,7 @@ import {
 import {
   SelectedTabQuery,
   SelectedTabQueryVariables,
+  SelectedTabDocument,
   ConnectionSettingsQueryVariables,
   ConnectionSettingsQuery,
   ConnectionSettingsDocument,
