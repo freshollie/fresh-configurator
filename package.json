@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
+    "start:dev": "yarn build:lib && yarn workspace @betaflight/configurator start:mocked",
     "test": "jest",
     "build": "yarn codegen && wsrun -mt build",
     "build:lib": "yarn codegen && wsrun -mt -x @betaflight/configurator build",

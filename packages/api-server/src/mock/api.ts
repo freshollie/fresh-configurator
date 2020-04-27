@@ -1,3 +1,7 @@
+/**
+ * Hacky mock data generator to be able to test this API without
+ * a device
+ */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Sensors, DisarmFlags } from "@betaflight/api";
 
@@ -48,6 +52,7 @@ const mockDevice = {
     rssi: 0,
     amperage: 0,
   },
+  channels: new Array(16).fill(0),
 };
 
 const tickAttitude = (): void => {
@@ -85,10 +90,15 @@ const tickAnalogValues = (): void => {
   mockDevice.analogValues.voltage = Math.round(Math.random() * 5 * 100) / 100;
 };
 
-setInterval(tickAttitude, 1000 / 60);
+const tickChannels = (): void => {
+  mockDevice.channels = mockDevice.channels.map((v, i) => (v + i + 1) % 2200);
+};
+
+setInterval(tickAttitude, 1000 / 120);
 setInterval(tickStatus, 1000 / 60);
 setInterval(tickAnalogValues, 1000 / 30);
 setInterval(tickGps, 1000 / 0.2);
+setInterval(tickChannels, 1000 / 120);
 
 const delay = (ms?: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -144,3 +154,6 @@ export const readAnalogValues = (
   port: string
 ): Promise<typeof mockDevice["analogValues"]> =>
   delay(10).then(() => mockDevice.analogValues);
+
+export const readRcValues = (): Promise<number[]> =>
+  delay(10).then(() => mockDevice.channels);
