@@ -3,5 +3,5 @@
  * our main without compiling it
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
-require("ts-node").register();
+require("ts-node").register({ compilerOptions: { module: "commonjs" } });
 require("./src/main");

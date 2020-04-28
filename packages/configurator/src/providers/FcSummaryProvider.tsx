@@ -24,24 +24,21 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
     data?.connection.device.arming.disabledFlags
       .filter((flag) => flag !== DisarmFlags.ARM_SWITCH)
       .map((flag) => DisarmFlags[flag])
-      .sort() ?? [];
-
-  const armSwitchInactive =
-    data?.connection.device.arming.disabledFlags.includes(
-      DisarmFlags.ARM_SWITCH
-    ) ?? false;
+      .sort()
+      .concat(
+        data.connection.device.arming.disabledFlags.includes(
+          DisarmFlags.ARM_SWITCH
+        )
+          ? [ARM_SWITCH_KEY]
+          : []
+      ) ?? [];
 
   return (
     <Table>
       <tbody>
         <tr>
           <td>Arming Disable Flags:</td>
-          <td>
-            {flagNames.map((flag) => (
-              <span key={flag}>{flag}</span>
-            ))}
-            {armSwitchInactive && <span>{ARM_SWITCH_KEY}</span>}
-          </td>
+          <td>{flagNames.join(" ")}</td>
         </tr>
         <tr>
           <td>Battery voltage:</td>

@@ -1,4 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+  APOLLO_DEVELOPER_TOOLS,
+} from "electron-devtools-installer";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
@@ -62,17 +67,11 @@ const createWindow = (): void => {
   }
 
   // Don't show until we are ready and loaded
-  mainWindow.webContents.once("dom-ready", async () => {
+  mainWindow.webContents.once("dom-ready", () => {
     mainWindow?.show();
 
     // Open the DevTools automatically if developing
     if (DEV_MODE) {
-      const {
-        default: installExtension,
-        REACT_DEVELOPER_TOOLS,
-        APOLLO_DEVELOPER_TOOLS,
-      } = await import("electron-devtools-installer");
-
       installExtension(REACT_DEVELOPER_TOOLS).catch((err) =>
         // eslint-disable-next-line no-console
         console.log("Error loading React DevTools: ", err)
