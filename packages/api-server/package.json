@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "start": "ts-node -T start.ts",
-    "build": "rimraf dist && concurrently 'yarn build:esm' 'yarn build:cjs'",
+    "build": "rimraf dist && concurrently 'yarn:build:esm' 'yarn:build:cjs'",
     "build:esm": "tsc -p tsconfig.build.json --module es2015 --outDir dist/esm",
     "build:cjs": "tsc -p tsconfig.build.json --outDir dist/cjs"
   },
