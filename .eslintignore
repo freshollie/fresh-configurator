@@ -8,3 +8,4 @@
 !.jest
 !.eslintrc.js
 lerna.json
+*.graphql.d.ts
