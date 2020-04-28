@@ -24,8 +24,9 @@ import {
 // Import bindings when we actually need them, so that libraries
 // can import this library without the bindings needing to be available
 // at import time
-const initialiseBindings = async (): Promise<void> => {
-  const { default: Binding } = await import("@serialport/bindings");
+const initialiseBindings = (): void => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, global-require
+  const Binding = require("@serialport/bindings");
   SerialPort.Binding = Binding;
 };
 
@@ -47,7 +48,7 @@ export const execute = async (
     throw new Error(`${port} is not open`);
   }
 
-  const sendData = data ? Buffer.from([...data]) : undefined;
+  const sendData = data ? Buffer.from(Array.from(data)) : undefined;
 
   const { parser, serial, requests } = connection;
 
@@ -120,7 +121,7 @@ export const reset = (): void => {
 
 export const ports = async (): Promise<string[]> => {
   if (!SerialPort.Binding) {
-    await initialiseBindings();
+    initialiseBindings();
   }
   return SerialPort.list().then((data) => data.map(({ path }) => path));
 };
@@ -167,7 +168,7 @@ export const open: OpenConnectionFunction = async (
   }
 
   if (!SerialPort.Binding) {
-    await initialiseBindings();
+    initialiseBindings();
   }
 
   const serial = new SerialPort(port, {

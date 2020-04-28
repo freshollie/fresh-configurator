@@ -14,7 +14,7 @@ $ yarn add @betaflight/msp
 ```
 
 ```typescript
-import { ports, open, execute, close, bytesRead, bytesWritten,  } from "@betaflight/msp";
+import { ports, open, execute, close, bytesRead, bytesWritten } from "@betaflight/msp";
 
 (async () => {
   const portsList = await ports();
