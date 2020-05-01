@@ -32,6 +32,7 @@ import {
   OSDStaticItem,
   OSDDisplayItem,
   OSDTimer,
+  Position,
 } from "./types";
 
 export * as OSDTypes from "./types";
@@ -39,20 +40,17 @@ export * as OSDTypes from "./types";
 const isVisible = (positionData: number, profile: number): boolean =>
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;
 
-const unpackPosition = (positionData: number): [number, number] => [
-  positionData & 0x001f,
-  (positionData >> 5) & 0x001f,
-];
+const unpackPosition = (positionData: number): Position => ({
+  x: positionData & 0x001f,
+  y: (positionData >> 5) & 0x001f,
+});
 
-const unpackLegacyPosition = (positionData: number): [number, number] =>
-  positionData === -1 ? [0, 0] : [positionData, 0];
+const unpackLegacyPosition = (positionData: number): Position =>
+  positionData === -1 ? { x: 0, y: 0 } : { x: positionData, y: 0 };
 
-const packLegacyPosition = (
-  position: [number, number],
-  visible: boolean
-): number => {
+const packLegacyPosition = (position: Position, visible: boolean): number => {
   if (visible) {
-    return position[0] === -1 ? 0 : position[0];
+    return position.x === -1 ? 0 : position.x;
   }
   return -1;
 };
@@ -236,8 +234,8 @@ export const writeOSDDisplayItem = async (
         0,
         visibility
       ) |
-      ((position[1] & 0x001f) << 5) |
-      position[0]
+      ((position.y & 0x001f) << 5) |
+      position.x
     : packLegacyPosition(position, visibility[0]);
 
   data.push8(index);

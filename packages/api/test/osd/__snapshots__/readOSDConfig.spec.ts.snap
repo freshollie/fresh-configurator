@@ -19,10 +19,10 @@ Object {
   "displayItems": Array [
     Object {
       "key": 0,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -31,10 +31,10 @@ Object {
     },
     Object {
       "key": 1,
-      "position": Array [
-        22,
-        11,
-      ],
+      "position": Object {
+        "x": 22,
+        "y": 11,
+      },
       "visibility": Array [
         true,
         false,
@@ -43,10 +43,10 @@ Object {
     },
     Object {
       "key": 2,
-      "position": Array [
-        13,
-        6,
-      ],
+      "position": Object {
+        "x": 13,
+        "y": 6,
+      },
       "visibility": Array [
         false,
         false,
@@ -55,10 +55,10 @@ Object {
     },
     Object {
       "key": 3,
-      "position": Array [
-        14,
-        2,
-      ],
+      "position": Object {
+        "x": 14,
+        "y": 2,
+      },
       "visibility": Array [
         false,
         false,
@@ -67,10 +67,10 @@ Object {
     },
     Object {
       "key": 4,
-      "position": Array [
-        14,
-        6,
-      ],
+      "position": Object {
+        "x": 14,
+        "y": 6,
+      },
       "visibility": Array [
         false,
         false,
@@ -79,10 +79,10 @@ Object {
     },
     Object {
       "key": 18,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -91,10 +91,10 @@ Object {
     },
     Object {
       "key": 19,
-      "position": Array [
-        1,
-        11,
-      ],
+      "position": Object {
+        "x": 1,
+        "y": 11,
+      },
       "visibility": Array [
         true,
         false,
@@ -103,10 +103,10 @@ Object {
     },
     Object {
       "key": 20,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -115,10 +115,10 @@ Object {
     },
     Object {
       "key": 14,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -127,10 +127,10 @@ Object {
     },
     Object {
       "key": 6,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -139,10 +139,10 @@ Object {
     },
     Object {
       "key": 8,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -151,10 +151,10 @@ Object {
     },
     Object {
       "key": 12,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -163,10 +163,10 @@ Object {
     },
     Object {
       "key": 13,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -175,10 +175,10 @@ Object {
     },
     Object {
       "key": 21,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -187,10 +187,10 @@ Object {
     },
     Object {
       "key": 22,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -199,10 +199,10 @@ Object {
     },
     Object {
       "key": 15,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -211,10 +211,10 @@ Object {
     },
     Object {
       "key": 23,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -223,10 +223,10 @@ Object {
     },
     Object {
       "key": 24,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -235,10 +235,10 @@ Object {
     },
     Object {
       "key": 25,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -247,10 +247,10 @@ Object {
     },
     Object {
       "key": 26,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -259,10 +259,10 @@ Object {
     },
     Object {
       "key": 27,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -271,10 +271,10 @@ Object {
     },
     Object {
       "key": 28,
-      "position": Array [
-        9,
-        9,
-      ],
+      "position": Object {
+        "x": 9,
+        "y": 9,
+      },
       "visibility": Array [
         true,
         true,
@@ -283,10 +283,10 @@ Object {
     },
     Object {
       "key": 30,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -295,10 +295,10 @@ Object {
     },
     Object {
       "key": 31,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -307,10 +307,10 @@ Object {
     },
     Object {
       "key": 32,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -319,10 +319,10 @@ Object {
     },
     Object {
       "key": 33,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -331,10 +331,10 @@ Object {
     },
     Object {
       "key": 34,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -343,10 +343,10 @@ Object {
     },
     Object {
       "key": 35,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -355,10 +355,10 @@ Object {
     },
     Object {
       "key": 36,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -367,10 +367,10 @@ Object {
     },
     Object {
       "key": 11,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -379,10 +379,10 @@ Object {
     },
     Object {
       "key": 37,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -391,10 +391,10 @@ Object {
     },
     Object {
       "key": 38,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -403,10 +403,10 @@ Object {
     },
     Object {
       "key": 39,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -415,10 +415,10 @@ Object {
     },
     Object {
       "key": 40,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -427,10 +427,10 @@ Object {
     },
     Object {
       "key": 41,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -439,10 +439,10 @@ Object {
     },
     Object {
       "key": 42,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -451,10 +451,10 @@ Object {
     },
     Object {
       "key": 43,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -463,10 +463,10 @@ Object {
     },
     Object {
       "key": 44,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -475,10 +475,10 @@ Object {
     },
     Object {
       "key": 45,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -487,10 +487,10 @@ Object {
     },
     Object {
       "key": 46,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -499,10 +499,10 @@ Object {
     },
     Object {
       "key": 47,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -511,10 +511,10 @@ Object {
     },
     Object {
       "key": 48,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -523,10 +523,10 @@ Object {
     },
     Object {
       "key": 49,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -535,10 +535,10 @@ Object {
     },
     Object {
       "key": 50,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -547,10 +547,10 @@ Object {
     },
     Object {
       "key": 51,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -559,10 +559,10 @@ Object {
     },
     Object {
       "key": 52,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -571,10 +571,10 @@ Object {
     },
     Object {
       "key": 53,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -583,10 +583,10 @@ Object {
     },
     Object {
       "key": 54,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -595,10 +595,10 @@ Object {
     },
     Object {
       "key": 55,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -607,10 +607,10 @@ Object {
     },
     Object {
       "key": 56,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -619,10 +619,10 @@ Object {
     },
     Object {
       "key": 57,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -631,10 +631,10 @@ Object {
     },
     Object {
       "key": 58,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -643,10 +643,10 @@ Object {
     },
     Object {
       "key": 59,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -655,10 +655,10 @@ Object {
     },
     Object {
       "key": 60,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -667,10 +667,10 @@ Object {
     },
     Object {
       "key": 61,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         false,
         false,
@@ -679,10 +679,10 @@ Object {
     },
     Object {
       "key": 62,
-      "position": Array [
-        10,
-        7,
-      ],
+      "position": Object {
+        "x": 10,
+        "y": 7,
+      },
       "visibility": Array [
         true,
         false,

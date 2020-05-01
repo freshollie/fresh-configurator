@@ -20,9 +20,11 @@ export type OSDWarning = {
   enabled: boolean;
 };
 
+export type Position = { x: number; y: number };
+
 export type OSDDisplayItem = {
   key: OSD_FIELDS;
-  position: [number, number];
+  position: Position;
   visibility: boolean[];
 };
 

@@ -171,3 +171,44 @@ export type Feature = {
   key: Features;
   enabled: boolean;
 };
+
+export enum SerialPortFunctions {
+  MSP,
+  GPS,
+  TELEMETRY_FRSKY,
+  TELEMETRY_HOTT,
+  TELEMETRY_MSP,
+  TELEMETRY_LTM,
+  TELEMETRY_SMARTPORT,
+  RX_SERIAL,
+  BLACKBOX,
+  TELEMETRY_MAVLINK,
+  ESC_SENSOR,
+  TBS_SMARTAUDIO,
+  TELEMETRY_IBUS,
+  IRC_TRAMP,
+  RUNCAM_DEVICE_CONTROL,
+  LIDAR_TF,
+  UNKNOWN,
+}
+
+export type PortSettings = {
+  identifier: number;
+  functions: SerialPortFunctions[];
+  mspBaudRate: number;
+  gpsBaudRate: number;
+  telemetryBaudRate: number;
+  blackboxBaudRate: number;
+};
+
+export type LegacyRates = {
+  mspBaudRate: number;
+  cliBaudRate: number;
+  gpsBaudRate: number;
+  gpsPassthroughBaudRate: number;
+};
+
+export type SerialConfig = {
+  ports: PortSettings[];
+  legacy?: LegacyRates;
+};
