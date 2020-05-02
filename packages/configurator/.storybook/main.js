@@ -15,7 +15,11 @@ module.exports = {
           transpileOnly: true,
         },
         forkTsCheckerWebpackPluginOptions: {
-          tsconfig: path.resolve(__dirname, "../tsconfig.storybook.json"),
+          tsconfig: path.resolve(__dirname, "../tsconfig.json"),
+          reportFiles: ["stories/**/*.{ts,tsx}"],
+          compilerOptions: {
+            baseUrl: null,
+          },
         },
       },
     },

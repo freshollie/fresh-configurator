@@ -17,7 +17,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Lint
-        run: yarn lint .
+        run: yarn lint:all
 
   test:
     runs-on: ubuntu-latest

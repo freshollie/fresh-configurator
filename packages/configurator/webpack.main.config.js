@@ -46,7 +46,7 @@ module.exports = (_, { mode }) => ({
     ],
   },
   output: {
-    path: `${__dirname}/app`,
+    path: `${__dirname}/build`,
     filename: "main.js",
   },
   plugins: [
@@ -55,6 +55,9 @@ module.exports = (_, { mode }) => ({
     }),
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ["src/main.ts"],
+      compilerOptions: {
+        baseUrl: null,
+      },
     }),
   ],
   devtool: "cheap-source-map",

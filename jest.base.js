@@ -4,6 +4,7 @@ module.exports = {
   testPathIgnorePatterns: [
     "/node_modules/",
     "/dist/",
+    "/build/",
     "/storybook-static/",
     "/__generated__/",
   ],
@@ -17,8 +18,10 @@ module.exports = {
     "!**/test/**",
     "!**/test-utils.*",
     "!**/dist/**",
+    "!**/build/**",
     "!**/mocks/**",
     "!*.d.ts",
+    "!*.graphql.d.ts",
   ],
   modulePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/dist/"],
 };

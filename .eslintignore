@@ -3,7 +3,7 @@
 **/node_modules
 **/__generated__
 !.storybook/
-**/app
+**/build
 **/storybook-static
 !.jest
 !.eslintrc.js

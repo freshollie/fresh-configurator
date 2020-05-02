@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const { getTransformer } = require("ts-transform-graphql-tag");
 const { DefinePlugin, NormalModuleReplacementPlugin } = require("webpack");
 const { spawn } = require("child_process");
 const path = require("path");
@@ -23,6 +24,7 @@ module.exports = (_, { mode }) => ({
             loader: "ts-loader",
             options: {
               transpileOnly: true,
+              getCustomTransformers: () => ({ before: [getTransformer()] }),
             },
           },
         ],
@@ -54,7 +56,7 @@ module.exports = (_, { mode }) => ({
     ],
   },
   output: {
-    path: `${__dirname}/app`,
+    path: `${__dirname}/build`,
     filename: "renderer.js",
   },
   plugins: [
@@ -70,6 +72,9 @@ module.exports = (_, { mode }) => ({
     }),
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
+      compilerOptions: {
+        baseUrl: null,
+      },
     }),
   ],
   devtool: "cheap-source-map",

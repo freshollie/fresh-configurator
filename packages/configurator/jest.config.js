@@ -9,6 +9,7 @@ module.exports = {
   setupFiles: ["jest-date-mock"],
   setupFilesAfterEnv: ["./.jest/setup.ts"],
   moduleDirectories: ["node_modules", "src"],
+  modulePathIgnorePatterns: ["<rootDir>/**/__mocks__"],
   moduleNameMapper: {
     // Mock any files which webpack would convert to file paths
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":

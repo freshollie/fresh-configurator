@@ -108,5 +108,5 @@ dist
 .DS_store
 __generated__/
 storybook-static
-**/app
+**/build
 *.graphql.d.ts
