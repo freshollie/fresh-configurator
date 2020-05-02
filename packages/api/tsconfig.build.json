@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig",
-  "include": ["src/**/*.ts", "types.d.ts"]
+  "include": ["src/**/*.ts", "types.d.ts"],
+  "compilerOptions": {
+    "paths": {}
+  }
 }

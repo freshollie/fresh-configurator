@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "rootDirs": ["src", "stories"],
-    "baseUrl": "./src",
+    "baseUrl": "\u0000",
     "paths": {
       "@betaflight/api": ["../../api/src"],
       "@betaflight/api-server": ["../../api-server/src"]

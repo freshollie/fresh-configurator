@@ -201,7 +201,7 @@ export type PortSettings = {
   blackboxBaudRate: number;
 };
 
-export type LegacyRates = {
+export type LegacyBaudRates = {
   mspBaudRate: number;
   cliBaudRate: number;
   gpsBaudRate: number;
@@ -210,5 +210,5 @@ export type LegacyRates = {
 
 export type SerialConfig = {
   ports: PortSettings[];
-  legacy?: LegacyRates;
+  legacy?: LegacyBaudRates;
 };

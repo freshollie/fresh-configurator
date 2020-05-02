@@ -9,7 +9,11 @@
     "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "\u0000", // https://github.com/microsoft/TypeScript/issues/31869
+    "paths": {
+      "@betaflight/msp": ["../../msp/src"]
+    }
   },
   "include": [
     "test-script.ts",

@@ -10,7 +10,11 @@
     "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "\u0000",
+    "paths": {
+      "@betaflight/api": ["../../api/src"]
+    }
   },
   "include": [
     "start.ts",
