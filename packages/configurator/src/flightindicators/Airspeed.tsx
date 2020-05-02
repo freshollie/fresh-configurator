@@ -15,6 +15,7 @@ export default withBase<{
   <>
     <SpeedMechanics />
     <FiNeedle
+      data-testid="indicator-needle"
       style={{ transform: `rotate(${90 + boundedSpeed(speed) * 2}deg)` }}
     />
   </>

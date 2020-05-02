@@ -9030,10 +9030,10 @@ graphql-extensions@^0.11.1:
     apollo-server-env "^2.4.3"
     apollo-server-types "^0.3.1"
 
-graphql-let@^0.10.0-canary.1:
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/graphql-let/-/graphql-let-0.10.0-canary.1.tgz#1176a8daf3febc3320e08775039da879fc0a326c"
-  integrity sha512-6FXH2mfOBmn1AjDDiDdb5O5aw1+bNVeeD4C8AalMsGzkMc1cc2bc7D9zy0IFz6lQKUg9o0+/JWz9Rac3Xp2BWw==
+graphql-let@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/graphql-let/-/graphql-let-0.10.0.tgz#25ad61260f1427f5c0b8da848be0539c191cb668"
+  integrity sha512-gKH83ZJ25S0YRzvLXK5hRtnA8E+Ere9tXMngQXXxr2gMmnJ6UGrPZmka/n6/1XHJ8FSA53N1IGRHFMwLswMWqw==
   dependencies:
     globby "^11.0.0"
     loader-utils "^2.0.0"
@@ -16282,6 +16282,11 @@ ts-node@^8.8.2:
 ts-pnp@^1.1.2:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.1.5.tgz#840e0739c89fce5f3abd9037bb091dbff16d9dec"
+
+ts-transform-graphql-tag@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ts-transform-graphql-tag/-/ts-transform-graphql-tag-0.2.1.tgz#f596c491196b6a6a65b65a8b99bf6e2314c78017"
+  integrity sha512-gciNzCpVafccayI/VQKU2ROaol4gMpz0t5sAW/jzG/J/wnjPYCn06yKzlM4mkQ5tjCvPmFuZnLYF4i0tUiIiMQ==
 
 tslib@1.11.1, tslib@^1.11.1, tslib@~1.11.1:
   version "1.11.1"

@@ -9,11 +9,8 @@ module.exports = {
     "jest",
   ],
   extends: [
-    "plugin:@typescript-eslint/recommended",
     "airbnb-typescript",
     "airbnb/hooks",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "prettier/react",
@@ -72,6 +69,7 @@ module.exports = {
       rules: {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
+        "react/jsx-props-no-spreading": "off",
         "no-constant-condition": "off",
         "no-empty": "off",
         "no-await-in-loop": "off",
@@ -98,6 +96,8 @@ module.exports = {
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/unbound-method": "off",
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-implied-eval": "off",
+        "@typescript-eslint/no-throw-literal": "off",
       },
     },
   ],

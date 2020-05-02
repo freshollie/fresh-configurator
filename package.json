@@ -18,6 +18,7 @@
     "codegen": "yarn codegen:clean && graphql-codegen --config codegen.yml && graphql-let",
     "postinstall": "yarn workspace @betaflight/configurator install-deps",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
+    "lint:all": "yarn lint . .*.js",
     "prepare": "yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
     "release": "yarn build:lib && yarn workspace @betaflight/configurator release"
