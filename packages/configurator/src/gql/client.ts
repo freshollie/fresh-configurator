@@ -3,7 +3,10 @@ import gql from "graphql-tag";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { WebSocketLink } from "apollo-link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
+import { createPersistedQueryLink } from "apollo-link-persisted-queries";
+import { usePregeneratedHashes } from "graphql-codegen-persisted-query-ids/lib/apollo";
 import { Resolvers, Configurator } from "./__generated__";
+import persistedQueries from "./__generated__/persisted-queries.json";
 import { versionInfo } from "../util";
 import {
   LogsQueryResult,
@@ -151,7 +154,19 @@ const BACKEND = searchParams.get("backend") ?? "ws://localhost:9000";
 
 const subscriptionClient = new SubscriptionClient(`${BACKEND}/graphql`, {
   reconnect: true,
-});
+}).use([
+  {
+    applyMiddleware: (operation, next) => {
+      if (operation.extensions?.persistedQuery) {
+        // as this middleware has to mutate the existing object
+        // this is the only option
+        // eslint-disable-next-line no-param-reassign
+        delete operation.query;
+      }
+      next();
+    },
+  },
+]);
 
 const client = new ApolloClient({
   cache,
@@ -159,7 +174,11 @@ const client = new ApolloClient({
   // generated resolvers are not compatible with apollo
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: resolvers as any,
-  link: new WebSocketLink(subscriptionClient),
+  link: createPersistedQueryLink({
+    // this isn't a react hook
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    generateHash: usePregeneratedHashes(persistedQueries),
+  }).concat(new WebSocketLink(subscriptionClient)),
 });
 
 const writeInitial = (): void => {

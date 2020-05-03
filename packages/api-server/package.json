@@ -30,6 +30,7 @@
   "dependencies": {
     "@betaflight/api": "^0.1.1",
     "apollo-server": "^2.12.0",
+    "apollo-server-caching": "^0.5.1",
     "graphql-tag": "^2.10.3",
     "graphql-tools": "^4.0.7",
     "merge-graphql-schemas": "^1.7.7",
