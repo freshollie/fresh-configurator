@@ -66,16 +66,22 @@ $ yarn
 $ yarn start
 ```
 
+### Running the application in mocked mode
+
+```
+$ yarn start
+```
+
 ### Component development environment
 
 ```
 $ yarn storybook
 ```
 
-### Compile library changes
+### Compile the application (for your current OS)
 
 ```
-$ yarn prepare
+$ yarn build
 ```
 
 ### Tests

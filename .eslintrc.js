@@ -50,6 +50,7 @@ module.exports = {
           "**/webpack.*.js",
           "**/.storybook/*.{js,ts}",
           "**/__mocks__/**/*.{ts,tsx}",
+          "**/jest.*.js",
         ],
       },
     ],
@@ -57,7 +58,7 @@ module.exports = {
     "@typescript-eslint/no-require-imports": "error",
   },
   parserOptions: {
-    project: ["./packages/*/tsconfig.json"],
+    project: "tsconfig.eslint.json",
     warnOnUnsupportedTypeScriptVersion: false,
   },
   overrides: [

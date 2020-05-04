@@ -62,7 +62,7 @@ export const execute = async (
 
   // Prevent FC lockup by checking if this request is currently being performed
   // and if not, making the request
-  if (!dataRequest) {
+  if (dataRequest === undefined) {
     dataRequest = new Promise((resolve, reject) => {
       // Throw an error if timeout is reached
       const timeoutId = setTimeout(() => {

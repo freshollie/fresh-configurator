@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./packages/msp/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/api/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/api-server/tsconfig.build.json"
+    }
+  ]
+}

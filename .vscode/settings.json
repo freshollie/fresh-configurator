@@ -15,6 +15,6 @@
   "eslint.enable": true,
   "prettier.packageManager": "yarn",
   "prettier.prettierPath": "node_modules/prettier",
-  "editor.formatOnSave": true,
+  "prettier.disableLanguages": ["javascript", "typescript"],
   "editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }

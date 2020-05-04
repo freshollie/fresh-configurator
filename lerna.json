@@ -15,7 +15,8 @@
         "**/jest.*.*",
         "**/jest.config.js",
         "**/.eslintrc.js",
-        "./tools/**/*"
+        "./tools/**/*",
+        "./types/**/*"
       ],
       "message": "chore(release): publish"
     }

@@ -7,25 +7,30 @@
   "author": "Oliver Bell <freshollie@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "clean:lib": "tsc -b --clean tsconfig.build.json tsconfig.cjs.build.json",
+    "clean:codegen": "rimraf packages/*/src/**/__generated__",
     "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
-    "start:dev": "yarn build:lib && yarn workspace @betaflight/configurator start:mocked",
-    "test": "jest",
-    "build": "yarn codegen && wsrun -mt build",
-    "build:lib": "yarn codegen && wsrun -mt -x @betaflight/configurator build",
-    "storybook": "yarn workspace @betaflight/configurator storybook",
-    "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
-    "codegen:clean": "rimraf packages/*/src/**/__generated__",
-    "codegen": "yarn codegen:clean && graphql-codegen --config codegen.yml && graphql-let",
-    "postinstall": "yarn workspace @betaflight/configurator install-deps",
+    "start:mocked": "yarn build:lib && yarn workspace @betaflight/configurator start:mocked",
+    "build": "yarn build:lib && yarn workspace @betaflight/configurator build",
+    "build:lib": "yarn codegen && yarn compile",
+    "build:storybook": "yarn build:lib && yarn workspace @betaflight/configurator build-storybook",
+    "compile": "tsc -b tsconfig.cjs.build.json tsconfig.build.json",
+    "compile:cjs": "tsc -b tsconfig.cjs.build.json",
+    "storybook": "yarn build:lib && yarn workspace @betaflight/configurator storybook",
+    "codegen": "yarn clean:codegen && graphql-codegen --config codegen.yml && graphql-let",
+    "test": "yarn compile:cjs && jest",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
+    "postinstall": "yarn workspace @betaflight/configurator install-deps",
     "prepare": "yarn build:lib",
+    "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
-    "release": "yarn build:lib && yarn workspace @betaflight/configurator release"
+    "release": "yarn workspace @betaflight/configurator release"
   },
   "workspaces": [
     "packages/*",
-    "tools/*"
+    "tools/*",
+    "types/*"
   ],
   "devDependencies": {
     "@graphql-codegen/add": "^1.13.2",
@@ -35,7 +40,7 @@
     "@graphql-codegen/typescript-operations": "^1.13.2",
     "@graphql-codegen/typescript-react-apollo": "^1.13.2",
     "@graphql-codegen/typescript-resolvers": "^1.13.2",
-    "@types/jest": "^25.1.2",
+    "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^6.8.0",
@@ -52,15 +57,14 @@
     "graphql-let": "^0.10.0",
     "graphql-tag": "^2.10.3",
     "husky": "^3.0.0",
-    "jest": "^25.1.0",
+    "jest": "^25.5.4",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.7",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
-    "ts-jest": "^25.3.1",
+    "ts-jest": "^25.4.0",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.3",
-    "wsrun": "^5.2.0"
+    "typescript": "^3.8.3"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

@@ -6,7 +6,9 @@ import {
   Children,
 } from "./HeaderBar.styles";
 import { Logo2 } from "../../logos";
-import { version } from "../../../package.json";
+import { versionInfo } from "../../util";
+
+const { version } = versionInfo();
 
 const HeaderBar: React.FC = ({ children }) => (
   <Container>
