@@ -1,20 +1,8 @@
 {
+  "extends": "../../tsconfig.base",
   "compilerOptions": {
     "jsx": "react",
-    "target": "ES2018",
-    "module": "es6",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "rootDirs": ["src", "stories"],
-    "baseUrl": "\u0000",
-    "paths": {
-      "@betaflight/api": ["../../api/src"],
-      "@betaflight/api-server": ["../../api-server/src"]
-    }
+    "rootDir": "."
   },
   "include": [
     "src/**/*.tsx",
@@ -25,7 +13,18 @@
     "*.d.ts",
     ".storybook/*.ts",
     ".storybook/*.tsx",
-    ".jest/*.ts"
+    ".jest/*.ts",
+    "package.json"
   ],
-  "exclude": ["node_modules", "dist"]
+  "references": [
+    {
+      "path": "../msp/tsconfig.build.json"
+    },
+    {
+      "path": "../api/tsconfig.build.json"
+    },
+    {
+      "path": "../api-server/tsconfig.build.json"
+    }
+  ]
 }

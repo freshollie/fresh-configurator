@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base",
+  "include": [
+    "types/**/*.ts",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "packages/**/.jest/*.ts",
+    "packages/**/.jest/*.tsx",
+    "packages/**/.storybook/*.ts",
+    "packages/**/.storybook/*.tsx"
+  ]
+}

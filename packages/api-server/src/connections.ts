@@ -22,7 +22,7 @@ export const connectLock = async (
   connectFunction: () => Promise<string>
 ): Promise<string> => {
   const lock = connectingAttempts[port];
-  if (lock) {
+  if (lock !== undefined) {
     return lock;
   }
 

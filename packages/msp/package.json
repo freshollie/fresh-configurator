@@ -22,10 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "testscript": "ts-node -T test-script.ts",
-    "build": "rimraf dist && concurrently 'yarn:build:esm' 'yarn:build:cjs'",
-    "build:esm": "tsc -p tsconfig.build.json --module es2015 --outDir dist/esm",
-    "build:cjs": "tsc -p tsconfig.build.json --outDir dist/cjs"
+    "testscript": "ts-node -T test-script.ts"
   },
   "dependencies": {
     "@serialport/bindings": "^8.0.7",
@@ -35,8 +32,9 @@
   "devDependencies": {
     "@serialport/binding-mock": "^8.0.6",
     "@types/debug": "^4.1.5",
-    "@types/serialport": "^8.0.0",
-    "concurrently": "^5.2.0",
+    "@types/serialport__stream": "^8.0.0",
+    "@types/serialport__bindings": "^8.0.0",
+    "@types/serialport__binding-mock": "^8.0.0",
     "flush-promises": "^1.0.2",
     "rimraf": "^3.0.2",
     "typescript": ">=3.7"

@@ -20,11 +20,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "rimraf dist && concurrently 'yarn:build:esm' 'yarn:build:cjs'",
-    "build:esm": "tsc -p tsconfig.build.json --module es2015 --outDir dist/esm",
-    "build:cjs": "tsc -p tsconfig.build.json --outDir dist/cjs"
-  },
   "dependencies": {
     "@betaflight/msp": "^0.1.1",
     "rambda": "^4.5.0",
@@ -32,7 +27,6 @@
   },
   "devDependencies": {
     "@types/semver": "^7.1.0",
-    "concurrently": "^5.2.0",
     "typescript": ">=3.7"
   }
 }

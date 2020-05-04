@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { getTransformer } = require("ts-transform-graphql-tag");
+const {
+  getTransformer: graphqlTagTransformer,
+} = require("ts-transform-graphql-tag");
 const { DefinePlugin, NormalModuleReplacementPlugin } = require("webpack");
 const { spawn } = require("child_process");
 const path = require("path");
@@ -24,7 +26,9 @@ module.exports = (_, { mode }) => ({
             loader: "ts-loader",
             options: {
               transpileOnly: true,
-              getCustomTransformers: () => ({ before: [getTransformer()] }),
+              getCustomTransformers: () => ({
+                before: [graphqlTagTransformer()],
+              }),
             },
           },
         ],

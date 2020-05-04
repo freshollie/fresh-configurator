@@ -20,8 +20,11 @@ module.exports = {
     "!**/dist/**",
     "!**/build/**",
     "!**/mocks/**",
-    "!*.d.ts",
-    "!*.graphql.d.ts",
+    "!**/*.d.ts",
   ],
-  modulePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/dist/"],
+  modulePathIgnorePatterns: [
+    "<rootDir>/build/",
+    "<rootDir>/dist/",
+    "<rootDir>/.*/__mocks__",
+  ],
 };
