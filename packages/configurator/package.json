@@ -47,8 +47,11 @@
     "build": "yarn install-deps && yarn compile && yarn run pack",
     "release": "yarn compile && electron-builder --publish always",
     "storybook": "start-storybook -p 6006",
+    "storybook:ci": "start-storybook -p 6006 --ci",
     "build-storybook": "build-storybook",
-    "install-deps": "electron-builder install-app-deps"
+    "install-deps": "electron-builder install-app-deps",
+    "storyshots:dev": "STORYBOOK_PORT=6006 yarn start-server-and-test storybook:ci http-get://localhost:6006 storyshots",
+    "storyshots": "jest --config=jest.storyshots.js"
   },
   "dependencies": {
     "@apollo/react-common": "^3.1.4",
@@ -83,6 +86,8 @@
     "@storybook/addon-actions": "^5.3.12",
     "@storybook/addon-docs": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
+    "@storybook/addon-storyshots": "^5.3.18",
+    "@storybook/addon-storyshots-puppeteer": "^5.3.18",
     "@storybook/addons": "^5.3.12",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.12",
@@ -109,8 +114,11 @@
     "jest-date-mock": "^1.0.8",
     "jest-styled-components": "^7.0.2",
     "node-loader": "^0.6.0",
+    "puppeteer": "^3.0.2",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-svg-loader": "^3.0.3",
+    "react-test-renderer": "^16.12.0",
+    "start-server-and-test": "^1.11.0",
     "themeprovider-storybook": "^1.5.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.8.2",

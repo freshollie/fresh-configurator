@@ -4,3 +4,4 @@ import "jest-styled-components";
 
 jest.mock("../src/components/Icon");
 jest.mock("../src/flightindicators/assets");
+jest.mock("../src/logos");

@@ -10,3 +10,4 @@ declare module "*.model";
   declare const someString: string;
   export default someString;
 }
+declare module "@storybook/react/standalone";
