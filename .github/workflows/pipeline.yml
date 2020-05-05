@@ -42,10 +42,40 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+    
+  storysnaps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Install
+        uses: bahmutov/npm-install@v1
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      
+      - name: Test
+        uses: mujo-code/puppeteer-headful@master
+        env:
+          CI: true
+        with:
+          args: yarn build-storybook && yarn workspace @betaflight/configurator storyshots
+      
+      - name: Publish diff
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: diff
+          path: |
+            packages/configurator/__image_snapshots__/__diff_output__/*
 
   deploy-mock-api:
     runs-on: ubuntu-latest
-    needs: [test, lint]
+    needs: [test, lint, storysnaps]
 
     steps:
       - uses: actions/checkout@v1
@@ -78,7 +108,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
-    needs: [test, lint]
+    needs: [test, lint, storysnaps]
 
     steps:
       - uses: actions/checkout@v1

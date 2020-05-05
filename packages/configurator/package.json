@@ -50,6 +50,7 @@
     "storybook:ci": "start-storybook -p 6006 --ci",
     "build-storybook": "build-storybook",
     "install-deps": "electron-builder install-app-deps",
+    "storyshots:dev:update": "STORYBOOK_PORT=6006 yarn start-server-and-test storybook:ci http-get://localhost:6006 'yarn storyshots -u'",
     "storyshots:dev": "STORYBOOK_PORT=6006 yarn start-server-and-test storybook:ci http-get://localhost:6006 storyshots",
     "storyshots": "jest --config=jest.storyshots.js"
   },
