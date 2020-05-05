@@ -63,7 +63,7 @@ jobs:
         env:
           CI: true
         with:
-          args: yarn build-storybook && yarn workspace @betaflight/configurator storyshots
+          args: sh -c 'yarn build-storybook && yarn workspace @betaflight/configurator storyshots'
       
       - name: Publish diff
         if: ${{ failure() }}
