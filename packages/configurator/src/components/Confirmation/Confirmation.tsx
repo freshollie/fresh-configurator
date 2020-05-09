@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { StyledModal } from "./Confirmation.styles";
 import Button from "../Button";
 
@@ -10,7 +10,7 @@ type ConfirmationProps = {
   message: string;
   confirmText: string;
   cancelText: string;
-  children: (confirm: ConfirmFunction) => JSX.Element;
+  children: (confirm: ConfirmFunction) => JSX.Element | null;
 };
 
 const Confirmation: React.FC<ConfirmationProps> = ({
@@ -25,6 +25,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   >();
 
   const close = (): void => setOnConfirmedFunction(undefined);
+
+  const openHandler = useCallback(
+    (onConfirmed: OnConfirmedCallback): void => {
+      setOnConfirmedFunction(() => onConfirmed);
+    },
+    [setOnConfirmedFunction]
+  );
 
   return (
     <>
@@ -53,9 +60,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <Button onClick={close}>{cancelText}</Button>
         </footer>
       </StyledModal>
-      {children((onConfirmed) => {
-        setOnConfirmedFunction(() => onConfirmed);
-      })}
+      {children(openHandler)}
     </>
   );
 };

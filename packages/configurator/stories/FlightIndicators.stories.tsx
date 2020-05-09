@@ -4,6 +4,7 @@ import Heading from "../src/flightindicators/Heading";
 import Variometer from "../src/flightindicators/Variometer";
 import Airspeed from "../src/flightindicators/Airspeed";
 import Altimeter from "../src/flightindicators/Altimeter";
+import requestInterval from "./helpers/request-interval";
 
 export default {
   component: Attitude,
@@ -30,7 +31,7 @@ const useIndicatorValues = (): {
   });
   useEffect(() => {
     let increment = 0;
-    const interval = setInterval(() => {
+    return requestInterval(() => {
       setValues({
         roll: 30 * Math.sin(increment / 10),
         pitch: 50 * Math.sin(increment / 20),
@@ -42,8 +43,7 @@ const useIndicatorValues = (): {
       });
 
       increment += 1;
-    }, 50);
-    return () => clearInterval(interval);
+    });
   }, []);
 
   return values;

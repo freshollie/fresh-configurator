@@ -2,7 +2,7 @@ const config = require("./jest.config");
 
 module.exports = {
   ...config,
-  testRegex: "storyshots.runner.ts",
+  testRegex: "storyshots\\.[A-z]+\\.ts$",
   setupFiles: undefined,
   collectCoverage: false,
 };

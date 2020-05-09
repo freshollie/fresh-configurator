@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Confirmation from "../src/components/Confirmation";
 
 export default {
@@ -6,7 +6,25 @@ export default {
   title: "Components|Confirmation Dialog",
 };
 
-export const example = (): JSX.Element => (
+export const open = (): JSX.Element => (
+  <Confirmation
+    title="Confirm"
+    message="Some question?"
+    cancelText="Cancel"
+    confirmText="Confirm"
+  >
+    {(confirm) => {
+      useEffect(() => {
+        confirm(() => {
+          console.log("Confirmed");
+        });
+      }, [confirm]);
+      return null;
+    }}
+  </Confirmation>
+);
+
+export const clickToOpen = (): JSX.Element => (
   <Confirmation
     title="Confirm"
     message="Some question?"

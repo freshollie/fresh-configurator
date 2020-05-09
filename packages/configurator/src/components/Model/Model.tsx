@@ -21,6 +21,29 @@ export type ModelTypes = keyof typeof MODEL_MAP;
 const modelsCache = {} as Record<ModelTypes, Model | undefined>;
 
 /**
+ * When running in storybook we still want
+ * to be able to lazy fetch the models, when
+ * viewing via files directly. Fetch doesn't
+ * support this, so using XHRHttp.
+ */
+const fetchLocal = (url: string): Promise<Response> =>
+  new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      resolve(
+        new Response(xhr.responseText, {
+          status: xhr.status !== 0 ? xhr.status : 200,
+        })
+      );
+    };
+    xhr.onerror = () => {
+      reject(new TypeError("Local request failed"));
+    };
+    xhr.open("GET", url);
+    xhr.send(null);
+  });
+
+/**
  * Load the given model
  */
 const useModelData = (modelKey: ModelTypes): Model | undefined => {
@@ -30,7 +53,7 @@ const useModelData = (modelKey: ModelTypes): Model | undefined => {
     if (modelsCache[modelKey]) {
       setData(modelsCache[modelKey]);
     } else {
-      fetch(MODEL_MAP[modelKey])
+      fetchLocal(MODEL_MAP[modelKey])
         .then((res) => res.json())
         .then((modelData) => {
           modelsCache[modelKey] = new JSONLoader().parse(modelData);

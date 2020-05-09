@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ChannelsList from "../src/components/ChannelsList";
+import requestInterval from "./helpers/request-interval";
 
 export default {
   component: ChannelsList,
@@ -10,9 +11,9 @@ const useChannelValues = (number: number): number[] => {
   const [values, setValues] = useState(new Array(number).fill(0));
 
   useEffect(() => {
-    let lastValues = new Array(number).fill(0);
+    let lastValues = new Array(number).fill(800);
     const directions = new Array(number).fill(1);
-    const interval = setInterval(() => {
+    return requestInterval(() => {
       lastValues = lastValues.map((lastValue, i) => {
         if (lastValue >= 2200) {
           directions[i] = -1;
@@ -22,11 +23,10 @@ const useChannelValues = (number: number): number[] => {
           directions[i] = 1;
         }
 
-        return lastValue + i * directions[i];
+        return lastValue + (i + 1) * directions[i];
       });
       setValues(lastValues);
-    }, 10);
-    return () => clearInterval(interval);
+    });
   }, [number]);
 
   return values;

@@ -8,6 +8,7 @@
     "src/**/*.tsx",
     "src/**/*.ts",
     "stories/**/*.tsx",
+    "stories/**/*.ts",
     "__mocks__/**/*.ts",
     "__mocks__/**/*.tsx",
     "*.d.ts",

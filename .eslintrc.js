@@ -51,7 +51,7 @@ module.exports = {
           "**/.storybook/*.{js,ts}",
           "**/__mocks__/**/*.{ts,tsx}",
           "**/jest.*.js",
-          "**/storyshots.*.ts",
+          "**/storyshots*.ts",
         ],
       },
     ],

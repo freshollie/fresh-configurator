@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Meter from "../src/components/Meter";
+import requestInterval from "./helpers/request-interval";
 
 export default {
   component: Meter,
@@ -12,7 +13,7 @@ const useMeterValue = (min: number, max: number, step = 1): number => {
   useEffect(() => {
     let lastValue = min;
     let direction = 1;
-    const interval = setInterval(() => {
+    return requestInterval(() => {
       if (lastValue >= max) {
         direction = -1;
       }
@@ -23,8 +24,7 @@ const useMeterValue = (min: number, max: number, step = 1): number => {
 
       lastValue += step * direction;
       setValue(lastValue);
-    }, 10);
-    return () => clearInterval(interval);
+    });
   }, [max, min, step]);
 
   return value;

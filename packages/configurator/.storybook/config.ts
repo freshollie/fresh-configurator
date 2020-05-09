@@ -1,6 +1,6 @@
 import { addDecorator } from "@storybook/react";
 import { withThemesProvider } from "themeprovider-storybook";
-import { ThemeProvider } from "../src/theme";
+import AutoTheme from "./AutoTheme";
 
 const themes = [
   {
@@ -13,4 +13,4 @@ const themes = [
   },
 ];
 
-addDecorator(withThemesProvider(themes, ThemeProvider));
+addDecorator(withThemesProvider(themes, AutoTheme));

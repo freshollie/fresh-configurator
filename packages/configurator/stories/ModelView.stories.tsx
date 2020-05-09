@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "../src/theme";
 import ModelView from "../src/components/ModelView";
 import { ModelTypes } from "../src/components/Model";
+import requestInterval from "./helpers/request-interval";
 
 export default {
   component: ModelView,
@@ -18,10 +19,7 @@ const useRollingAttitude = (): {
   heading: number;
 } => {
   const [number, setNumber] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => setNumber((number + 1) % 360), 10);
-    return () => clearInterval(interval);
-  });
+  useEffect(() => requestInterval(() => setNumber((number + 1) % 360)));
 
   return {
     roll: number,
