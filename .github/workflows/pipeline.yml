@@ -62,12 +62,12 @@ jobs:
         run: yarn build:storybook
       
       - name: Test
-        uses: mujo-code/puppeteer-headful@12.3.1
+        uses: ianwalter/puppeteer@12728ddef82390d1ecd4732fb543f62177392fbb
         env:
           CI: true
         with:
           args: yarn workspace @betaflight/configurator storyshots
-      
+
       - name: Publish diff
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2-preview

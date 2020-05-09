@@ -11,10 +11,13 @@ declare global {
   }
 }
 
-jest.setTimeout(100000);
+jest.setTimeout(50000);
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const snapshotsHelper = ({ dark }: { dark: boolean }) => {
+const snapshotsHelper = ({
+  dark,
+}: {
+  dark: boolean;
+}): ReturnType<typeof imageSnapshot> => {
   let browser: puppeteer.Browser | undefined;
   const testFunction = imageSnapshot({
     chromeExecutablePath: process.env.PUPPETEER_EXEC_PATH,
@@ -23,6 +26,7 @@ const snapshotsHelper = ({ dark }: { dark: boolean }) => {
       : `http://localhost:${process.env.STORYBOOK_PORT}`,
     getCustomBrowser: async () => {
       browser = await puppeteer.launch({
+        executablePath: process.env.CI ? "google-chrome-stable" : undefined,
         headless: true,
         args: [
           "--no-sandbox",
@@ -67,11 +71,13 @@ const snapshotsHelper = ({ dark }: { dark: boolean }) => {
     await browser?.close();
     browser = undefined;
   };
+
   process.on("SIGINT", async () => {
     await browser?.close();
     browser = undefined;
     process.exit(120);
   });
+
   customTest.beforeAll = testFunction.beforeAll;
   customTest.timeout = testFunction.timeout;
   return customTest;
