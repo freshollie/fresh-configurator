@@ -33,6 +33,8 @@ const snapshotsHelper = ({
           "--disable-setuid-sandbox",
           "--disable-dev-shm-usage",
           "--disable-web-security",
+          "--disable-gpu",
+          "--font-render-hinting=none",
           "--allow-file-access-from-files",
           "--allow-file-access",
         ],

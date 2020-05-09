@@ -5,4 +5,5 @@ module.exports = {
   testRegex: "storyshots\\.[A-z]+\\.ts$",
   setupFiles: undefined,
   collectCoverage: false,
+  maxWorkers: 2,
 };
