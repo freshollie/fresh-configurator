@@ -57,13 +57,16 @@ jobs:
         uses: bahmutov/npm-install@v1
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+        
+      - name: Build
+        run: yarn build:storybook
       
       - name: Test
-        uses: mujo-code/puppeteer-headful@master
+        uses: mujo-code/puppeteer-headful@12.3.1
         env:
           CI: true
         with:
-          args: /bin/sh -c 'yarn build-storybook && yarn workspace @betaflight/configurator storyshots'
+          args: yarn workspace @betaflight/configurator storyshots
       
       - name: Publish diff
         if: ${{ failure() }}
