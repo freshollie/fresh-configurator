@@ -158,7 +158,7 @@ jobs:
         run: yarn e2e:production
       
       - name: Preview demo
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
         uses: netlify/actions/cli@master
         with:
           args: deploy --dir=packages/configurator/build
@@ -167,7 +167,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       
       - name: Publish demo
-        if: github.ref != 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest'
         uses: netlify/actions/cli@master
         with:
           args: deploy --dir=packages/configurator/build --prod

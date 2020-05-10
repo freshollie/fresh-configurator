@@ -2,7 +2,6 @@ import { Application } from "spectron";
 
 import path from "path";
 import os from "os";
-import fs from "fs";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const electronPath = require("electron");
@@ -22,12 +21,9 @@ const binaryPath = (): string => {
         "../../dist/mac/Betaflight Configurator.app/Contents/MacOS/Betaflight Configurator"
       );
     case "win32":
-      console.log(
-        fs.readdirSync(path.join(__dirname, "../../dist/win-unpacked/"))
-      );
       return path.join(
         __dirname,
-        "../../dist/win-unpacked/betaflight-configurator.exe"
+        "../../dist/win-unpacked/Betaflight Configurator.exe"
       );
     default:
       throw new Error("Unknown OS");
