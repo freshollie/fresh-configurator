@@ -144,18 +144,11 @@ jobs:
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
-
-      - name: Ubuntu env
-        if: matrix.os == 'ubuntu-latest'
-        run:
-          sudo apt-get update
-          sudo apt-get install xvfb -y |
-          export DISPLAY=:99 |
-          sh -e /etc/init.d/xvfb start |
-          sleep 3
       
       - name: E2E
-        run: yarn e2e:production
+        uses: GabrielBB/xvfb-action@v1.2
+        with:
+          run: yarn e2e:production
       
       - name: Preview demo
         if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
