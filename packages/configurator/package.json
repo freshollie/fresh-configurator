@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
-    "start:mocked": "MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
+    "start:mocked": "cross-env MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development --config ./webpack.renderer.config.js",
     "compile": "webpack --progress --mode production --config ./webpack.config.js",
     "pack": "electron-builder --publish never",
     "build": "yarn install-deps && yarn compile && yarn run pack",
@@ -50,8 +50,8 @@
     "storybook:ci": "start-storybook -p 6006 --ci",
     "build-storybook": "build-storybook",
     "install-deps": "electron-builder install-app-deps",
-    "storyshots:dev:update": "STORYBOOK_PORT=6006 yarn start-server-and-test storybook:ci http-get://localhost:6006 'yarn storyshots -u'",
-    "storyshots:dev": "STORYBOOK_PORT=6006 yarn start-server-and-test storybook:ci http-get://localhost:6006 storyshots",
+    "storyshots:dev:update": "cross-env STORYBOOK_PORT=6006 start-server-and-test storybook:ci http-get://localhost:6006 'yarn storyshots -u'",
+    "storyshots:dev": "cross-env STORYBOOK_PORT=6006 start-server-and-test storybook:ci http-get://localhost:6006 storyshots",
     "storyshots": "jest --config=jest.storyshots.js"
   },
   "dependencies": {
@@ -107,6 +107,7 @@
     "apollo-link": "^1.2.14",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.6",
+    "cross-env": "^7.0.2",
     "electron": "7.2.3",
     "electron-builder": "^22.4.1",
     "electron-devtools-installer": "^3.0.0",

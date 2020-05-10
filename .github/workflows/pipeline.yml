@@ -130,9 +130,9 @@ jobs:
       - name: Ubuntu env
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run:
-          sudo apt install xvfb |
-          export DISPLAY=:99 | 
-          sh -e /etc/init.d/xvfb start |
+          sudo apt-get install xvfb; |
+          export DISPLAY=:99; | 
+          sh -e /etc/init.d/xvfb start; |
           sleep 3
       
       - name: E2E
