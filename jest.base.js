@@ -23,6 +23,7 @@ module.exports = {
     "!**/*.d.ts",
   ],
   modulePathIgnorePatterns: [
+    "<rootDir>/e2e/",
     "<rootDir>/build/",
     "<rootDir>/dist/",
     "<rootDir>/.*/__mocks__",

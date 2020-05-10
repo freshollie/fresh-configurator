@@ -21,6 +21,8 @@
     "test": "yarn compile:cjs && jest",
     "storyshots": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev",
     "storyshots:update": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev:update",
+    "e2e": "jest --config packages/configurator/jest.e2e.js",
+    "e2e:production": "CI=true jest --config packages/configurator/jest.e2e.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
     "postinstall": "yarn workspace @betaflight/configurator install-deps",

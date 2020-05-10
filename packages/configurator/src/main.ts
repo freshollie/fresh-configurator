@@ -14,13 +14,13 @@ import { createServer } from "@betaflight/api-server";
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | undefined;
 
-const DEV_MODE =
-  process.env.NODE_ENV !== undefined && process.env.NODE_ENV === "development";
+const E2E = process.env.E2E === "true";
+const PRODUCTION = process.env.NODE_ENV === "production";
 
 let backendPort = 9000;
 
 const startBackend = async (): Promise<void> => {
-  const mocked = process.env.MOCKED === "true";
+  const mocked = process.env.MOCKED === "true" || E2E;
   if (mocked) {
     console.log("Creating backend in mocked mode");
   }
@@ -50,7 +50,7 @@ const createWindow = (): void => {
   });
 
   const backendAddress = `ws://localhost:${backendPort}`;
-  if (DEV_MODE) {
+  if (!PRODUCTION) {
     mainWindow.loadURL(
       url.format({
         protocol: "http:",
@@ -68,10 +68,12 @@ const createWindow = (): void => {
 
   // Don't show until we are ready and loaded
   mainWindow.webContents.once("dom-ready", () => {
-    mainWindow?.show();
+    if (process.env.HEADLESS !== "true") {
+      mainWindow?.show();
+    }
 
     // Open the DevTools automatically if developing
-    if (DEV_MODE) {
+    if (!PRODUCTION && !E2E) {
       installExtension(REACT_DEVELOPER_TOOLS).catch((err) =>
         // eslint-disable-next-line no-console
         console.log("Error loading React DevTools: ", err)

@@ -47,6 +47,7 @@ module.exports = {
           "**/*.stories.{ts,tsx}",
           "**/test-utils.{ts,tsx}",
           "**/.jest/*.{ts,tsx,js}",
+          "**/e2e/**/*.{ts,tsx,js}",
           "**/webpack.*.js",
           "**/.storybook/*.{js,ts}",
           "**/__mocks__/**/*.{ts,tsx}",
