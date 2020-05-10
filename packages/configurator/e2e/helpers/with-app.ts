@@ -1,11 +1,38 @@
 import { Application } from "spectron";
 
 import path from "path";
+import os from "os";
+import fs from "fs";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const electronPath = require("electron");
 
 let app: Application | undefined;
+
+const binaryPath = (): string => {
+  switch (os.platform()) {
+    case "linux":
+      return path.join(
+        __dirname,
+        "../../dist/linux-unpacked/betaflight-configurator"
+      );
+    case "darwin":
+      return path.join(
+        __dirname,
+        "../../dist/mac/Betaflight Configurator.app/Contents/MacOS/Betaflight Configurator"
+      );
+    case "win32":
+      console.log(
+        fs.readdirSync(path.join(__dirname, "../../dist/win-unpacked/"))
+      );
+      return path.join(
+        __dirname,
+        "../../dist/win-unpacked/betaflight-configurator.exe"
+      );
+    default:
+      throw new Error("Unknown OS");
+  }
+};
 
 export default async (): Promise<Application> => {
   if (!app) {
@@ -14,13 +41,7 @@ export default async (): Promise<Application> => {
         E2E: "true",
         HEADLESS: "true",
       },
-      path:
-        process.env.CI === "true"
-          ? path.join(
-              __dirname,
-              "../../dist/mac/Betaflight Configurator.app/Contents/MacOS/Betaflight Configurator"
-            )
-          : electronPath,
+      path: process.env.CI === "true" ? binaryPath() : electronPath,
       args:
         process.env.CI === "true"
           ? undefined
