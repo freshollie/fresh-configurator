@@ -128,7 +128,7 @@ jobs:
         run: yarn workspace @betaflight/configurator build
 
       - name: Ubuntu env
-        if: ${{ matrix.os === 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run:
           export DISPLAY=:99 | 
           sh -e /etc/init.d/xvfb start |
