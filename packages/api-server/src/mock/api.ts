@@ -3,7 +3,7 @@
  * a device
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Sensors, DisarmFlags } from "@betaflight/api";
+import { Sensors, DisarmFlags, SerialPortFunctions } from "@betaflight/api";
 
 export * from "@betaflight/api";
 
@@ -53,6 +53,20 @@ const mockDevice = {
     amperage: 0,
   },
   channels: new Array(16).fill(0),
+  serial: {
+    ports: new Array(5).fill(0).map((i) => ({
+      identifier: i,
+      functions: [
+        SerialPortFunctions.BLACKBOX,
+        SerialPortFunctions.MSP,
+        SerialPortFunctions.TELEMETRY_LTM,
+      ],
+      mspBaudRate: 115200,
+      gpsBaudRate: -1,
+      telemetryBaudRate: 115200,
+      blackboxBaudRate: 115200,
+    })),
+  },
 };
 
 const tickAttitude = (): void => {
@@ -157,3 +171,6 @@ export const readAnalogValues = (
 
 export const readRcValues = (): Promise<number[]> =>
   delay(10).then(() => mockDevice.channels);
+
+export const readSerialConfig = (): Promise<typeof mockDevice["serial"]> =>
+  delay(50).then(() => mockDevice.serial);

@@ -31,7 +31,7 @@ import {
 
 export * from "./osd";
 
-export { Features, DisarmFlags, Sensors } from "./types";
+export { Features, DisarmFlags, Sensors, SerialPortFunctions } from "./types";
 export {
   apiVersion,
   open,
