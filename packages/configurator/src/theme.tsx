@@ -18,7 +18,7 @@ import openSansBold from "./fonts/opensans-bold-webfont.woff";
 import openSansBoldItalic2 from "./fonts/opensans-bolditalic-webfont.woff2";
 import openSansBoldItalic from "./fonts/opensans-bolditalic-webfont.woff";
 
-const lightColors = {
+export const lightColors = {
   accent: "#ffbb00",
   secondary: "#3d3f3e",
   borderAccent: "#ffbb2a",
@@ -41,7 +41,7 @@ const lightColors = {
 
 type ThemeColors = typeof lightColors;
 
-const darkColors: ThemeColors = {
+export const darkColors: ThemeColors = {
   accent: "#ffbb00",
   secondary: "#3d3f3e",
   borderAccent: "#ffbb2a",
