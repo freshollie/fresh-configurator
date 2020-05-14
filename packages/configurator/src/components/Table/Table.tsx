@@ -16,4 +16,16 @@ export default styled.table`
   td:last-child {
     text-align: right;
   }
+
+  thead {
+    > td {
+      white-space: nowrap;
+      padding: 5px 7px;
+      background-color: ${({ theme }) => theme.colors.quietHeader};
+      color: ${({ theme }) => theme.colors.quietText};
+    }
+    > td:not(:first-child) {
+      text-align: center;
+    }
+  }
 `;

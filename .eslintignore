@@ -9,3 +9,4 @@
 !.eslintrc.js
 lerna.json
 *.graphql.d.ts
+*.generated.tsx

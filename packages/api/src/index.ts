@@ -361,7 +361,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
       ports: times(() => {
         const start = data.remaining();
         const serialPort = {
-          identifier: data.readU8(),
+          id: data.readU8(),
           functions: unpackSerialPortFunctions(data.readU32()),
           mspBaudRate: toBaudRate(data.readU8()),
           gpsBaudRate: toBaudRate(data.readU8()),
@@ -390,7 +390,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
     return {
       ports: times(
         () => ({
-          identifier: data.readU8(),
+          id: data.readU8(),
           functions: legacySerialPortFunctionsMap[data.readU8()] ?? [],
           mspBaudRate: -1,
           gpsBaudRate: -1,
@@ -407,11 +407,11 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
       },
     };
   }
-  const serialPortCount = data.byteLength / 16;
+  const serialPortCount = Math.floor(data.byteLength / (1 + 2 + 1 * 4));
   return {
     ports: times(
       () => ({
-        identifier: data.readU8(),
+        id: data.readU8(),
         functions: unpackSerialPortFunctions(data.readU16()),
         mspBaudRate: toBaudRate(data.readU8()),
         gpsBaudRate: toBaudRate(data.readU8()),
@@ -435,7 +435,7 @@ export const writeSerialConfig = async (
     buffer.push8(config.ports.length);
 
     config.ports.forEach((portSettings) => {
-      buffer.push8(portSettings.identifier);
+      buffer.push8(portSettings.id);
 
       const functionMask = packSerialPortFunctions(portSettings.functions);
       buffer
@@ -461,7 +461,7 @@ export const writeSerialConfig = async (
       //   .push32(SERIAL_CONFIG.gpsPassthroughBaudRate);
     } else {
       config.ports.forEach((portSettings) => {
-        buffer.push8(portSettings.identifier);
+        buffer.push8(portSettings.id);
 
         const functionMask = packSerialPortFunctions(portSettings.functions);
         buffer

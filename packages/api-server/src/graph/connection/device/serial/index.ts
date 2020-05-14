@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   type PortSettings {
-    identifier: Int
+    id: Int!
     functions: [Int!]!
     mspBaudRate: Int!
     gpsBaudRate: Int!

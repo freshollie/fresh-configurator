@@ -56,7 +56,7 @@ const snapshotsHelper = ({
       process.stdout.write(
         `Testing(${dark ? "dark" : "light"}) ${kind}:${story}\n`
       );
-      return { waitUntil: "networkidle0" };
+      return { waitUntil: "networkidle2" };
     },
   });
 

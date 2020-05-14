@@ -193,7 +193,7 @@ export enum SerialPortFunctions {
 }
 
 export type PortSettings = {
-  identifier: number;
+  id: number;
   functions: SerialPortFunctions[];
   mspBaudRate: number;
   gpsBaudRate: number;

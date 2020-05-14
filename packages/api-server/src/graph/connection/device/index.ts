@@ -12,6 +12,7 @@ import profiles from "./profiles";
 import rc from "./rc";
 import sensors from "./sensors";
 import status from "./status";
+import serial from "./serial";
 
 const typeDefs = gql`
   extend type Connection {
@@ -52,6 +53,7 @@ export default {
     rc.typeDefs,
     sensors.typeDefs,
     status.typeDefs,
+    serial.typeDefs,
   ]),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: mergeResolvers<unknown, any>([
@@ -66,5 +68,6 @@ export default {
     rc.resolvers,
     sensors.resolvers,
     status.resolvers,
+    serial.resolvers,
   ]),
 };

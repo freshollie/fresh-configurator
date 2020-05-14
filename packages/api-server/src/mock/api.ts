@@ -55,7 +55,7 @@ const mockDevice = {
   channels: new Array(16).fill(0),
   serial: {
     ports: new Array(5).fill(0).map((i) => ({
-      identifier: i,
+      id: i,
       functions: [
         SerialPortFunctions.BLACKBOX,
         SerialPortFunctions.MSP,

@@ -25,6 +25,9 @@ module.exports = {
     },
   ],
   webpackFinal: (config) => {
+    config.externals = {
+      "@serialport/bindings": "commonjs @serialport/bindings",
+    };
     config.module.rules = config.module.rules.map((data) => {
       if (`${data.test}`.includes("svg")) {
         data.test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/;
