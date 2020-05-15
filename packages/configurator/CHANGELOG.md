@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.1](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.5.0...@betaflight/configurator@0.5.1) (2020-05-15)
+
+
+### Bug Fixes
+
+* **configurator:** fix storybook build ([d113a84](https://github.com/freshollie/fresh-configurator/commit/d113a842798c76e865a6b86bd8807d68df54962f))
+
+
+
+
+
 # [0.5.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.4.0...@betaflight/configurator@0.5.0) (2020-05-15)
 
 
