@@ -6,7 +6,7 @@ FROM node:12-alpine as build
 WORKDIR /build
 COPY packages packages
 COPY types types
-COPY tsconfig.build.json tsconfig.base.json tsconfig.cjs.build.json yarn.lock package.json codegen.yml .graphql-let.yml .gitignore ./
+COPY tsconfig.build.json tsconfig.base.json tsconfig.cjs.build.json yarn.lock package.json codegen.yml .gitignore ./
 
 # Build the minimum required to make a functional mock server
 RUN rm packages/configurator/package.json && \

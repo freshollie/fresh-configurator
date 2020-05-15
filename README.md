@@ -66,10 +66,10 @@ $ yarn
 $ yarn start
 ```
 
-### Running the application in mocked mode
+### Running the application in a mocked device environment
 
 ```
-$ yarn start
+$ yarn start:mocked
 ```
 
 ### Component development environment

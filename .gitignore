@@ -110,4 +110,5 @@ __generated__/
 storybook-static
 **/build
 *.graphql.d.ts
+*.graphql.ts
 __diff_output__

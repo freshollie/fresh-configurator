@@ -15,25 +15,36 @@ generates:
         FlightController: ../../mappers#FlightControllerMapping
         RC: ../../mappers#FlightControllerMapping
     plugins:
-      - "typescript"
-      - "typescript-resolvers"
+      - typescript
+      - typescript-resolvers
 
   ./packages/configurator/src/gql/__generated__/index.tsx:
-    documents: "./packages/configurator/src/gql/**/*.graphql"
+    documents: ./packages/configurator/src/gql/**/*.graphql
     config:
       withHooks: true
       withComponent: false
       withHOC: false
       contextType: ../apollo#ApolloContext
-      apolloReactHooksImportFrom: "../apollo"
-
+      apolloReactHooksImportFrom: ../apollo
       nonOptionalTypename: true
     plugins:
-      - "typescript"
-      - "typescript-resolvers"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typescript-react-apollo
   
-  ./packages/configurator/src/gql/__generated__/schema.graphql:
+  ./packages/configurator/src/gql/:
+    documents: ./packages/configurator/src/gql/**/*.graphql
+    preset: near-operation-file
+    presetConfig:
+      extension: .graphql.ts
+      baseTypesPath: ./__generated__/index.tsx
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+      nonOptionalTypename: true
     plugins:
-      - schema-ast
+      - typescript-operations
+      - typescript-react-apollo
+

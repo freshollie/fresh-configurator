@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "clean:lib": "tsc -b --clean tsconfig.build.json tsconfig.cjs.build.json",
-    "clean:codegen": "rimraf packages/*/src/**/__generated__",
+    "clean:codegen": "rimraf packages/*/src/**/__generated__ packages/configurator/src/**/*.graphql.ts",
     "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
     "start:mocked": "yarn build:lib && yarn workspace @betaflight/configurator start:mocked",
     "build": "yarn build:lib && yarn workspace @betaflight/configurator build",
@@ -17,7 +17,7 @@
     "compile": "tsc -b tsconfig.cjs.build.json tsconfig.build.json",
     "compile:cjs": "tsc -b tsconfig.cjs.build.json",
     "storybook": "yarn build:lib && yarn workspace @betaflight/configurator storybook",
-    "codegen": "yarn clean:codegen && graphql-codegen --config codegen.yml && graphql-let",
+    "codegen": "yarn clean:codegen && graphql-codegen --config codegen.yml",
     "test": "yarn compile:cjs && jest",
     "storyshots": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev",
     "storyshots:update": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev:update",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@graphql-codegen/add": "^1.13.2",
     "@graphql-codegen/cli": "^1.13.2",
+    "@graphql-codegen/near-operation-file-preset": "^1.13.5",
     "@graphql-codegen/plugin-helpers": "^1.13.2",
     "@graphql-codegen/schema-ast": "^1.13.2",
     "@graphql-codegen/typescript-operations": "^1.13.2",
@@ -59,7 +60,6 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.3.0",
     "graphql": "^14.6.0",
-    "graphql-let": "^0.10.0",
     "graphql-tag": "^2.10.3",
     "husky": "^3.0.0",
     "jest": "^25.5.4",

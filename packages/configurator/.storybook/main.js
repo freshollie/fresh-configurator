@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 const path = require("path");
-const { NormalModuleReplacementPlugin } = require("webpack");
 
 module.exports = {
   stories: ["../stories/**/*.stories.tsx"],
@@ -56,12 +55,6 @@ module.exports = {
       ],
     });
 
-    config.plugins.push(
-      new NormalModuleReplacementPlugin(
-        /\.graphql$/,
-        path.resolve(__dirname, "../src/gql/__generated__/index.tsx")
-      )
-    );
     return config;
   },
 };
