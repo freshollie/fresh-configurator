@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/configurator",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "./build/main.js",
   "license": "MIT",
   "repository": "https://github.com/freshollie/fresh-configurator.git",
@@ -57,8 +57,8 @@
   "dependencies": {
     "@apollo/react-common": "^3.1.4",
     "@apollo/react-hooks": "^3.1.5",
-    "@betaflight/api": "^0.1.1",
-    "@betaflight/api-server": "^0.2.1",
+    "@betaflight/api": "^0.2.0",
+    "@betaflight/api-server": "^0.3.0",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link-ws": "^1.0.20",

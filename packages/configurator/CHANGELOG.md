@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.4.0...@betaflight/configurator@0.5.0) (2020-05-15)
+
+
+### Bug Fixes
+
+* **configurator:** fix disarm flags, fixed dev environment ([d766771](https://github.com/freshollie/fresh-configurator/commit/d7667717d9924aa9e682196522e83dae8adc686f))
+* **configurator:** fix not disconnecting on close, started adding tests, added jest eslint plugin ([cbe29a3](https://github.com/freshollie/fresh-configurator/commit/cbe29a3eedb2a84768c8ddf30dbd7e56cba0d891))
+* **configurator:** fixed styling for widgets, added TabRouter tests ([f7efbf7](https://github.com/freshollie/fresh-configurator/commit/f7efbf7e411b37ff0548cdfffe73a734f414a108))
+* **configurator:** make sure components always update from data changes ([7dedeea](https://github.com/freshollie/fresh-configurator/commit/7dedeeab1d8ae56627917f480bcb425029742f30))
+* **configurator:** simplified connection manager, finished tests ([0564abd](https://github.com/freshollie/fresh-configurator/commit/0564abd27a5b749af249845986a17dc694015bb6))
+* **configurator:** useCallback in custom hooks, added more tests ([3d9ad7c](https://github.com/freshollie/fresh-configurator/commit/3d9ad7c056247e5526b276938857ef2d948c19cd))
+
+
+### Features
+
+* **api-server:** added serial query, fixed relative imports, upgrade eslint-typescript-airbnb ([418da88](https://github.com/freshollie/fresh-configurator/commit/418da881d80f04f8cd78f9f138fecb725845e6f9))
+* **api-server:** created mock api, deploy mocks to heroku ([df4d2b4](https://github.com/freshollie/fresh-configurator/commit/df4d2b456d6dac1147b5f8732eda5e383dcb8af4))
+* **configurator:** created reset functionality, downgrade to AC2 ([f504eee](https://github.com/freshollie/fresh-configurator/commit/f504eee0f0c2f997296637da4ec13cddadfa8cdb))
+* **ports:** completed api-server ports, start work on ports settings table ([73559b0](https://github.com/freshollie/fresh-configurator/commit/73559b01cbfe49d80ac165139859933e0175f8a9))
+
+
+
+
+
 # [0.4.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.2.1...@betaflight/configurator@0.4.0) (2020-04-18)
 
 
