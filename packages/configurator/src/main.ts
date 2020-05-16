@@ -7,7 +7,6 @@ import installExtension, {
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
-import getPort from "get-port";
 import { createServer } from "@betaflight/api-server";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -17,7 +16,7 @@ let mainWindow: BrowserWindow | undefined;
 const E2E = process.env.E2E === "true";
 const PRODUCTION = process.env.NODE_ENV === "production";
 
-let backendPort = 9000;
+let backendPort: number | string = 9000;
 
 const startBackend = async (): Promise<void> => {
   const mocked = process.env.MOCKED === "true" || E2E;
@@ -25,10 +24,11 @@ const startBackend = async (): Promise<void> => {
     console.log("Creating backend in mocked mode");
   }
   const backend = createServer({ mocked });
-  backendPort = await getPort({ port: backendPort });
-  console.log(`Starting backend on ${backendPort}`);
 
-  await backend.listen(backendPort);
+  const { port } = await backend.listen(backendPort);
+  console.log(`Starting backend on ${port}`);
+
+  backendPort = port;
 };
 
 // Temporary fix broken high-dpi scale factor on Windows (125% scaling)
