@@ -28,4 +28,6 @@ module.exports = {
     "<rootDir>/dist/",
     "<rootDir>/.*/__mocks__",
   ],
+  testEnvironment: "node",
+  testRunner: "jest-circus/runner",
 };

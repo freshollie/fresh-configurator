@@ -6,7 +6,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/freshollie/fresh-configurator/badge.svg?branch=master)](https://coveralls.io/github/freshollie/fresh-configurator?branch=master)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://betaflight-storybook.netlify.app)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/9ccda5f0-7558-4e26-8070-2127d467309b/deploy-status)](https://app.netlify.com/sites/betaflight-configurator/deploys)
 
 <p align="center">
   <img width="700" src="./docs/progress.png">
@@ -53,6 +52,12 @@ Project | Description
 [@betaflight/msp](packages/msp) | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers
 
 ## Developing
+
+### Requirements
+- `node@12`
+- `yarn`
+
+If you have `nvm` run `nvm use` to use the correct node version
 
 **PLEASE NOTE, THIS SOFTWARE IS WORK IN PROGRESS AND THINGS ARE CHANGING ALL THE TIME**
 

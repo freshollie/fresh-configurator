@@ -6,13 +6,17 @@ describe("callibrateAccelerometer", () => {
   it("should callibrate the accelerometer for the given device", async () => {
     let timersRun = 0;
     const interval = setInterval(() => {
-      jest.runTimersToTime(100);
+      try {
+        jest.advanceTimersByTime(100);
+      } catch (e) {}
       timersRun += 1;
     }, 10);
 
     jest.useFakeTimers();
 
     await calibrateAccelerometer("/dev/something");
+
+    jest.useRealTimers();
     clearInterval(interval);
 
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/something", {

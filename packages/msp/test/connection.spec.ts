@@ -35,13 +35,15 @@ const reply = (port: string, data: Buffer): void => {
 };
 
 const realSetTimeout = setTimeout;
+
+let killMspReplying = false;
 /**
  * Automatically reply MSP info for the given port
  * when it's opened
  */
 const handleMspInfoReply = async (port: string): Promise<void> => {
   let currentPort = raw(port);
-  while (true) {
+  while (!killMspReplying) {
     try {
       if (
         currentPort !== raw(port) &&
@@ -61,10 +63,15 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
 
 mockMspDevices.forEach((port) => handleMspInfoReply(port));
 
+afterAll(() => {
+  killMspReplying = true;
+});
+
 beforeEach(() => {
   // Reset the bindings every iteration to ensure
   // that every function can start from an empty state
   SerialPort.Binding = undefined as any;
+  jest.clearAllTimers();
   jest.useRealTimers();
 });
 
@@ -186,6 +193,8 @@ describe("execute", () => {
 
   it("should write the given command and data for v1 commands", async () => {
     await open("/dev/something");
+    jest.useFakeTimers();
+
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a message"),
@@ -199,6 +208,8 @@ describe("execute", () => {
 
   it("should write the given command and data for v2 commands", async () => {
     await open("/dev/something");
+    jest.useFakeTimers();
+
     execute("/dev/something", {
       code: 256,
       data: Buffer.from("This is a v2 message"),
@@ -212,6 +223,8 @@ describe("execute", () => {
 
   it("should deduplicate requests, if the same request is already in flight", async () => {
     await open("/dev/something");
+    jest.useFakeTimers();
+
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a message"),
@@ -382,6 +395,8 @@ describe("bytesWritten", () => {
 
   it("should count the number of bytes written to the device", async () => {
     await open("/dev/something");
+    jest.useFakeTimers();
+
     execute("/dev/something", {
       code: 54,
       data: Buffer.from("This is a v1 message"),

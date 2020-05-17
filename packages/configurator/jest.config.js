@@ -17,4 +17,5 @@ module.exports = {
     "\\.graphql": "<rootDir>/src/gql/__generated__/index.tsx",
     ...base.moduleNameMapper,
   },
+  testEnvironment: "jest-environment-jsdom",
 };

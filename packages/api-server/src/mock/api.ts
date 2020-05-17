@@ -108,11 +108,13 @@ const tickChannels = (): void => {
   mockDevice.channels = mockDevice.channels.map((v, i) => (v + i + 1) % 2200);
 };
 
-setInterval(tickAttitude, 1000 / 120);
-setInterval(tickStatus, 1000 / 60);
-setInterval(tickAnalogValues, 1000 / 30);
-setInterval(tickGps, 1000 / 0.2);
-setInterval(tickChannels, 1000 / 120);
+export const startTicks = (): void => {
+  setInterval(tickAttitude, 1000 / 120);
+  setInterval(tickStatus, 1000 / 60);
+  setInterval(tickAnalogValues, 1000 / 30);
+  setInterval(tickGps, 1000 / 0.2);
+  setInterval(tickChannels, 1000 / 120);
+};
 
 const delay = (ms?: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
