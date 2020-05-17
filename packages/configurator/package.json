@@ -86,7 +86,7 @@
     "@storybook/addon-actions": "^5.3.12",
     "@storybook/addon-docs": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
-    "@storybook/addon-storyshots": "^5.3.18",
+    "@storybook/addon-storyshots": "^6.0.0-beta.8",
     "@storybook/addon-storyshots-puppeteer": "^5.3.18",
     "@storybook/addons": "^5.3.18",
     "@storybook/preset-typescript": "^3.0.0",

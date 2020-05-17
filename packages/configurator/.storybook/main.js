@@ -3,7 +3,7 @@ const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
 
 module.exports = {
-  stories: ["../stories/**/*.stories.tsx"],
+  stories: [path.resolve(__dirname, "../stories/**/*.stories.tsx")],
   addons: [
     "@storybook/addon-actions",
     "@storybook/addon-links",
@@ -16,7 +16,7 @@ module.exports = {
         },
         forkTsCheckerWebpackPluginOptions: {
           tsconfig: path.resolve(__dirname, "../tsconfig.json"),
-          reportFiles: ["stories/**/*.{ts,tsx}"],
+          reportFiles: [path.resolve(__dirname, "../stories/**/*.{ts,tsx}")],
           compilerOptions: {
             baseUrl: null,
           },
