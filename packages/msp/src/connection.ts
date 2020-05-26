@@ -81,7 +81,7 @@ export const execute = async (
           log(
             `${request.toJSON().data} response: ${
               Buffer.from(message.data).toJSON().data
-            }`
+            }, byteLength: ${message.data.byteLength}`
           );
 
           delete requests[requestKey];

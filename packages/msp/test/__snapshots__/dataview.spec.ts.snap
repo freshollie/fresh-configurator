@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MspDataView read8 should throw an error if there is no more data to read 1`] = `"Data depleated"`;
+
+exports[`MspDataView read16 should throw an error if there is no more data to read 1`] = `"Data depleated"`;

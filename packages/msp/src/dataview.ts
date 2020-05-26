@@ -32,7 +32,7 @@ export default class MspDataView extends DataView {
   public read8(): number {
     if (this.byteLength >= this.offset + 1) {
       this.offset += 1;
-      return this.getInt8(this.offset);
+      return this.getInt8(this.offset - 1);
     }
     return MspDataView.error();
   }

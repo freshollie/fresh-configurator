@@ -285,7 +285,7 @@ export class MspParser extends Transform {
       this.crcError = true;
       data = new ArrayBuffer(0);
     }
-    log(`Parsed message: ${data}`);
+    log(`Parsed message: ${Buffer.from(data).toJSON().data}`);
 
     this.emit("data", {
       code: this.code,
