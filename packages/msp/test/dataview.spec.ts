@@ -50,7 +50,7 @@ describe("MspDataView", () => {
 
       const dataView = new MspDataView(arrayBuffer, 0, arrayBuffer.byteLength);
 
-      expect(dataView.read8()).toEqual(15);
+      expect(dataView.read16()).toEqual(17679);
       expect(() => dataView.read16()).toThrowErrorMatchingSnapshot();
     });
   });

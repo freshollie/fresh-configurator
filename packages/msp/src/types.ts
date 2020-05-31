@@ -9,10 +9,15 @@ export type MspInfo = {
 
 export type ExecutionLocks = Record<number, Promise<void> | undefined>;
 
+export type MspRequest = {
+  close: () => void;
+  response: Promise<ArrayBuffer>;
+};
+
 export type Connection = {
   serial: SerialPort;
   parser: MspParser;
-  requests: Record<string, Promise<ArrayBuffer> | undefined>;
+  requests: Record<string, MspRequest | undefined>;
   bytesWritten: number;
   bytesRead: number;
   packetErrors: number;

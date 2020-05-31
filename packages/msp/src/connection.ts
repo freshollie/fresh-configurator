@@ -58,12 +58,14 @@ export const execute = async (
       : encodeMessageV1(code, sendData);
 
   const requestKey = request.toString("utf-8");
-  let dataRequest = requests[requestKey];
+  let mspRequest = requests[requestKey];
 
   // Prevent FC lockup by checking if this request is currently being performed
   // and if not, making the request
-  if (dataRequest === undefined) {
-    dataRequest = new Promise((resolve, reject) => {
+  if (mspRequest === undefined) {
+    let rejector: (err: Error) => void | undefined;
+    const response = new Promise<ArrayBuffer>((resolve, reject) => {
+      rejector = reject;
       // Throw an error if timeout is reached
       const timeoutId = setTimeout(() => {
         delete requests[requestKey];
@@ -95,7 +97,11 @@ export const execute = async (
       parser.on("data", onData);
     });
 
-    requests[requestKey] = dataRequest;
+    mspRequest = {
+      response,
+      close: () => rejector?.(new Error("Connection closed")),
+    };
+    requests[requestKey] = mspRequest;
 
     log(`Writing ${request.toJSON().data} to ${port}`);
     serial.write(request);
@@ -104,19 +110,9 @@ export const execute = async (
 
   // make every DataView unique to each request, even though
   // they are accessing the same set of data
-  return dataRequest.then((responseData) => new MspDataView(responseData));
-};
-
-/**
- * Private, used for testing
- */
-export const raw = (port: string): SerialPort | undefined =>
-  connectionsMap[port]?.serial;
-
-export const reset = (): void => {
-  Object.keys(connectionsMap).forEach((port) => {
-    delete connectionsMap[port];
-  });
+  return mspRequest.response.then(
+    (responseData) => new MspDataView(responseData)
+  );
 };
 
 export const ports = async (): Promise<string[]> => {
@@ -135,10 +131,16 @@ export const close = async (port: string): Promise<void> => {
     return;
   }
   const { serial } = connection;
-
-  const closePromise = new Promise((resolve) => serial.on("close", resolve));
-  serial.close();
   delete connectionsMap[port];
+
+  const closePromise = serial.isOpen
+    ? new Promise((resolve) => serial.on("close", resolve))
+    : Promise.resolve();
+  await new Promise((resolve) => serial.close(resolve));
+
+  Object.values(connection.requests).forEach((request) => {
+    request?.close();
+  });
 
   await closePromise;
 };
@@ -221,6 +223,17 @@ export const open: OpenConnectionFunction = async (
     throw new Error(`Could not read MSP version from ${port}`);
   }
 
+  // Disconnect isn't notified unless we write to the serial
+  // port after it disconnects. This interval constantly checks
+  // the available ports, and issues a disconnect if the port
+  // is removed
+  const disconnectMonitor = setInterval(async () => {
+    const list = await ports();
+    if (!list.includes(port) && serial.isOpen) {
+      close(port);
+    }
+  }, 250);
+
   // valid connection, setup listeners
   serial.on("data", (data: Buffer) => {
     connection.bytesRead += Buffer.byteLength(data);
@@ -228,12 +241,18 @@ export const open: OpenConnectionFunction = async (
 
   serial.on("error", () => {
     log(`${port} on error received`);
-    close(port);
+    // Don't trigger close if this serial port is already
+    // closed, as it means that the closing
+    // will be dealt with by the close event
+    if (serial.isOpen) {
+      close(port);
+    }
   });
 
-  serial.on("close", () => {
+  serial.on("close", async () => {
     log(`${port} on close received`);
-    close(port);
+    clearInterval(disconnectMonitor);
+    await close(port);
     onCloseCallback?.();
   });
 
@@ -256,3 +275,16 @@ export const packetErrors = (port: string): number =>
 
 export const apiVersion = (port: string): string =>
   connectionsMap[port]?.mspInfo.apiVersion ?? "0.0.0";
+
+/**
+ * Private, used for testing
+ */
+export const raw = (port: string): SerialPort | undefined =>
+  connectionsMap[port]?.serial;
+
+/**
+ * Private, used for testing
+ */
+export const reset = async (): Promise<void> => {
+  await Promise.all(Object.keys(connectionsMap).map((port) => close(port)));
+};

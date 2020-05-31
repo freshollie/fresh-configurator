@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`close should cancel all pending executions 1`] = `[Error: Connection closed]`;
+
+exports[`close should cancel all pending executions 2`] = `[Error: Connection closed]`;
+
 exports[`execute should throw an error if the port is not open 1`] = `[Error: /dev/something is not open]`;
 
 exports[`execute should timeout after given timeout 1`] = `[Error: Timed out during execution]`;
