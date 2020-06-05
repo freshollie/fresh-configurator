@@ -19,8 +19,8 @@ export const isOpen = (connectionId: string): boolean =>
 
 export const connectLock = async (
   port: string,
-  connectFunction: () => Promise<string>
-): Promise<string> => connectFunction();
+  connectFunction: () => Promise<void>
+): Promise<void> => connectFunction();
 
 export const add = (port: string, connnectionId: string): void => {
   connectionsMap[connnectionId] = port;

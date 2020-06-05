@@ -4,6 +4,7 @@
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Sensors, DisarmFlags, SerialPortFunctions } from "@betaflight/api";
+import { v4 } from "uuid";
 
 export * from "@betaflight/api";
 
@@ -17,6 +18,11 @@ const mockPorts = [
   legacyPort,
   autoClosePort,
 ];
+
+const ids = mockPorts.reduce(
+  (acc, port) => ({ ...acc, [port]: v4() }),
+  {} as Record<string, string>
+);
 
 const badBaudrate = 38400;
 
@@ -176,3 +182,9 @@ export const readRcValues = (): Promise<number[]> =>
 
 export const readSerialConfig = (): Promise<typeof mockDevice["serial"]> =>
   delay(50).then(() => mockDevice.serial);
+
+export const readUID = (port: string): Promise<string> =>
+  delay(30).then(() => ids[port]);
+
+export const writeReboot = (port: string): Promise<boolean> =>
+  delay(100).then(() => true);
