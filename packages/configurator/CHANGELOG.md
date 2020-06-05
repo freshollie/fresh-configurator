@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.5.1...@betaflight/configurator@0.5.2) (2020-06-05)
+
+
+### Bug Fixes
+
+* **configurator:** correctly find available port to create api-server ([9eb8616](https://github.com/freshollie/fresh-configurator/commit/9eb8616cc1dbce1fc7893e8ec26fd74c9a801dd4))
+
+
+
+
+
 ## [0.5.1](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.5.0...@betaflight/configurator@0.5.1) (2020-05-15)
 
 

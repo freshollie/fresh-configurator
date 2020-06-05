@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/freshollie/fresh-configurator/tree/master/packages/api/compare/@betaflight/api@0.2.0...@betaflight/api@0.3.0) (2020-06-05)
+
+
+### Features
+
+* **api:** added more read board info tests, added readUID, added writeReboot ([5fef163](https://github.com/freshollie/fresh-configurator/tree/master/packages/api/commit/5fef163d7db9dbb6923ddf7e2d2767b924d17a48))
+
+
+
+
+
 # 0.2.0 (2020-05-15)
 
 

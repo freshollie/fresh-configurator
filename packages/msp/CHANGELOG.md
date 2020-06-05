@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/freshollie/fresh-configurator/tree/master/packages/msp/compare/@betaflight/msp@0.2.0...@betaflight/msp@0.3.0) (2020-06-05)
+
+
+### Bug Fixes
+
+* **msp:** fix issues with read8 on MspDataView, better logging, start tests for dataview ([7835832](https://github.com/freshollie/fresh-configurator/tree/master/packages/msp/commit/7835832c3907804696aa7634b115c5b84cd196bc))
+
+
+### Features
+
+* **msp:** added better detection for device disconnect, reject all pending requests on connection close ([23c693a](https://github.com/freshollie/fresh-configurator/tree/master/packages/msp/commit/23c693a9ffe0bb496400f8f2eb459e2ce62b45b5))
+
+
+
+
+
 # 0.2.0 (2020-05-15)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server/compare/@betaflight/api-server@0.3.0...@betaflight/api-server@0.4.0) (2020-06-05)
+
+
+### Features
+
+* **api-server:** automatically reconnect when device disconnects ([a597012](https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server/commit/a597012b33406325723f96edd4c9873cc94757ab))
+
+
+
+
+
 # [0.3.0](https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server/compare/@betaflight/api-server@0.2.1...@betaflight/api-server@0.3.0) (2020-05-15)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/api",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A high-level API to read data from betaflight flight controllers",
   "author": "freshollie@gmail.com",
   "main": "./dist/cjs/index.js",
@@ -21,7 +21,7 @@
     "dist"
   ],
   "dependencies": {
-    "@betaflight/msp": "^0.2.0",
+    "@betaflight/msp": "^0.3.0",
     "rambda": "^4.5.0",
     "semver": "^7.1.3"
   },
