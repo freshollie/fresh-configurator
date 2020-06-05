@@ -25,7 +25,7 @@ const startBackend = async (): Promise<void> => {
   }
   const backend = createServer({ mocked });
 
-  const { port } = await backend.listen(backendPort);
+  const { port } = await backend.listen();
   console.log(`Starting backend on ${port}`);
 
   backendPort = port;

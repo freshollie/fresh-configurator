@@ -212,3 +212,10 @@ export type SerialConfig = {
   ports: PortSettings[];
   legacy?: LegacyBaudRates;
 };
+
+export enum RebootTypes {
+  FIRMWARE = 0,
+  BOOTLOADER = 1,
+  MSC = 2,
+  MSC_UTC = 3,
+}

@@ -2,8 +2,11 @@ import * as uuid from "uuid";
 import gql from "graphql-tag";
 import { ApolloError } from "apollo-server";
 import { mergeResolvers, mergeTypes } from "merge-graphql-schemas";
+import debug from "debug";
 import device from "./device";
 import { Resolvers } from "../__generated__";
+
+const log = debug("api-server:connection");
 
 const typeDefs = gql`
   type Subscription {
@@ -43,34 +46,72 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
-    connect: (_, { port, baudRate }, { connections, api }) =>
-      connections
-        .connectLock(port, async () => {
-          const connectionId = uuid.v4();
-          if (!api.isOpen(port)) {
-            try {
-              await api.open(port, { baudRate }, () => {
-                // remove any connections if the port closes
-                connections.closeConnections(port);
-              });
-            } catch (e) {
-              throw new ApolloError(`Could not open port: ${e.message}`);
-            }
+    connect: async (_, { port, baudRate }, { connections, api }) => {
+      let deviceId: string | undefined;
+      const connectionId = uuid.v4();
+
+      const connect = async (retries = 0): Promise<void> => {
+        if (deviceId && !connections.getPort(connectionId)) {
+          log("connection is now closed, ignoring reconnect");
+          return;
+        }
+
+        try {
+          log(`opening ${port}`);
+          // open the connection, and if the connection closes
+          // try to reconnect
+          await api.open(port, { baudRate }, () =>
+            setTimeout(() => connect(0), 1000)
+          );
+
+          // ensure that after we have connected that
+          // this is the same device which we originally connected to
+          if (deviceId && deviceId !== (await api.readUID(port))) {
+            log(
+              "the connection has restarted, but the device is not the same as expected"
+            );
+            connections.closeConnection(connectionId);
           }
-          return connectionId;
-        })
-        .then((connectionId) => {
-          // Close any existing connections
-          connections.closeConnections(port);
+        } catch (e) {
+          // as we were not previously open
+          // throw an error
+          if (!deviceId) {
+            throw e;
+          }
 
-          // start a new connection with a new connection id
-          connections.add(port, connectionId);
+          // otherwise, try again
+          if (retries < 2) {
+            log("error connecting, trying again");
+            log(e);
+            setTimeout(() => connect(retries + 1), 1000);
+          } else {
+            log("ran out of retries closing");
+            connections.closeConnections(port);
+          }
+        }
+      };
 
-          return {
-            id: connectionId,
-            port,
-          };
-        }),
+      await connections.connectLock(port, async () => {
+        if (!api.isOpen(port)) {
+          try {
+            await connect();
+          } catch (e) {
+            throw new ApolloError(`Could not open port: ${e.message}`);
+          }
+        }
+        deviceId = await api.readUID(port);
+      });
+
+      // Close any existing connections
+      connections.closeConnections(port);
+      // start a new connection with a new connection id
+      connections.add(port, connectionId);
+
+      return {
+        id: connectionId,
+        port,
+      };
+    },
 
     close: async (_, { connectionId }, { connections, api }) => {
       const port = connections.getPort(connectionId);

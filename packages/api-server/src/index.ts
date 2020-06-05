@@ -1,8 +1,11 @@
 import { ApolloServer } from "apollo-server";
 import { makeExecutableSchema } from "graphql-tools";
+import debug from "debug";
 import context, { mockedContext } from "./context";
 import graph from "./graph";
 import { startTicks } from "./mock/api";
+
+const log = debug("api-server:server");
 
 // eslint-disable-next-line import/prefer-default-export
 export const createServer = ({
@@ -18,8 +21,7 @@ export const createServer = ({
     context: mocked ? mockedContext : context,
     playground,
     formatError: (error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      log(error);
       return error;
     },
   });

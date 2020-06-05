@@ -71,19 +71,18 @@ beforeEach(() => {
   // Reset the bindings every iteration to ensure
   // that every function can start from an empty state
   SerialPort.Binding = undefined as any;
-  jest.clearAllTimers();
-  jest.useRealTimers();
-});
-
-beforeEach(() => {
-  MockBinding.reset();
-  reset();
-
   mockPorts.forEach((path) => {
     MockBinding.createPort(path, {
       record: true,
     });
   });
+});
+
+afterEach(async () => {
+  jest.clearAllTimers();
+  jest.useRealTimers();
+  await reset();
+  MockBinding.reset();
 });
 
 describe("open", () => {
@@ -135,6 +134,23 @@ describe("open", () => {
       );
     }));
 
+  it("should close the connection if the device disconnects", () =>
+    new Promise((done) => {
+      open("/dev/something", () => {
+        expect(isOpen("/dev/something")).toBe(false);
+        done();
+      }).then(() => {
+        MockBinding.reset();
+        mockPorts
+          .filter((port) => port !== "/dev/something")
+          .forEach((path) => {
+            MockBinding.createPort(path, {
+              record: true,
+            });
+          });
+      });
+    }));
+
   it("should throw an error when port cannot be opened", async () => {
     await expect(open("/something/wrong")).rejects.toEqual(expect.any(Error));
     await expect(open("/something/wrong")).rejects.toMatchSnapshot();
@@ -173,6 +189,26 @@ describe("close", () => {
   it("should ignore when connection is already closed", async () => {
     await expect(close("/dev/something")).resolves.toBeUndefined();
   });
+
+  it("should cancel all pending executions", async () => {
+    await open("/dev/something");
+
+    const requests = Promise.all(
+      [1, 2].map((v) =>
+        execute("/dev/something", { code: v })
+          .then(() => {
+            throw new Error("Should have thrown an error");
+          })
+          .catch((e) => {
+            expect(e).toMatchSnapshot();
+          })
+      )
+    );
+
+    await close("/dev/something");
+
+    return requests;
+  });
 });
 
 describe("ports", () => {
@@ -198,7 +234,7 @@ describe("execute", () => {
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a message"),
-    });
+    }).catch(() => {});
     await flushPromises();
 
     expect(writtenData("/dev/something")).toEqual(
@@ -213,7 +249,7 @@ describe("execute", () => {
     execute("/dev/something", {
       code: 256,
       data: Buffer.from("This is a v2 message"),
-    });
+    }).catch(() => {});
     await flushPromises();
 
     expect(writtenData("/dev/something")).toEqual(
@@ -228,13 +264,13 @@ describe("execute", () => {
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a message"),
-    });
+    }).catch(() => {});
 
     await flushPromises();
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a message"),
-    });
+    }).catch(() => {});
 
     await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
@@ -244,7 +280,7 @@ describe("execute", () => {
     execute("/dev/something", {
       code: 254,
       data: Buffer.from("This is a different request"),
-    });
+    }).catch(() => {});
     await flushPromises();
     expect(writtenData("/dev/something")).toEqual(
       Buffer.concat([
@@ -400,7 +436,7 @@ describe("bytesWritten", () => {
     execute("/dev/something", {
       code: 54,
       data: Buffer.from("This is a v1 message"),
-    });
+    }).catch(() => {});
 
     expect(bytesWritten("/dev/something")).toEqual(
       Buffer.byteLength(

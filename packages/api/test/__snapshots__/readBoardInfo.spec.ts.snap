@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readBoardInfo should correctly read board info for v1.40.0 1`] = `
+Object {
+  "boardIdentifier": "SRF3",
+  "boardName": "",
+  "boardType": 0,
+  "boardVersion": 0,
+  "configurationState": undefined,
+  "manufacturerId": "",
+  "mcuTypeId": 255,
+  "sampleRateHz": undefined,
+  "signature": Array [],
+  "targetCapabilities": 2,
+  "targetName": "SPRACINGF3",
+}
+`;
+
+exports[`readBoardInfo should correctly read board info for v1.42.0 1`] = `
+Object {
+  "boardIdentifier": "S411",
+  "boardName": "CRAZYBEEF4FS",
+  "boardType": 2,
+  "boardVersion": 0,
+  "configurationState": 2,
+  "manufacturerId": "HAMO",
+  "mcuTypeId": 4,
+  "sampleRateHz": undefined,
+  "signature": Array [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ],
+  "targetCapabilities": 55,
+  "targetName": "STM32F411",
+}
+`;

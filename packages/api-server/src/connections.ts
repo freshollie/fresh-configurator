@@ -2,7 +2,7 @@ import { PubSub, ApolloError } from "apollo-server";
 
 const closeEvents = new PubSub();
 let connectionsMap: Record<string, string | undefined> = {};
-let connectingAttempts: Record<string, Promise<string> | undefined> = {};
+let connectingAttempts: Record<string, Promise<void> | undefined> = {};
 
 export const getPort = (connectionId: string): string => {
   const port = connectionsMap[connectionId];
@@ -19,8 +19,8 @@ export const isOpen = (connectionId: string): boolean =>
 
 export const connectLock = async (
   port: string,
-  connectFunction: () => Promise<string>
-): Promise<string> => {
+  connectFunction: () => Promise<void>
+): Promise<void> => {
   const lock = connectingAttempts[port];
   if (lock !== undefined) {
     return lock;

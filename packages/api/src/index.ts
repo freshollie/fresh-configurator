@@ -1,6 +1,12 @@
 import { times } from "rambda";
 import semver from "semver";
-import { MspDataView, execute, apiVersion, WriteBuffer } from "@betaflight/msp";
+import {
+  MspDataView,
+  execute,
+  apiVersion,
+  WriteBuffer,
+  isOpen,
+} from "@betaflight/msp";
 import codes from "./codes";
 
 import {
@@ -20,6 +26,7 @@ import {
   Feature,
   SerialPortFunctions,
   SerialConfig,
+  RebootTypes,
 } from "./types";
 import {
   getFeatureBits,
@@ -31,7 +38,13 @@ import {
 
 export * from "./osd";
 
-export { Features, DisarmFlags, Sensors, SerialPortFunctions } from "./types";
+export {
+  Features,
+  DisarmFlags,
+  Sensors,
+  SerialPortFunctions,
+  RebootTypes,
+} from "./types";
 export {
   apiVersion,
   open,
@@ -66,17 +79,25 @@ export const readBoardInfo = async (port: string): Promise<BoardInfo> => {
     targetName: semver.gte(api, "1.37.0")
       ? String.fromCharCode(...times(() => data.readU8(), data.readU8()))
       : "",
-    boardName: semver.gte(api, "1.39.0")
+    boardName: semver.gte(api, "1.41.0")
       ? String.fromCharCode(...times(() => data.readU8(), data.readU8()))
       : "",
-    manufacturerId: semver.gte(api, "1.39.0")
+    manufacturerId: semver.gte(api, "1.41.0")
       ? String.fromCharCode(...times(() => data.readU8(), data.readU8()))
       : "",
-    signature: semver.gte(api, "1.39.0") ? times(() => data.readU8(), 32) : [],
+    signature: semver.gte(api, "1.41.0") ? times(() => data.readU8(), 32) : [],
     mcuTypeId: semver.gte(api, "1.41.0") ? data.readU8() : 255,
     configurationState: semver.gte(api, "1.42.0") ? data.readU8() : undefined,
     sampleRateHz: semver.gte(api, "1.43.0") ? data.readU16() : undefined,
   };
+};
+
+export const readUID = async (port: string): Promise<string> => {
+  const data = await execute(port, { code: codes.MSP_UID });
+  return times(
+    () => (data.readU32() + 16 ** 6).toString(16).substr(-6),
+    3
+  ).join("");
 };
 
 export const readAnalogValues = async (port: string): Promise<AnalogValues> => {
@@ -477,4 +498,35 @@ export const writeSerialConfig = async (
       data: buffer,
     });
   }
+};
+
+/**
+ * Set the device to reboot, returning true if successful
+ */
+export const writeReboot = async (
+  port: string,
+  type?: RebootTypes
+): Promise<boolean> => {
+  const api = apiVersion(port);
+  const data = await execute(port, {
+    code: codes.MSP_SET_REBOOT,
+    data: type ? ([type] as WriteBuffer) : undefined,
+    timeout: 3000,
+  }).catch((e) => {
+    if (!isOpen(port)) {
+      return undefined;
+    }
+    throw e;
+  });
+
+  if (data && semver.gte(api, "1.40.0")) {
+    const rebootType = data.read8();
+    if (rebootType === RebootTypes.MSC || rebootType === RebootTypes.MSC_UTC) {
+      if (data.read8() === 0) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 };

@@ -1,4 +1,4 @@
-export default class WriteBuffer extends Array {
+export default class WriteBuffer extends Array<number> {
   public push8(val: number): WriteBuffer {
     this.push(0xff & val);
     return this;
