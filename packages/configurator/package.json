@@ -55,6 +55,8 @@
     "storyshots": "jest --config=jest.storyshots.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.0.0-rc.12",
+    "@apollo/link-ws": "^2.0.0-beta.3",
     "@apollo/react-common": "^3.1.4",
     "@apollo/react-hooks": "^3.1.5",
     "@betaflight/api": "^0.2.0",

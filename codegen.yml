@@ -27,6 +27,7 @@ generates:
       contextType: ../apollo#ApolloContext
       apolloReactHooksImportFrom: ../apollo
       nonOptionalTypename: true
+      reactApolloVersion: 3
     plugins:
       - typescript
       - typescript-resolvers
@@ -44,6 +45,7 @@ generates:
       withComponent: false
       withHOC: false
       nonOptionalTypename: true
+      reactApolloVersion: 3
     plugins:
       - typescript-operations
       - typescript-react-apollo

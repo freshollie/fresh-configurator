@@ -16,5 +16,6 @@
   "prettier.packageManager": "yarn",
   "prettier.prettierPath": "node_modules/prettier",
   "prettier.disableLanguages": ["javascript", "typescript"],
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "deno.enable": false
 }
