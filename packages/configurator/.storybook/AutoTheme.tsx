@@ -113,6 +113,7 @@ const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
   const dark = window.location.search.includes("dark=true") || theme.dark;
   if (!animationsDisabled && snapshot) {
     disableAnimations();
+    document.querySelector("body")!.style.padding = "initial";
     animationsDisabled = true;
   }
 

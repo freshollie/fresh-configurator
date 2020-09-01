@@ -8,22 +8,17 @@ module.exports = {
     "@storybook/addon-actions",
     "@storybook/addon-links",
     "@storybook/addon-docs",
-    {
-      name: "@storybook/preset-typescript",
-      options: {
-        tsLoaderOptions: {
-          transpileOnly: true,
-        },
-        forkTsCheckerWebpackPluginOptions: {
-          tsconfig: path.resolve(__dirname, "../tsconfig.json"),
-          reportFiles: [path.resolve(__dirname, "../stories/**/*.{ts,tsx}")],
-          compilerOptions: {
-            baseUrl: null,
-          },
-        },
+  ],
+  typescript: {
+    check: true,
+    checkOptions: {
+      tsconfig: path.resolve(__dirname, "../tsconfig.json"),
+      reportFiles: [path.resolve(__dirname, "../stories/**/*.{ts,tsx}")],
+      compilerOptions: {
+        baseUrl: null,
       },
     },
-  ],
+  },
   webpackFinal: (config) => {
     config.externals = {
       "@serialport/bindings": "commonjs @serialport/bindings",

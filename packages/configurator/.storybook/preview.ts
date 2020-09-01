@@ -13,4 +13,4 @@ const themes = [
   },
 ];
 
-addDecorator(withThemesProvider(themes, AutoTheme));
+addDecorator(withThemesProvider(themes, undefined, AutoTheme));
