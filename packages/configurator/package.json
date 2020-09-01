@@ -104,7 +104,6 @@
     "@types/three": "0.93.31",
     "@types/webdriverio": "^4.0.0",
     "apollo-link": "^1.2.14",
-    "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.6",
     "cross-env": "^7.0.2",
     "electron": "7.2.4",
