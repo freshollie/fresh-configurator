@@ -32,6 +32,7 @@ generates:
       withHOC: false
       contextType: ../apollo#ApolloContext
       apolloReactHooksImportFrom: ../apollo
+      reactApolloVersion: 2
       nonOptionalTypename: true
     plugins:
       - typescript

@@ -101,6 +101,7 @@ module.exports = {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-implied-eval": "off",
         "@typescript-eslint/no-throw-literal": "off",
+        "@typescript-eslint/dot-notation": "off",
       },
     },
   ],

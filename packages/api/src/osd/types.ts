@@ -5,31 +5,31 @@ export type OSDProfileConfig = {
 
 export type OSDTimer = {
   key: number;
-  src: OSD_TIMER_SOURCES;
-  precision: OSD_PRECISION_TYPES;
+  src: OSDTimerSources;
+  precision: OSDPrecisionTypes;
   time: number;
 };
 
 export type OSDAlarm = {
-  key: OSD_ALARMS;
+  key: OSDAlarms;
   value: number;
 };
 
 export type OSDWarning = {
-  key: OSD_WARNINGS;
+  key: OSDWarnings;
   enabled: boolean;
 };
 
 export type Position = { x: number; y: number };
 
 export type OSDDisplayItem = {
-  key: OSD_FIELDS;
+  key: OSDFields;
   position: Position;
   visibility: boolean[];
 };
 
 export type OSDStaticItem = {
-  key: OSD_STATIC_FIELDS;
+  key: OSDStaticFields;
   enabled: boolean;
 };
 
@@ -48,29 +48,29 @@ export type OSDParameters = {
 
 export type OSDConfig = {
   flags: OSDFlags;
-  unitMode: OSD_UNIT_TYPES;
+  unitMode: OSDUnitTypes;
   displayItems: OSDDisplayItem[];
   staticItems: OSDStaticItem[];
   warnings: OSDWarning[];
   timers: OSDTimer[];
-  timerSources: OSD_TIMER_SOURCES[];
+  timerSources: OSDTimerSources[];
   osdProfiles: OSDProfileConfig;
-  videoSystem: OSD_VIDEO_TYPES;
+  videoSystem: OSDVideoTypes;
   alarms: OSDAlarm[];
   parameters: OSDParameters;
 };
 
 export type OSDOtherData = {
   flags: OSDFlags;
-  videoSystem: OSD_VIDEO_TYPES;
-  unitMode: OSD_UNIT_TYPES;
+  videoSystem: OSDVideoTypes;
+  unitMode: OSDUnitTypes;
   alarms: OSDAlarm[];
   warnings: OSDWarning[];
   osdProfiles: OSDProfileConfig;
   parameters: OSDParameters;
 };
 
-export enum OSD_WARNINGS {
+export enum OSDWarnings {
   ARMING_DISABLED,
   BATTERY_NOT_FULL,
   BATTERY_WARNING,
@@ -91,7 +91,7 @@ export enum OSD_WARNINGS {
   UNKNOWN,
 }
 
-export enum OSD_TIMER_SOURCES {
+export enum OSDTimerSources {
   ON_TIME,
   TOTAL_ARMED_TIME,
   LAST_ARMED_TIME,
@@ -99,31 +99,31 @@ export enum OSD_TIMER_SOURCES {
   UNKNOWN,
 }
 
-export enum OSD_ALARMS {
+export enum OSDAlarms {
   RSSI,
   CAP,
   TIME,
   ALT,
 }
 
-export enum OSD_VIDEO_TYPES {
+export enum OSDVideoTypes {
   AUTO,
   PAL,
   NTSC,
 }
 
-export enum OSD_UNIT_TYPES {
+export enum OSDUnitTypes {
   IMPERIAL,
   METRIC,
 }
 
-export enum OSD_PRECISION_TYPES {
+export enum OSDPrecisionTypes {
   SECOND,
   HUNDREDTH,
   TENTH,
 }
 
-export enum OSD_FIELDS {
+export enum OSDFields {
   RSSI_VALUE,
   MAIN_BATT_VOLTAGE,
   CROSSHAIRS,
@@ -192,7 +192,7 @@ export enum OSD_FIELDS {
   UNKNOWN,
 }
 
-export enum OSD_STATIC_FIELDS {
+export enum OSDStaticFields {
   MAX_SPEED,
   MIN_BATTERY,
   MIN_RSSI,

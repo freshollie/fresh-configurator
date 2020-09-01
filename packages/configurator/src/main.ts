@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   APOLLO_DEVELOPER_TOOLS,
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } from "electron-devtools-installer";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow } from "electron";
