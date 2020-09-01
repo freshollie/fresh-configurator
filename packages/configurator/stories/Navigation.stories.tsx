@@ -6,7 +6,7 @@ import styled from "../src/theme";
 
 export default {
   component: Navigation,
-  title: "Managers|Navigation",
+  title: "Managers/Navigation",
 };
 
 const Page = styled.div`

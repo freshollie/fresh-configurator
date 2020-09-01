@@ -5,7 +5,7 @@ import { DevicePortSettingsDocument } from "../src/gql/queries/Device.graphql";
 
 export default {
   component: PortSettingsManager,
-  title: "Managers|Port Settings",
+  title: "Managers/Port Settings",
 };
 
 const resolvers = {

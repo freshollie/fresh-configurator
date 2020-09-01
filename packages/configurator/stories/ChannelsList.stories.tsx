@@ -4,7 +4,7 @@ import requestInterval from "./helpers/request-interval";
 
 export default {
   component: ChannelsList,
-  title: "Components|Channels List",
+  title: "Components/Channels List",
 };
 
 const useChannelValues = (number: number): number[] => {

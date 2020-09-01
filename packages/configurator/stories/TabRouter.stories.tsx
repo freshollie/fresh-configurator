@@ -5,7 +5,7 @@ import { TabRouter } from "../src/routing";
 
 export default {
   component: TabRouter,
-  title: "Routing|Tab Router",
+  title: "Routing/Tab Router",
 };
 
 const selectedTab = (tab: string): Resolvers => ({

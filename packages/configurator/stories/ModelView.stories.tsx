@@ -6,7 +6,7 @@ import requestInterval from "./helpers/request-interval";
 
 export default {
   component: ModelView,
-  title: "Components|ModelView",
+  title: "Components/ModelView",
 };
 
 const Container = styled.div`

@@ -4,7 +4,7 @@ import Icon from "../src/components/Icon";
 
 export default {
   component: BigButton,
-  title: "Components|Big Button",
+  title: "Components/Big Button",
 };
 
 export const connectButton = (): JSX.Element => (

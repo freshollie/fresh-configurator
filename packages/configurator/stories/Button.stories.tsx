@@ -3,7 +3,7 @@ import Button from "../src/components/Button";
 
 export default {
   component: Button,
-  title: "Components|Button",
+  title: "Components/Button",
 };
 
 export const normal = (): JSX.Element => <Button>Some text</Button>;

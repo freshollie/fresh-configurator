@@ -4,7 +4,7 @@ import MainLayout from "../src/layouts/MainLayout";
 
 export default {
   component: StatusList,
-  title: "Components|Status List",
+  title: "Components/Status List",
 };
 
 export const inFooter = (): JSX.Element => (

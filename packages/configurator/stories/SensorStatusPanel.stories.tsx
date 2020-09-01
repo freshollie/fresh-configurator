@@ -4,7 +4,7 @@ import Icon from "../src/components/Icon";
 
 export default {
   component: SensorStatusPanel,
-  title: "Components|Sensor Status Panel",
+  title: "Components/Sensor Status Panel",
 };
 
 export const ExampleSensors = (): JSX.Element => (

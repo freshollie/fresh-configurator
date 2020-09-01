@@ -3,7 +3,7 @@ import Switch from "../src/components/Switch";
 
 export default {
   component: Switch,
-  title: "Components|Switch",
+  title: "Components/Switch",
 };
 export const Small = (): JSX.Element => {
   const [checked, setChecked] = useState(false);

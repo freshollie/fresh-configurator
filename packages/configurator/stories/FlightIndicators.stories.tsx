@@ -8,7 +8,7 @@ import requestInterval from "./helpers/request-interval";
 
 export default {
   component: Attitude,
-  title: "Components|Flight Indicators",
+  title: "Components/Flight Indicators",
 };
 
 const useIndicatorValues = (): {

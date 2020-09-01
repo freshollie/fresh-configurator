@@ -8,7 +8,7 @@ import Button from "../src/components/Button";
 
 export default {
   component: SetupLayout,
-  title: "Layouts|Setup",
+  title: "Layouts/Setup",
 };
 
 export const example = (): JSX.Element => (

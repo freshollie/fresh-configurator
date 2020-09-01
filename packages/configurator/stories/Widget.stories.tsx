@@ -6,7 +6,7 @@ import Table from "../src/components/Table";
 
 export default {
   component: Widget,
-  title: "Components|Widget",
+  title: "Components/Widget",
 };
 
 export const instruments = (): JSX.Element => (

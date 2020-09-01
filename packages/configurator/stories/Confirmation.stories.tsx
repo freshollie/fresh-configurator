@@ -3,7 +3,7 @@ import Confirmation from "../src/components/Confirmation";
 
 export default {
   component: Confirmation,
-  title: "Components|Confirmation Dialog",
+  title: "Components/Confirmation Dialog",
 };
 
 export const open = (): JSX.Element => (
