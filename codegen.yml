@@ -50,6 +50,7 @@ generates:
       withHooks: true
       withComponent: false
       withHOC: false
+      reactApolloVersion: 2
       nonOptionalTypename: true
     plugins:
       - typescript-operations

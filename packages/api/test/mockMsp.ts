@@ -1,7 +1,7 @@
 import { execute, apiVersion, MspDataView } from "@betaflight/msp";
 
 jest.mock("@betaflight/msp", () => ({
-  ...jest.requireActual<object>("@betaflight/msp"),
+  ...jest.requireActual("@betaflight/msp"),
   execute: jest.fn(),
   apiVersion: jest.fn(),
 }));
