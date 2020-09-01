@@ -10,7 +10,8 @@ const log = debug("api-server:connection");
 
 const typeDefs = gql`
   type Subscription {
-    onClosed(connectionId: ID!): ID!
+    onConnectionChanged(connectionId: ID!): ID
+    onReconnecting(connectionId: ID!): ID!
   }
 
   type Mutation {
@@ -34,12 +35,21 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   Subscription: {
-    onClosed: {
+    onConnectionChanged: {
       subscribe: (_, { connectionId }, { connections }) => {
         if (!connections.isOpen(connectionId)) {
           throw new ApolloError("Connection is not open");
         }
-        return connections.onClosed(connectionId);
+        return connections.onChanged(connectionId);
+      },
+      resolve: (connectionId: string) => connectionId,
+    },
+    onReconnecting: {
+      subscribe: (_, { connectionId }, { connections }) => {
+        if (!connections.isOpen(connectionId)) {
+          throw new ApolloError("Connection is not open");
+        }
+        return connections.onReconnecting(connectionId);
       },
       resolve: (connectionId: string) => connectionId,
     },
@@ -48,29 +58,46 @@ const resolvers: Resolvers = {
   Mutation: {
     connect: async (_, { port, baudRate }, { connections, api }) => {
       let deviceId: string | undefined;
-      const connectionId = uuid.v4();
+      let connectionId = uuid.v4();
 
-      const connect = async (retries = 0): Promise<void> => {
+      const connect = async (retries = 1): Promise<void> => {
         if (deviceId && !connections.getPort(connectionId)) {
           log("connection is now closed, ignoring reconnect");
           return;
         }
 
         try {
-          log(`opening ${port}`);
+          log(`opening ${port}, connectionId=${connectionId}`);
           // open the connection, and if the connection closes
           // try to reconnect
-          await api.open(port, { baudRate }, () =>
-            setTimeout(() => connect(0), 1000)
-          );
+          await api.open(port, { baudRate }, () => {
+            log(
+              `connection closed for ${port}, reconnecting in 3 seconds, connectionId=${connectionId}`
+            );
+            connections.setReconnecting(connectionId, 1);
+            setTimeout(() => connect(), 1000);
+          });
+          log(`opened for ${port} successfully, connectionId=${connectionId}`);
 
+          if (!deviceId) {
+            return;
+          }
           // ensure that after we have connected that
           // this is the same device which we originally connected to
-          if (deviceId && deviceId !== (await api.readUID(port))) {
+          if (deviceId !== (await api.readUID(port))) {
             log(
-              "the connection has restarted, but the device is not the same as expected"
+              `connectionId=${connectionId} has restarted, but the device is not the same as expected`
             );
-            connections.closeConnection(connectionId);
+            connections.close(connectionId);
+          } else {
+            log(`connectionId=${connectionId} reopened for port=${port}`);
+            // As the device has now reconnected
+            // let the users of this connection know
+            // that there is a new connection id
+            // and then close the old connection id
+            const newConnectionId = uuid.v4();
+            connections.change(connectionId, newConnectionId);
+            connectionId = newConnectionId;
           }
         } catch (e) {
           // as we were not previously open
@@ -80,9 +107,12 @@ const resolvers: Resolvers = {
           }
 
           // otherwise, try again
-          if (retries < 2) {
-            log("error connecting, trying again");
+          if (retries < 5) {
+            log(
+              `connection=${connectionId} error reconnecting, trying again in 3 seconds`
+            );
             log(e);
+            connections.setReconnecting(connectionId, retries + 1);
             setTimeout(() => connect(retries + 1), 1000);
           } else {
             log("ran out of retries closing");

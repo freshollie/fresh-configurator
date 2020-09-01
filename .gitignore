@@ -112,3 +112,4 @@ storybook-static
 *.graphql.d.ts
 *.graphql.ts
 __diff_output__
+schema.graphql

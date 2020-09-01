@@ -295,14 +295,20 @@ Array [
 ]
 `;
 
-exports[`ConnectionManager should remove the active connection if onClosed event subscription fails 1`] = `
+exports[`ConnectionManager should remove the active connection if onConnectionChanged event subscription fails 1`] = `
 Array [
   "Serial port closed unexpectedly for connectionId=238478234",
 ]
 `;
 
-exports[`ConnectionManager should remove the connection when onClosed event occurs for the active connection 1`] = `
+exports[`ConnectionManager should remove the connection when onConnectionChanged event occurs for the active connection with no new connectionId 1`] = `
 Array [
   "Serial port closed unexpectedly for connectionId=238478234",
+]
+`;
+
+exports[`ConnectionManager should update the connectionId when onConnectionChanged event occurs for the active connection with a new connectionId 1`] = `
+Array [
+  "Serial port reconnected for connectionId=238478234 newConnectionId=new-id ",
 ]
 `;

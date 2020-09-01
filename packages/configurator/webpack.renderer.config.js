@@ -91,7 +91,7 @@ module.exports = (_, { mode }) => ({
     before() {
       spawn("electron", ["./dev.js"], {
         shell: true,
-        env: { NODE_ENV: "development", ...process.env },
+        env: { NODE_ENV: "development", DEBUG: "api-server:*", ...process.env },
         stdio: "inherit",
       })
         .on("close", () => process.exit(0))

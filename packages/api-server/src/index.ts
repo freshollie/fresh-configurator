@@ -5,7 +5,7 @@ import context, { mockedContext } from "./context";
 import graph from "./graph";
 import { startTicks } from "./mock/api";
 
-const log = debug("api-server:server");
+const log = debug("api-server:errors");
 
 // eslint-disable-next-line import/prefer-default-export
 export const createServer = ({

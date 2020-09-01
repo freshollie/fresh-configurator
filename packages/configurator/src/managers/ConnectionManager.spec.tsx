@@ -12,7 +12,7 @@ import {
   ConnectDocument,
   DisconnectDocument,
 } from "../gql/mutations/Connection.graphql";
-import { OnConnectionClosedDocument } from "../gql/queries/Connection.graphql";
+import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
 import {
   ConnectionStateDocument,
   ConnectionStateQuery,
@@ -158,22 +158,23 @@ const setArmingMock = (
   },
 });
 
-const onClosedMock = (
+const onChangedMock = (
   connectionId: string,
   response: string | null,
-  onSubscribed: () => void
+  onSubscribed = () => {}
 ): MockedResponse => ({
   request: {
-    query: OnConnectionClosedDocument,
+    query: OnConnectionChangedDocument,
     variables: {
       connection: connectionId,
     },
   },
+  delay: 99999,
   result: () => {
     onSubscribed();
     return {
       data: {
-        onClosed: response,
+        onConnectionChanged: response,
       },
     };
   },
@@ -194,7 +195,6 @@ describe("ConnectionManager", () => {
   it("should connect with the connection settings and set the new connection id when connect clicked", async () => {
     const connect = jest.fn();
     const setDisarmed = jest.fn();
-    const onSubscribed = jest.fn();
     const mockConnectionId = "23455";
 
     const cache = new InMemoryCache();
@@ -215,7 +215,7 @@ describe("ConnectionManager", () => {
             "1.40.1",
             connect
           ),
-          onClosedMock(mockConnectionId, null, onSubscribed),
+          onChangedMock(mockConnectionId, null),
           setArmingMock(mockConnectionId, true, false, setDisarmed),
         ]}
       >
@@ -242,7 +242,6 @@ describe("ConnectionManager", () => {
     );
     await waitFor(() => expect(setDisarmed).toHaveBeenCalled());
     expect(connectionState(cache).connecting).toBeFalsy();
-    expect(onSubscribed).toHaveBeenCalled();
 
     // expect disconnect button
     expect(getByTestId("disconnect-button")).toBeVisible();
@@ -267,7 +266,7 @@ describe("ConnectionManager", () => {
           baudRate: 115200,
         })}
         mocks={[
-          onClosedMock(mockConnectionId, null, () => {}),
+          onChangedMock(mockConnectionId, null),
           disconnectMock(mockConnectionId, disconnect),
         ]}
       >
@@ -285,7 +284,7 @@ describe("ConnectionManager", () => {
     expect(logs).toMatchSnapshot();
   });
 
-  it("should remove the connection when onClosed event occurs for the active connection", async () => {
+  it("should remove the connection when onConnectionChanged event occurs for the active connection with no new connectionId", async () => {
     const mockConnectionId = "238478234";
     const cache = new InMemoryCache();
     const mockSubscriptions = new MockSubscriptionLink();
@@ -308,7 +307,7 @@ describe("ConnectionManager", () => {
     mockSubscriptions.simulateResult({
       result: {
         data: {
-          onClosed: mockConnectionId,
+          onConnectionChanged: null,
         },
       },
     });
@@ -317,7 +316,40 @@ describe("ConnectionManager", () => {
     expect(logs).toMatchSnapshot();
   });
 
-  it("should remove the active connection if onClosed event subscription fails", async () => {
+  it("should update the connectionId when onConnectionChanged event occurs for the active connection with a new connectionId", async () => {
+    const mockConnectionId = "238478234";
+    const cache = new InMemoryCache();
+    const mockSubscriptions = new MockSubscriptionLink();
+    const { getByTestId } = render(
+      <MockedProvider
+        cache={cache}
+        resolvers={configuratorState({
+          connecting: false,
+          connection: mockConnectionId,
+          port: "/dev/something",
+          baudRate: 115200,
+        })}
+        link={mockSubscriptions}
+      >
+        <ConnectionManager />
+      </MockedProvider>
+    );
+
+    await waitFor(() => expect(getByTestId("disconnect-button")).toBeVisible());
+    mockSubscriptions.simulateResult({
+      result: {
+        data: {
+          onConnectionChanged: "new-id",
+        },
+      },
+    });
+    await waitFor(() =>
+      expect(connectionState(cache).connection).toBe("new-id")
+    );
+    expect(logs).toMatchSnapshot();
+  });
+
+  it("should remove the active connection if onConnectionChanged event subscription fails", async () => {
     const mockConnectionId = "238478234";
     const cache = new InMemoryCache();
     const mockSubscriptions = new MockSubscriptionLink();
@@ -421,7 +453,6 @@ describe("ConnectionManager", () => {
   it("should handle aborting connection attempts", async () => {
     const disconnect = jest.fn();
     const setDisarmed = jest.fn();
-    const onSubscribed = jest.fn();
     const mockConnectionId1 = "435543";
     const mockConnectionId2 = "243455";
 
@@ -468,7 +499,7 @@ describe("ConnectionManager", () => {
             mockConnectionId2,
             "1.40.1"
           ),
-          onClosedMock(mockConnectionId2, null, onSubscribed),
+          onChangedMock(mockConnectionId2, null),
           setArmingMock(mockConnectionId2, true, false, setDisarmed),
         ]}
       >
@@ -485,7 +516,6 @@ describe("ConnectionManager", () => {
     );
     await waitFor(() => expect(setDisarmed).toHaveBeenCalled());
     expect(connectionState(cache).connecting).toBeFalsy();
-    expect(onSubscribed).toHaveBeenCalled();
 
     // The correct things should have been logged
     expect(logs).toMatchSnapshot();

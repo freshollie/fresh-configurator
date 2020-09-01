@@ -1,6 +1,8 @@
 import { PubSub, ApolloError } from "apollo-server";
 
-const closeEvents = new PubSub();
+const changeEvents = new PubSub();
+const reconnectingEvents = new PubSub();
+
 let connectionsMap: Record<string, string | undefined> = {};
 let connectingAttempts: Record<string, Promise<void> | undefined> = {};
 
@@ -40,19 +42,38 @@ export const add = (port: string, connnectionId: string): void => {
   connectionsMap[connnectionId] = port;
 };
 
-export const closeConnection = (connectionId: string): void => {
-  closeEvents.publish(connectionId, connectionId);
+export const close = (connectionId: string): void => {
+  changeEvents.publish(connectionId, undefined);
   connectionsMap[connectionId] = undefined;
+};
+
+export const setReconnecting = (
+  connectionId: string,
+  attempt: number
+): void => {
+  reconnectingEvents.publish(connectionId, attempt);
+};
+
+export const change = (connectionId: string, newConnectionId: string): void => {
+  connectionsMap[newConnectionId] = connectionsMap[connectionId];
+  connectionsMap[connectionId] = undefined;
+  changeEvents.publish(connectionId, newConnectionId);
 };
 
 export const closeConnections = (port: string): void => {
   Object.entries(connectionsMap)
     .filter(([, connectionPort]) => port === connectionPort)
-    .forEach(([connectionId]) => closeConnection(connectionId));
+    .forEach(([connectionId]) => close(connectionId));
 };
 
-export const onClosed = (connectionId: string): AsyncIterator<string> => {
-  return closeEvents.asyncIterator<string>(connectionId);
+export const onChanged = (
+  connectionId: string
+): AsyncIterator<string | undefined> => {
+  return changeEvents.asyncIterator(connectionId);
+};
+
+export const onReconnecting = (connectionId: string): AsyncIterator<number> => {
+  return reconnectingEvents.asyncIterator(connectionId);
 };
 
 export const reset = (): void => {

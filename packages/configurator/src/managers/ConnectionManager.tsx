@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import semver from "semver";
-import { useOnConnectionClosedSubscription } from "../gql/queries/Connection.graphql";
+import { useOnConnectionChangedSubscription } from "../gql/queries/Connection.graphql";
 import config from "../config";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
@@ -110,28 +110,37 @@ const ConnectionManager: React.FC = () => {
     },
   });
 
+  const connectionClosed = useCallback(() => {
+    setConnection(null);
+    log(`Serial port closed unexpectedly for connectionId=${connection}`);
+  }, [connection, log, setConnection]);
+
   // Create a subscription to the current connection
   // and handle updating the app state when connection
   // is closed
-  const {
-    error: subscriptionError,
-    data: onClosedData,
-  } = useOnConnectionClosedSubscription({
+  const { error: subscriptionError } = useOnConnectionChangedSubscription({
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
+    onSubscriptionData: ({ subscriptionData: { data: onChangedData } }) => {
+      const newConnectionId = onChangedData?.onConnectionChanged;
+      if (newConnectionId) {
+        setConnection(newConnectionId);
+        log(
+          `Serial port reconnected for connectionId=${connection} newConnectionId=${newConnectionId} `
+        );
+      } else if (newConnectionId === null) {
+        connectionClosed();
+      }
+    },
   });
 
-  const connectionClosed =
-    onClosedData && connection && onClosedData.onClosed === connection;
-
   useEffect(() => {
-    if ((subscriptionError || connectionClosed) && connection) {
-      setConnection(null);
-      log(`Serial port closed unexpectedly for connectionId=${connection}`);
+    if (subscriptionError) {
+      connectionClosed();
     }
-  }, [connection, connectionClosed, log, setConnection, subscriptionError]);
+  }, [connectionClosed, log, subscriptionError]);
 
   const handleClicked = (): void => {
     if (!connection && !connecting) {

@@ -3,7 +3,14 @@ import gql from "graphql-tag";
 import flushPromises from "flush-promises";
 import { mockApi } from "./mocks";
 import { createServer } from "../src";
-import { reset, getPort, isOpen, add } from "../src/connections";
+import {
+  reset,
+  getPort,
+  isOpen,
+  add,
+  onChanged,
+  onReconnecting,
+} from "../src/connections";
 
 const server = createServer();
 
@@ -167,6 +174,23 @@ describe("connections", () => {
         },
       });
 
+      const connectionId = data?.connect.id;
+
+      let newConnectionId = "";
+      let attemptNumber = 0;
+
+      onChanged(connectionId)
+        .next()
+        .then((newId) => {
+          newConnectionId = newId.value;
+        });
+
+      onReconnecting(connectionId)
+        .next()
+        .then((attempt) => {
+          attemptNumber = attempt.value;
+        });
+
       expect(errors).toBeFalsy();
       expect(mockApi.open).toHaveBeenCalledTimes(1);
 
@@ -178,9 +202,13 @@ describe("connections", () => {
       expect(mockApi.open).toHaveBeenCalledTimes(1);
 
       jest.advanceTimersByTime(1000);
-      expect(mockApi.open).toHaveBeenCalledTimes(2);
+      await flushPromises();
 
-      expect(getPort(data?.connect.id)).toEqual("/dev/someotherport");
+      expect(mockApi.open).toHaveBeenCalledTimes(2);
+      expect(attemptNumber).toBe(1);
+      expect(newConnectionId).toBeTruthy();
+      expect(connectionId).not.toEqual(newConnectionId);
+      expect(getPort(newConnectionId)).toEqual("/dev/someotherport");
 
       simulateDisconnect();
       jest.advanceTimersByTime(1000);
@@ -207,32 +235,54 @@ describe("connections", () => {
           baudRate: 99922,
         },
       });
+
+      const connectionId = data?.connect.id;
+      let newConnectionId: string = connectionId;
+
+      onChanged(connectionId)
+        .next()
+        .then((newId) => {
+          newConnectionId = newId.value;
+        });
+
       expect(errors).toBeFalsy();
-      expect(getPort(data?.connect.id)).toEqual("/dev/someotherport");
+      expect(getPort(connectionId)).toEqual("/dev/someotherport");
 
       mockApi.open.mockRejectedValue(new Error("could not open"));
 
       const simulateDisconnect = (): void =>
         (mockApi.open.mock.calls[0] as any)[2]();
 
+      const reconnectAttemptEvent = (): Promise<number> =>
+        onReconnecting(connectionId)
+          .next()
+          .then(({ value }) => value);
+
       jest.useFakeTimers();
+      // Wait for connection attempt events, and ensure
+      // that the connection has been called correctly
+      // for each one
+      const testAttempts = (async () => {
+        while (true) {
+          const attempt = await reconnectAttemptEvent();
+          jest.advanceTimersByTime(1000);
+          if (attempt < 5) {
+            expect(mockApi.open).toHaveBeenCalledTimes(attempt + 1);
+          } else {
+            await flushPromises();
+            break;
+          }
+        }
+      })();
+      // After registering the function to listen for events
+      // simulate the disconnect
       simulateDisconnect();
-      jest.advanceTimersByTime(1000);
+      await testAttempts;
 
-      expect(mockApi.open).toHaveBeenCalledTimes(2);
-      await flushPromises();
-      jest.advanceTimersByTime(1000);
-
-      expect(mockApi.open).toHaveBeenCalledTimes(3);
-      await flushPromises();
-      jest.advanceTimersByTime(1000);
-
-      expect(mockApi.open).toHaveBeenCalledTimes(4);
-      await flushPromises();
-      jest.advanceTimersByTime(1000);
-
-      expect(mockApi.open).toHaveBeenCalledTimes(4);
-      expect(isOpen(data?.connect.id)).toBeFalsy();
+      expect(mockApi.open).toHaveBeenCalledTimes(6);
+      expect(isOpen(connectionId)).toBeFalsy();
+      // The on change event should have been sent with undefined
+      expect(newConnectionId).toBeUndefined();
     });
 
     it("should not reopen the connection if the device UID is not equal to the original", async () => {
@@ -277,7 +327,14 @@ describe("connections", () => {
     it("should close an open connection", async () => {
       const { mutate } = createTestClient(server);
       const connectionId = "abddddasdfsdf";
+      let newConnectionId: string = connectionId;
       add("/dev/someport", connectionId);
+
+      onChanged(connectionId)
+        .next()
+        .then((newId) => {
+          newConnectionId = newId.value;
+        });
 
       const { data, errors } = await mutate({
         mutation: gql`
@@ -294,6 +351,7 @@ describe("connections", () => {
       expect(data?.close).toEqual(connectionId);
       expect(mockApi.close).toHaveBeenCalledWith("/dev/someport");
       expect(isOpen("/dev/someport")).toBeFalsy();
+      expect(newConnectionId).toBeUndefined();
     });
   });
 });

@@ -8,7 +8,6 @@ module.exports = {
     "/storybook-static/",
     "/__generated__/",
   ],
-  collectCoverage: true,
   collectCoverageFrom: [
     "**/*.{ts,tsx}",
     "!**/node_modules/**",
