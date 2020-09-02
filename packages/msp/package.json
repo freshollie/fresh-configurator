@@ -22,11 +22,12 @@
     "dist"
   ],
   "scripts": {
-    "testscript": "ts-node -T test-script.ts"
+    "testscript": "ts-node -T --project tsconfig.cjs.build.json test-script.ts"
   },
   "dependencies": {
     "@serialport/bindings": "^8.0.7",
     "@serialport/stream": "^8.0.6",
+    "async-mutex": "^0.2.4",
     "debug": "^4.1.1"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@types/serialport__stream": "^8.0.0",
     "flush-promises": "^1.0.2",
     "rimraf": "^3.0.2",
+    "ts-node": "^8.8.2",
     "typescript": ">=3.7"
   }
 }

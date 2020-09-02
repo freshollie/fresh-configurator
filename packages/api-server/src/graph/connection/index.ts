@@ -72,7 +72,7 @@ const resolvers: Resolvers = {
           // try to reconnect
           await api.open(port, { baudRate }, () => {
             log(
-              `connection closed for ${port}, reconnecting in 3 seconds, connectionId=${connectionId}`
+              `connection closed for ${port}, reconnecting in 1 second, connectionId=${connectionId}`
             );
             connections.setReconnecting(connectionId, 1);
             setTimeout(() => connect(), 1000);
@@ -109,7 +109,7 @@ const resolvers: Resolvers = {
           // otherwise, try again
           if (retries < 5) {
             log(
-              `connection=${connectionId} error reconnecting, trying again in 3 seconds`
+              `connection=${connectionId} error reconnecting, trying again in 1 second`
             );
             log(e);
             connections.setReconnecting(connectionId, retries + 1);

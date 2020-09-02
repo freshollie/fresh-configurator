@@ -9,6 +9,7 @@
 
 import SerialPort from "@serialport/stream";
 import debug from "debug";
+import { Mutex } from "async-mutex";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
@@ -68,7 +69,6 @@ export const execute = async (
       rejector = reject;
       // Throw an error if timeout is reached
       const timeoutId = setTimeout(() => {
-        delete requests[requestKey];
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         parser.off("data", onData);
         reject(new Error("Timed out during execution"));
@@ -86,15 +86,17 @@ export const execute = async (
             }, byteLength: ${message.data.byteLength}`
           );
 
-          delete requests[requestKey];
           clearTimeout(timeoutId);
-
           resolve(message.data);
           parser.off("data", onData);
         }
       }
 
       parser.on("data", onData);
+    });
+
+    response.finally(() => {
+      delete requests[requestKey];
     });
 
     mspRequest = {
@@ -110,9 +112,101 @@ export const execute = async (
 
   // make every DataView unique to each request, even though
   // they are accessing the same set of data
-  return mspRequest.response.then(
+  return (mspRequest.response as Promise<ArrayBuffer>).then(
     (responseData) => new MspDataView(responseData)
   );
+};
+
+/**
+ * Execute the given CLI command and return the result. This will restart
+ * the flight controller and may result in the connection being closed
+ */
+export const executeCli = async (
+  port: string,
+  command: string
+): Promise<string> => {
+  const connection = connectionsMap[port];
+  if (!connection) {
+    throw new Error(`${port} is not open`);
+  }
+
+  connection.mode = "cli";
+
+  const { serial } = connection;
+  // only 1 cli mode request can be completed at a time
+  const release = await connection.cliLock.acquire();
+
+  try {
+    const inCliMode = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error("Could not enter cli mode"));
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        serial.off("off", onData);
+      }, 1000);
+
+      function onData(data: Buffer): void {
+        if (data.toString().includes("#")) {
+          resolve();
+          clearTimeout(timeout);
+          serial.off("off", onData);
+        }
+      }
+
+      serial.on("data", onData);
+    });
+    serial.write(Buffer.from(`#`, "utf-8"));
+    await inCliMode;
+
+    const responseReader = new Promise<string>((resolve, reject) => {
+      let buffer = "";
+
+      const timeout = setTimeout(() => {
+        reject(new Error("Timed out waiting for cli response"));
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        serial.off("off", onData);
+      }, 10000);
+
+      function onData(data: string): void {
+        buffer += data.toString();
+        if (data.includes("#")) {
+          // only include the data before the exit command
+          resolve(buffer.split("#")[0]);
+          clearTimeout(timeout);
+          serial.off("off", onData);
+        }
+      }
+
+      serial.on("data", onData);
+    });
+
+    serial.write(Buffer.from(`${command}\n`, "utf-8"));
+
+    const repsonse = await responseReader;
+
+    const exit = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error("Problem exiting cli mode"));
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        serial.off("off", onData);
+      }, 1000);
+
+      function onData(data: Buffer): void {
+        if (data.toString().includes("#")) {
+          resolve();
+          clearTimeout(timeout);
+          serial.off("off", onData);
+        }
+      }
+
+      serial.on("data", onData);
+    });
+    serial.write(Buffer.from(`exit\r`, "utf-8"));
+
+    await exit.catch(() => {});
+    return repsonse;
+  } finally {
+    release();
+  }
 };
 
 export const ports = async (): Promise<string[]> => {
@@ -193,7 +287,7 @@ export const open: OpenConnectionFunction = async (
   const parser = serial.pipe(new MspParser());
   parser.setMaxListeners(1000000);
 
-  const connection = {
+  const connection: Connection = {
     serial,
     parser,
     requests: {},
@@ -204,6 +298,8 @@ export const open: OpenConnectionFunction = async (
       apiVersion: "0",
       mspProtocolVersion: 0,
     },
+    cliLock: new Mutex(),
+    mode: null,
   };
 
   connectionsMap[port] = connection;
