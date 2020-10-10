@@ -1,0 +1,14 @@
+{
+  "name": "@betaflight-tools/msp-e2e",
+  "version": "0.5.2",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@betaflight/msp": "^0.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
