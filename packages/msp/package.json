@@ -25,6 +25,7 @@
     "testscript": "ts-node -T test-script.ts"
   },
   "dependencies": {
+    "@serialport/binding-abstract": "^8.0.0",
     "@serialport/bindings": "^8.0.7",
     "@serialport/stream": "^8.0.6",
     "debug": "^4.1.1"
@@ -35,6 +36,7 @@
     "@types/serialport__binding-mock": "^8.0.0",
     "@types/serialport__bindings": "^8.0.0",
     "@types/serialport__stream": "^8.0.0",
+    "@types/w3c-web-usb": "^1.0.4",
     "flush-promises": "^1.0.2",
     "rimraf": "^3.0.2",
     "typescript": ">=3.7"

@@ -7,11 +7,12 @@
  * making one of the same request at a time.
  */
 
-import SerialPort from "@serialport/stream";
+import SerialPort, { BaseBinding } from "@serialport/stream";
 import debug from "debug";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
+import WebBinding from "./bindings/web";
 
 import {
   Connection,
@@ -25,9 +26,16 @@ import {
 // can import this library without the bindings needing to be available
 // at import time
 const initialiseBindings = (): void => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, global-require
-  const Binding = require("@serialport/bindings");
-  SerialPort.Binding = Binding;
+  if (
+    typeof navigator !== "undefined" &&
+    typeof navigator.usb !== "undefined"
+  ) {
+    SerialPort.Binding = (WebBinding as unknown) as BaseBinding;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, global-require
+    const Binding = require("@serialport/bindings");
+    SerialPort.Binding = Binding;
+  }
 };
 
 const log = debug("connection");
