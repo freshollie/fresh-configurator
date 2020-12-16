@@ -3,10 +3,8 @@
  * Bootstrap electron with ts-node to allow us to run
  * our main without compiling it
  */
-const path = require("path");
+process.env.TS_NODE_PROJECT = `${__dirname}/tsconfig.dev.json`;
 
-require("ts-node").register({
-  compilerOptions: { module: "commonjs" },
-  project: path.join(__dirname, "tsconfig.json"),
-});
+require("ts-node").register();
+require("tsconfig-paths").register();
 require("./src/main");

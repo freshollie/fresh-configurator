@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "baseUrl": "../../"
+  },
+  "references": [
+    {
+      "path": "../msp/tsconfig.build.cjs.json"
+    },
+    {
+      "path": "../api/tsconfig.build.cjs.json"
+    },
+    {
+      "path": "../api-server/tsconfig.build.cjs.json"
+    }
+  ]
+}

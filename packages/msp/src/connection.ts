@@ -179,7 +179,7 @@ export const open: OpenConnectionFunction = async (
     autoOpen: false,
   });
 
-  await new Promise((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     serial.open((err) => {
       if (err) {
         log(`error opening ${port}`);

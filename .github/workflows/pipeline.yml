@@ -34,7 +34,7 @@ jobs:
         uses: bahmutov/npm-install@v1.4.0
 
       - name: Test
-        run: yarn test --collectCoverage
+        run: yarn test --coverage
         env:
           CI: true
 

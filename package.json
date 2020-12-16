@@ -9,24 +9,22 @@
   "scripts": {
     "clean:lib": "tsc -b --clean tsconfig.build.json tsconfig.cjs.build.json",
     "clean:codegen": "rimraf packages/*/src/**/__generated__ packages/configurator/src/**/*.graphql.ts",
-    "start": "yarn build:lib && yarn workspace @betaflight/configurator start",
-    "start:mocked": "yarn build:lib && yarn workspace @betaflight/configurator start:mocked",
-    "build": "yarn build:lib && yarn workspace @betaflight/configurator build",
-    "build:lib": "yarn codegen && yarn compile",
-    "build:storybook": "yarn build:lib && yarn workspace @betaflight/configurator build-storybook",
-    "compile": "tsc -b tsconfig.cjs.build.json tsconfig.build.json",
-    "compile:cjs": "tsc -b tsconfig.cjs.build.json",
-    "storybook": "yarn build:lib && yarn workspace @betaflight/configurator storybook",
+    "start": "yarn workspace @betaflight/configurator start",
+    "start:mocked": "yarn workspace @betaflight/configurator start:mocked",
+    "build": "yarn workspace @betaflight/configurator build",
+    "build:lib": "tsc -b tsconfig.cjs.build.json tsconfig.build.json",
+    "build:cjs": "tsc -b tsconfig.cjs.build.json",
+    "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
+    "storybook": "yarn workspace @betaflight/configurator storybook",
     "codegen": "yarn clean:codegen && graphql-codegen --config codegen.yml",
-    "test": "yarn compile:cjs && jest",
-    "storyshots": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev",
-    "storyshots:update": "yarn compile && yarn workspace @betaflight/configurator storyshots:dev:update",
+    "test": "jest",
+    "storyshots": "yarn workspace @betaflight/configurator storyshots:dev",
+    "storyshots:update": "yarn workspace @betaflight/configurator storyshots:dev:update",
     "e2e": "jest --config packages/configurator/jest.e2e.js",
     "e2e:production": "cross-env CI=true jest --config packages/configurator/jest.e2e.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
-    "postinstall": "yarn workspace @betaflight/configurator install-deps",
-    "prepare": "yarn build:lib",
+    "postinstall": "yarn codegen && yarn workspace @betaflight/configurator install-deps",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
     "release": "yarn workspace @betaflight/configurator release"
@@ -69,7 +67,10 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.3.0",
     "ts-node": "^8.6.2",
-    "typescript": "^4.0.2"
+    "typescript": "*"
+  },
+  "resolutions": {
+    "typescript": "4.1.2"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

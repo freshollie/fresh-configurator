@@ -1,6 +1,6 @@
-const base = require("./jest.base.js");
+const { config } = require("./jest.base.js");
 
 module.exports = {
   projects: ["<rootDir>/packages/*/jest.config.js"],
-  ...base,
+  ...config,
 };

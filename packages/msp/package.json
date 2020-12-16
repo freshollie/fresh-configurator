@@ -37,6 +37,6 @@
     "@types/serialport__stream": "^8.0.0",
     "flush-promises": "^1.0.2",
     "rimraf": "^3.0.2",
-    "typescript": ">=3.7"
+    "typescript": "*"
   }
 }

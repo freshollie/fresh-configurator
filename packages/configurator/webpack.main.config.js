@@ -1,4 +1,3 @@
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
 module.exports = (_, { mode }) => ({
@@ -31,6 +30,7 @@ module.exports = (_, { mode }) => ({
             loader: "ts-loader",
             options: {
               transpileOnly: true,
+              projectReferences: true,
             },
           },
         ],
@@ -52,12 +52,6 @@ module.exports = (_, { mode }) => ({
   plugins: [
     new DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(mode),
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      reportFiles: ["src/main.ts"],
-      compilerOptions: {
-        baseUrl: null,
-      },
     }),
   ],
   devtool: "cheap-source-map",

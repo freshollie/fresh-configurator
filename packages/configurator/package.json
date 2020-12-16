@@ -123,9 +123,11 @@
     "spectron": "^9.0.0",
     "start-server-and-test": "^1.11.0",
     "themeprovider-storybook": "^1.6.2",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^8.0.12",
     "ts-node": "^8.8.2",
-    "typescript": ">=3.7",
+    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.3.0",
+    "typescript": "*",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.3"

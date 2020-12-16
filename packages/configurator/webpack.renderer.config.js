@@ -26,6 +26,7 @@ module.exports = (_, { mode }) => ({
             loader: "ts-loader",
             options: {
               transpileOnly: true,
+              projectReferences: true,
               getCustomTransformers: () => ({
                 before: [graphqlTagTransformer()],
               }),
@@ -77,7 +78,8 @@ module.exports = (_, { mode }) => ({
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
       compilerOptions: {
-        baseUrl: null,
+        noEmit: true,
+        baseUrl: `${__dirname}/../../`,
       },
     }),
   ],

@@ -27,6 +27,6 @@
   },
   "devDependencies": {
     "@types/semver": "^7.1.0",
-    "typescript": ">=3.7"
+    "typescript": "*"
   }
 }
