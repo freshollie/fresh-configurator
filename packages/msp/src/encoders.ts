@@ -19,9 +19,9 @@ export const encodeMessageV1 = (code: number, data?: Buffer): Buffer => {
     checksum = bufView[3] ^ bufView[4];
 
     for (let i = 0; i < data.length; i += 1) {
-      bufView[i + 5] = data[i];
+      bufView[i + 5] = data[i]!;
 
-      checksum ^= bufView[i + 5];
+      checksum ^= bufView[i + 5]!;
     }
 
     bufView[5 + data.length] = checksum;
@@ -54,7 +54,7 @@ export const encodeMessageV2 = (code: number, data?: Buffer): Buffer => {
   bufView[6] = dataLength & 0xff;
   bufView[7] = (dataLength >> 8) & 0xff;
   for (let i = 0; i < dataLength; i += 1) {
-    bufView[8 + i] = data![i];
+    bufView[8 + i] = data![i]!;
   }
   bufView[bufferSize - 1] = crc8DvbS2Data(bufView, 3, bufferSize - 1);
   return Buffer.from(bufferOut);

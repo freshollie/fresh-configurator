@@ -16,9 +16,7 @@ export const crc8DvbS2Data = (
   start: number,
   end: number
 ): number => {
-  let crc = 0;
-  for (let i = start; i < end; i += 1) {
-    crc = crc8DvbS2(crc, data[i]);
-  }
-  return crc;
+  return data
+    .slice(start, end)
+    .reduce((computed, byte) => crc8DvbS2(computed, byte), 0);
 };

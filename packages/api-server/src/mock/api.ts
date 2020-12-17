@@ -184,7 +184,13 @@ export const readSerialConfig = (): Promise<typeof mockDevice["serial"]> =>
   delay(50).then(() => mockDevice.serial);
 
 export const readUID = (port: string): Promise<string> =>
-  delay(30).then(() => ids[port]);
+  delay(30).then(() => {
+    const id = ids[port];
+    if (id) {
+      return id;
+    }
+    throw new Error("Port does not exist");
+  });
 
 export const writeReboot = (port: string): Promise<boolean> =>
   delay(100).then(() => true);

@@ -30,7 +30,7 @@ const initialiseBindings = (): void => {
   SerialPort.Binding = Binding;
 };
 
-const log = debug("connection");
+const log = debug("msp:connection");
 
 const connectionsMap: Record<string, Connection | undefined> = {};
 
@@ -81,7 +81,7 @@ export const execute = async (
             return;
           }
           log(
-            `${request.toJSON().data} response: ${
+            `request: ${request.toJSON().data}, response: ${
               Buffer.from(message.data).toJSON().data
             }, byteLength: ${message.data.byteLength}`
           );

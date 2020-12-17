@@ -15,7 +15,7 @@ import { Transform } from "stream";
 import debug from "debug";
 import { crc8DvbS2 } from "./utils";
 
-const log = debug("parser");
+const log = debug("msp:parser");
 
 const Symbols = {
   BEGIN: "$".charCodeAt(0),
@@ -106,15 +106,15 @@ export class MspParser extends Transform {
     log(`Received data ${chunk.toJSON().data}`);
     const data = new Uint8Array(chunk);
 
-    for (let i = 0; i < data.length; i += 1) {
+    data.forEach((byte) => {
       switch (this.state) {
         case DecoderStates.IDLE: // sync char 1
-          if (data[i] === Symbols.BEGIN) {
+          if (byte === Symbols.BEGIN) {
             this.state = DecoderStates.PROTO_IDENTIFIER;
           }
           break;
         case DecoderStates.PROTO_IDENTIFIER: // sync char 2
-          switch (data[i]) {
+          switch (byte) {
             case Symbols.PROTO_V1:
               this.state = DecoderStates.DIRECTION_V1;
               break;
@@ -122,14 +122,14 @@ export class MspParser extends Transform {
               this.state = DecoderStates.DIRECTION_V2;
               break;
             default:
-              log(`Unknown protocol char ${String.fromCharCode(data[i])}`);
+              log(`Unknown protocol char ${String.fromCharCode(byte)}`);
               this.state = DecoderStates.IDLE;
           }
           break;
         case DecoderStates.DIRECTION_V1: // direction (should be >)
         case DecoderStates.DIRECTION_V2:
           this.unsupported = 0;
-          switch (data[i]) {
+          switch (byte) {
             case Symbols.FROM_MWC:
               this.messageDirection = 1;
               break;
@@ -151,7 +151,7 @@ export class MspParser extends Transform {
           this.state = DecoderStates.CODE_V2_LOW;
           break;
         case DecoderStates.PAYLOAD_LENGTH_V1:
-          this.message_length_expected = data[i];
+          this.message_length_expected = byte;
 
           if (this.message_length_expected === Constants.JUMBO_FRAME_MIN_SIZE) {
             this.state = DecoderStates.CODE_JUMBO_V1;
@@ -162,11 +162,11 @@ export class MspParser extends Transform {
 
           break;
         case DecoderStates.PAYLOAD_LENGTH_V2_LOW:
-          this.message_length_expected = data[i];
+          this.message_length_expected = byte;
           this.state = DecoderStates.PAYLOAD_LENGTH_V2_HIGH;
           break;
         case DecoderStates.PAYLOAD_LENGTH_V2_HIGH:
-          this.message_length_expected |= data[i] << 8;
+          this.message_length_expected |= byte << 8;
           this.initializeReadBuffer();
           this.state =
             this.message_length_expected > 0
@@ -175,7 +175,7 @@ export class MspParser extends Transform {
           break;
         case DecoderStates.CODE_V1:
         case DecoderStates.CODE_JUMBO_V1:
-          this.code = data[i];
+          this.code = byte;
           if (this.message_length_expected > 0) {
             // process payload
             if (this.state === DecoderStates.CODE_JUMBO_V1) {
@@ -189,26 +189,25 @@ export class MspParser extends Transform {
           }
           break;
         case DecoderStates.CODE_V2_LOW:
-          this.code = data[i];
+          this.code = byte;
           this.state = DecoderStates.CODE_V2_HIGH;
           break;
         case DecoderStates.CODE_V2_HIGH:
-          this.code |= data[i] << 8;
+          this.code |= byte << 8;
           this.state = DecoderStates.PAYLOAD_LENGTH_V2_LOW;
           break;
         case DecoderStates.PAYLOAD_LENGTH_JUMBO_LOW:
-          this.message_length_expected = data[i];
+          this.message_length_expected = byte;
           this.state = DecoderStates.PAYLOAD_LENGTH_JUMBO_HIGH;
           break;
         case DecoderStates.PAYLOAD_LENGTH_JUMBO_HIGH:
-          this.message_length_expected |= data[i] << 8;
+          this.message_length_expected |= byte << 8;
           this.initializeReadBuffer();
           this.state = DecoderStates.PAYLOAD_V1;
           break;
         case DecoderStates.PAYLOAD_V1:
         case DecoderStates.PAYLOAD_V2:
-          this.message_buffer_uint8_view[this.message_length_received] =
-            data[i];
+          this.message_buffer_uint8_view[this.message_length_received] = byte;
           this.message_length_received += 1;
 
           if (this.message_length_received >= this.message_length_expected) {
@@ -230,10 +229,14 @@ export class MspParser extends Transform {
             this.message_checksum ^=
               (this.message_length_expected & 0xff00) >> 8;
           }
-          for (let ii = 0; ii < this.message_length_received; ii += 1) {
-            this.message_checksum ^= this.message_buffer_uint8_view[ii];
-          }
-          this.dispatchMessage(data[i]);
+
+          this.message_buffer_uint8_view
+            .slice(0, this.message_length_received)
+            .forEach((messageByte) => {
+              this.message_checksum ^= messageByte;
+            });
+
+          this.dispatchMessage(byte);
           break;
         case DecoderStates.CHECKSUM_V2:
           this.message_checksum = 0;
@@ -254,18 +257,21 @@ export class MspParser extends Transform {
             this.message_checksum,
             (this.message_length_expected & 0xff00) >> 8
           );
-          for (let ii = 0; ii < this.message_length_received; ii += 1) {
-            this.message_checksum = crc8DvbS2(
-              this.message_checksum,
-              this.message_buffer_uint8_view[ii]
-            );
-          }
-          this.dispatchMessage(data[i]);
+
+          this.message_buffer_uint8_view
+            .slice(0, this.message_length_received)
+            .forEach((messageByte) => {
+              this.message_checksum = crc8DvbS2(
+                this.message_checksum,
+                messageByte
+              );
+            });
+          this.dispatchMessage(byte);
           break;
         default:
           log(`Unknown state detected: ${this.state}`);
       }
-    }
+    });
     cb();
   }
 
@@ -281,7 +287,9 @@ export class MspParser extends Transform {
       data = new DataView(this.message_buffer, 0, this.message_length_expected)
         .buffer;
     } else {
-      log(`code: ${this.code} - crc failed`);
+      log(
+        `code: ${this.code} - crc failed, expectedChecksum=${expectedChecksum}, checksum=${this.message_checksum}`
+      );
       this.crcError = true;
       data = new ArrayBuffer(0);
     }

@@ -8,6 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
     "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,

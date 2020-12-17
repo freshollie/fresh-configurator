@@ -99,7 +99,7 @@ export default (
             (roll +
               delta *
                 calcRate(
-                  channels[0],
+                  channels[0] ?? 0,
                   tuning.rollRate,
                   tuning.rcRate,
                   tuning.rcExpo,
@@ -113,7 +113,7 @@ export default (
             (pitch +
               delta *
                 calcRate(
-                  channels[1],
+                  channels[1] ?? 0,
                   tuning.pitchRate,
                   tuning.rcPitchRate,
                   tuning.rcPitchExpo,
@@ -127,7 +127,7 @@ export default (
             (heading +
               delta *
                 calcRate(
-                  channels[2],
+                  channels[2] ?? 0,
                   tuning.yawRate,
                   tuning.rcYawRate,
                   tuning.rcYawExpo,
