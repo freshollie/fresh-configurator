@@ -10,8 +10,8 @@ COPY tsconfig.build.json tsconfig.base.json tsconfig.cjs.build.json yarn.lock pa
 
 # Build the minimum required to make a functional mock server
 RUN rm packages/configurator/package.json && \
-        yarn --frozen-lockfile && \
-        yarn build:lib && rm -r packages/configurator
+        yarn --frozen-lockfile --ignore-scripts && \
+        yarn codegen && yarn build:lib && rm -r packages/configurator
 
 # Deployed layer
 FROM node:12-alpine
