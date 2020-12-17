@@ -3,6 +3,7 @@
     "target": "ES2017",
     "module": "es6",
     "strict": true,
+    "jsx": "react",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
@@ -12,7 +13,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "baseUrl": "\u0000",
     "paths": {
       "@betaflight/*": ["./packages/*/src"]
     },

@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
+const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   stories: [path.resolve(__dirname, "../stories/**/*.stories.tsx")],
@@ -15,7 +16,7 @@ module.exports = {
       tsconfig: path.resolve(__dirname, "../tsconfig.json"),
       reportFiles: [path.resolve(__dirname, "../stories/**/*.{ts,tsx}")],
       compilerOptions: {
-        baseUrl: null,
+        baseUrl: `${__dirname}../../../`,
       },
     },
   },
@@ -51,6 +52,11 @@ module.exports = {
       ],
     });
 
+    config.resolve.plugins.push(
+      new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, "../tsconfig.dev.json"),
+      })
+    );
     config.plugins.push(
       new NormalModuleReplacementPlugin(
         /\.graphql$/,

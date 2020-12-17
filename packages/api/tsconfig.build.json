@@ -4,5 +4,10 @@
     "outDir": "dist/esm",
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    {
+      "path": "../msp/tsconfig.build.json"
+    }
+  ]
 }

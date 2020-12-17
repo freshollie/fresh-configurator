@@ -1,8 +1,8 @@
-const base = require("../../jest.base");
+const { config } = require("../../jest.base");
 const { name } = require("./package.json");
 
 module.exports = {
-  ...base,
+  ...config,
   displayName: {
     name,
     color: "green",
@@ -15,7 +15,7 @@ module.exports = {
       "identity-obj-proxy",
     // Change graphql let imports to the generated version of all queries
     "\\.graphql": "<rootDir>/src/gql/__generated__/index.tsx",
-    ...base.moduleNameMapper,
+    ...config.moduleNameMapper,
   },
   testEnvironment: "jest-environment-jsdom",
 };

@@ -11,10 +11,5 @@
     "__mocks__/**/*.ts",
     "__mocks__/**/*.tsx",
     "*.d.ts"
-  ],
-  "references": [
-    {
-      "path": "../api/tsconfig.build.json"
-    }
   ]
 }

@@ -37,7 +37,7 @@ const disableAnimations = (): void => {
   let currentFrame = 1;
   const frameDuration = 16;
   const maxFrames = 100;
-  let resolveRAF: { (): void; (value?: unknown): void } | null;
+  let resolveRAF: { (): void; (value?: void): void } | null;
   let resolveRAFTimer: number | null;
   const callbacks: FrameRequestCallback[] = [];
 
@@ -61,7 +61,7 @@ const disableAnimations = (): void => {
     }, 0);
 
     if (!resolveRAF) {
-      window.snaps.animationsFinished = new Promise((resolve) => {
+      window.snaps.animationsFinished = new Promise<void>((resolve) => {
         resolveRAF = resolve;
       });
     }

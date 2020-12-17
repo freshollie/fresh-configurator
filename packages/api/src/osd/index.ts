@@ -34,8 +34,9 @@ import {
   OSDTimer,
   Position,
 } from "./types";
+import * as OSDTypes from "./types";
 
-export * as OSDTypes from "./types";
+export { OSDTypes };
 
 const isVisible = (positionData: number, profile: number): boolean =>
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;

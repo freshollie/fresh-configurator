@@ -98,7 +98,7 @@ describe("open", () => {
   });
 
   it("should throw an error when trying to open a port which doesn't respond with api version", () =>
-    new Promise((done) => {
+    new Promise<void>((done) => {
       jest.useFakeTimers();
 
       open("/dev/non-msp-device")
@@ -116,7 +116,7 @@ describe("open", () => {
     }));
 
   it("should provide a callback and close the connection when the connection closes", () => {
-    return new Promise((done) => {
+    return new Promise<void>((done) => {
       open("/dev/something", () => {
         expect(isOpen("/dev/something")).toBe(false);
         done();
@@ -125,7 +125,7 @@ describe("open", () => {
   });
 
   it("should close the connection when an error occurs", () =>
-    new Promise((done) => {
+    new Promise<void>((done) => {
       open("/dev/something", () => {
         expect(isOpen("/dev/something")).toBe(false);
         done();
@@ -135,7 +135,7 @@ describe("open", () => {
     }));
 
   it("should close the connection if the device disconnects", () =>
-    new Promise((done) => {
+    new Promise<void>((done) => {
       open("/dev/something", () => {
         expect(isOpen("/dev/something")).toBe(false);
         done();

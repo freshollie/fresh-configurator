@@ -1,4 +1,4 @@
-const base = require("../../jest.base");
+const { config } = require("../../jest.base");
 const { name } = require("./package.json");
 
 module.exports = {
@@ -6,5 +6,5 @@ module.exports = {
     name,
     color: "cyan",
   },
-  ...base,
+  ...config,
 };
