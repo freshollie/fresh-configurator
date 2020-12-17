@@ -76,10 +76,9 @@ module.exports = (_, { mode }) => ({
       "process.env.NODE_ENV": JSON.stringify(mode),
     }),
     new ForkTsCheckerWebpackPlugin({
-      reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
-      compilerOptions: {
-        noEmit: true,
-        baseUrl: `${__dirname}/../../`,
+      typescript: {
+        reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
+        build: true,
       },
     }),
   ],
