@@ -242,7 +242,7 @@ const NavigationManager: React.FC = () => {
     if (!loading && !links.find((link) => link.id === selectedTab)) {
       selectTab({
         variables: {
-          tabId: links[0].id,
+          tabId: links[0]!.id,
         },
       });
     }
