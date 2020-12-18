@@ -1,7 +1,7 @@
 # This docker image is used to deploy @betaflight/api-server
 # in mocked mode to heroku. Used to allow the demo app to
 # use the API
-FROM node:12-alpine as build
+FROM node:14-alpine as build
 
 WORKDIR /build
 COPY packages packages
@@ -14,7 +14,7 @@ RUN rm packages/configurator/package.json && \
         yarn codegen && yarn build:lib && rm -r packages/configurator
 
 # Deployed layer
-FROM node:12-alpine
+FROM node:14-alpine
 
 WORKDIR /mock-server
 COPY --from=build /build/packages /mock-server/packages

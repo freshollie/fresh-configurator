@@ -1,6 +1,6 @@
 name: pipeline
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   lint:
@@ -8,10 +8,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "14.x"
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
@@ -25,10 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "14.x"
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
@@ -48,10 +48,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "14.x"
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
@@ -134,10 +134,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: "14.x"
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
