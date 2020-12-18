@@ -32,7 +32,7 @@ const initialiseBindings = (): void => {
 
 const log = debug("msp:connection");
 
-const connectionsMap: Record<string, Connection | undefined> = {};
+const connectionsMap: Record<string, Connection> = {};
 
 /**
  * Execute the given MspCommand on the given port.
@@ -63,9 +63,8 @@ export const execute = async (
   // Prevent FC lockup by checking if this request is currently being performed
   // and if not, making the request
   if (mspRequest === undefined) {
-    let rejector: (err: Error) => void | undefined;
+    let onError: (err: Error) => void | undefined;
     const response = new Promise<ArrayBuffer>((resolve, reject) => {
-      rejector = reject;
       // Throw an error if timeout is reached
       const timeoutId = setTimeout(() => {
         delete requests[requestKey];
@@ -73,6 +72,12 @@ export const execute = async (
         parser.off("data", onData);
         reject(new Error("Timed out during execution"));
       }, timeout);
+
+      onError = (e) => {
+        reject(e);
+        clearTimeout(timeoutId);
+        delete requests[requestKey];
+      };
 
       function onData(message: MspMessage): void {
         if (message.code === code) {
@@ -99,13 +104,21 @@ export const execute = async (
 
     mspRequest = {
       response,
-      close: () => rejector?.(new Error("Connection closed")),
+      close: () => onError(new Error("Connection closed")),
     };
     requests[requestKey] = mspRequest;
 
     log(`Writing ${request.toJSON().data} to ${port}`);
-    serial.write(request);
-    connection.bytesWritten += Buffer.byteLength(request);
+    serial.write(request, (error) => {
+      if (error) {
+        log(
+          `Error writing to serial port ${error.message}, rejecting execution`
+        );
+        onError(new Error(`Could not write to serial port: ${error.message}`));
+      } else {
+        connection.bytesWritten += Buffer.byteLength(request);
+      }
+    });
   }
 
   // make every DataView unique to each request, even though
@@ -116,6 +129,7 @@ export const execute = async (
 };
 
 export const ports = async (): Promise<string[]> => {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!SerialPort.Binding) {
     initialiseBindings();
   }
@@ -139,7 +153,7 @@ export const close = async (port: string): Promise<void> => {
   await new Promise((resolve) => serial.close(resolve));
 
   Object.values(connection.requests).forEach((request) => {
-    request?.close();
+    request.close();
   });
 
   await closePromise;
@@ -169,6 +183,7 @@ export const open: OpenConnectionFunction = async (
     connectionOptions = {};
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!SerialPort.Binding) {
     initialiseBindings();
   }
@@ -239,8 +254,8 @@ export const open: OpenConnectionFunction = async (
     connection.bytesRead += Buffer.byteLength(data);
   });
 
-  serial.on("error", () => {
-    log(`${port} on error received`);
+  serial.on("error", (e) => {
+    log(`${port} on error received: ${e?.message}`);
     // Don't trigger close if this serial port is already
     // closed, as it means that the closing
     // will be dealt with by the close event

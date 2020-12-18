@@ -7,7 +7,7 @@ export type MspInfo = {
   apiVersion: string;
 };
 
-export type ExecutionLocks = Record<number, Promise<void> | undefined>;
+export type ExecutionLocks = Record<number, Promise<void>>;
 
 export type MspRequest = {
   close: () => void;
@@ -17,7 +17,7 @@ export type MspRequest = {
 export type Connection = {
   serial: SerialPort;
   parser: MspParser;
-  requests: Record<string, MspRequest | undefined>;
+  requests: Record<string, MspRequest>;
   bytesWritten: number;
   bytesRead: number;
   packetErrors: number;
