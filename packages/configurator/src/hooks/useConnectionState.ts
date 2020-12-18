@@ -17,8 +17,7 @@ export default (): {
   const [setConnecting] = useSetConnectingMutation();
 
   return {
-    connected:
-      !!data?.configurator.connection && !data?.configurator.connecting,
+    connected: !!data?.configurator.connection && !data.configurator.connecting,
     connecting: data?.configurator.connecting ?? false,
     connection: data?.configurator.connection ?? undefined,
     setConnection: useCallback(

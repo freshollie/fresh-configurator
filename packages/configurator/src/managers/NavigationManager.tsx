@@ -242,6 +242,7 @@ const NavigationManager: React.FC = () => {
     if (!loading && !links.find((link) => link.id === selectedTab)) {
       selectTab({
         variables: {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           tabId: links[0]!.id,
         },
       });

@@ -7,6 +7,15 @@
     "packages/**/.jest/*.ts",
     "packages/**/.jest/*.tsx",
     "packages/**/.storybook/*.ts",
-    "packages/**/.storybook/*.tsx"
+    "packages/**/.storybook/*.tsx",
+    "packages/**/*.js",
+    "packages/**/.*/**.js",
+    "packages/**/.*.js",
+    "tools/**/*.ts",
+    "tools/**/*.js",
+    "tools/**/.*.js",
+    "packages/**/*.json",
+    "*.js",
+    ".*.js"
   ]
 }
