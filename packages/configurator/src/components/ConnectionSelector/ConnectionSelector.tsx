@@ -41,7 +41,7 @@ const ConnectionSelector: React.FC<{
   disabled = false,
 }) => (
   <Container>
-    {!ports?.includes(selectedPort) && (
+    {!ports.includes(selectedPort) && (
       <ManualOverride htmlFor="port-override">
         <span>Port:</span>
         <input
@@ -58,7 +58,7 @@ const ConnectionSelector: React.FC<{
       <DarkSelectContainer>
         <select
           disabled={disabled}
-          value={ports?.includes(selectedPort) ? selectedPort : "manual"}
+          value={ports.includes(selectedPort) ? selectedPort : "manual"}
           onChange={(e) =>
             onChange?.({ port: e.target.value, baud: selectedBaud })
           }

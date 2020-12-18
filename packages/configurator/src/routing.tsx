@@ -13,14 +13,15 @@ export const TabRouter: React.FC<{ children: TabElement | TabElement[] }> = ({
   children,
 }) => {
   const { data } = useSelectedTabQuery();
-  const selectedTab = data?.configurator.tab || undefined;
+  const selectedTab = data?.configurator.tab ?? undefined;
 
   const visibleTab =
-    selectedTab &&
-    React.Children.map(children, (c) => c)
-      ?.filter(isElement)
-      .filter((c): c is TabElement => typeof c.props.id === "string")
-      .find((t) => t.props.id === selectedTab);
+    (selectedTab &&
+      React.Children.map(children, (c) => c)
+        .filter(isElement)
+        .filter((c): c is TabElement => typeof c.props.id === "string")
+        .find((t) => t.props.id === selectedTab)) ||
+    undefined;
 
-  return visibleTab || null;
+  return visibleTab ?? null;
 };

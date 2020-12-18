@@ -98,7 +98,6 @@ const disableAnimations = (): void => {
   window.document.addEventListener("DOMContentLoaded", () => {
     const styleElement = window.document.createElement("style");
     window.document.documentElement.appendChild(styleElement);
-    // @ts-ignore
     styleElement.sheet?.insertRule(DISABLE_CSS_ANIMATIONS_STYLE);
   });
 };

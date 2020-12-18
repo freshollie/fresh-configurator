@@ -64,6 +64,7 @@ const inWriteOrder = <K, T extends { key: K }>(
 ): T[] =>
   sortOrder.map(
     (orderedKey, i) =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       values.find(({ key }) => key === orderedKey) ?? subsitutions[i]!
   );
 

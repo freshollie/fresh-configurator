@@ -3,7 +3,7 @@ import { Application } from "spectron";
 import path from "path";
 import os from "os";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const electronPath = require("electron");
 
 let app: Application | undefined;

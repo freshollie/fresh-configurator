@@ -11,13 +11,19 @@ module.exports = {
   extends: [
     "airbnb-typescript",
     "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "prettier/react",
     "prettier/@typescript-eslint",
   ],
   rules: {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unnecessary-condition": [
+      "error",
+      { allowConstantLoopConditions: true },
+    ],
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       { allowExpressions: true, allowTypedFunctionExpressions: true },
@@ -58,9 +64,14 @@ module.exports = {
     ],
     "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
     "@typescript-eslint/no-require-imports": "error",
+    "@typescript-eslint/array-type": ["error", { default: "array" }],
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/no-extra-non-null-assertion": "error",
+    "@typescript-eslint/no-inferrable-types": "error",
   },
   parserOptions: {
-    project: "tsconfig.eslint.json",
+    project: "./tsconfig.eslint.json",
     warnOnUnsupportedTypeScriptVersion: false,
   },
   overrides: [
@@ -83,25 +94,16 @@ module.exports = {
       rules: {
         // Fix to /// imports in .d.ts
         "spaced-comment": ["error", "always", { markers: ["/"] }],
+        "@typescript-eslint/no-unused-vars": "off",
+        "functional/no-class": "off",
+        "no-shadow": "off",
       },
     },
     {
       files: ["*.js", "*.json"],
-      parser: "espree",
       rules: {
-        "@typescript-eslint/no-require-imports": "off",
-        "@typescript-eslint/no-misused-promises": "off",
-        "@typescript-eslint/await-thenable": "off",
-        "@typescript-eslint/no-unnecessary-type-assertion": "off",
-        "@typescript-eslint/prefer-includes": "off",
-        "@typescript-eslint/prefer-regexp-exec": "off",
-        "@typescript-eslint/prefer-string-starts-ends-with": "off",
-        "@typescript-eslint/require-await": "off",
-        "@typescript-eslint/unbound-method": "off",
         "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/no-implied-eval": "off",
-        "@typescript-eslint/no-throw-literal": "off",
-        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/no-require-imports": "off",
       },
     },
   ],

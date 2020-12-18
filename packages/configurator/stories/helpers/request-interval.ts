@@ -1,6 +1,6 @@
 export default (callback: () => unknown): (() => void) => {
   const requestAnimation = window.requestAnimationFrame;
-  let stop: boolean = false;
+  let stop = false;
   const intervalFunc = (): void => {
     callback();
     if (!stop) {

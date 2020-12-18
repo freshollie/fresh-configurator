@@ -38,7 +38,7 @@ describe("client", () => {
         query: ConnectionSettingsDocument,
       });
 
-      expect(data?.configurator.port).toEqual(null);
+      expect(data.configurator.port).toEqual(null);
 
       await client.mutate<
         SetConnectionSettingsMutation,
@@ -57,7 +57,7 @@ describe("client", () => {
         query: ConnectionSettingsDocument,
       }));
 
-      expect(data?.configurator.port).toEqual("/a/test/port");
+      expect(data.configurator.port).toEqual("/a/test/port");
     });
 
     it("should allow tab to be selected", async () => {
@@ -68,7 +68,7 @@ describe("client", () => {
         query: SelectedTabDocument,
       });
 
-      expect(data?.configurator.tab).toEqual(null);
+      expect(data.configurator.tab).toEqual(null);
 
       await client.mutate<SelectTabMutation, SelectTabMutationVariables>({
         mutation: SelectTabDocument,
@@ -84,7 +84,7 @@ describe("client", () => {
         query: SelectedTabDocument,
       }));
 
-      expect(data?.configurator.tab).toEqual("some-tab");
+      expect(data.configurator.tab).toEqual("some-tab");
     });
 
     it("should allow logs to be appended", async () => {
@@ -100,7 +100,7 @@ describe("client", () => {
         time: "2020-03-01T19:00:00.000Z",
       };
 
-      expect(data?.configurator.logs).toEqual([initialMessage]);
+      expect(data.configurator.logs).toEqual([initialMessage]);
 
       // Move time forward by 50 minutes
       advanceBy(60 * 1000 * 50);
@@ -112,13 +112,13 @@ describe("client", () => {
         },
       });
 
-      expect(response?.errors).toBeFalsy();
+      expect(response.errors).toBeFalsy();
 
       ({ data } = await client.query<LogsQuery>({
         query: LogsDocument,
       }));
 
-      expect(data?.configurator.logs).toEqual([
+      expect(data.configurator.logs).toEqual([
         initialMessage,
         {
           __typename: "Log",
