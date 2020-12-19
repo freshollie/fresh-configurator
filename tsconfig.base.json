@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2018",
     "module": "es6",
     "strict": true,
     "jsx": "react",
