@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "rootDir": "."
+    "rootDir": ".",
+    "target": "ES2019"
   },
   "include": [
     "src/**/*.tsx",
     "src/**/*.ts",
     "stories/**/*.tsx",
     "stories/**/*.ts",
+    "e2e/**/*.ts",
     "__mocks__/**/*.ts",
     "__mocks__/**/*.tsx",
     "*.d.ts",

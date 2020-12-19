@@ -10,7 +10,7 @@ module.exports = {
   ],
   rootDir: path.join(__dirname, "e2e"),
   setupFiles: undefined,
-  setupFilesAfterEnv: undefined,
+  setupFilesAfterEnv: ["<rootDir>/setup.ts"],
   collectCoverage: false,
   maxWorkers: 2,
 };

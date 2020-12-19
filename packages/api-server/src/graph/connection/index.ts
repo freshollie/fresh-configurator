@@ -103,6 +103,7 @@ const resolvers: Resolvers = {
           // as we were not previously open
           // throw an error
           if (!deviceId) {
+            log(`Error opening ${port}`, e);
             throw e;
           }
 

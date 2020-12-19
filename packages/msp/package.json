@@ -22,15 +22,15 @@
     "dist"
   ],
   "scripts": {
-    "testscript": "ts-node -T test-script.ts"
+    "testscript": "ts-node --project tsconfig.cjs.build.json test-script.ts"
   },
   "dependencies": {
-    "@serialport/bindings": "^8.0.7",
-    "@serialport/stream": "^8.0.6",
+    "@serialport/bindings": "9.0.3",
+    "@serialport/stream": "^9.0.2",
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@serialport/binding-mock": "^8.0.6",
+    "@serialport/binding-mock": "^9.0.2",
     "@types/debug": "^4.1.5",
     "@types/serialport__binding-mock": "^8.0.0",
     "@types/serialport__bindings": "^8.0.0",

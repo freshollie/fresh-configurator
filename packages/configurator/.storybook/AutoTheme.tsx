@@ -38,7 +38,7 @@ const disableAnimations = (): void => {
   const frameDuration = 16;
   const maxFrames = 100;
   let resolveRAF: { (): void; (value?: void): void } | null;
-  let resolveRAFTimer: number | null;
+  let resolveRAFTimer: NodeJS.Timeout | null;
   const callbacks: FrameRequestCallback[] = [];
 
   // Speed up with 10x, but beware stepping too fast might cause
