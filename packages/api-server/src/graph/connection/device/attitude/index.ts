@@ -9,17 +9,13 @@ const typeDefs = gql`
   type Attitude {
     roll: Float!
     pitch: Float!
-    heading: Float!
+    yaw: Float!
   }
 `;
 
 const resolvers: Resolvers = {
   FlightController: {
-    attitude: ({ port }, _, { api }) =>
-      api.readAttitude(port).then((values) => ({
-        ...values,
-        __typename: "Attitude",
-      })),
+    attitude: ({ port }, _, { api }) => api.readAttitude(port),
   },
 };
 

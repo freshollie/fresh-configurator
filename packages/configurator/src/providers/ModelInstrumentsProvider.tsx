@@ -19,13 +19,13 @@ const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
     pollInterval: 1000 / refreshRate,
   });
 
-  const { roll = 0, pitch = 0, heading = 0 } =
+  const { roll = 0, pitch = 0, yaw = 0 } =
     deviceData?.connection.device.attitude ?? {};
 
   return (
     <>
       <Attitude roll={roll} pitch={pitch} size={90} />
-      <Heading heading={heading} size={90} />
+      <Heading heading={yaw} size={90} />
     </>
   );
 };

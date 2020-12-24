@@ -5,12 +5,12 @@ import Paper from "../Paper";
 
 const ModelView: React.FC<{
   modelType: ModelTypes;
-  attitude?: { roll: number; pitch: number; heading: number };
+  attitude?: { roll: number; pitch: number; yaw: number };
 }> = ({
-  attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
+  attitude: { roll, pitch, yaw } = { roll: 0, pitch: 0, yaw: 0 },
   modelType,
 }) => {
-  const [headingOffset, setHeadingOffset] = useState(0);
+  const [yawOffset, setYawOffset] = useState(0);
   return (
     <Container>
       <Paper>
@@ -21,17 +21,17 @@ const ModelView: React.FC<{
             <div>Roll:</div>
           </div>
           <div>
-            <div>{heading} deg</div>
+            <div>{yaw} deg</div>
             <div>{pitch} deg</div>
             <div>{roll} deg</div>
           </div>
         </Info>
-        <ResetButton onClick={() => setHeadingOffset(-heading)}>
-          Reset Z axis, offset: {headingOffset} deg
+        <ResetButton onClick={() => setYawOffset(-yaw)}>
+          Reset Z axis, offset: {yawOffset} deg
         </ResetButton>
         <Model
           name={modelType}
-          attitude={{ roll, pitch, heading: heading + headingOffset }}
+          attitude={{ roll, pitch, yaw: yaw + yawOffset }}
         />
       </Paper>
     </Container>

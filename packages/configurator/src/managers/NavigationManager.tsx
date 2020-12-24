@@ -34,6 +34,11 @@ const DISCONNECTED_LINKS = [
 
 const CONNECTED_LINKS = [
   {
+    title: "General",
+    icon: <Icon name="setup" />,
+    id: "general",
+  },
+  {
     title: "Setup",
     icon: <Icon name="setup" />,
     id: "setup",

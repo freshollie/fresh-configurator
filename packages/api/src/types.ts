@@ -42,10 +42,10 @@ export type ImuData = {
   magnetometer: ImuUnit;
 };
 
-export type Kinematics = {
+export type Axes3D = {
   roll: number;
   pitch: number;
-  heading: number;
+  yaw: number;
 };
 
 export type Status = {

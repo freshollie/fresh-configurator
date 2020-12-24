@@ -23,6 +23,9 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "testscript": "ts-node --project tsconfig.cjs.build.json testscript.ts"
+  },
   "dependencies": {
     "@betaflight/msp": "workspace:^0.3.0",
     "semver": "^7.1.3"

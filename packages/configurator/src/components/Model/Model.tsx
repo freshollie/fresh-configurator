@@ -76,7 +76,7 @@ type ModelProps = {
   attitude?: {
     roll: number;
     pitch: number;
-    heading: number;
+    yaw: number;
   };
   /**
    * Are the attitude values the raw
@@ -91,11 +91,11 @@ const whiteColor = new Color(1, 1, 1);
 /**
  * Create a 3D representation of the given model
  * and show what it will look like with the given
- * roll pitch and heading values
+ * roll pitch and yaw values
  */
 const Model: React.FC<ModelProps> = ({
   name,
-  attitude: { roll, pitch, heading } = { roll: 0, pitch: 0, heading: 0 },
+  attitude: { roll, pitch, yaw } = { roll: 0, pitch: 0, yaw: 0 },
   rawAttitude = false,
 }) => {
   const data = useModelData(name);
@@ -108,7 +108,7 @@ const Model: React.FC<ModelProps> = ({
   const { geometry, materials } = data;
 
   const x = pitch * -1.0 * (Math.PI / 180);
-  const y = (heading * -1.0 - 0) * (Math.PI / 180);
+  const y = (yaw * -1.0 - 0) * (Math.PI / 180);
   const z = roll * -1.0 * (Math.PI / 180);
 
   return (

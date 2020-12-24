@@ -16,7 +16,7 @@ const Container = styled.div`
 const useRollingAttitude = (): {
   roll: number;
   pitch: number;
-  heading: number;
+  yaw: number;
 } => {
   const [number, setNumber] = useState(0);
   useEffect(() => requestInterval(() => setNumber((number + 1) % 360)));
@@ -24,7 +24,7 @@ const useRollingAttitude = (): {
   return {
     roll: number,
     pitch: number,
-    heading: number,
+    yaw: number,
   };
 };
 

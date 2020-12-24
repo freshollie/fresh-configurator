@@ -7,7 +7,7 @@ describe("readAttitude", () => {
     mockMsp.setResponse([99, 0, 54, 1, 12, 1]);
 
     expect(await readAttitude("/dev/someport")).toEqual({
-      heading: 268,
+      yaw: 268,
       pitch: 31,
       roll: 9.9,
     });

@@ -14,6 +14,7 @@ import MainLayout from "./layouts/MainLayout";
 import Setup from "./tabs/Setup";
 import Landing from "./tabs/Landing";
 import Receiver from "./tabs/Receiver";
+import General from "./tabs/General";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -33,6 +34,9 @@ const App: React.FC = () => (
       </nav>
       <div className="tab-content">
         <TabRouter>
+          <div id="general">
+            <General />
+          </div>
           <div id="landing">
             <Landing />
           </div>

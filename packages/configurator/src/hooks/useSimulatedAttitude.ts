@@ -78,16 +78,16 @@ export default (
   tuning?: TuningData,
   deadband?: DeadbandData,
   legacy = false
-): { roll: number; pitch: number; heading: number } => {
+): { roll: number; pitch: number; yaw: number } => {
   // Keep track of the time between calculations to work out the delta
   const timeRef = useRef(new Date().getTime());
   const [attitude, setAttitude] = useState({
     roll: 0,
     pitch: 0,
-    heading: 0,
+    yaw: 0,
   });
 
-  const { roll, pitch, heading } = attitude;
+  const { roll, pitch, yaw } = attitude;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,8 +123,8 @@ export default (
                   legacy
                 )) %
             360,
-          heading:
-            (heading +
+          yaw:
+            (yaw +
               delta *
                 calcRate(
                   channels[2] ?? 0,
@@ -142,7 +142,7 @@ export default (
     });
 
     return () => clearInterval(interval);
-  }, [channels, deadband, heading, legacy, pitch, roll, tuning]);
+  }, [channels, deadband, legacy, pitch, roll, tuning, yaw]);
 
   return attitude;
 };

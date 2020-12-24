@@ -10,7 +10,7 @@ query Attitude($connection: ID!) {
       attitude {
         roll
         pitch
-        heading
+        yaw
       }
     }
   }
@@ -123,6 +123,18 @@ query DevicePortSettings($connection: ID!) {
           mspBaudRate
           telemetryBaudRate
         }
+      }
+    }
+  }
+}
+
+query DeviceBoardAlignment($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      alignment {
+        roll
+        pitch
+        yaw
       }
     }
   }
