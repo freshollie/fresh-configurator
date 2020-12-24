@@ -2,8 +2,13 @@
  * Hacky mock data generator to be able to test this API without
  * a device
  */
-/* eslint-disable @typescript-eslint/no-unused-vars, import/export */
-import { Sensors, DisarmFlags, SerialPortFunctions } from "@betaflight/api";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Sensors,
+  DisarmFlags,
+  SerialPortFunctions,
+  Axes3D,
+} from "@betaflight/api";
 import { v4 } from "uuid";
 
 export * from "@betaflight/api";
@@ -30,7 +35,12 @@ const mockDevice = {
   attitude: {
     roll: 0,
     pitch: 0,
-    heading: 0,
+    yaw: 0,
+  },
+  alignment: {
+    roll: 0,
+    pitch: 0,
+    yaw: 0,
   },
   gps: {
     fix: false,
@@ -79,7 +89,7 @@ const tickAttitude = (): void => {
   const newValue = (mockDevice.attitude.roll + 1) % 360;
   mockDevice.attitude.roll = newValue;
   mockDevice.attitude.pitch = newValue;
-  mockDevice.attitude.heading = newValue;
+  mockDevice.attitude.yaw = newValue;
 };
 
 const tickGps = (): void => {
@@ -194,3 +204,14 @@ export const readUID = (port: string): Promise<string> =>
 
 export const writeReboot = (port: string): Promise<boolean> =>
   delay(100).then(() => true);
+
+export const readBoardAlignmentConfig = (port: string): Promise<Axes3D> =>
+  delay(20).then(() => mockDevice.alignment);
+
+export const writeBoardAlignmentConfig = (
+  port: string,
+  alignment: Axes3D
+): Promise<void> =>
+  delay(20).then(() => {
+    mockDevice.alignment = alignment;
+  });

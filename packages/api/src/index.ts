@@ -11,7 +11,8 @@ import codes from "./codes";
 import {
   VoltageMeters,
   ImuData,
-  Kinematics,
+  ImuUnit,
+  Axes3D,
   Status,
   ExtendedStatus,
   RCTuning,
@@ -43,6 +44,7 @@ export {
   Sensors,
   SerialPortFunctions,
   RebootTypes,
+  Axes3D,
 } from "./types";
 export {
   apiVersion,
@@ -144,12 +146,12 @@ export const readIMUData = async (port: string): Promise<ImuData> => {
   };
 };
 
-export const readAttitude = async (port: string): Promise<Kinematics> => {
+export const readAttitude = async (port: string): Promise<Axes3D> => {
   const data = await execute(port, { code: codes.MSP_ATTITUDE });
   return {
     roll: data.read16() / 10.0, // x
     pitch: data.read16() / 10.0, // y
-    heading: data.read16(), // z
+    yaw: data.read16(), // z
   };
 };
 
@@ -528,4 +530,25 @@ export const writeReboot = async (
   }
 
   return true;
+};
+
+export const readBoardAlignmentConfig = async (
+  port: string
+): Promise<Axes3D> => {
+  const data = await execute(port, { code: codes.MSP_BOARD_ALIGNMENT_CONFIG });
+  return {
+    roll: data.read16(),
+    pitch: data.read16(),
+    yaw: data.read16(),
+  };
+};
+
+export const writeBoardAlignmentConfig = async (
+  port: string,
+  { roll, pitch, yaw }: Axes3D
+): Promise<void> => {
+  await execute(port, {
+    code: codes.MSP_SET_BOARD_ALIGNMENT_CONFIG,
+    data: new WriteBuffer().push16(roll).push16(pitch).push16(yaw),
+  });
 };

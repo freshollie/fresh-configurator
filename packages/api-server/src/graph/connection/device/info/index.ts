@@ -23,11 +23,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    info: ({ port }, _, { api }) =>
-      api.readBoardInfo(port).then((values) => ({
-        ...values,
-        __typename: "BoardInfo",
-      })),
+    info: ({ port }, _, { api }) => api.readBoardInfo(port),
   },
 };
 

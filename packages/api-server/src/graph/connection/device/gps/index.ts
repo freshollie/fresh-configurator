@@ -19,11 +19,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    gps: ({ port }, _, { api }) =>
-      api.readRawGPS(port).then((gpsData) => ({
-        ...gpsData,
-        __typename: "GpsData",
-      })),
+    gps: ({ port }, _, { api }) => api.readRawGPS(port),
   },
 };
 

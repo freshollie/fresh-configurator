@@ -13,6 +13,7 @@ import rc from "./rc";
 import sensors from "./sensors";
 import status from "./status";
 import serial from "./serial";
+import alignment from "./alignment";
 
 const typeDefs = gql`
   extend type Connection {
@@ -44,6 +45,7 @@ export default {
   typeDefs: mergeTypes([
     typeDefs,
     arming.typeDefs,
+    alignment.typeDefs,
     attitude.typeDefs,
     features.typeDefs,
     gps.typeDefs,
@@ -59,6 +61,7 @@ export default {
   resolvers: mergeResolvers<unknown, any>([
     resolvers,
     arming.resolvers,
+    alignment.resolvers,
     attitude.resolvers,
     features.resolvers,
     gps.resolvers,

@@ -17,3 +17,7 @@ mutation SetArming(
 mutation Reset($connection: ID!) {
   deviceReset(connectionId: $connection)
 }
+
+mutation SetBoardAlignment($connection: ID!, $alignment: AlignmentInput!) {
+  deviceSetBoardAlignment(connectionId: $connection, alignment: $alignment)
+}
