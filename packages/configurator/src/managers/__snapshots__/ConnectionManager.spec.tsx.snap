@@ -291,7 +291,7 @@ Array [
 exports[`ConnectionManager should handle failing to connect 1`] = `
 Array [
   "Opening connection on /dev/something",
-  "Could not open connection (<span class=\\"message-negative\\">Network error: some error</span>), communication <span class=\\"message-negative\\">failed</span>",
+  "Could not open connection (<span class=\\"message-negative\\">some error</span>), communication <span class=\\"message-negative\\">failed</span>",
 ]
 `;
 

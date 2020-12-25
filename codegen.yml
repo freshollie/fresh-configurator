@@ -32,7 +32,7 @@ generates:
       withHOC: false
       contextType: ../apollo#ApolloContext
       apolloReactHooksImportFrom: ../apollo
-      reactApolloVersion: 2
+      reactApolloVersion: 3
       nonOptionalTypename: true
     plugins:
       - typescript
@@ -50,7 +50,7 @@ generates:
       withHooks: true
       withComponent: false
       withHOC: false
-      reactApolloVersion: 2
+      reactApolloVersion: 3
       nonOptionalTypename: true
     plugins:
       - typescript-operations

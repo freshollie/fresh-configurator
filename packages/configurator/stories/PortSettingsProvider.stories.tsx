@@ -1,5 +1,5 @@
 import React from "react";
-import { MockedProvider, MockedResponse } from "@apollo/react-testing";
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import PortSettingsManager from "../src/managers/PortSettingsManager";
 import { DevicePortSettingsDocument } from "../src/gql/queries/Device.graphql";
 

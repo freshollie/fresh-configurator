@@ -1,7 +1,5 @@
-import { ApolloClient } from "apollo-client";
-import gql from "graphql-tag";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { WebSocketLink } from "apollo-link-ws";
+import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
+import { WebSocketLink } from "@apollo/link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { Resolvers, Configurator } from "./__generated__";
 import { versionInfo } from "../util";
@@ -9,6 +7,12 @@ import {
   LogsQueryResult,
   LogsQuery,
   LogsDocument,
+  SelectedTabDocument,
+  SelectedTabQuery,
+  SelectedTabQueryVariables,
+  ConnectionSettingsQuery,
+  ConnectionSettingsQueryVariables,
+  ConnectionSettingsDocument,
 } from "./queries/Configurator.graphql";
 
 const typeDefs = gql`
@@ -41,107 +45,166 @@ const typeDefs = gql`
   }
 `;
 
-const cache = new InMemoryCache();
-
-const resolvers: Resolvers = {
-  Mutation: {
-    setTab: (_, { tabId }, { client }) => {
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            tab: tabId,
-          } as Configurator,
-        },
-      });
-      return null;
+export const cache = (): InMemoryCache =>
+  new InMemoryCache({
+    typePolicies: {
+      // RC: {
+      //   merge: true,
+      // },
+      Connection: {
+        merge: true,
+      },
+      FlightController: {
+        merge: true,
+      },
+      Configurator: {
+        merge: true,
+      },
     },
-    setConnectionSettings: (_, { port, baudRate }, { client }) => {
-      const data: { port: string; baudRate?: number } = {
-        port,
-      };
+  });
 
-      if (typeof baudRate === "number") {
-        data.baudRate = baudRate;
-      }
+export const resolvers = (initialState?: {
+  connecting?: boolean;
+  connection?: string | null;
+  port?: string;
+  baudRate?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}): any => {
+  const config: Resolvers = {
+    Query: {
+      configurator: () => ({
+        __typename: "Configurator",
 
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            ...data,
-          } as Configurator,
-        },
-      });
-
-      return null;
+        port: "",
+        baudRate: 115200,
+        connecting: false,
+        connection: null,
+        expertMode: false,
+        logs: [],
+        ...initialState,
+      }),
     },
-    setConnecting: (_, { value }, { client }) => {
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            connecting: value,
-          } as Configurator,
-        },
-      });
+    Mutation: {
+      setTab: (_, { tabId }, { client }) => {
+        client.writeQuery<SelectedTabQuery, SelectedTabQueryVariables>({
+          query: SelectedTabDocument,
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              tab: tabId,
+            },
+          },
+        });
+        return null;
+      },
+      setConnectionSettings: (_, { port, baudRate }, { client }) => {
+        const data: { port: string; baudRate?: number } = {
+          port,
+        };
 
-      return null;
-    },
-    setConnection: (_, { connection }, { client }) => {
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            connection,
-          } as Configurator,
-        },
-      });
+        if (typeof baudRate === "number") {
+          data.baudRate = baudRate;
+        }
 
-      return null;
-    },
-    setExpertMode: (_, { enabled }, { client }) => {
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            expertMode: enabled,
-          } as Configurator,
-        },
-      });
+        client.writeQuery<
+          ConnectionSettingsQuery,
+          ConnectionSettingsQueryVariables
+        >({
+          query: ConnectionSettingsDocument,
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              ...data,
+            } as Configurator,
+          },
+        });
 
-      return null;
-    },
-    log: (_, { message }, { client }) => {
-      const logs =
-        client.readQuery<LogsQuery, LogsQueryResult>({
+        return null;
+      },
+      setConnecting: (_, { value }, { client }) => {
+        client.writeQuery({
+          query: gql`
+            query {
+              configurator {
+                connecting
+              }
+            }
+          `,
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              connecting: value,
+            } as Configurator,
+          },
+        });
+
+        return null;
+      },
+      setConnection: (_, { connection }, { client }) => {
+        client.writeQuery({
+          query: gql`
+            query {
+              configurator {
+                connection
+              }
+            }
+          `,
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              connection,
+            } as Configurator,
+          },
+        });
+
+        return null;
+      },
+      // setExpertMode: (_, { enabled }, { client }) => {
+      //   client.writeQuery({
+      //     document: Ex,
+      //     data: {
+      //       __typename: "Query",
+      //       configurator: {
+      //         __typename: "Configurator",
+      //         expertMode: enabled,
+      //       } as Configurator,
+      //     },
+      //   });
+
+      //   return null;
+      // },
+      log: (_, { message }, { client }) => {
+        const logs =
+          client.readQuery<LogsQuery, LogsQueryResult>({
+            query: LogsDocument,
+          })?.configurator.logs ?? [];
+
+        client.writeQuery({
           query: LogsDocument,
-        })?.configurator.logs ?? [];
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              logs: logs.concat([
+                {
+                  time: new Date().toISOString(),
+                  message,
+                  __typename: "Log" as const,
+                },
+              ]),
+            } as Configurator,
+          },
+        });
 
-      client.writeData({
-        data: {
-          __typename: "Query",
-          configurator: {
-            __typename: "Configurator",
-            logs: logs.concat([
-              {
-                time: new Date().toISOString(),
-                message,
-                __typename: "Log" as const,
-              },
-            ]),
-          } as Configurator,
-        },
-      });
-
-      return null;
+        return null;
+      },
     },
-  },
+  };
+  return config;
 };
 
 // extract the backend address from the URL search query, as this can
@@ -154,17 +217,31 @@ const subscriptionClient = new SubscriptionClient(`${BACKEND}/graphql`, {
 });
 
 const client = new ApolloClient({
-  cache,
+  cache: cache(),
   typeDefs,
-  // generated resolvers are not compatible with apollo
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolvers: resolvers as any,
+  resolvers: resolvers(),
   link: new WebSocketLink(subscriptionClient),
 });
 
 const writeInitial = (): void => {
   const { os, version, chromeVersion } = versionInfo();
-  client.writeData({
+  client.writeQuery({
+    query: gql`
+      query {
+        configurator {
+          port
+          baudRate
+          tab
+          expertMode
+          connecting
+          connection
+          logs {
+            time
+            message
+          }
+        }
+      }
+    `,
     data: {
       __typename: "Query",
       configurator: {

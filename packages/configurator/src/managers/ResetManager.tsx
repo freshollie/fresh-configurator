@@ -1,5 +1,5 @@
 import React from "react";
-import { useApolloClient } from "@apollo/react-hooks";
+import { useApolloClient } from "@apollo/client";
 import Confirmation from "../components/Confirmation";
 import Button from "../components/Button";
 import { useResetMutation } from "../gql/mutations/Device.graphql";
