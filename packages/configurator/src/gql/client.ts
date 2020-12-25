@@ -1,5 +1,5 @@
 import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
-import { WebSocketLink } from "@apollo/link-ws";
+import { WebSocketLink } from "@apollo/client/link/ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { Resolvers, Configurator } from "./__generated__";
 import { versionInfo } from "../util";
