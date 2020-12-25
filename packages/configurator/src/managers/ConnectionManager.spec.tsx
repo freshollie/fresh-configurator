@@ -407,11 +407,11 @@ describe("ConnectionManager", () => {
     const mockConnectionId1 = "435543";
     const mockConnectionId2 = "243455";
 
-    const cache1 = clientCache();
+    const cache = clientCache();
 
-    const { getByTestId, rerender } = render(
+    const { getByTestId } = render(
       <MockedProvider
-        cache={cache1}
+        cache={cache}
         resolvers={resolvers({
           connecting: false,
           connection: null,
@@ -422,6 +422,9 @@ describe("ConnectionManager", () => {
         mocks={[
           connectMock("/dev/something", 115200, mockConnectionId1, "1.40.1"),
           disconnectMock(mockConnectionId1, disconnect),
+          connectMock("/dev/something", 115200, mockConnectionId2, "1.40.1"),
+          onChangedMock(mockConnectionId2, null),
+          setArmingMock(mockConnectionId2, true, false, setDisarmed),
         ]}
       >
         <ConnectionManager />
@@ -435,44 +438,17 @@ describe("ConnectionManager", () => {
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     await waitFor(() => expect(disconnect).toHaveBeenCalled());
 
-    const cache2 = clientCache();
-
-    rerender(
-      <MockedProvider
-        cache={cache2}
-        resolvers={resolvers({
-          connecting: false,
-          connection: null,
-          port: "/dev/someotherport",
-          baudRate: 115200,
-        })}
-        key={2}
-        mocks={[
-          connectMock(
-            "/dev/someotherport",
-            115200,
-            mockConnectionId2,
-            "1.40.1"
-          ),
-          onChangedMock(mockConnectionId2, null),
-          setArmingMock(mockConnectionId2, true, false, setDisarmed),
-        ]}
-      >
-        <ConnectionManager />
-      </MockedProvider>
-    );
-
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     fireEvent.click(getByTestId("connect-button"));
 
     await waitFor(() => expect(getByTestId("disconnect-button")).toBeVisible());
     await waitFor(() =>
-      expect(connectionState(cache2).connection).toEqual(mockConnectionId2)
+      expect(connectionState(cache).connection).toEqual(mockConnectionId2)
     );
     await waitFor(() => expect(setDisarmed).toHaveBeenCalled());
-    expect(connectionState(cache2).connecting).toBeFalsy();
+    expect(connectionState(cache).connecting).toBeFalsy();
 
     // The correct things should have been logged
-    expect([...logs(cache1), ...logs(cache2)]).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 });

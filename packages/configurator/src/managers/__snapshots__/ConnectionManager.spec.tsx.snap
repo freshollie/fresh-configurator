@@ -281,7 +281,7 @@ exports[`ConnectionManager should handle aborting connection attempts 1`] = `
 Array [
   "Opening connection on /dev/something",
   "Connection attempt to /dev/something aborted",
-  "Opening connection on /dev/someotherport",
+  "Opening connection on /dev/something",
   "Serial port <span class=\\"message-positive\\">successfully</span> opened, connectionId=243455",
   "MultiWii API version: <strong>1.40.1</strong>",
   "<b>Arming disabled</b>",
