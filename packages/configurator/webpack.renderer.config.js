@@ -11,7 +11,7 @@ const path = require("path");
 module.exports = (_, { mode }) => ({
   entry: "./src/index.tsx",
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".mjs", ".js"],
   },
   externals: {
     "@serialport/bindings": "commonjs @serialport/bindings",

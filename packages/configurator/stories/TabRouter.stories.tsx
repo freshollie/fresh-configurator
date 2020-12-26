@@ -1,6 +1,6 @@
 import React from "react";
-import { Resolvers } from "apollo-client";
-import { MockedProvider } from "@apollo/react-testing";
+import { Resolvers } from "@apollo/client";
+import { MockedProvider } from "@apollo/client/testing";
 import { TabRouter } from "../src/routing";
 
 export default {

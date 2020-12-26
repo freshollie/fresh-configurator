@@ -1,12 +1,11 @@
 import React from "react";
-import { Resolvers } from "apollo-client";
 import {
   MockedProvider,
   MockedResponse,
   MockSubscriptionLink,
-} from "@apollo/react-testing";
-import { InMemoryCache } from "apollo-cache-inmemory";
+} from "@apollo/client/testing";
 import { GraphQLError } from "graphql";
+import { InMemoryCache } from "@apollo/client";
 import { render, waitFor, fireEvent } from "../test-utils";
 import {
   ConnectDocument,
@@ -16,61 +15,12 @@ import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
 import {
   ConnectionStateDocument,
   ConnectionStateQuery,
+  LogsDocument,
 } from "../gql/queries/Configurator.graphql";
 import { SetArmingDocument } from "../gql/mutations/Device.graphql";
-import { Connection } from "../gql/__generated__";
-import { ApolloContext } from "../gql/apollo";
+import { Connection, LogsQuery } from "../gql/__generated__";
 import ConnectionManager from "./ConnectionManager";
-
-let logs: string[] = [];
-
-const configuratorState = (state: {
-  connecting?: boolean;
-  connection?: string | null;
-  port?: string;
-  baudRate?: number;
-}): Resolvers => ({
-  Query: {
-    configurator: () => ({
-      __typename: "Configurator",
-
-      port: "",
-      baudRate: 115200,
-      connecting: false,
-      connection: null,
-
-      ...state,
-    }),
-  },
-  Mutation: {
-    setConnection: (_, { connection }, { client }: ApolloContext) => {
-      client.writeData({
-        data: {
-          configurator: {
-            __typename: "Configurator",
-            connection,
-          },
-        },
-      });
-      return null;
-    },
-    setConnecting: (_, { value }, { client }: ApolloContext) => {
-      client.writeData({
-        data: {
-          configurator: {
-            __typename: "Configurator",
-            connecting: value,
-          },
-        },
-      });
-      return null;
-    },
-    log: (_, { message }) => {
-      logs.push(message);
-      return null;
-    },
-  },
-});
+import { cache as clientCache, resolvers } from "../gql/client";
 
 const connectMock = (
   port: string,
@@ -180,10 +130,6 @@ const onChangedMock = (
   },
 });
 
-beforeEach(() => {
-  logs = [];
-});
-
 const connectionState = (
   cache: InMemoryCache
 ): { connecting: boolean; connection?: string | null } =>
@@ -191,17 +137,22 @@ const connectionState = (
     query: ConnectionStateDocument,
   })!.configurator;
 
+const logs = (cache: InMemoryCache) =>
+  cache
+    .readQuery<LogsQuery>({ query: LogsDocument })!
+    .configurator.logs.map((line) => line.message);
+
 describe("ConnectionManager", () => {
   it("should connect with the connection settings and set the new connection id when connect clicked", async () => {
     const connect = jest.fn();
     const setDisarmed = jest.fn();
     const mockConnectionId = "23455";
 
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const { getByTestId, asFragment } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: null,
           port: "/dev/something",
@@ -248,18 +199,18 @@ describe("ConnectionManager", () => {
     expect(asFragment()).toMatchSnapshot();
 
     // The correct things should have been logged
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should close the connection when the disconnect button is clicked", async () => {
     const mockConnectionId = "435345";
     const disconnect = jest.fn();
 
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: mockConnectionId,
           port: "/dev/something",
@@ -281,17 +232,17 @@ describe("ConnectionManager", () => {
     expect(connectionState(cache).connection).toBeNull();
     expect(connectionState(cache).connecting).toBeFalsy();
 
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should remove the connection when onConnectionChanged event occurs for the active connection with no new connectionId", async () => {
     const mockConnectionId = "238478234";
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const mockSubscriptions = new MockSubscriptionLink();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: mockConnectionId,
           port: "/dev/something",
@@ -313,17 +264,17 @@ describe("ConnectionManager", () => {
     });
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     expect(connectionState(cache).connection).toBeNull();
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should update the connectionId when onConnectionChanged event occurs for the active connection with a new connectionId", async () => {
     const mockConnectionId = "238478234";
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const mockSubscriptions = new MockSubscriptionLink();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: mockConnectionId,
           port: "/dev/something",
@@ -346,17 +297,17 @@ describe("ConnectionManager", () => {
     await waitFor(() =>
       expect(connectionState(cache).connection).toBe("new-id")
     );
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should remove the active connection if onConnectionChanged event subscription fails", async () => {
     const mockConnectionId = "238478234";
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const mockSubscriptions = new MockSubscriptionLink();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: mockConnectionId,
           port: "/dev/something",
@@ -376,15 +327,15 @@ describe("ConnectionManager", () => {
     });
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     expect(connectionState(cache).connection).toBeNull();
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should handle failing to connect", async () => {
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: null,
           port: "/dev/something",
@@ -404,7 +355,7 @@ describe("ConnectionManager", () => {
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     expect(connectionState(cache).connecting).toBeFalsy();
     expect(connectionState(cache).connection).toBeNull();
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should close the connection if api version is less than minimum version", async () => {
@@ -412,11 +363,11 @@ describe("ConnectionManager", () => {
     const disconnect = jest.fn();
     const mockConnectionId = "23432423";
 
-    const cache = new InMemoryCache();
+    const cache = clientCache();
     const { getByTestId } = render(
       <MockedProvider
         cache={cache}
-        resolvers={configuratorState({
+        resolvers={resolvers({
           connecting: false,
           connection: null,
           port: "/dev/something",
@@ -447,7 +398,7 @@ describe("ConnectionManager", () => {
     expect(disconnect).toHaveBeenCalled();
     expect(connectionState(cache).connecting).toBeFalsy();
     expect(connectionState(cache).connection).toBeNull();
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 
   it("should handle aborting connection attempts", async () => {
@@ -456,9 +407,12 @@ describe("ConnectionManager", () => {
     const mockConnectionId1 = "435543";
     const mockConnectionId2 = "243455";
 
-    const { getByTestId, rerender } = render(
+    const cache = clientCache();
+
+    const { getByTestId } = render(
       <MockedProvider
-        resolvers={configuratorState({
+        cache={cache}
+        resolvers={resolvers({
           connecting: false,
           connection: null,
           port: "/dev/something",
@@ -468,6 +422,9 @@ describe("ConnectionManager", () => {
         mocks={[
           connectMock("/dev/something", 115200, mockConnectionId1, "1.40.1"),
           disconnectMock(mockConnectionId1, disconnect),
+          connectMock("/dev/something", 115200, mockConnectionId2, "1.40.1"),
+          onChangedMock(mockConnectionId2, null),
+          setArmingMock(mockConnectionId2, true, false, setDisarmed),
         ]}
       >
         <ConnectionManager />
@@ -481,32 +438,6 @@ describe("ConnectionManager", () => {
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     await waitFor(() => expect(disconnect).toHaveBeenCalled());
 
-    const cache = new InMemoryCache();
-    rerender(
-      <MockedProvider
-        cache={cache}
-        resolvers={configuratorState({
-          connecting: false,
-          connection: null,
-          port: "/dev/someotherport",
-          baudRate: 115200,
-        })}
-        key={2}
-        mocks={[
-          connectMock(
-            "/dev/someotherport",
-            115200,
-            mockConnectionId2,
-            "1.40.1"
-          ),
-          onChangedMock(mockConnectionId2, null),
-          setArmingMock(mockConnectionId2, true, false, setDisarmed),
-        ]}
-      >
-        <ConnectionManager />
-      </MockedProvider>
-    );
-
     await waitFor(() => expect(getByTestId("connect-button")).toBeVisible());
     fireEvent.click(getByTestId("connect-button"));
 
@@ -518,6 +449,6 @@ describe("ConnectionManager", () => {
     expect(connectionState(cache).connecting).toBeFalsy();
 
     // The correct things should have been logged
-    expect(logs).toMatchSnapshot();
+    expect(logs(cache)).toMatchSnapshot();
   });
 });
