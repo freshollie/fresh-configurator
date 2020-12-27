@@ -1,6 +1,7 @@
 import { createServer } from "./src";
 
-createServer().listen(9000, () => {
+(async () => {
+  await createServer().listen({ port: 9000, hostname: "127.0.0.1" });
   // eslint-disable-next-line no-console
   console.log("listening");
-});
+})();

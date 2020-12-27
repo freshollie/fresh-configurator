@@ -14,7 +14,7 @@ $ yarn add @betaflight/api-server graphql@14
 ```typescript
 import { createServer } from "@betaflight/api-server";
 
-createServer().listen(9000)
+createServer().listen({ port: 9000 })
 ```
 
 Then, you can query the graph at `http://localhost:9000/graphql`
@@ -29,7 +29,7 @@ have a flight controller to hand.
 import { createServer } from "@betaflight/api-server";
 
 // Start in mocked mode
-server.listen(9000, true)
+createServer({ mocked: true }).listen({ port: 9000 })
 ```
 
 ### Ports
@@ -56,8 +56,8 @@ mutation Connect($port: String!) {
 ### Listen for connection changes
 
 ```graphql
-subscription OnClosed($id: ID!) {
-    onClosed(connection: $id)
+subscription OnChanged($id: ID!) {
+    onConnectionChanged(connection: $id)
 }
 ```
 

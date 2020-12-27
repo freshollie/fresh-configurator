@@ -1,6 +1,5 @@
 import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { SubscriptionClient } from "subscriptions-transport-ws";
+import WebSocketLink from "./WebSocketLink";
 import { Resolvers, Configurator } from "./__generated__";
 import { versionInfo } from "../util";
 import {
@@ -212,15 +211,14 @@ export const resolvers = (initialState?: {
 const searchParams = new URLSearchParams(window.location.search.slice(1));
 const BACKEND = searchParams.get("backend") ?? "ws://localhost:9000";
 
-const subscriptionClient = new SubscriptionClient(`${BACKEND}/graphql`, {
-  reconnect: true,
-});
-
 const client = new ApolloClient({
   cache: cache(),
   typeDefs,
   resolvers: resolvers(),
-  link: new WebSocketLink(subscriptionClient),
+  link: new WebSocketLink({
+    url: `${BACKEND}/graphql`,
+    keepAlive: 99999999999,
+  }),
 });
 
 const writeInitial = (): void => {

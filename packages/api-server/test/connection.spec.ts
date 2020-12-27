@@ -12,7 +12,7 @@ import {
   onReconnecting,
 } from "../src/connections";
 
-const server = createServer();
+const { apolloServer } = createServer();
 
 afterEach(() => {
   jest.useRealTimers();
@@ -22,7 +22,7 @@ afterEach(() => {
 describe("connections", () => {
   describe("connect", () => {
     it("should initialise a connection on the given port with given baudrate", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
 
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
@@ -58,7 +58,7 @@ describe("connections", () => {
     });
 
     it("should return a unique connection id for every connection", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
 
@@ -94,7 +94,7 @@ describe("connections", () => {
     });
 
     it("should close existing connections when a new connection comes in for the same port", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
 
@@ -131,7 +131,7 @@ describe("connections", () => {
     });
 
     it("should handle connection failing to open", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
       mockApi.open.mockRejectedValue(new Error("Some error"));
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
@@ -154,7 +154,7 @@ describe("connections", () => {
     });
 
     it("should attempt to reconnect if the connection is lost", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
 
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
@@ -216,7 +216,7 @@ describe("connections", () => {
     });
 
     it("should stop attempting to reconnect if the connection is lost", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
 
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
@@ -286,7 +286,7 @@ describe("connections", () => {
     });
 
     it("should not reopen the connection if the device UID is not equal to the original", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
 
       mockApi.apiVersion.mockReturnValue("1.32.0");
       mockApi.readUID.mockResolvedValue("abcd");
@@ -325,7 +325,7 @@ describe("connections", () => {
 
   describe("close", () => {
     it("should close an open connection", async () => {
-      const { mutate } = createTestClient(server);
+      const { mutate } = createTestClient(apolloServer);
       const connectionId = "abddddasdfsdf";
       let newConnectionId: string = connectionId;
       add("/dev/someport", connectionId);

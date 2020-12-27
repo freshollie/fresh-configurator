@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PubSub, ApolloError } from "apollo-server";
+import { PubSub, ApolloError } from "apollo-server-express";
 
 const changeEvents = new PubSub();
 const reconnectEvents = new PubSub();

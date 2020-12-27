@@ -8,6 +8,7 @@ import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
 import { createServer } from "@betaflight/api-server";
+import persistedQueries from "./gql/__generated__/persisted-queries-server.json";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,16 +17,19 @@ let mainWindow: BrowserWindow | undefined;
 const E2E = process.env.E2E === "true";
 const PRODUCTION = process.env.NODE_ENV === "production";
 
-let backendPort: number | string = 9000;
+let backendPort: number;
 
 const startBackend = async (): Promise<void> => {
   const mocked = process.env.MOCKED === "true" || E2E;
   if (mocked) {
     console.log("Creating backend in mocked mode");
   }
-  const backend = createServer({ mocked });
+  const backend = createServer({ mocked, persistedQueries });
 
-  const { port } = await backend.listen();
+  const port = await backend.listen({
+    port: backendPort,
+    hostname: "127.0.0.1",
+  });
   console.log(`Starting backend on ${port}`);
 
   backendPort = port;
@@ -51,19 +55,20 @@ const createWindow = (): void => {
   });
 
   const backendAddress = `ws://localhost:${backendPort}`;
+  const searchQuery = `backend=${backendAddress}&electron=true`;
   if (!PRODUCTION) {
     mainWindow.loadURL(
       url.format({
         protocol: "http:",
         host: "localhost:8080",
         pathname: "index.html",
-        search: `backend=${backendAddress}`,
+        search: searchQuery,
         slashes: true,
       })
     );
   } else {
     mainWindow.loadFile(path.join(__dirname, "index.html"), {
-      search: `backend=${backendAddress}`,
+      search: searchQuery,
     });
   }
 

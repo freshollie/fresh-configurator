@@ -1,6 +1,6 @@
 import * as uuid from "uuid";
 import gql from "graphql-tag";
-import { ApolloError } from "apollo-server";
+import { ApolloError } from "apollo-server-express";
 import { mergeResolvers, mergeTypes } from "merge-graphql-schemas";
 import debug from "debug";
 import device from "./device";
