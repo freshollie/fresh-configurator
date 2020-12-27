@@ -182,5 +182,5 @@ const rendererConfig = (mode) => ({
 module.exports = (_, { mode }) => [
   rendererConfig(mode),
   // Don't build the main
-  ...(mode === "production" ? mainConfig(mode) : []),
+  ...(mode === "production" ? [mainConfig(mode)] : []),
 ];
