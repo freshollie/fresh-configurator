@@ -1,3 +1,4 @@
+import "source-map-support/register";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   APOLLO_DEVELOPER_TOOLS,
