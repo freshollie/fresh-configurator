@@ -27,7 +27,8 @@ const commonPlugins = (mode) => [
     : []),
 ];
 
-const mainConfig = (_, { mode }) => ({
+// Only run the main config when in production
+const mainConfig = (mode) => ({
   entry: require.resolve("./src/main.ts"),
   target: "electron-main",
   resolve: {
@@ -81,7 +82,7 @@ const mainConfig = (_, { mode }) => ({
   devtool: devtool(mode),
 });
 
-const rendererConfig = (_, { mode }) => ({
+const rendererConfig = (mode) => ({
   entry: require.resolve("./src/index.tsx"),
   resolve: {
     extensions: [".ts", ".tsx", ".mjs", ".js"],
@@ -178,4 +179,8 @@ const rendererConfig = (_, { mode }) => ({
   },
 });
 
-module.exports = [rendererConfig, mainConfig];
+module.exports = (_, { mode }) => [
+  rendererConfig(mode),
+  // Don't build the main
+  ...(mode === "production" ? mainConfig(mode) : []),
+];
