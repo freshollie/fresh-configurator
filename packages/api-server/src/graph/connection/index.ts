@@ -61,7 +61,7 @@ const resolvers: Resolvers = {
       let connectionId = uuid.v4();
 
       const connect = async (retries = 1): Promise<void> => {
-        if (deviceId && !connections.getPort(connectionId)) {
+        if (deviceId && !connections.isOpen(connectionId)) {
           log("connection is now closed, ignoring reconnect");
           return;
         }
