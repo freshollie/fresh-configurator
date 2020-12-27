@@ -3,13 +3,13 @@ import gql from "graphql-tag";
 import { createServer } from "../src";
 import { mockApi } from "./mocks";
 
-const server = createServer();
+const { apolloServer } = createServer();
 
 describe("ports", () => {
   it("should return the available ports", async () => {
     mockApi.ports.mockResolvedValue(["/dev/something", "/dev/anotherport"]);
 
-    const { query } = createTestClient(server);
+    const { query } = createTestClient(apolloServer);
 
     const { data, errors } = await query({
       query: gql`

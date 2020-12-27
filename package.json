@@ -57,6 +57,7 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "graphql": "^14.6.0",
+    "graphql-codegen-persisted-query-ids": "^0.1.2",
     "graphql-tag": "^2.10.3",
     "husky": "^3.0.0",
     "jest": "^26.4.2",

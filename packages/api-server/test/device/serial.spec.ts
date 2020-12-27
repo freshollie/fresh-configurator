@@ -5,7 +5,7 @@ import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
 import { mockApi } from "../mocks";
 
-const server = createServer();
+const { apolloServer } = createServer();
 
 afterEach(() => {
   reset();
@@ -27,7 +27,7 @@ describe("device.serial", () => {
     });
     add("/dev/something", "abcd");
 
-    const { query } = createTestClient(server);
+    const { query } = createTestClient(apolloServer);
 
     const { data, errors } = await query({
       query: gql`
