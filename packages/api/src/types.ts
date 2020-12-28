@@ -63,6 +63,57 @@ export type ExtendedStatus = Status & {
   armingDisabledFlags: DisarmFlags[];
 };
 
+export enum FilterTypes {
+  PT1 = 0,
+  BIQUAD = 1,
+}
+
+export type LowpassFilter = {
+  hz: number;
+  type: FilterTypes;
+};
+
+export type NotchFilter = {
+  hz: number;
+  cutoff: number;
+};
+
+export type FilterConfig = {
+  gryo: {
+    hardwareLPF: number;
+    hardware32KhzLPF: number;
+    rpmNotchHarmonics: number;
+    rpmNotchMinHz: number;
+    lowpass: LowpassFilter & {
+      dynMinHz: number;
+      dynMaxHz: number;
+    };
+    lowpass2: LowpassFilter;
+    notch: NotchFilter;
+    notch2: NotchFilter;
+  };
+  derm: {
+    lowpass: LowpassFilter & {
+      dynMinHz: number;
+      dynMaxHz: number;
+    };
+    lowpass2: LowpassFilter;
+    notch: NotchFilter & {
+      range: number;
+      widthPercent: number;
+      q: number;
+      minHz: number;
+      maxHz: number;
+    };
+  };
+  yaw: {
+    lowpass: {
+      hz: number;
+    };
+  };
+  dynLpfCurveExpo: 0;
+};
+
 export type RCTuning = {
   rcRate: number;
   rcExpo: number;
