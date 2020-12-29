@@ -3009,6 +3009,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-codegen/introspection@npm:^1.18.1":
+  version: 1.18.1
+  resolution: "@graphql-codegen/introspection@npm:1.18.1"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^1.18.2
+    tslib: ~2.0.1
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: c81313e690e2570512daa88ee21bda4a50850d0af7b24c6c9784d7e2c876d7d1ce8676902cc7a40c2615d552bc92a849e3417a7d41a7b23485afe81ce015742e
+  languageName: node
+  linkType: hard
+
 "@graphql-codegen/near-operation-file-preset@npm:^1.17.11":
   version: 1.17.11
   resolution: "@graphql-codegen/near-operation-file-preset@npm:1.17.11"
@@ -15117,6 +15129,7 @@ app-builder-lib@22.9.1:
   dependencies:
     "@graphql-codegen/add": ^2.0.1
     "@graphql-codegen/cli": ^1.17.10
+    "@graphql-codegen/introspection": ^1.18.1
     "@graphql-codegen/near-operation-file-preset": ^1.17.11
     "@graphql-codegen/schema-ast": ^1.17.10
     "@graphql-codegen/typed-document-node": ^1.18.2
@@ -27091,7 +27104,7 @@ resolve@^1.18.1:
     "@storybook/addons": ^5.x.x || ^6.x.x
     "@storybook/react": ^5.x.x || ^6.x.x
     react: ^16.x || ^17.x
-    styled-components: ^4.x.x || ^5.x.x
+    styled-components: ^4.x.x || ^5.x.x
   checksum: c4a581734ad634fb32796637d72fd92ea2a643a59bde301c9f4af42e247416e0e8326425bdfff3c5ad72097d90b3c594b65404af867c45a3a47803997fc3eade
   languageName: node
   linkType: hard

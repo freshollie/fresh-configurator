@@ -24,6 +24,12 @@ generates:
     config:
       includeDirectives: true
 
+  ./packages/configurator/src/gql/__generated__/introspection.json:
+    plugins:
+      - introspection
+    config:
+      module: es2015
+
   ./packages/configurator/src/gql/__generated__/index.tsx:
     documents: ./packages/configurator/src/gql/**/*.graphql
     config:

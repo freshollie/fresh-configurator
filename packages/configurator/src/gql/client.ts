@@ -1,6 +1,7 @@
 import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
 import WebSocketLink from "./WebSocketLink";
 import { Resolvers, Configurator } from "./__generated__";
+import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
 import {
   LogsDocument,
@@ -40,20 +41,12 @@ const typeDefs = gql`
 
 export const cache = (): InMemoryCache =>
   new InMemoryCache({
-    typePolicies: {
-      // RC: {
-      //   merge: true,
-      // },
-      Connection: {
-        merge: true,
-      },
-      FlightController: {
-        merge: true,
-      },
-      Configurator: {
-        merge: true,
-      },
-    },
+    typePolicies: Object.fromEntries(
+      // eslint-disable-next-line no-underscore-dangle
+      introspection.__schema.types
+        .filter(({ kind }) => kind === "OBJECT")
+        .map(({ name }) => [name, { merge: true }])
+    ),
   });
 
 export const resolvers = (initialState?: {
