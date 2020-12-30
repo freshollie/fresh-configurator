@@ -23,7 +23,6 @@ const resolvers: Resolvers = {
   FlightController: {
     arming: ({ port }, _, { api }) =>
       api.readExtendedStatus(port).then(({ armingDisabledFlags }) => ({
-        __typename: "Arming",
         disabledFlags: armingDisabledFlags,
       })),
   },
