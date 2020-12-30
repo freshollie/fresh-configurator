@@ -1,6 +1,9 @@
 name: pipeline
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   lint:
@@ -77,6 +80,7 @@ jobs:
             packages/configurator/__image_snapshots__/__diff_output__/*
       
       - name: Preview
+        id: storybook-preview
         if: github.ref != 'refs/heads/master'
         uses: netlify/actions/cli@master
         with:
@@ -84,6 +88,16 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STORYBOOK_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      - name: Preview demo URL
+        if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT: "Storybook has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.storybook-preview.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.storybook-preview.outputs.NETLIFY_URL }}"
+        with:
+          msg: ${{ env.OUTPUT }}
+          check_for_duplicate_msg: false
       
       - name: Publish
         if: github.ref == 'refs/heads/master'
@@ -102,6 +116,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Login to Heroku
+        if: github.ref == 'refs/heads/master'
         env: 
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: heroku container:login 
@@ -151,6 +166,7 @@ jobs:
           run: yarn e2e:production
       
       - name: Preview demo
+        id: preview-demo
         if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
         uses: netlify/actions/cli@master
         with:
@@ -158,6 +174,16 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DEMO_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      - name: Preview demo URL
+        if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT: "The configurator has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}"
+        with:
+          msg: ${{ env.OUTPUT }}
+          check_for_duplicate_msg: false
       
       - name: Publish demo
         if: github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest'
