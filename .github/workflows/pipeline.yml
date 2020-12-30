@@ -90,7 +90,7 @@ jobs:
 
       - name: Preview storybook URL
         if: github.ref != 'refs/heads/master'
-        uses: unsplash/comment-on-pr@master
+        uses: peter-evans/commit-comment@v1
         with:
           body: |
             Storybook has been automatically deployed to Netlify.
