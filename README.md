@@ -3,7 +3,7 @@
 > A re-write of the Betaflight configurator
 
 [![Pipeline status](https://github.com/freshollie/fresh-configurator/workflows/pipeline/badge.svg)](https://github.com/freshollie/fresh-configurator/actions)
-[![Coverage Status](https://coveralls.io/repos/github/freshollie/fresh-configurator/badge.svg?branch=master)](https://coveralls.io/github/freshollie/fresh-configurator?branch=master)
+[![Coverage](https://codecov.io/gh/freshollie/fresh-configurator/branch/master/graph/badge.svg?token=JOAYJP148K)](https://codecov.io/gh/freshollie/fresh-configurator)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://betaflight-storybook.netlify.app)
 
