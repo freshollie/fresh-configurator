@@ -6644,6 +6644,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^12.0.0":
+  version: 12.19.13
+  resolution: "@types/node@npm:12.19.13"
+  checksum: 390bb231d52adaa372519b4475e788ab6bbf6270fdc54b02e7f28e44d92fa931d7e8df3f3a2527fc0dad6ec9f122f4cc80958b93f0738da3b9456c12eb1fac90
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^12.0.12":
   version: 12.12.26
   resolution: "@types/node@npm:12.12.26"
@@ -15136,6 +15143,7 @@ app-builder-lib@22.9.1:
     "@graphql-codegen/typescript": ^1.20.0
     "@graphql-codegen/typescript-operations": ^1.17.10
     "@graphql-codegen/typescript-resolvers": ^1.17.10
+    "@types/node": ^12.0.0
     "@typescript-eslint/eslint-plugin": ^4.12.0
     "@typescript-eslint/parser": ^4.12.0
     cross-env: ^7.0.2
