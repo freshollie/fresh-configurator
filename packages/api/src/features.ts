@@ -5,6 +5,8 @@ import {
   DisarmFlags,
   Sensors,
   SerialPortFunctions,
+  EscProtocols,
+  McuTypes,
 } from "./types";
 
 const BASE_FEATURE_BITS: FeatureBits = {
@@ -154,3 +156,42 @@ export const legacySerialPortFunctionsMap: Record<
   10: [SerialPortFunctions.BLACKBOX],
   11: [SerialPortFunctions.MSP, SerialPortFunctions.BLACKBOX],
 };
+
+export const escProtocols = (version: string): EscProtocols[] => [
+  EscProtocols.PWM,
+  EscProtocols.ONESHOT125,
+  EscProtocols.ONESHOT42,
+  EscProtocols.MULTISHOT,
+  ...(semver.gte(version, "1.20.0") ? [EscProtocols.BRUSHED] : []),
+  ...(semver.gte(version, "1.31.0")
+    ? [EscProtocols.DSHOT150, EscProtocols.DSHOT300, EscProtocols.DSHOT600]
+    : []),
+  ...(semver.gte(version, "1.31.0") && semver.lt(version, "1.42.0")
+    ? [EscProtocols.DSHOT1200]
+    : []),
+  ...(semver.gte(version, "1.36.0") ? [EscProtocols.PROSHOT1000] : []),
+  ...(semver.gte(version, "1.43.0") ? [EscProtocols.DISABLED] : []),
+];
+
+export const MCU_GROUPS = {
+  F7: [McuTypes.F722, McuTypes.F745, McuTypes.F746, McuTypes.F765],
+  F3: [McuTypes.F303],
+  F4: [McuTypes.F411, McuTypes.F446],
+  H7: [
+    McuTypes.H723_725,
+    McuTypes.H743_REV_UNKNOWN,
+    McuTypes.H743_REV_V,
+    McuTypes.H743_REV_X,
+    McuTypes.H743_REV_Y,
+    McuTypes.H750,
+    McuTypes.H7A3,
+  ],
+  F1: [McuTypes.F103],
+};
+
+export const mcuGroupFromId = (
+  mcuTypeId: McuTypes
+): keyof typeof MCU_GROUPS | undefined =>
+  (Object.keys(MCU_GROUPS) as (keyof typeof MCU_GROUPS)[]).find((key) =>
+    MCU_GROUPS[key].includes(mcuTypeId)
+  );

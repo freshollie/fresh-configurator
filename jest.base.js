@@ -10,7 +10,8 @@ module.exports = {
       "/__generated__/",
     ],
     collectCoverageFrom: [
-      `**/*.{ts,tsx}`,
+      "**/src/**/*.{ts,tsx}",
+      "!**/*.graphql.ts",
       "!**/node_modules/**",
       "!./tools/**/*",
       "!**/stories/**",

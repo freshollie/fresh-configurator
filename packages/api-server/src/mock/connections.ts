@@ -20,12 +20,15 @@ export const isOpen = (connectionId: string): boolean =>
 
 export const close = (connectionId: string): void => {
   changeEvents.publish(connectionId, undefined);
+  connectionsMap[connectionId] = undefined;
 };
+
 export const change = (connectionId: string, newId: string): void => {
   connectionsMap[newId] = connectionsMap[connectionId];
   connectionsMap[connectionId] = undefined;
   changeEvents.publish(connectionId, newId);
 };
+
 export const setReconnecting = (
   connectionId: string,
   attempt: number

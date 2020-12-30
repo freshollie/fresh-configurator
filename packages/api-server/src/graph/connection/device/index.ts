@@ -14,6 +14,7 @@ import sensors from "./sensors";
 import status from "./status";
 import serial from "./serial";
 import alignment from "./alignment";
+import pid from "./pid";
 
 const typeDefs = gql`
   extend type Connection {
@@ -56,6 +57,7 @@ export default {
     sensors.typeDefs,
     status.typeDefs,
     serial.typeDefs,
+    pid.typeDefs,
   ]),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: mergeResolvers<unknown, any>([
@@ -72,5 +74,6 @@ export default {
     sensors.resolvers,
     status.resolvers,
     serial.resolvers,
+    pid.resolvers,
   ]),
 };

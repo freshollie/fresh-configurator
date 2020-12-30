@@ -53,6 +53,7 @@ export const createServer = ({
     context: mocked ? mockedContext : context,
     playground,
     formatError: (error) => {
+      console.error(error);
       log(error);
       return error;
     },
@@ -90,7 +91,6 @@ export const createServer = ({
                         // for extra security you only allow the queries from the store
                         throw new Error("404: Query Not Found");
                       }
-
                       return {
                         document,
                         schema,
@@ -99,7 +99,11 @@ export const createServer = ({
                     }
                   : undefined,
                 schema,
-                execute,
+                execute: async (args) => {
+                  const result = await execute(args);
+                  result.errors?.forEach((error) => log(error));
+                  return result;
+                },
                 subscribe,
               },
               wsServer

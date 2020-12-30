@@ -139,3 +139,23 @@ query DeviceBoardAlignment($connection: ID!) {
     }
   }
 }
+
+query PidProtocolsAndProcessor($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      pid {
+        protocols {
+          gyroSyncDenom
+          pidProcessDenom
+          fastPwmProtocol
+          useUnsyncedPwm
+          motorPwmRate
+        }
+      }
+      info {
+        targetName
+        mcuTypeId
+      }
+    }
+  }
+}

@@ -24,3 +24,16 @@ export const times = <T, N extends number>(
   number: N
 ): N extends TupleSizes ? TupleOf<T, N> : T[] =>
   new Array(number).fill(0).map((_, i) => f(i)) as TupleOrArray<T, N>;
+
+type RequiredAndNotNull<T> = {
+  [P in keyof T]-?: Exclude<T[P], null | undefined>;
+};
+
+export const filterUnset = <T extends Record<string, unknown>>(
+  object: T
+): RequiredAndNotNull<T> =>
+  Object.fromEntries(
+    Object.entries(object).filter(
+      ([, value]) => value !== undefined && value !== null
+    )
+  ) as RequiredAndNotNull<T>;

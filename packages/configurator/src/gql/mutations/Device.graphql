@@ -21,3 +21,7 @@ mutation Reset($connection: ID!) {
 mutation SetBoardAlignment($connection: ID!, $alignment: AlignmentInput!) {
   deviceSetBoardAlignment(connectionId: $connection, alignment: $alignment)
 }
+
+mutation SetPidProtocols($connection: ID!, $protocols: PidProtocolsInput!) {
+  deviceSetPidProtocols(connectionId: $connection, protocols: $protocols)
+}
