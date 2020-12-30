@@ -87,8 +87,8 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STORYBOOK_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
-      - name: Preview demo URL
-        if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
+      - name: Preview storybook URL
+        if: github.ref != 'refs/heads/master
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,6 +139,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
+      max-parallel: 3
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
