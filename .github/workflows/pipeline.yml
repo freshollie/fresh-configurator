@@ -109,29 +109,23 @@ jobs:
 
   demo-api:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v1
 
       - name: Login to Heroku
-        if: github.ref == 'refs/heads/master'
         env: 
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: heroku container:login 
 
-      - name: Build
-        if: github.ref == 'refs/heads/master'
-        run: docker build -t mock-api -f Dockerfile.web .
-
-      - name: Push
-        if: github.ref == 'refs/heads/master'
+      - name: Build and push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: 
-          heroku container:push -a betaflight-mock-api web
+          heroku container:push -a betaflight-mock-api web --recursive
 
       - name: Release
-        if: github.ref == 'refs/heads/master'
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: heroku container:release -a betaflight-mock-api web
