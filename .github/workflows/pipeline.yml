@@ -140,6 +140,8 @@ jobs:
       - name: Preview
         if: github.ref != 'refs/heads/master'
         uses: niteoweb/reviewapps-deploy-status@v1.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   configurator:
     runs-on: ${{ matrix.os }}
