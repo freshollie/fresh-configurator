@@ -127,7 +127,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: 
-          heroku container:push -a betaflight-mock-api web --recursive
+          heroku container:push -a betaflight-mock-api web
 
       - name: Release
         if: github.ref == 'refs/heads/master'
@@ -180,7 +180,7 @@ jobs:
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUTPUT: "The configurator has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}"
+          OUTPUT: "The configurator has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=ws://betaflight-api-pr-${{ github.event.number }}.heroku.app&electron=true"
         with:
           msg: ${{ env.OUTPUT }}
           check_for_duplicate_msg: false
