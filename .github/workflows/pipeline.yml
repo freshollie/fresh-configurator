@@ -184,7 +184,7 @@ jobs:
             The configurator has been automatically deployed to Netlify.
             
             🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}
-            ✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=ws://betaflight-api-pr-${{ github.event.number }}.herokuapp.com&electron=true
+            ✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=wss://betaflight-api-pr-${{ github.event.number }}.herokuapp.com
       
       - name: Publish demo
         if: github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest'
