@@ -91,12 +91,12 @@ jobs:
       - name: Preview storybook URL
         if: github.ref != 'refs/heads/master'
         uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUTPUT: "Storybook has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.storybook-preview.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.storybook-preview.outputs.NETLIFY_URL }}"
         with:
-          msg: ${{ env.OUTPUT }}
-          check_for_duplicate_msg: false
+          body: |
+            Storybook has been automatically deployed to Netlify.
+            
+            🔍 Inspect: ${{ steps.storybook-preview.outputs.NETLIFY_LOGS_URL }}
+            ✅ Preview: ${{ steps.storybook-preview.outputs.NETLIFY_URL }}
       
       - name: Publish
         if: github.ref == 'refs/heads/master'
@@ -178,13 +178,13 @@ jobs:
 
       - name: Preview demo URL
         if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUTPUT: "The configurator has been automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=ws://betaflight-api-pr-${{ github.event.number }}.heroku.app&electron=true"
+        uses: peter-evans/commit-comment@v1
         with:
-          msg: ${{ env.OUTPUT }}
-          check_for_duplicate_msg: false
+          body: |
+            The configurator has been automatically deployed to Netlify.
+            
+            🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}
+            ✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=ws://betaflight-api-pr-${{ github.event.number }}.herokuapp.com&electron=true
       
       - name: Publish demo
         if: github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest'
