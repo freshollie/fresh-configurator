@@ -1,0 +1,61 @@
+import { EscProtocols, escProtocols } from "../src";
+
+describe("escProtocols", () => {
+  it.each([
+    [
+      "1.20.0",
+      [
+        EscProtocols.PWM,
+        EscProtocols.ONESHOT125,
+        EscProtocols.ONESHOT42,
+        EscProtocols.MULTISHOT,
+        EscProtocols.BRUSHED,
+      ],
+    ],
+    [
+      "1.31.0",
+      [
+        EscProtocols.PWM,
+        EscProtocols.ONESHOT125,
+        EscProtocols.ONESHOT42,
+        EscProtocols.MULTISHOT,
+        EscProtocols.BRUSHED,
+        EscProtocols.DSHOT150,
+        EscProtocols.DSHOT300,
+        EscProtocols.DSHOT600,
+        EscProtocols.DSHOT1200,
+      ],
+    ],
+    [
+      "1.42.0",
+      [
+        EscProtocols.PWM,
+        EscProtocols.ONESHOT125,
+        EscProtocols.ONESHOT42,
+        EscProtocols.MULTISHOT,
+        EscProtocols.BRUSHED,
+        EscProtocols.DSHOT150,
+        EscProtocols.DSHOT300,
+        EscProtocols.DSHOT600,
+        EscProtocols.PROSHOT1000,
+      ],
+    ],
+    [
+      "1.43.0",
+      [
+        EscProtocols.PWM,
+        EscProtocols.ONESHOT125,
+        EscProtocols.ONESHOT42,
+        EscProtocols.MULTISHOT,
+        EscProtocols.BRUSHED,
+        EscProtocols.DSHOT150,
+        EscProtocols.DSHOT300,
+        EscProtocols.DSHOT600,
+        EscProtocols.PROSHOT1000,
+        EscProtocols.DISABLED,
+      ],
+    ],
+  ])("should return available protocols for %s", (version, expected) => {
+    expect(escProtocols(version)).toEqual(expected);
+  });
+});

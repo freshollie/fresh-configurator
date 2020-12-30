@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /**
  * Hacky mock data generator to be able to test this API without
  * a device
@@ -24,10 +25,7 @@ const mockPorts = [
   autoClosePort,
 ];
 
-const ids = mockPorts.reduce(
-  (acc, port) => ({ ...acc, [port]: v4() }),
-  {} as Record<string, string>
-);
+const ids = Object.fromEntries(mockPorts.map((port) => [port, v4()]));
 
 const badBaudrate = 38400;
 
@@ -82,6 +80,70 @@ const mockDevice = {
       telemetryBaudRate: 115200,
       blackboxBaudRate: 115200,
     })),
+  },
+  advancedPidConfig: {
+    gyroSyncDenom: 3,
+    pidProcessDenom: 2,
+    useUnsyncedPwm: false,
+    fastPwmProtocol: 1,
+    gyroToUse: 0,
+    motorPwmRate: 480,
+    digitalIdlePercent: 4.5,
+    gyroUse32kHz: false,
+    motorPwmInversion: 0,
+    gyroHighFsr: 0,
+    gyroMovementCalibThreshold: 0,
+    gyroCalibDuration: 0,
+    gyroOffsetYaw: 0,
+    gyroCheckOverflow: 0,
+    debugMode: 0,
+    debugModeCount: 0,
+  },
+  boardInfo: {
+    boardIdentifier: "S411",
+    boardName: "CRAZYBEEF4FS",
+    boardType: 2,
+    boardVersion: 0,
+    configurationState: 2,
+    manufacturerId: "HAMO",
+    mcuTypeId: 4,
+    sampleRateHz: undefined,
+    signature: [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    targetCapabilities: 55,
+    targetName: "STM32F411",
   },
 };
 
@@ -215,3 +277,18 @@ export const writeBoardAlignmentConfig = (
   delay(20).then(() => {
     mockDevice.alignment = alignment;
   });
+
+export const readAdvancedPidConfig = (port: string) =>
+  delay(30).then(() => mockDevice.advancedPidConfig);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const writePidProtocols = (port: string, protocols: any) =>
+  delay(20).then(() => {
+    mockDevice.advancedPidConfig = {
+      ...mockDevice.advancedPidConfig,
+      ...protocols,
+    };
+  });
+
+export const readBoardInfo = (port: string) =>
+  delay(10).then(() => mockDevice.boardInfo);

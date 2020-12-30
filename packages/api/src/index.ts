@@ -26,6 +26,10 @@ import {
   SerialPortFunctions,
   SerialConfig,
   RebootTypes,
+  AdvancedPidConfig,
+  PidProtocols,
+  PartialNullable,
+  EscProtocols,
 } from "./types";
 import {
   getFeatureBits,
@@ -34,7 +38,7 @@ import {
   serialPortFunctionBits,
   legacySerialPortFunctionsMap,
 } from "./features";
-import { times } from "./utils";
+import { times, filterUnset } from "./utils";
 
 export * from "./osd";
 
@@ -45,6 +49,8 @@ export {
   SerialPortFunctions,
   RebootTypes,
   Axes3D,
+  EscProtocols,
+  McuTypes,
 } from "./types";
 export {
   apiVersion,
@@ -56,6 +62,7 @@ export {
   packetErrors,
   ports,
 } from "@betaflight/msp";
+export { escProtocols, MCU_GROUPS, mcuGroupFromId } from "./features";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -551,4 +558,143 @@ export const writeBoardAlignmentConfig = async (
     code: codes.MSP_SET_BOARD_ALIGNMENT_CONFIG,
     data: new WriteBuffer().push16(roll).push16(pitch).push16(yaw),
   });
+};
+
+const reorderPwmProtocols = (
+  api: string,
+  currentProtocol: EscProtocols
+): EscProtocols => {
+  let result = currentProtocol;
+  if (semver.lt(api, "1.26.0")) {
+    switch (currentProtocol) {
+      case EscProtocols.DSHOT150:
+        result = EscProtocols.DSHOT600;
+
+        break;
+      case EscProtocols.DSHOT600:
+        result = EscProtocols.DSHOT150;
+
+        break;
+      default:
+        break;
+    }
+  } else if (
+    semver.gte(api, "1.43.0") &&
+    currentProtocol > EscProtocols.DSHOT1200
+  ) {
+    // for some reason, DSHOT1200 was removed in later
+    // verions of betaflight, and thus
+    // the protocol written to the board has
+    // to be reduced for anything after DSHOT1200
+    result -= 1;
+  }
+
+  return result;
+};
+
+export const readAdvancedPidConfig = async (
+  port: string
+): Promise<AdvancedPidConfig> => {
+  const api = apiVersion(port);
+  const data = await execute(port, { code: codes.MSP_ADVANCED_CONFIG });
+  const config = {
+    gyroSyncDenom: 0,
+    pidProcessDenom: 0,
+    useUnsyncedPwm: false,
+    fastPwmProtocol: 0,
+    gyroToUse: 0,
+    motorPwmRate: 0,
+    digitalIdlePercent: 0,
+    gyroUse32kHz: false,
+    motorPwmInversion: 0,
+    gyroHighFsr: 0,
+    gyroMovementCalibThreshold: 0,
+    gyroCalibDuration: 0,
+    gyroOffsetYaw: 0,
+    gyroCheckOverflow: 0,
+    debugMode: 0,
+    debugModeCount: 0,
+  };
+
+  config.gyroSyncDenom = data.readU8();
+  config.pidProcessDenom = data.readU8();
+  config.useUnsyncedPwm = data.readU8() !== 0;
+  config.fastPwmProtocol = reorderPwmProtocols(api, data.readU8());
+  config.motorPwmRate = data.readU16();
+  if (semver.gte(api, "1.24.0")) {
+    config.digitalIdlePercent = data.readU16() / 100;
+  }
+
+  if (semver.gte(api, "1.25.0")) {
+    const gyroUse32kHz = data.readU8();
+
+    if (semver.lt(api, "1.41.0")) {
+      config.gyroUse32kHz = gyroUse32kHz !== 0;
+    }
+  }
+
+  if (semver.gte(api, "1.42.0")) {
+    config.motorPwmInversion = data.readU8();
+    // gyroToUse (read by MSP_SENSOR_ALIGNMENT)
+    config.gyroToUse = data.readU8();
+    config.gyroHighFsr = data.readU8();
+    config.gyroMovementCalibThreshold = data.readU8();
+    config.gyroCalibDuration = data.readU16();
+    config.gyroOffsetYaw = data.readU16();
+    config.gyroCheckOverflow = data.readU8();
+    config.debugMode = data.readU8();
+    config.debugModeCount = data.readU8();
+  }
+
+  return config;
+};
+
+export const writeAdvancedPidConfig = async (
+  port: string,
+  config: AdvancedPidConfig
+): Promise<void> => {
+  const api = apiVersion(port);
+  const buffer = new WriteBuffer();
+  buffer
+    .push8(config.gyroSyncDenom)
+    .push8(config.pidProcessDenom)
+    .push8(config.useUnsyncedPwm ? 1 : 0)
+    .push8(reorderPwmProtocols(api, config.fastPwmProtocol))
+    .push16(config.motorPwmRate);
+  if (semver.gte(api, "1.24.0")) {
+    buffer.push16(config.digitalIdlePercent * 100);
+  }
+
+  if (semver.gte(api, "1.25.0")) {
+    let gyroUse32kHz = 0;
+    if (semver.lt(api, "1.41.0")) {
+      gyroUse32kHz = config.gyroUse32kHz ? 1 : 0;
+    }
+    buffer.push8(gyroUse32kHz);
+  }
+
+  if (semver.gte(api, "1.42.0")) {
+    buffer
+      .push8(config.motorPwmInversion)
+      .push8(config.gyroToUse)
+      .push8(config.gyroHighFsr)
+      .push8(config.gyroMovementCalibThreshold)
+      .push16(config.gyroCalibDuration)
+      .push16(config.gyroOffsetYaw)
+      .push8(config.gyroCheckOverflow)
+      .push8(config.debugMode);
+  }
+  await execute(port, { code: codes.MSP_SET_ADVANCED_CONFIG, data: buffer });
+};
+
+export const writePidProtocols = async (
+  port: string,
+  protocols: PartialNullable<PidProtocols>
+): Promise<void> => {
+  const config = await readAdvancedPidConfig(port);
+  const newConfig = {
+    ...config,
+    ...filterUnset(protocols),
+  };
+  await writeAdvancedPidConfig(port, newConfig);
 };
