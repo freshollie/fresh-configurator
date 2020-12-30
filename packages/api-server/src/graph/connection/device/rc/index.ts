@@ -47,7 +47,6 @@ const resolvers: Resolvers = {
   FlightController: {
     rc: ({ port }) => ({
       port,
-      __typename: "RC",
     }),
   },
 
