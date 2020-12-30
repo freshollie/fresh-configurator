@@ -2,8 +2,9 @@ name: pipeline
 
 on:
   push:
+    branches:
+      - master 
   pull_request:
-    types: [opened, synchronize]
 
 jobs:
   lint:
