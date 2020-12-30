@@ -30,6 +30,7 @@ import {
   PidProtocols,
   PartialNullable,
   EscProtocols,
+  MixerConfig,
 } from "./types";
 import {
   getFeatureBits,
@@ -62,7 +63,12 @@ export {
   packetErrors,
   ports,
 } from "@betaflight/msp";
-export { escProtocols, MCU_GROUPS, mcuGroupFromId } from "./features";
+export {
+  escProtocols,
+  MCU_GROUPS,
+  mcuGroupFromId,
+  MIXER_LIST,
+} from "./features";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -697,4 +703,27 @@ export const writePidProtocols = async (
     ...filterUnset(protocols),
   };
   await writeAdvancedPidConfig(port, newConfig);
+};
+
+export const readMixerConfig = async (port: string): Promise<MixerConfig> => {
+  const data = await execute(port, { code: codes.MSP_MIXER_CONFIG });
+  const api = apiVersion(port);
+  return {
+    mixer: data.readU8(),
+    reverseMotors: !!(semver.gte(api, "1.36.0") ? data.readU8() : 0),
+  };
+};
+
+export const writeMixerConfig = async (
+  port: string,
+  config: MixerConfig
+): Promise<void> => {
+  const buffer = new WriteBuffer();
+  const api = apiVersion(port);
+
+  buffer.push8(config.mixer);
+  if (semver.gte(api, "1.36.0")) {
+    buffer.push8(config.reverseMotors ? 1 : 0);
+  }
+  await execute(port, { code: codes.MSP_SET_MIXER_CONFIG, data: buffer });
 };

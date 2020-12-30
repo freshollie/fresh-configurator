@@ -4,8 +4,7 @@
     "rootDir": ".",
     "target": "ES2019",
     "types": [
-      "jest",
-      "testing-library__jest-dom"
+      "jest"
     ]
   },
   "include": [

@@ -195,3 +195,32 @@ export const mcuGroupFromId = (
   (Object.keys(MCU_GROUPS) as (keyof typeof MCU_GROUPS)[]).find((key) =>
     MCU_GROUPS[key].includes(mcuTypeId)
   );
+
+export const MIXER_LIST = [
+  { name: "Tricopter", id: 3, model: "tricopter", image: "tri" },
+  { name: "Quad +", id: 2, model: "quad_x", image: "quad_p" },
+  { name: "Quad X", id: 0, model: "quad_x", image: "quad_x" },
+  { name: "Bicopter", id: 16, model: "custom", image: "bicopter" },
+  { name: "Gimbal", id: 4, model: "custom", image: "custom" },
+  { name: "Y6", id: 20, model: "y6", image: "y6" },
+  { name: "Hex +", id: 5, model: "hex_plus", image: "hex_p" },
+  { name: "Flying Wing", id: 10, model: "custom", image: "flying_wing" },
+  { name: "Y4", id: 19, model: "y4", image: "y4" },
+  { name: "Hex X", id: 6, model: "hex_x", image: "hex_x" },
+  { name: "Octo X8", id: 21, model: "custom", image: "octo_x8" },
+  { name: "Octo Flat +", id: 8, model: "custom", image: "octo_flat_p" },
+  { name: "Octo Flat X", id: 9, model: "custom", image: "octo_flat_x" },
+  { name: "Airplane", id: 11, model: "custom", image: "airplane" },
+  { name: "Heli 120", id: 12, model: "custom", image: "custom" },
+  { name: "Heli 90", id: 13, model: "custom", image: "custom" },
+  { name: "V-tail Quad", id: 17, model: "quad_vtail", image: "vtail_quad" },
+  { name: "Hex H", id: 7, model: "custom", image: "custom" },
+  { name: "PPM to SERVO", id: 22, model: "custom", image: "custom" },
+  { name: "Dualcopter", id: 15, model: "custom", image: "custom" },
+  { name: "Singlecopter", id: 14, model: "custom", image: "custom" },
+  { name: "A-tail Quad", id: 18, model: "quad_atail", image: "atail_quad" },
+  { name: "Custom", id: 23, model: "custom", image: "custom" },
+  { name: "Custom Airplane", id: 24, model: "custom", image: "custom" },
+  { name: "Custom Tricopter", id: 25, model: "custom", image: "custom" },
+  { name: "Quad X 1234", id: 1, model: "quad_x", image: "quad_x_1234" },
+];

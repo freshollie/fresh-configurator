@@ -7,4 +7,5 @@ module.exports = {
     color: "blue",
   },
   ...config,
+  setupFilesAfterEnv: ["./.jest/setup.ts"],
 };

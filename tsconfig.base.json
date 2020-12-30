@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2018",
     "module": "ES2020",
+    "lib": ["ES2019", "DOM"],
     "strict": true,
     "jsx": "react",
     "esModuleInterop": true,
@@ -14,7 +15,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "composite": true
+    "composite": true,
+    "types": []
   },
   "exclude": ["/node_modules/", "/dist/"]
 }
