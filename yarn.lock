@@ -2466,6 +2466,7 @@ __metadata:
     "@types/debug": ^4.1.5
     "@types/express": ^4.17.9
     "@types/jest": "*"
+    "@types/node": "*"
     "@types/uuid": ^7.0.2
     "@types/ws": ^7.4.0
     apollo-server-express: ^2.19.1
@@ -2495,6 +2496,7 @@ __metadata:
   dependencies:
     "@betaflight/msp": "workspace:^0.3.0"
     "@types/jest": "*"
+    "@types/node": "*"
     "@types/semver": ^7.1.0
     semver: ^7.1.3
     ts-jest: "*"
@@ -2588,6 +2590,7 @@ __metadata:
     "@serialport/stream": ^9.0.2
     "@types/debug": ^4.1.5
     "@types/jest": "*"
+    "@types/node": "*"
     "@types/serialport__binding-mock": "workspace:^8.0.0"
     "@types/serialport__bindings": "workspace:^8.0.0"
     "@types/serialport__stream": "workspace:^8.0.0"
@@ -6623,45 +6626,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 13.7.0
-  resolution: "@types/node@npm:13.7.0"
-  checksum: cfdb8577f650e20f850d706854a6ff5a43cf222ab8a760d102d909820645cb7da74da67283155c4f5278ca9a3ab2f2d3a4fde6af50bcf3d8280264a9b7998be8
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:>= 8":
-  version: 13.11.1
-  resolution: "@types/node@npm:13.11.1"
-  checksum: 0ced8498fb982d1275ce4f2e13554243d53386315e57de641d934fddeb02d86bc745c2c6b2aacad1072f081b0984d5f3beb81d309823202ec6cf8653f6d8100b
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^10.1.0":
-  version: 10.17.19
-  resolution: "@types/node@npm:10.17.19"
-  checksum: 5d26d72c187e38407bf1efb3fe0a763870d808db4112e128c14632ceed54ca8be0e8bd71da802e74cfd71afd892f110f99ca48459836965c0bbbe5ed4c6e1335
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^12.0.0":
   version: 12.19.13
   resolution: "@types/node@npm:12.19.13"
   checksum: 390bb231d52adaa372519b4475e788ab6bbf6270fdc54b02e7f28e44d92fa931d7e8df3f3a2527fc0dad6ec9f122f4cc80958b93f0738da3b9456c12eb1fac90
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^12.0.12":
-  version: 12.12.26
-  resolution: "@types/node@npm:12.12.26"
-  checksum: f30095a734f1ba95eb357cfe4b14a063d3430c90102f05b707827eb4a73a31ef8e82109cf3ebfd4538ac4362ad116d5bd578a2a19f3f5711a081f4f2b3601bf0
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^12.6.8":
-  version: 12.19.11
-  resolution: "@types/node@npm:12.19.11"
-  checksum: 2c42159419adafb03179f89ac22770b74350b0e904a6e52ac9a3d4734fcc81c6b7d183573fbffe10f450c8926837b7fd66951ae1ddfda2d6c25669511e7785c8
   languageName: node
   linkType: hard
 
@@ -15143,7 +15111,6 @@ app-builder-lib@22.9.1:
     "@graphql-codegen/typescript": ^1.20.0
     "@graphql-codegen/typescript-operations": ^1.17.10
     "@graphql-codegen/typescript-resolvers": ^1.17.10
-    "@types/node": ^12.0.0
     "@typescript-eslint/eslint-plugin": ^4.12.0
     "@typescript-eslint/parser": ^4.12.0
     cross-env: ^7.0.2

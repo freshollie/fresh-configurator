@@ -331,3 +331,8 @@ export enum McuTypes {
   H723_725,
   UNKNOWN = 255,
 }
+
+export type MixerConfig = {
+  mixer: number;
+  reverseMotors: boolean;
+};
