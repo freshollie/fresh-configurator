@@ -121,6 +121,7 @@ jobs:
         run: heroku container:login 
 
       - name: Build
+        if: github.ref == 'refs/heads/master'
         run: docker build -t mock-api -f Dockerfile.web .
 
       - name: Push
@@ -135,6 +136,10 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: heroku container:release -a betaflight-mock-api web
+      
+      - name: Preview
+        if: github.ref != 'refs/heads/master'
+        uses: niteoweb/reviewapps-deploy-status@v1.4.0
   
   configurator:
     runs-on: ${{ matrix.os }}
