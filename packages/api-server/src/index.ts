@@ -53,7 +53,6 @@ export const createServer = ({
     context: mocked ? mockedContext : context,
     playground,
     formatError: (error) => {
-      console.error(error);
       log(error);
       return error;
     },
