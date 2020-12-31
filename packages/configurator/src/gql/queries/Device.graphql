@@ -159,3 +159,13 @@ query PidProtocolsAndProcessor($connection: ID!) {
     }
   }
 }
+
+query MotorDirection($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      motors {
+        reversedDirection
+      }
+    }
+  }
+}

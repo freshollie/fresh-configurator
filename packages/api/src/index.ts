@@ -710,7 +710,7 @@ export const readMixerConfig = async (port: string): Promise<MixerConfig> => {
   const api = apiVersion(port);
   return {
     mixer: data.readU8(),
-    reverseMotors: !!(semver.gte(api, "1.36.0") ? data.readU8() : 0),
+    reversedMotors: !!(semver.gte(api, "1.36.0") ? data.readU8() : 0),
   };
 };
 
@@ -723,7 +723,15 @@ export const writeMixerConfig = async (
 
   buffer.push8(config.mixer);
   if (semver.gte(api, "1.36.0")) {
-    buffer.push8(config.reverseMotors ? 1 : 0);
+    buffer.push8(config.reversedMotors ? 1 : 0);
   }
   await execute(port, { code: codes.MSP_SET_MIXER_CONFIG, data: buffer });
+};
+
+export const writeMotorDirection = async (
+  port: string,
+  reversed: boolean
+): Promise<void> => {
+  const { mixer } = await readMixerConfig(port);
+  await writeMixerConfig(port, { mixer, reversedMotors: reversed });
 };

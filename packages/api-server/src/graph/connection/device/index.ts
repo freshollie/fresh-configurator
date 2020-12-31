@@ -15,6 +15,7 @@ import status from "./status";
 import serial from "./serial";
 import alignment from "./alignment";
 import pid from "./pid";
+import motors from "./motors";
 
 const typeDefs = gql`
   extend type Connection {
@@ -58,6 +59,7 @@ export default {
     status.typeDefs,
     serial.typeDefs,
     pid.typeDefs,
+    motors.typeDefs,
   ]),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: mergeResolvers<unknown, any>([
@@ -75,5 +77,6 @@ export default {
     status.resolvers,
     serial.resolvers,
     pid.resolvers,
+    motors.resolvers,
   ]),
 };

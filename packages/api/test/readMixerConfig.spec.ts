@@ -8,7 +8,7 @@ describe("readMixerConfig", () => {
 
     expect(await readMixerConfig("/dev/someport")).toEqual({
       mixer: 3,
-      reverseMotors: true,
+      reversedMotors: true,
     });
   });
 
@@ -18,7 +18,7 @@ describe("readMixerConfig", () => {
 
     expect(await readMixerConfig("/dev/someport")).toEqual({
       mixer: 3,
-      reverseMotors: false,
+      reversedMotors: false,
     });
   });
 });
