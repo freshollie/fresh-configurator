@@ -145,6 +145,10 @@ const mockDevice = {
     targetCapabilities: 55,
     targetName: "STM32F411",
   },
+  mixerConfig: {
+    mixer: 3,
+    reversedMotors: false,
+  },
 };
 
 const tickAttitude = (): void => {
@@ -292,3 +296,11 @@ export const writePidProtocols = (port: string, protocols: any) =>
 
 export const readBoardInfo = (port: string) =>
   delay(10).then(() => mockDevice.boardInfo);
+
+export const readMixerConfig = (port: string) =>
+  delay(15).then(() => mockDevice.mixerConfig);
+
+export const writeMotorDirection = (port: string, reversed: boolean) =>
+  delay(50).then(() => {
+    mockDevice.mixerConfig.reversedMotors = reversed;
+  });
