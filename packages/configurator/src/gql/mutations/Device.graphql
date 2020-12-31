@@ -25,3 +25,7 @@ mutation SetBoardAlignment($connection: ID!, $alignment: AlignmentInput!) {
 mutation SetPidProtocols($connection: ID!, $protocols: PidProtocolsInput!) {
   deviceSetPidProtocols(connectionId: $connection, protocols: $protocols)
 }
+
+mutation SetMotorsDirection($connection: ID!, $reversed: Boolean!) {
+  deviceSetMotorsDirection(connectionId: $connection, reversed: $reversed)
+}

@@ -334,5 +334,5 @@ export enum McuTypes {
 
 export type MixerConfig = {
   mixer: number;
-  reverseMotors: boolean;
+  reversedMotors: boolean;
 };
