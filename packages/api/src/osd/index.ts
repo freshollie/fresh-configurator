@@ -1,7 +1,6 @@
 import semver from "semver";
-import { times, reduce } from "rambda";
 import { WriteBuffer, apiVersion, execute } from "@betaflight/msp";
-import { bitCheck } from "../utils";
+import { bitCheck, times } from "../utils";
 import {
   osdFields,
   OSD_VIDEO_VALUE_TO_TYPE,
@@ -233,11 +232,10 @@ export const writeOSDDisplayItem = async (
   }
 
   const packedPosition = semver.gte(api, "1.21.0")
-    ? reduce(
+    ? visibility.reduce(
         (packedVisible, visibilityProfile, i) =>
           packedVisible | (visibilityProfile ? OSD_VALUE_VISIBLE << i : 0),
-        0,
-        visibility
+        0
       ) |
       ((position.y & 0x001f) << 5) |
       position.x
@@ -283,10 +281,9 @@ const writeOSDOtherData = async (
 
     data.push16(alarms[3]?.value ?? 0);
     if (semver.gte(api, "1.37.0")) {
-      const warningFlags = reduce(
+      const warningFlags = warnings.reduce(
         (acc, warning, i) => (warning.enabled ? acc | (1 << i) : acc),
-        0,
-        warnings
+        0
       );
 
       data.push16(warningFlags);

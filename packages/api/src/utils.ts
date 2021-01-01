@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const bitCheck = (num: number, bit: number): boolean =>
   (num >> bit) % 2 !== 0;
 
@@ -16,3 +15,12 @@ export const isTupleOf = <T, N extends number>(
   list: T[],
   length: N
 ): list is TupleOf<T, N> => list.length === length;
+
+type TupleSizes = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+type TupleOrArray<T, N> = N extends TupleSizes ? TupleOf<T, N> : T[];
+
+export const times = <T, N extends number>(
+  f: (index: number) => T,
+  number: N
+): N extends TupleSizes ? TupleOf<T, N> : T[] =>
+  new Array(number).fill(0).map((_, i) => f(i)) as TupleOrArray<T, N>;

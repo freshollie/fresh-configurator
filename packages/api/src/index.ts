@@ -1,4 +1,3 @@
-import { times } from "rambda";
 import semver from "semver";
 import {
   MspDataView,
@@ -12,7 +11,6 @@ import codes from "./codes";
 import {
   VoltageMeters,
   ImuData,
-  ImuUnit,
   Kinematics,
   Status,
   ExtendedStatus,
@@ -35,6 +33,7 @@ import {
   serialPortFunctionBits,
   legacySerialPortFunctionsMap,
 } from "./features";
+import { times } from "./utils";
 
 export * from "./osd";
 
@@ -139,9 +138,9 @@ export const readIMUData = async (port: string): Promise<ImuData> => {
   const mangetUnit = (): number => data.read16() / 1090;
 
   return {
-    accelerometer: times(accUnit, 3) as ImuUnit,
-    gyroscope: times(gyroUnit, 3) as ImuUnit,
-    magnetometer: times(mangetUnit, 3) as ImuUnit,
+    accelerometer: times(accUnit, 3),
+    gyroscope: times(gyroUnit, 3),
+    magnetometer: times(mangetUnit, 3),
   };
 };
 
