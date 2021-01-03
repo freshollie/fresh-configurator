@@ -1,0 +1,23 @@
+{
+  "name": "@betaflight-tools/storyshots-runner",
+  "version": "0.1.0",
+  "description": "Run visual regression across our storbok",
+  "license": "MIT",
+  "main": "index.js",
+  "bin": {
+    "storyshots-runner": "bin.js"
+  },
+  "dependencies": {
+    "import-jsx": "^4.0.0",
+    "ink": "^3.0.8",
+    "meow": "^8.1.0",
+    "pending-xhr-puppeteer": "^2.3.3",
+    "pixelmatch": "^5.2.1",
+    "pngjs": "^6.0.0",
+    "react": "^16.12.0",
+    "storycrawler": "^3.0.3"
+  },
+  "peerDependencies": {
+    "puppeteer": ">=3"
+  }
+}
