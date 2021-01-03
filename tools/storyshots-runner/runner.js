@@ -117,11 +117,14 @@ const run = async ({
           executablePath: CI ? "google-chrome-stable" : undefined,
           headless: true,
           args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-web-security",
             "--disable-gpu",
             "--font-render-hinting=none",
-            "--use-gl=egl",
-            "--no-sandbox",
-            "--enable-surface-synchronization",
+            "--allow-file-access-from-files",
+            "--allow-file-access",
           ],
         },
       }).boot()
