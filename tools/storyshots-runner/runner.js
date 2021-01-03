@@ -85,7 +85,10 @@ const run = async ({
 
   // Launch Puppeteer process to fetch stories info.
   const storiesBrowser = await new StoriesBrowser(connection, {
-    launchOptions: { executablePath: CI ? "google-chrome-stable" : undefined },
+    launchOptions: {
+      executablePath: CI ? "google-chrome-stable" : undefined,
+      args: ["--no-sandbox"],
+    },
   }).boot();
 
   const shutdown = async () => {
@@ -117,6 +120,7 @@ const run = async ({
             "--disable-gpu",
             "--font-render-hinting=none",
             "--use-gl=egl",
+            "--no-sandbox",
             "--enable-surface-synchronization",
           ],
         },
