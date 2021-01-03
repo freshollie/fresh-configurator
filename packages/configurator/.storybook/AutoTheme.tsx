@@ -8,14 +8,20 @@ import { ThemeProvider } from "../src/theme";
 declare global {
   // eslint-disable-next-line functional/prefer-type-literal
   interface Window {
+    __dark__: boolean;
+    __snapshot__: boolean;
     snaps: {
-      animationsFinished: Promise<unknown>;
+      animationsDisabled: boolean;
+      waitForAnimations: () => Promise<void>;
+      teardown: () => void;
     };
   }
 }
 
 window.snaps = {
-  animationsFinished: Promise.resolve(),
+  animationsDisabled: false,
+  waitForAnimations: () => Promise.resolve(),
+  teardown: () => {},
 };
 
 /**
@@ -34,12 +40,13 @@ const disableAnimations = (): void => {
   }
   `;
 
-  let currentFrame = 1;
   const frameDuration = 16;
   const maxFrames = 100;
-  let resolveRAF: { (): void; (value?: void): void } | null;
-  let resolveRAFTimer: number | null;
+  let currentFrame = 0;
   const callbacks: FrameRequestCallback[] = [];
+  const overflowCallbacks: FrameRequestCallback[] = [];
+  const resolvedListeners: { cb: () => void; cancelTimeout: () => void }[] = [];
+  let resolveRAFTimer: number | null;
 
   // Speed up with 10x, but beware stepping too fast might cause
   // react-motion to pause them instead.
@@ -48,29 +55,28 @@ const disableAnimations = (): void => {
   // In the case of multiple concurrent animations we want to
   // advance them together just like rAF would.
   const scheduleFrame = (): void => {
+    // Cancel the timouts of any
+    // current listeners, as we know that we will
+    // resolve them very soon
+    resolvedListeners.forEach(({ cancelTimeout }) => cancelTimeout());
     setTimeout(() => {
       currentFrame += 1;
       callbacks.splice(0).forEach((c) => c(now()));
 
       // Assume no new invocations for 50ms means we've ended
       resolveRAFTimer = setTimeout(() => {
-        resolveRAF?.();
-        resolveRAF = null;
+        resolvedListeners.splice(0).forEach(({ cb }) => cb());
         resolveRAFTimer = null;
       }, 50);
     }, 0);
-
-    if (!resolveRAF) {
-      window.snaps.animationsFinished = new Promise<void>((resolve) => {
-        resolveRAF = resolve;
-      });
-    }
 
     if (resolveRAFTimer) {
       clearTimeout(resolveRAFTimer);
       resolveRAFTimer = null;
     }
   };
+
+  const previousRequestAnimationFrame = window.requestAnimationFrame;
 
   // Monkey patch rAF to resolve immediately. This makes JS
   // based animations run until the end within a few milliseconds.
@@ -83,37 +89,63 @@ const disableAnimations = (): void => {
       if (callbacks.length === 1) {
         scheduleFrame();
       }
+    } else {
+      overflowCallbacks.push(callback);
     }
     return -1;
   };
 
+  const previousPerformanceNow = window.performance.now;
   // For implementations of JS transitions that don't use the rAF
   // timestamp callback argument, we need to monkey patch `performance.now`
   // too. Potentially need to include `Date.now` in the future.
   window.performance.now = now;
 
+  const styleElement = window.document.createElement("style");
   // Disable CSS animations/transitions by forcing style.
   // Potentially not effective enough if `!important` is used
   // elsewhere in the story stylesheet/inline CSS.
   window.document.addEventListener("DOMContentLoaded", () => {
-    const styleElement = window.document.createElement("style");
     window.document.documentElement.appendChild(styleElement);
     styleElement.sheet?.insertRule(DISABLE_CSS_ANIMATIONS_STYLE);
   });
-};
 
-let animationsDisabled = false;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  document.querySelector("body")!.style.padding = "initial";
+
+  window.snaps = {
+    animationsDisabled: true,
+    waitForAnimations: () =>
+      new Promise((resolve) => {
+        let timeout: number;
+        if (callbacks.length < 1) {
+          timeout = setTimeout(resolve, 100);
+        }
+        resolvedListeners.push({
+          cancelTimeout: () => clearTimeout(timeout),
+          cb: resolve,
+        });
+      }),
+    teardown: () => {
+      window.snaps.animationsDisabled = false;
+      window.requestAnimationFrame = previousRequestAnimationFrame;
+      window.performance.now = previousPerformanceNow;
+      overflowCallbacks.splice(0).forEach((c) => c(now()));
+      styleElement.remove();
+    },
+  };
+};
 
 const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
   theme,
   children,
 }) => {
-  const snapshot = window.location.search.includes("snapshot=true");
-  const dark = window.location.search.includes("dark=true") || theme.dark;
-  if (!animationsDisabled && snapshot) {
+  // eslint-disable-next-line no-underscore-dangle
+  const snapshot = window.__snapshot__;
+  // eslint-disable-next-line no-underscore-dangle
+  const dark = snapshot ? window.__dark__ : theme.dark;
+  if (!window.snaps.animationsDisabled && snapshot) {
     disableAnimations();
-    document.querySelector("body")!.style.padding = "initial";
-    animationsDisabled = true;
   }
 
   return <ThemeProvider theme={{ dark }}>{children}</ThemeProvider>;
