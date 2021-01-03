@@ -117,7 +117,6 @@ const run = async ({
             "--disable-gpu",
             "--font-render-hinting=none",
             "--use-gl=egl",
-            "--no-sandbox",
             "--enable-surface-synchronization",
           ],
         },
