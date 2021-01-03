@@ -84,7 +84,9 @@ const run = async ({
   ).connect();
 
   // Launch Puppeteer process to fetch stories info.
-  const storiesBrowser = await new StoriesBrowser(connection).boot();
+  const storiesBrowser = await new StoriesBrowser(connection, {
+    launchOptions: { executablePath: CI ? "google-chrome-stable" : undefined },
+  }).boot();
 
   const shutdown = async () => {
     await Promise.all([connection.disconnect(), storiesBrowser.close()]);

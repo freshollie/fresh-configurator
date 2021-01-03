@@ -7,7 +7,7 @@
  * making one of the same request at a time.
  */
 
-import SerialPort, { BaseBinding } from "@serialport/stream";
+import SerialPort from "@serialport/stream";
 import debug from "debug";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
@@ -25,7 +25,6 @@ import {
 // can import this library without the bindings needing to be available
 // at import time
 const initialiseBindings = async (): Promise<void> => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, global-require
   const { default: Binding } = await import("@serialport/bindings");
   SerialPort.Binding = Binding;
 };
