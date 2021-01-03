@@ -202,8 +202,10 @@ const run = async ({
             threshold: 0.2,
           }
         );
+        const pixels = width * height;
+        const percentage = (difference / pixels) * 100;
 
-        if (difference > 0) {
+        if (percentage > 0.2) {
           if (!update) {
             const diffSnap = snapshotPath(diffDirectory, task);
             await ensureDir(diffDirectory);
@@ -255,9 +257,11 @@ const run = async ({
       (task) => async (worker) => {
         // mark starting
         console.log("WORKING ON", task);
+        const start = new Date().getTime();
         const result = await executor(worker, task);
         // mark complete (value)
-        console.log("FINISHED", task);
+        const end = new Date().getTime();
+        console.log(`FINISHED (${end - start}ms)`, task);
         return result;
       }
     );
