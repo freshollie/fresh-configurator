@@ -116,16 +116,7 @@ const run = async ({
         launchOptions: {
           executablePath: CI ? "google-chrome-stable" : undefined,
           headless: true,
-          args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-web-security",
-            "--disable-gpu",
-            "--font-render-hinting=none",
-            "--allow-file-access-from-files",
-            "--allow-file-access",
-          ],
+          args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
         },
       }).boot()
     )
@@ -208,7 +199,7 @@ const run = async ({
         const pixels = width * height;
         const percentage = (difference / pixels) * 100;
 
-        if (percentage > 0.2) {
+        if (percentage > 0.5) {
           if (!update) {
             const diffSnap = snapshotPath(diffDirectory, task);
             await ensureDir(diffDirectory);
