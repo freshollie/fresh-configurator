@@ -11,7 +11,6 @@ import codes from "./codes";
 import {
   VoltageMeters,
   ImuData,
-  ImuUnit,
   Axes3D,
   Status,
   ExtendedStatus,
