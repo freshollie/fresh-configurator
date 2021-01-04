@@ -19,6 +19,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
       - name: Lint
         run: yarn lint:all
@@ -36,6 +38,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
       - name: Test
         run: yarn test --coverage
@@ -68,7 +72,7 @@ jobs:
         env:
           CI: true
         with:
-          args: yarn workspace @betaflight/configurator storyshots
+          args: yarn workspace @betaflight/configurator storyshots:production
 
       - name: Publish test diff
         if: ${{ failure() }}
@@ -148,6 +152,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
       - name: Install
         uses: bahmutov/npm-install@v1.4.0

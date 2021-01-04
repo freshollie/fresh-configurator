@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Canvas } from "react-three-fiber";
-import { JSONLoader, Color, Geometry, Material } from "three";
+import { Color, Geometry, Material } from "three";
+import JSONLoader from "./JSONLoader";
 
 import quadx from "./models/quad_x.model";
 import tricopter from "./models/tricopter.model";

@@ -18,6 +18,7 @@ module.exports = {
     "prettier/@typescript-eslint",
   ],
   rules: {
+    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unnecessary-condition": [
@@ -106,6 +107,7 @@ module.exports = {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-require-imports": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
       },
     },
   ],
