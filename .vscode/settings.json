@@ -1,5 +1,5 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -14,7 +14,16 @@
   "eslint.format.enable": false,
   "eslint.enable": true,
   "prettier.packageManager": "yarn",
-  "prettier.prettierPath": "node_modules/prettier",
-  "prettier.disableLanguages": ["javascript", "typescript"],
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "prettier.disableLanguages": [
+    "javascript",
+    "typescript"
+  ],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

@@ -2,7 +2,11 @@
   "extends": "../../tsconfig.base",
   "compilerOptions": {
     "rootDir": ".",
-    "target": "ES2019"
+    "target": "ES2019",
+    "types": [
+      "jest",
+      "testing-library__jest-dom"
+    ]
   },
   "include": [
     "src/**/*.tsx",

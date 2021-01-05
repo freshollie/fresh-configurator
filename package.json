@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "clean:lib": "tsc -b --clean tsconfig.build.json tsconfig.cjs.build.json",
-    "clean:codegen": "rimraf packages/*/src/**/__generated__ packages/configurator/src/**/*.graphql.ts",
+    "clean:codegen": "rimraf './packages/*/src/**/__generated__' 'packages/configurator/src/**/*.graphql.ts'",
     "start": "yarn workspace @betaflight/configurator start",
     "start:mocked": "yarn workspace @betaflight/configurator start:mocked",
     "build": "yarn workspace @betaflight/configurator build",
@@ -24,7 +24,7 @@
     "e2e:production": "cross-env CI=true jest --config packages/configurator/jest.e2e.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
-    "postinstall": "yarn codegen && yarn workspace @betaflight/configurator install-deps",
+    "postinstall": "yarn codegen",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
     "release": "yarn workspace @betaflight/configurator release"
@@ -36,14 +36,15 @@
   ],
   "devDependencies": {
     "@graphql-codegen/add": "^2.0.1",
-    "@graphql-codegen/cli": "^1.17.8",
+    "@graphql-codegen/cli": "^1.17.10",
     "@graphql-codegen/near-operation-file-preset": "^1.17.11",
-    "@graphql-codegen/plugin-helpers": "^1.17.8",
-    "@graphql-codegen/schema-ast": "^1.17.8",
+    "@graphql-codegen/plugin-helpers": "^1.17.10",
+    "@graphql-codegen/schema-ast": "^1.17.10",
     "@graphql-codegen/typed-document-node": "^1.18.2",
-    "@graphql-codegen/typescript-operations": "^1.17.8",
+    "@graphql-codegen/typescript": "^1.20.0",
+    "@graphql-codegen/typescript-operations": "^1.17.10",
     "@graphql-codegen/typescript-react-apollo": "^2.0.6",
-    "@graphql-codegen/typescript-resolvers": "^1.17.9",
+    "@graphql-codegen/typescript-resolvers": "^1.17.10",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "cross-env": "^7.0.2",
@@ -60,7 +61,7 @@
     "graphql": "^14.6.0",
     "graphql-codegen-persisted-query-ids": "^0.1.2",
     "graphql-tag": "^2.10.3",
-    "husky": "^3.0.0",
+    "husky": "^4.3.6",
     "jest": "^26.4.2",
     "jest-circus": "^26.4.2",
     "lerna": "^3.22.1",
@@ -73,7 +74,8 @@
   },
   "resolutions": {
     "typescript": "4.1.2",
-    "graphql": "14.6.0"
+    "graphql": "14.6.0",
+    "app-builder-lib": "patch:app-builder-lib@22.9.1#./patches/fix-install-deps.patch"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -86,6 +88,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged --allow-empty"
+    }
+  },
+  "dependenciesMeta": {
+    "dmg-builder@22.9.1": {
+      "unplugged": true
     }
   }
 }

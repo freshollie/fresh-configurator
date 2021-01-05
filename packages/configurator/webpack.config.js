@@ -28,11 +28,11 @@ const mainConfig = (mode) => ({
   entry: require.resolve("./src/main.ts"),
   target: "electron-main",
   resolve: {
-    extensions: [".ts", ".mjs", ".js", ".node"],
+    extensions: [".ts", ".mjs", ".js", ".node"]
   },
   externals: [
     // Don't try to pack referenced .node files
-    (__, request, callback) => {
+    ({ context, request }, callback) => {
       if (/\.node$/.test(request)) {
         return callback(null, `commonjs ${request}`);
       }
@@ -46,6 +46,12 @@ const mainConfig = (mode) => ({
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+            fullySpecified: false
+        }
+      },
       {
         test: /\.ts(x?)$/,
         include: /src/,
@@ -82,12 +88,23 @@ const rendererConfig = (mode) => ({
   entry: require.resolve("./src/index.tsx"),
   resolve: {
     extensions: [".ts", ".tsx", ".mjs", ".js"],
+    fallback: {
+      "stream": false,
+      "util": false,
+      "path": false
+    }
   },
   externals: {
     "@serialport/bindings": "commonjs @serialport/bindings",
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+            fullySpecified: false
+        }
+      },
       {
         test: /\.ts(x?)$/,
         include: /src/,
