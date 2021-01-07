@@ -40,15 +40,15 @@
     }
   },
   "scripts": {
-    "start": "yarn install-deps && webpack-dev-server --hot --host 0.0.0.0 --mode development",
-    "start:mocked": "yarn install-deps && cross-env MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development",
+    "start": "yarn run compile:deps && webpack-dev-server --hot --host 0.0.0.0 --mode development",
+    "start:mocked": "yarn run compile:deps && cross-env MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development",
     "compile": "webpack --progress --mode production",
+    "compile:deps": "node build-deps.js",
     "pack": "electron-builder --publish never",
-    "build": "yarn install-deps && yarn compile && yarn run pack",
+    "build": "yarn run compile:deps && yarn compile && yarn run pack",
     "release": "yarn compile && electron-builder --publish always",
     "storybook": "start-storybook -p 6006 -s .storybook/public",
     "build-storybook": "build-storybook  -s .storybook/public",
-    "install-deps": "electron-builder install-app-deps",
     "storyshots": "storyshots-runner --url http://localhost:6006 --command 'start-storybook -p 6006 -s .storybook/public --ci'",
     "storyshots:production": "storyshots-runner --url http://localhost:6006 --command 'serve storybook-static -l 6006'"
   },
@@ -101,6 +101,7 @@
     "electron": "11.1.0",
     "electron-builder": "22.9.1",
     "electron-devtools-installer": "^3.1.1",
+    "electron-rebuild": "^2.3.4",
     "file-loader": "^5.1.0",
     "fork-ts-checker-webpack-plugin": "^6.0.7",
     "html-webpack-plugin": "^4.5.1",

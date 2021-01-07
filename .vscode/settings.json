@@ -12,7 +12,6 @@
     "source.fixAll.eslint": true
   },
   "eslint.format.enable": false,
-  "eslint.enable": true,
   "prettier.packageManager": "yarn",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "prettier.disableLanguages": [
