@@ -10,3 +10,4 @@
 lerna.json
 *.graphql.d.ts
 *.graphql.ts
+.pnp.js

@@ -2,7 +2,7 @@
  * Hacky mock data generator to be able to test this API without
  * a device
  */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars, import/export */
 import { Sensors, DisarmFlags, SerialPortFunctions } from "@betaflight/api";
 import { v4 } from "uuid";
 

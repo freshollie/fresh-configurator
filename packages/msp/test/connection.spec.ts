@@ -111,7 +111,7 @@ describe("open", () => {
         });
 
       realSetTimeout(() => {
-        jest.runTimersToTime(2500);
+        jest.advanceTimersByTime(2500);
       }, 100);
     }));
 

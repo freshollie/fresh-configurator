@@ -18,7 +18,7 @@ jobs:
           node-version: "12.x"
 
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        uses: bahmutov/npm-install@v1.6.2
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -37,7 +37,7 @@ jobs:
           node-version: "12.x"
 
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        uses: bahmutov/npm-install@v1.6.2
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -60,7 +60,7 @@ jobs:
           node-version: "12.x"
 
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        uses: bahmutov/npm-install@v1.6.2
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         
@@ -156,7 +156,7 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        uses: bahmutov/npm-install@v1.6.2
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build

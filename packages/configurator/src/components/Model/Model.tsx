@@ -7,7 +7,7 @@ import quadx from "./models/quad_x.model";
 import tricopter from "./models/tricopter.model";
 import hexx from "./models/hex_x.model";
 
-type Model = {
+type ModelData = {
   geometry: Geometry;
   materials?: Material[] | undefined;
 };
@@ -19,7 +19,7 @@ const MODEL_MAP = {
 };
 
 export type ModelTypes = keyof typeof MODEL_MAP;
-const modelsCache = {} as Record<ModelTypes, Model | undefined>;
+const modelsCache = {} as Record<ModelTypes, ModelData | undefined>;
 
 /**
  * When running in storybook we still want
@@ -47,8 +47,8 @@ const fetchLocal = (url: string): Promise<Response> =>
 /**
  * Load the given model
  */
-const useModelData = (modelKey: ModelTypes): Model | undefined => {
-  const [data, setData] = useState<Model | undefined>(undefined);
+const useModelData = (modelKey: ModelTypes): ModelData | undefined => {
+  const [data, setData] = useState<ModelData | undefined>(undefined);
 
   useEffect(() => {
     if (modelsCache[modelKey]) {

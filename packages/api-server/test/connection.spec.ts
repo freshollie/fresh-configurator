@@ -267,6 +267,7 @@ describe("connections", () => {
           const attempt = await reconnectAttemptEvent();
           jest.advanceTimersByTime(1000);
           if (attempt < 5) {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(mockApi.open).toHaveBeenCalledTimes(attempt + 1);
           } else {
             await flushPromises();

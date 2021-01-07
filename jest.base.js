@@ -1,8 +1,6 @@
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
-
 module.exports = {
   config: {
-    preset: 'ts-jest',
+    preset: "ts-jest",
     resetMocks: true,
     testPathIgnorePatterns: [
       "/node_modules/",
@@ -31,6 +29,6 @@ module.exports = {
       "<rootDir>/dist/",
       "<rootDir>/.*/__mocks__",
     ],
-    testEnvironment: "node"
+    testEnvironment: "node",
   },
 };

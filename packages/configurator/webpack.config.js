@@ -28,11 +28,11 @@ const mainConfig = (mode) => ({
   entry: require.resolve("./src/main.ts"),
   target: "electron-main",
   resolve: {
-    extensions: [".ts", ".mjs", ".js", ".node"]
+    extensions: [".ts", ".mjs", ".js", ".node"],
   },
   externals: [
     // Don't try to pack referenced .node files
-    ({ context, request }, callback) => {
+    ({ request }, callback) => {
       if (/\.node$/.test(request)) {
         return callback(null, `commonjs ${request}`);
       }
@@ -49,8 +49,8 @@ const mainConfig = (mode) => ({
       {
         test: /\.m?js/,
         resolve: {
-            fullySpecified: false
-        }
+          fullySpecified: false,
+        },
       },
       {
         test: /\.ts(x?)$/,
@@ -89,10 +89,10 @@ const rendererConfig = (mode) => ({
   resolve: {
     extensions: [".ts", ".tsx", ".mjs", ".js"],
     fallback: {
-      "stream": false,
-      "util": false,
-      "path": false
-    }
+      stream: false,
+      util: false,
+      path: false,
+    },
   },
   externals: {
     "@serialport/bindings": "commonjs @serialport/bindings",
@@ -102,8 +102,8 @@ const rendererConfig = (mode) => ({
       {
         test: /\.m?js/,
         resolve: {
-            fullySpecified: false
-        }
+          fullySpecified: false,
+        },
       },
       {
         test: /\.ts(x?)$/,
@@ -191,6 +191,7 @@ const rendererConfig = (mode) => ({
 
 module.exports = (_, { mode }) => [
   rendererConfig(mode),
-  // Don't build the main
+  // Don't build the main unless we are building for
+  // production
   ...(mode === "production" ? [mainConfig(mode)] : []),
 ];
