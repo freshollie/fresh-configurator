@@ -19,6 +19,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.6.2
+        with:
+          install-command: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -38,6 +40,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.6.2
+        with:
+          install-command: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -61,6 +65,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.6.2
+        with:
+          install-command: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         
@@ -157,6 +163,8 @@ jobs:
 
       - name: Install
         uses: bahmutov/npm-install@v1.6.2
+        with:
+          install-command: yarn --immutable
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
