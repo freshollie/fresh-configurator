@@ -26,7 +26,7 @@ const CHANNEL_COLORS = [
 const CHANNEL_NAMES = ["Roll [A]", "Pitch [E]", "Yaw [R]", "Throttle [T]"];
 
 export type ChannelsListProps = {
-  channels: number[];
+  channels: readonly number[];
   disabled?: boolean;
 };
 

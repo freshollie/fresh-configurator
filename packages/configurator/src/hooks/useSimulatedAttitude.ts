@@ -74,7 +74,7 @@ type TuningData = {
 };
 
 export default (
-  channels?: number[],
+  channels?: readonly number[],
   tuning?: TuningData,
   deadband?: DeadbandData,
   legacy = false

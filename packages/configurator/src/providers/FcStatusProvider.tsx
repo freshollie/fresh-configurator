@@ -2,18 +2,19 @@ import React from "react";
 import useUtilisation from "../hooks/useUtilisation";
 import useConnectionState from "../hooks/useConnectionState";
 
-import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
-import { useStatusQuery } from "../gql/queries/Device.graphql";
-import { useConnectionStatsQuery } from "../gql/queries/Connection.graphql";
+import { ConnectionSettingsDocument } from "../gql/queries/Configurator.graphql";
+import { StatusDocument } from "../gql/queries/Device.graphql";
+import { ConnectionStatsDocument } from "../gql/queries/Connection.graphql";
 import StatusList from "../components/StatusList";
+import { useQuery } from "../gql/apollo";
 
 const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
-  const { data: connectionSettingsData } = useConnectionSettingsQuery();
+  const { data: connectionSettingsData } = useQuery(ConnectionSettingsDocument);
   const baudRate = connectionSettingsData?.configurator.baudRate;
   const { connection } = useConnectionState();
-  const { data: deviceStatus } = useStatusQuery({
+  const { data: deviceStatus } = useQuery(StatusDocument, {
     variables: {
       connection: connection ?? "",
     },
@@ -24,7 +25,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
   const { cycleTime, cpuload, i2cError } =
     deviceStatus?.connection.device.status ?? {};
 
-  const { data: connectionStatsData } = useConnectionStatsQuery({
+  const { data: connectionStatsData } = useQuery(ConnectionStatsDocument, {
     variables: {
       connection: connection ?? "",
     },

@@ -1,25 +1,14 @@
 import { advanceTo, advanceBy } from "jest-date-mock";
 import client from "./client";
 import {
-  SetConnectionSettingsMutation,
-  SetConnectionSettingsMutationVariables,
   SetConnectionSettingsDocument,
   SelectTabDocument,
-  SelectTabMutation,
-  SelectTabMutationVariables,
-  LogMutation,
-  LogMutationVariables,
   LogDocument,
 } from "./mutations/Configurator.graphql";
 import {
-  SelectedTabQuery,
-  SelectedTabQueryVariables,
   SelectedTabDocument,
-  ConnectionSettingsQueryVariables,
-  ConnectionSettingsQuery,
   ConnectionSettingsDocument,
   LogsDocument,
-  LogsQuery,
 } from "./queries/Configurator.graphql";
 import { versionInfo } from "../util";
 
@@ -31,29 +20,20 @@ beforeEach(async () => {
 describe("client", () => {
   describe("configurator", () => {
     it("should allow a port to be selected", async () => {
-      let { data } = await client.query<
-        ConnectionSettingsQuery,
-        ConnectionSettingsQueryVariables
-      >({
+      let { data } = await client.query({
         query: ConnectionSettingsDocument,
       });
 
       expect(data.configurator.port).toEqual(null);
 
-      await client.mutate<
-        SetConnectionSettingsMutation,
-        SetConnectionSettingsMutationVariables
-      >({
+      await client.mutate({
         mutation: SetConnectionSettingsDocument,
         variables: {
           port: "/a/test/port",
         },
       });
 
-      ({ data } = await client.query<
-        ConnectionSettingsQuery,
-        ConnectionSettingsQueryVariables
-      >({
+      ({ data } = await client.query({
         query: ConnectionSettingsDocument,
       }));
 
@@ -61,26 +41,20 @@ describe("client", () => {
     });
 
     it("should allow tab to be selected", async () => {
-      let { data } = await client.query<
-        SelectedTabQuery,
-        SelectedTabQueryVariables
-      >({
+      let { data } = await client.query({
         query: SelectedTabDocument,
       });
 
       expect(data.configurator.tab).toEqual(null);
 
-      await client.mutate<SelectTabMutation, SelectTabMutationVariables>({
+      await client.mutate({
         mutation: SelectTabDocument,
         variables: {
           tabId: "some-tab",
         },
       });
 
-      ({ data } = await client.query<
-        SelectedTabQuery,
-        SelectedTabQueryVariables
-      >({
+      ({ data } = await client.query({
         query: SelectedTabDocument,
       }));
 
@@ -88,7 +62,7 @@ describe("client", () => {
     });
 
     it("should allow logs to be appended", async () => {
-      let { data } = await client.query<LogsQuery>({
+      let { data } = await client.query({
         query: LogsDocument,
       });
 
@@ -105,7 +79,7 @@ describe("client", () => {
       // Move time forward by 50 minutes
       advanceBy(60 * 1000 * 50);
 
-      const response = await client.mutate<LogMutation, LogMutationVariables>({
+      const response = await client.mutate({
         mutation: LogDocument,
         variables: {
           message: "Some message to log",
@@ -114,7 +88,7 @@ describe("client", () => {
 
       expect(response.errors).toBeFalsy();
 
-      ({ data } = await client.query<LogsQuery>({
+      ({ data } = await client.query({
         query: LogsDocument,
       }));
 

@@ -14,11 +14,10 @@ import {
 import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
 import {
   ConnectionStateDocument,
-  ConnectionStateQuery,
   LogsDocument,
 } from "../gql/queries/Configurator.graphql";
 import { SetArmingDocument } from "../gql/mutations/Device.graphql";
-import { Connection, LogsQuery } from "../gql/__generated__";
+import { Connection } from "../gql/__generated__";
 import ConnectionManager from "./ConnectionManager";
 import { cache as clientCache, resolvers } from "../gql/client";
 
@@ -133,13 +132,13 @@ const onChangedMock = (
 const connectionState = (
   cache: InMemoryCache
 ): { connecting: boolean; connection?: string | null } =>
-  cache.readQuery<ConnectionStateQuery>({
+  cache.readQuery({
     query: ConnectionStateDocument,
   })!.configurator;
 
 const logs = (cache: InMemoryCache) =>
   cache
-    .readQuery<LogsQuery>({ query: LogsDocument })!
+    .readQuery({ query: LogsDocument })!
     .configurator.logs.map((line) => line.message);
 
 describe("ConnectionManager", () => {

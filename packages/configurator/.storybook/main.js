@@ -58,10 +58,10 @@ module.exports = {
       })
     );
     config.plugins.push(
-      new NormalModuleReplacementPlugin(
-        /\.graphql$/,
-        path.resolve(__dirname, "../src/gql/__generated__/index.tsx")
-      )
+      new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
+        // eslint-disable-next-line no-param-reassign
+        resource.request += ".ts";
+      })
     );
     return config;
   },

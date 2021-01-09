@@ -9,6 +9,8 @@ import {
   QueryResult,
   useQuery as useQueryOrig,
   QueryHookOptions,
+  OperationVariables,
+  TypedDocumentNode,
 } from "@apollo/client";
 import { DocumentNode } from "graphql";
 
@@ -16,8 +18,8 @@ export * from "@apollo/client";
 
 // We are following the definitions from apollo, so any has to be used here
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useQuery<TData = any, TVariables = Record<string, any>>(
-  query: DocumentNode,
+export function useQuery<TData = any, TVariables = OperationVariables>(
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: QueryHookOptions<TData, TVariables>
 ): QueryResult<TData, TVariables> {
   return useQueryOrig(

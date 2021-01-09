@@ -2,25 +2,26 @@ import React from "react";
 import semver from "semver";
 import Model from "../components/Model";
 import {
-  useRcChannelsQuery,
-  useRcSettingsQuery,
-  useApiVersionQuery,
+  RcSettingsDocument,
+  ApiVersionDocument,
+  RcChannelsDocument,
 } from "../gql/queries/Device.graphql";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
 import useConnectionState from "../hooks/useConnectionState";
+import { useQuery } from "../gql/apollo";
 
 const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
   const { connection } = useConnectionState();
-  const { data: rcSettingsData } = useRcSettingsQuery({
+  const { data: rcSettingsData } = useQuery(RcSettingsDocument, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
 
-  const { data: apiVersionData } = useApiVersionQuery({
+  const { data: apiVersionData } = useQuery(ApiVersionDocument, {
     variables: {
       connection: connection ?? "",
     },
@@ -29,7 +30,7 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
 
   const apiVersion = apiVersionData?.connection.apiVersion ?? "0.0.0";
 
-  const { data: channelsData } = useRcChannelsQuery({
+  const { data: channelsData } = useQuery(RcChannelsDocument, {
     variables: {
       connection: connection ?? "",
     },

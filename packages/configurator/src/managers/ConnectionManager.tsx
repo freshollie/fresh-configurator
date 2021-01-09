@@ -1,18 +1,19 @@
 import React, { useEffect, useCallback } from "react";
 import semver from "semver";
-import { useOnConnectionChangedSubscription } from "../gql/queries/Connection.graphql";
+import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
 import config from "../config";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
-import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
+import { ConnectionSettingsDocument } from "../gql/queries/Configurator.graphql";
 import {
-  useConnectMutation,
-  useDisconnectMutation,
+  ConnectDocument,
+  DisconnectDocument,
 } from "../gql/mutations/Connection.graphql";
-import { useSetArmingMutation } from "../gql/mutations/Device.graphql";
+import { SetArmingDocument } from "../gql/mutations/Device.graphql";
 
 import BigButton from "../components/BigButton";
+import { useMutation, useQuery, useSubscription } from "../gql/apollo";
 
 /**
  * Handle all aspects of tracking the app connection
@@ -22,7 +23,7 @@ import BigButton from "../components/BigButton";
 const ConnectionManager: React.FC = () => {
   const log = useLogger();
 
-  const { data: configuratorQuery } = useConnectionSettingsQuery();
+  const { data: configuratorQuery } = useQuery(ConnectionSettingsDocument);
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
 
   const {
@@ -32,7 +33,7 @@ const ConnectionManager: React.FC = () => {
     setConnecting,
   } = useConnectionState();
 
-  const [disableArming] = useSetArmingMutation({
+  const [disableArming] = useMutation(SetArmingDocument, {
     onCompleted: () => {
       log("<b>Arming disabled</b>");
     },
@@ -43,7 +44,7 @@ const ConnectionManager: React.FC = () => {
     },
   });
 
-  const [disconnectMutation] = useDisconnectMutation();
+  const [disconnectMutation] = useMutation(DisconnectDocument);
 
   const disconnect = (
     notify = true,
@@ -67,7 +68,7 @@ const ConnectionManager: React.FC = () => {
         }
       });
 
-  const [connect] = useConnectMutation({
+  const [connect] = useMutation(ConnectDocument, {
     variables: {
       port: port ?? "",
       baudRate: baudRate ?? 0,
@@ -118,23 +119,26 @@ const ConnectionManager: React.FC = () => {
   // Create a subscription to the current connection
   // and handle updating the app state when connection
   // is closed
-  const { error: subscriptionError } = useOnConnectionChangedSubscription({
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-    onSubscriptionData: ({ subscriptionData: { data: onChangedData } }) => {
-      const newConnectionId = onChangedData?.onConnectionChanged;
-      if (newConnectionId) {
-        setConnection(newConnectionId);
-        log(
-          `Serial port reconnected for connectionId=${connection} newConnectionId=${newConnectionId} `
-        );
-      } else if (newConnectionId === null) {
-        connectionClosed();
-      }
-    },
-  });
+  const { error: subscriptionError } = useSubscription(
+    OnConnectionChangedDocument,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+      onSubscriptionData: ({ subscriptionData: { data: onChangedData } }) => {
+        const newConnectionId = onChangedData?.onConnectionChanged;
+        if (newConnectionId) {
+          setConnection(newConnectionId);
+          log(
+            `Serial port reconnected for connectionId=${connection} newConnectionId=${newConnectionId} `
+          );
+        } else if (newConnectionId === null) {
+          connectionClosed();
+        }
+      },
+    }
+  );
 
   useEffect(() => {
     if (subscriptionError) {

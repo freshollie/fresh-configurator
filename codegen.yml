@@ -27,18 +27,11 @@ generates:
   ./packages/configurator/src/gql/__generated__/index.tsx:
     documents: ./packages/configurator/src/gql/**/*.graphql
     config:
-      withHooks: true
-      withComponent: false
-      withHOC: false
       contextType: ../apollo#ApolloContext
-      apolloReactHooksImportFrom: ../apollo
-      reactApolloVersion: 3
-      nonOptionalTypename: true
+      immutableTypes: true
     plugins:
       - typescript
       - typescript-resolvers
-      - typescript-operations
-      - typescript-react-apollo
   
   ./packages/configurator/src/gql/:
     documents: ./packages/configurator/src/gql/**/*.graphql
@@ -47,14 +40,11 @@ generates:
       extension: .graphql.ts
       baseTypesPath: ./__generated__/index.tsx
     config:
-      withHooks: true
-      withComponent: false
-      withHOC: false
-      reactApolloVersion: 3
       nonOptionalTypename: true
+      immutableTypes: true
     plugins:
       - typescript-operations
-      - typescript-react-apollo
+      - typed-document-node
 
   # compile queries into their hashed values, so that the client
   # only has to ask the server for the hashed query to perform
