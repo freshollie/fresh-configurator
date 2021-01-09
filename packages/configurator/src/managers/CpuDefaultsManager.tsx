@@ -5,13 +5,11 @@ import {
   McuTypes,
 } from "@betaflight/api";
 import React from "react";
-import {
-  PidProtocolsAndProcessorDocument,
-  usePidProtocolsAndProcessorQuery,
-} from "../gql/queries/Device.graphql";
-import { useSetPidProtocolsMutation } from "../gql/mutations/Device.graphql";
+import { PidProtocolsAndProcessorDocument } from "../gql/queries/Device.graphql";
+import { SetPidProtocolsDocument } from "../gql/mutations/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 import Button from "../components/Button";
+import { useMutation, useQuery } from "../gql/apollo";
 
 type McuGroupName = keyof typeof MCU_GROUPS;
 const MCU_GROUP_NAMES = Object.keys(MCU_GROUPS) as McuGroupName[];
@@ -62,23 +60,26 @@ const findProcessorType = ({
 
 const CpuDefaultsManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading, error } = usePidProtocolsAndProcessorQuery({
+  const { data, loading, error } = useQuery(PidProtocolsAndProcessorDocument, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
 
-  const [setProtocols, { loading: saving }] = useSetPidProtocolsMutation({
-    refetchQueries: [
-      {
-        query: PidProtocolsAndProcessorDocument,
-        variables: {
-          connection,
+  const [setProtocols, { loading: saving }] = useMutation(
+    SetPidProtocolsDocument,
+    {
+      refetchQueries: [
+        {
+          query: PidProtocolsAndProcessorDocument,
+          variables: {
+            connection,
+          },
         },
-      },
-    ],
-  });
+      ],
+    }
+  );
 
   const processorType = data?.connection.device.info
     ? findProcessorType(data.connection.device.info)
