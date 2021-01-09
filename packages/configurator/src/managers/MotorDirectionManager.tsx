@@ -1,30 +1,31 @@
 import React from "react";
-import {
-  MotorDirectionDocument,
-  useMotorDirectionQuery,
-} from "../gql/queries/Device.graphql";
-import { useSetMotorsDirectionMutation } from "../gql/__generated__";
+import { useMutation, useQuery } from "../gql/apollo";
+import { MotorDirectionDocument } from "../gql/queries/Device.graphql";
+import { SetMotorsDirectionDocument } from "../gql/mutations/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
 const MotorDirectionManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading } = useMotorDirectionQuery({
+  const { data, loading } = useQuery(MotorDirectionDocument, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
 
-  const [setDirection, { loading: setting }] = useSetMotorsDirectionMutation({
-    refetchQueries: [
-      {
-        query: MotorDirectionDocument,
-        variables: {
-          connection,
+  const [setDirection, { loading: setting }] = useMutation(
+    SetMotorsDirectionDocument,
+    {
+      refetchQueries: [
+        {
+          query: MotorDirectionDocument,
+          variables: {
+            connection,
+          },
         },
-      },
-    ],
-  });
+      ],
+    }
+  );
 
   const reversed = data?.connection.device.motors.reversedDirection ?? false;
 

@@ -1,22 +1,20 @@
 import React from "react";
 import BoardAligner from "../components/BoardAligner";
-import { useSetBoardAlignmentMutation } from "../gql/mutations/Device.graphql";
-import {
-  DeviceBoardAlignmentDocument,
-  useDeviceBoardAlignmentQuery,
-} from "../gql/queries/Device.graphql";
+import { useMutation, useQuery } from "../gql/apollo";
+import { SetBoardAlignmentDocument } from "../gql/mutations/Device.graphql";
+import { DeviceBoardAlignmentDocument } from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
 const BoardAlignmentManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading } = useDeviceBoardAlignmentQuery({
+  const { data, loading } = useQuery(DeviceBoardAlignmentDocument, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
 
-  const [setAlignment] = useSetBoardAlignmentMutation({
+  const [setAlignment] = useMutation(SetBoardAlignmentDocument, {
     refetchQueries: [
       {
         query: DeviceBoardAlignmentDocument,
