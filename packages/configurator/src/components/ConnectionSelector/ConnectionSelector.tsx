@@ -28,7 +28,7 @@ type ConnectionDetails = {
 };
 
 const ConnectionSelector: React.FC<{
-  ports?: string[];
+  ports?: readonly string[];
   selectedPort?: string;
   selectedBaud?: number;
   disabled?: boolean;

@@ -1,30 +1,36 @@
 import React, { useEffect } from "react";
-import { useAvailablePortsQuery } from "../gql/queries/Connection.graphql";
-import { useConnectionSettingsQuery } from "../gql/queries/Configurator.graphql";
-import { useSetConnectionSettingsMutation } from "../gql/mutations/Configurator.graphql";
+import { AvailablePortsDocument } from "../gql/queries/Connection.graphql";
+import { ConnectionSettingsDocument } from "../gql/queries/Configurator.graphql";
+import { SetConnectionSettingsDocument } from "../gql/mutations/Configurator.graphql";
 import ConnectionSelector from "../components/ConnectionSelector";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
+import { useMutation, useQuery } from "../gql/apollo";
 
 const ConnectionSettingsManager: React.FC = () => {
-  const [updateSettings] = useSetConnectionSettingsMutation();
+  const [updateSettings] = useMutation(SetConnectionSettingsDocument);
 
   const log = useLogger();
 
-  const { data: configuratorData, loading } = useConnectionSettingsQuery();
+  const { data: configuratorData, loading } = useQuery(
+    ConnectionSettingsDocument
+  );
   const { port, baudRate } = configuratorData?.configurator ?? {};
 
   const { connected, connecting } = useConnectionState();
 
   // Constantly query the available ports, unless we have already
   // selected a port
-  const { data: portsData, loading: loadingPorts } = useAvailablePortsQuery({
-    pollInterval: 1000,
-    skip: connected,
-    onError: (e) => {
-      log(`Error reading available ports: ${e.message}`);
-    },
-  });
+  const { data: portsData, loading: loadingPorts } = useQuery(
+    AvailablePortsDocument,
+    {
+      pollInterval: 1000,
+      skip: connected,
+      onError: (e) => {
+        log(`Error reading available ports: ${e.message}`);
+      },
+    }
+  );
 
   // If this is the first load, and the currently selected port is null
   // then select the first available port

@@ -1,14 +1,15 @@
 import React from "react";
 import { SerialPortFunctions, BAUD_RATES } from "@betaflight/api";
 import useConnectionState from "../hooks/useConnectionState";
-import { useDevicePortSettingsQuery } from "../gql/queries/Device.graphql";
+import { DevicePortSettingsDocument } from "../gql/queries/Device.graphql";
 import Table from "../components/Table";
 import Switch from "../components/Switch";
+import { useQuery } from "../gql/apollo";
 
 const PortSettingsManager: React.FC = () => {
   const { connection } = useConnectionState();
 
-  const { data } = useDevicePortSettingsQuery({
+  const { data } = useQuery(DevicePortSettingsDocument, {
     variables: {
       connection: connection ?? "",
     },

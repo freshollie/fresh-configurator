@@ -1,7 +1,8 @@
 import React from "react";
-import { useAttitudeQuery } from "../gql/queries/Device.graphql";
+import { AttitudeDocument } from "../gql/queries/Device.graphql";
 import ModelView from "../components/ModelView";
 import useConnectionState from "../hooks/useConnectionState";
+import { useQuery } from "../gql/apollo";
 
 type Props = {
   refreshRate: number;
@@ -10,7 +11,7 @@ type Props = {
 const ModelViewProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
 
-  const { data: attitudeData } = useAttitudeQuery({
+  const { data: attitudeData } = useQuery(AttitudeDocument, {
     variables: {
       connection: connection ?? "",
     },

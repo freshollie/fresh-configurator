@@ -1,15 +1,11 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const {
-  getTransformer: graphqlTagTransformer,
-} = require("ts-transform-graphql-tag");
-const {
   DefinePlugin,
   NormalModuleReplacementPlugin,
   SourceMapDevToolPlugin,
 } = require("webpack");
 const { spawn } = require("child_process");
-const path = require("path");
 
 const devtool = (mode) =>
   mode !== "production" ? "cheap-source-map" : undefined;
@@ -102,9 +98,6 @@ const rendererConfig = (mode) => ({
             options: {
               transpileOnly: true,
               projectReferences: true,
-              getCustomTransformers: () => ({
-                before: [graphqlTagTransformer()],
-              }),
             },
           },
         ],
@@ -140,10 +133,10 @@ const rendererConfig = (mode) => ({
     filename: "renderer.js",
   },
   plugins: [
-    new NormalModuleReplacementPlugin(
-      /\.graphql$/,
-      path.resolve(__dirname, "src/gql/__generated__/index.tsx")
-    ),
+    new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
+      // eslint-disable-next-line no-param-reassign
+      resource.request += ".ts";
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),

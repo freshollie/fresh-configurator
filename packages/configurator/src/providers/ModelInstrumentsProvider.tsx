@@ -1,7 +1,8 @@
 import React from "react";
 import Attitude from "../flightindicators/Attitude";
 import Heading from "../flightindicators/Heading";
-import { useAttitudeQuery } from "../gql/queries/Device.graphql";
+import { useQuery } from "../gql/apollo";
+import { AttitudeDocument } from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
 
 const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
-  const { data: deviceData } = useAttitudeQuery({
+  const { data: deviceData } = useQuery(AttitudeDocument, {
     variables: {
       connection: connection ?? "",
     },

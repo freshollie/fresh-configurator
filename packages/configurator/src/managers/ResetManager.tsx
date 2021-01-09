@@ -1,8 +1,8 @@
 import React from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useMutation } from "../gql/apollo";
 import Confirmation from "../components/Confirmation";
 import Button from "../components/Button";
-import { useResetMutation } from "../gql/mutations/Device.graphql";
+import { ResetDocument } from "../gql/mutations/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
 
@@ -11,7 +11,7 @@ const ResetManager: React.FC = () => {
   const client = useApolloClient();
   const log = useLogger();
 
-  const [reset, { loading }] = useResetMutation({
+  const [reset, { loading }] = useMutation(ResetDocument, {
     variables: {
       connection: connection ?? "",
     },

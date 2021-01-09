@@ -3,14 +3,8 @@ import WebSocketLink from "./WebSocketLink";
 import { Resolvers, Configurator } from "./__generated__";
 import { versionInfo } from "../util";
 import {
-  LogsQueryResult,
-  LogsQuery,
   LogsDocument,
   SelectedTabDocument,
-  SelectedTabQuery,
-  SelectedTabQueryVariables,
-  ConnectionSettingsQuery,
-  ConnectionSettingsQueryVariables,
   ConnectionSettingsDocument,
 } from "./queries/Configurator.graphql";
 
@@ -85,7 +79,7 @@ export const resolvers = (initialState?: {
     },
     Mutation: {
       setTab: (_, { tabId }, { client }) => {
-        client.writeQuery<SelectedTabQuery, SelectedTabQueryVariables>({
+        client.writeQuery({
           query: SelectedTabDocument,
           data: {
             __typename: "Query",
@@ -98,25 +92,25 @@ export const resolvers = (initialState?: {
         return null;
       },
       setConnectionSettings: (_, { port, baudRate }, { client }) => {
-        const data: { port: string; baudRate?: number } = {
-          port,
+        const existingData = {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          ...client.readQuery({
+            query: ConnectionSettingsDocument,
+          })!.configurator,
         };
 
         if (typeof baudRate === "number") {
-          data.baudRate = baudRate;
+          existingData.baudRate = baudRate;
         }
+        existingData.port = port;
 
-        client.writeQuery<
-          ConnectionSettingsQuery,
-          ConnectionSettingsQueryVariables
-        >({
+        client.writeQuery({
           query: ConnectionSettingsDocument,
           data: {
             __typename: "Query",
             configurator: {
-              __typename: "Configurator",
-              ...data,
-            } as Configurator,
+              ...existingData,
+            },
           },
         });
 
@@ -136,7 +130,7 @@ export const resolvers = (initialState?: {
             configurator: {
               __typename: "Configurator",
               connecting: value,
-            } as Configurator,
+            },
           },
         });
 
@@ -156,7 +150,7 @@ export const resolvers = (initialState?: {
             configurator: {
               __typename: "Configurator",
               connection,
-            } as Configurator,
+            },
           },
         });
 
@@ -178,7 +172,7 @@ export const resolvers = (initialState?: {
       // },
       log: (_, { message }, { client }) => {
         const logs =
-          client.readQuery<LogsQuery, LogsQueryResult>({
+          client.readQuery({
             query: LogsDocument,
           })?.configurator.logs ?? [];
 
@@ -195,7 +189,7 @@ export const resolvers = (initialState?: {
                   __typename: "Log" as const,
                 },
               ]),
-            } as Configurator,
+            },
           },
         });
 

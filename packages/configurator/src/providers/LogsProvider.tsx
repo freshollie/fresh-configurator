@@ -1,10 +1,11 @@
 import React from "react";
 import LogsView from "../components/LogsView";
 import LogLine from "../components/LogLine";
-import { useLogsQuery } from "../gql/queries/Configurator.graphql";
+import { LogsDocument } from "../gql/queries/Configurator.graphql";
+import { useQuery } from "../gql/apollo";
 
 const LogsProvider: React.FC = () => {
-  const { data } = useLogsQuery();
+  const { data } = useQuery(LogsDocument);
   return (
     <LogsView>
       {data?.configurator.logs.map(({ time, message }) => (

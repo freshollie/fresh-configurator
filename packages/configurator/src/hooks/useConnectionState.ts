@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-import { useConnectionStateQuery } from "../gql/queries/Configurator.graphql";
+import { ConnectionStateDocument } from "../gql/queries/Configurator.graphql";
 import {
-  useSetConnectionMutation,
-  useSetConnectingMutation,
+  SetConnectionDocument,
+  SetConnectingDocument,
 } from "../gql/mutations/Configurator.graphql";
+import { useMutation, useQuery } from "../gql/apollo";
 
 export default (): {
   connected: boolean;
@@ -12,9 +13,9 @@ export default (): {
   setConnecting: (value: boolean) => Promise<unknown>;
   setConnection: (connectionId: string | null) => Promise<unknown>;
 } => {
-  const { data } = useConnectionStateQuery();
-  const [setConnection] = useSetConnectionMutation();
-  const [setConnecting] = useSetConnectingMutation();
+  const { data } = useQuery(ConnectionStateDocument);
+  const [setConnection] = useMutation(SetConnectionDocument);
+  const [setConnecting] = useMutation(SetConnectingDocument);
 
   return {
     connected: !!data?.configurator.connection && !data.configurator.connecting,
