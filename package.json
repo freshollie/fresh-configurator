@@ -27,8 +27,7 @@
     "postinstall": "yarn codegen",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
-    "release": "yarn workspace @betaflight/configurator release",
-    "testthing": "echo $npm_config_runtime"
+    "release": "yarn workspace @betaflight/configurator release"
   },
   "workspaces": [
     "packages/*",
