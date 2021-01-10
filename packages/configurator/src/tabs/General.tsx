@@ -4,6 +4,7 @@ import Widget from "../components/Widget";
 import BoardAlignmentManager from "../managers/BoardAlignmentManager";
 import CpuDefaultsManager from "../managers/CpuDefaultsManager";
 import MotorDirectionManager from "../managers/MotorDirectionManager";
+import MotorIdleSpeedManager from "../managers/MotorIdleSpeedManager";
 
 const Layout = styled.div`
   display: flex;
@@ -36,9 +37,14 @@ const General: React.FC = () => (
           </main>
         </Widget>
         <Widget>
-          <header>Prop Direction</header>
+          <header>Motors</header>
           <main>
-            <MotorDirectionManager />
+            <div>
+              <h4>Prop Direction</h4>
+              <MotorDirectionManager />
+              <h4>Idle speed</h4>
+              <MotorIdleSpeedManager />
+            </div>
           </main>
         </Widget>
       </div>

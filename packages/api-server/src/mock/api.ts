@@ -304,3 +304,8 @@ export const writeMotorDirection = (port: string, reversed: boolean) =>
   delay(50).then(() => {
     mockDevice.mixerConfig.reversedMotors = reversed;
   });
+
+export const writeDigitalIdleSpeed = (port: string, idlePercentage: number) =>
+  delay(10).then(() => {
+    mockDevice.advancedPidConfig.digitalIdlePercent = idlePercentage;
+  });
