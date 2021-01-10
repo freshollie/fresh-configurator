@@ -2514,6 +2514,7 @@ __metadata:
     "@betaflight-tools/storyshots-runner": ^0.1.0
     "@betaflight/api": "workspace:^0.3.0"
     "@betaflight/api-server": "workspace:^0.4.0"
+    "@graphql-typed-document-node/core": ^3.1.0
     "@storybook/addon-actions": ^6.1.11
     "@storybook/addon-docs": ^6.1.11
     "@storybook/addon-links": ^6.1.11
@@ -3710,7 +3711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0":
+"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.0":
   version: 3.1.0
   resolution: "@graphql-typed-document-node/core@npm:3.1.0"
   peerDependencies:

@@ -56,6 +56,7 @@
     "@apollo/client": "^3.3.6",
     "@betaflight/api": "workspace:^0.3.0",
     "@betaflight/api-server": "workspace:^0.4.0",
+    "@graphql-typed-document-node/core": "^3.1.0",
     "date-fns": "^2.11.0",
     "graphql": "*",
     "graphql-ws": "^3.2.0",
