@@ -16,6 +16,10 @@ describe("device.motors", () => {
       mixer: 2,
       reversedMotors: true,
     });
+    mockApi.readAdvancedPidConfig.mockResolvedValue({
+      digitalIdlePercent: 5.5,
+    } as any);
+
     add("/dev/something", "abcd");
 
     const { query } = createTestClient(apolloServer);
@@ -28,6 +32,7 @@ describe("device.motors", () => {
               motors {
                 mixer
                 reversedDirection
+                digitalIdlePercent
               }
             }
           }
@@ -39,8 +44,12 @@ describe("device.motors", () => {
     expect(data?.connection.device.motors).toEqual({
       mixer: 2,
       reversedDirection: true,
+      digitalIdlePercent: 5.5,
     });
     expect(mockApi.readMixerConfig).toHaveBeenCalledWith("/dev/something");
+    expect(mockApi.readAdvancedPidConfig).toHaveBeenCalledWith(
+      "/dev/something"
+    );
   });
 
   describe("setDeviceMotorsDirection", () => {
@@ -69,6 +78,39 @@ describe("device.motors", () => {
       expect(mockApi.writeMotorDirection).toHaveBeenCalledWith(
         "/dev/something",
         true
+      );
+    });
+  });
+
+  describe("deviceSetDigitalIdleSpeed", () => {
+    it("should write the digital idle percentage to the baord", async () => {
+      mockApi.writeDigitalIdleSpeed.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetMotorsDirection(
+            $connection: ID!
+            $idlePercentage: Float!
+          ) {
+            deviceSetDigitalIdleSpeed(
+              connectionId: $connection
+              idlePercentage: $idlePercentage
+            )
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          idlePercentage: 7.5,
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeDigitalIdleSpeed).toHaveBeenCalledWith(
+        "/dev/something",
+        7.5
       );
     });
   });

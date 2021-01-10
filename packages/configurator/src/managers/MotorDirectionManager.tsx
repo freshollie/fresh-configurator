@@ -36,6 +36,7 @@ const MotorDirectionManager: React.FC = () => {
           <input
             type="radio"
             value={name}
+            key={name}
             disabled={setting || loading}
             checked={
               (name === "Normal" && !reversed) ||

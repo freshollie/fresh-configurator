@@ -169,3 +169,13 @@ query MotorDirection($connection: ID!) {
     }
   }
 }
+
+query MotorDigitalIdleSpeed($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      motors {
+        digitalIdlePercent
+      }
+    }
+  }
+}

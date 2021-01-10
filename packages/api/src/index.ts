@@ -734,3 +734,15 @@ export const writeMotorDirection = async (
   const { mixer } = await readMixerConfig(port);
   await writeMixerConfig(port, { mixer, reversedMotors: reversed });
 };
+
+export const writeDigitalIdleSpeed = async (
+  port: string,
+  idlePercentage: number
+): Promise<void> => {
+  const config = await readAdvancedPidConfig(port);
+  const newConfig = {
+    ...config,
+    digitalIdlePercent: idlePercentage,
+  };
+  await writeAdvancedPidConfig(port, newConfig);
+};

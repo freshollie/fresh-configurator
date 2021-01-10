@@ -29,3 +29,10 @@ mutation SetPidProtocols($connection: ID!, $protocols: PidProtocolsInput!) {
 mutation SetMotorsDirection($connection: ID!, $reversed: Boolean!) {
   deviceSetMotorsDirection(connectionId: $connection, reversed: $reversed)
 }
+
+mutation SetMotorDigitalIdleSpeed($connection: ID!, $idlePercentage: Float!) {
+  deviceSetDigitalIdleSpeed(
+    connectionId: $connection
+    idlePercentage: $idlePercentage
+  )
+}

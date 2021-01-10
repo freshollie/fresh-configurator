@@ -8,21 +8,32 @@ const typeDefs = gql`
 
   extend type Mutation {
     deviceSetMotorsDirection(connectionId: ID!, reversed: Boolean!): Boolean
+    deviceSetDigitalIdleSpeed(
+      connectionId: ID!
+      idlePercentage: Float!
+    ): Boolean
   }
 
   type MotorsConfig {
     mixer: Int!
     reversedDirection: Boolean!
+    digitalIdlePercent: Float!
   }
 `;
 
 const resolvers: Resolvers = {
   FlightController: {
-    motors: ({ port }, _, { api }) =>
-      api.readMixerConfig(port).then((config) => ({
-        ...config,
-        reversedDirection: config.reversedMotors,
-      })),
+    motors: ({ port }) => ({ port }),
+  },
+  MotorsConfig: {
+    mixer: ({ port }, _, { api }) =>
+      api.readMixerConfig(port).then((config) => config.mixer),
+    reversedDirection: ({ port }, _, { api }) =>
+      api.readMixerConfig(port).then((config) => config.reversedMotors),
+    digitalIdlePercent: ({ port }, _, { api }) =>
+      api
+        .readAdvancedPidConfig(port)
+        .then((config) => config.digitalIdlePercent),
   },
   Mutation: {
     deviceSetMotorsDirection: async (
@@ -33,6 +44,17 @@ const resolvers: Resolvers = {
       await api.writeMotorDirection(
         connections.getPort(connectionId),
         reversed
+      );
+      return null;
+    },
+    deviceSetDigitalIdleSpeed: async (
+      _,
+      { connectionId, idlePercentage },
+      { api, connections }
+    ) => {
+      await api.writeDigitalIdleSpeed(
+        connections.getPort(connectionId),
+        idlePercentage
       );
       return null;
     },
