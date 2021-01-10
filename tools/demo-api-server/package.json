@@ -1,0 +1,15 @@
+{
+  "name": "@betaflight-tools/demo-api-server",
+  "version": "0.1.0",
+  "description": "A demo of the betaflight api-server",
+  "license": "MIT",
+  "author": "freshollie@gmail.com",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@betaflight/api-server": "workspace:^0.4.0",
+    "graphql": "*"
+  }
+}

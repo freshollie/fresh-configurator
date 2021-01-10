@@ -2430,6 +2430,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@betaflight-tools/demo-api-server@workspace:tools/demo-api-server":
+  version: 0.0.0-use.local
+  resolution: "@betaflight-tools/demo-api-server@workspace:tools/demo-api-server"
+  dependencies:
+    "@betaflight/api-server": "workspace:^0.4.0"
+    graphql: "*"
+  languageName: unknown
+  linkType: soft
+
 "@betaflight-tools/storyshots-runner@^0.1.0, @betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner":
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner"
@@ -2524,7 +2533,6 @@ __metadata:
     "@types/styled-components": ^4.4.2
     "@types/testing-library__jest-dom": ^5.9.5
     babel-loader: ^8.0.6
-    core-js: ^3.8.2
     cross-env: ^7.0.2
     date-fns: ^2.11.0
     dmg-builder: 22.9.1
@@ -11665,13 +11673,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.8.2":
-  version: 3.8.2
-  resolution: "core-js@npm:3.8.2"
-  checksum: 8fa2c580b77b9d54d3f6ee147be4d9ae01ea6d77f35f16b05962161e9bec02d846449cce4c68b9d190145edc8ded71142f6fd99e35b53fc642b20a3bf47bbd07
-  languageName: node
-  linkType: hard
-
 "core-util-is@npm:1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -15193,7 +15194,7 @@ app-builder-lib@22.9.1:
     eslint-plugin-prettier: ^3.3.1
     eslint-plugin-react: ^7.22.0
     eslint-plugin-react-hooks: ^4.2.0
-    graphql: ^14.6.0
+    graphql: "*"
     graphql-codegen-persisted-query-ids: ^0.1.2
     graphql-tag: ^2.10.3
     husky: ^4.3.6

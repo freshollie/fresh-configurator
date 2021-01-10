@@ -1,11 +1,13 @@
 # This docker image is used to deploy @betaflight/api-server
 # in mocked mode to heroku. Used to allow the demo app to
 # use the API
-FROM node:12-alpine as build
+FROM node:12 as build
 
 WORKDIR /build
 COPY packages packages
+COPY tools/demo-api-server tools/demo-api-server
 COPY types types
+COPY scripts scripts
 COPY .yarn .yarn
 COPY tsconfig.build.json \
         tsconfig.base.json \
@@ -18,18 +20,18 @@ COPY tsconfig.build.json \
 
 # Build the minimum required to make a functional mock server
 RUN rm packages/configurator/package.json && \
-        yarn --immutable --skip-builds && \
+        yarn --skip-builds && \
         yarn codegen && yarn build:lib && rm -r packages/configurator
+
+RUN yarn cache clean && \
+        yarn workspaces focus @betaflight-tools/demo-api-server --production
 
 # Deployed layer
 FROM node:12-alpine
 
 WORKDIR /mock-server
-COPY --from=build /build/packages /mock-server/packages
-COPY scripts scripts
-COPY yarn.lock package.json .yarnrc.yml ./
+COPY --from=build /build /mock-server
+RUN yarn node scripts/substitute-publish-config.js --write
 
-RUN yarn workspaces focus --production
-
-WORKDIR /mock-server/packages/api-server
-CMD node mock-server.js
+WORKDIR /mock-server/tools/demo-api-server
+CMD yarn start
