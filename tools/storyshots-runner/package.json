@@ -16,6 +16,6 @@
     "storycrawler": "^3.0.3"
   },
   "peerDependencies": {
-    "puppeteer": ">=3"
+    "puppeteer": ">=5"
   }
 }

@@ -108,6 +108,7 @@ module.exports = {
         "@typescript-eslint/no-require-imports": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/prefer-optional-chain": "off",
       },
     },
   ],

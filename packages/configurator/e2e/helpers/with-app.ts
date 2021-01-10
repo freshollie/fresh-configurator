@@ -37,7 +37,10 @@ export default async (): Promise<Application> => {
         E2E: "true",
         HEADLESS: "true",
       },
-      path: process.env.CI === "true" ? binaryPath() : electronPath,
+      path:
+        process.env.CI === "true"
+          ? binaryPath()
+          : ((electronPath as unknown) as string),
       args:
         process.env.CI === "true"
           ? undefined
