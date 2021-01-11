@@ -3032,7 +3032,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/plugin-helpers@npm:^1.13.2, @graphql-codegen/plugin-helpers@npm:^1.17.10, @graphql-codegen/plugin-helpers@npm:^1.18.2":
+"@graphql-codegen/plugin-helpers@npm:^1.13.2, @graphql-codegen/plugin-helpers@npm:^1.18.2":
   version: 1.18.2
   resolution: "@graphql-codegen/plugin-helpers@npm:1.18.2"
   dependencies:
@@ -3117,23 +3117,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-apollo@npm:^2.0.6":
-  version: 2.0.6
-  resolution: "@graphql-codegen/typescript-react-apollo@npm:2.0.6"
-  dependencies:
-    "@graphql-codegen/plugin-helpers": ^1.17.8
-    "@graphql-codegen/visitor-plugin-common": ^1.17.13
-    auto-bind: ~4.0.0
-    camel-case: ^4.1.1
-    pascal-case: ^3.1.1
-    tslib: ~2.0.0
-  peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    graphql-tag: ^2.0.0
-  checksum: 107df9cfd43d59e546537ec7402e5b4e332f79542fcc277718cb8adb9893915d929448ddd656a3c6dd0d30d85d5a1ccd08d3189a4f5bb393a5e07fe762ed744e
-  languageName: node
-  linkType: hard
-
 "@graphql-codegen/typescript-resolvers@npm:^1.17.10":
   version: 1.18.1
   resolution: "@graphql-codegen/typescript-resolvers@npm:1.18.1"
@@ -3164,7 +3147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/visitor-plugin-common@npm:^1.17.13, @graphql-codegen/visitor-plugin-common@npm:^1.17.14":
+"@graphql-codegen/visitor-plugin-common@npm:^1.17.14":
   version: 1.17.14
   resolution: "@graphql-codegen/visitor-plugin-common@npm:1.17.14"
   dependencies:
@@ -10374,7 +10357,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"camel-case@npm:4.1.1, camel-case@npm:^4.1.1":
+"camel-case@npm:4.1.1":
   version: 4.1.1
   resolution: "camel-case@npm:4.1.1"
   dependencies:
@@ -15133,12 +15116,10 @@ app-builder-lib@22.9.1:
     "@graphql-codegen/add": ^2.0.1
     "@graphql-codegen/cli": ^1.17.10
     "@graphql-codegen/near-operation-file-preset": ^1.17.11
-    "@graphql-codegen/plugin-helpers": ^1.17.10
     "@graphql-codegen/schema-ast": ^1.17.10
     "@graphql-codegen/typed-document-node": ^1.18.2
     "@graphql-codegen/typescript": ^1.20.0
     "@graphql-codegen/typescript-operations": ^1.17.10
-    "@graphql-codegen/typescript-react-apollo": ^2.0.6
     "@graphql-codegen/typescript-resolvers": ^1.17.10
     "@typescript-eslint/eslint-plugin": ^4.12.0
     "@typescript-eslint/parser": ^4.12.0
@@ -15157,7 +15138,6 @@ app-builder-lib@22.9.1:
     eslint-plugin-react-hooks: ^4.2.0
     graphql: "*"
     graphql-codegen-persisted-query-ids: ^0.1.2
-    graphql-tag: ^2.10.3
     husky: ^4.3.6
     jest: "*"
     lerna: ^3.22.1
