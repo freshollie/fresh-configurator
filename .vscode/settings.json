@@ -14,15 +14,13 @@
   "eslint.format.enable": false,
   "prettier.packageManager": "yarn",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
-  "prettier.disableLanguages": [
-    "javascript",
-    "typescript"
-  ],
+  "prettier.disableLanguages": ["javascript", "typescript"],
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
   },
   "eslint.nodePath": ".yarn/sdks",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "jest.pathToJest": "yarn jest"
 }
