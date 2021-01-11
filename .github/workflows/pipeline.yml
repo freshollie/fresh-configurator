@@ -17,10 +17,17 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Install
-        uses: bahmutov/npm-install@v1.6.2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::($(yarn config get globalFolder)"
+
+      - uses: actions/cache@v2
         with:
-          install-command: yarn --immutable
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}/cache
+          key: yarn-cache-${{ github.head_ref }}
+
+      - name: Install
+        run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
