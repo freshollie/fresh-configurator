@@ -40,8 +40,9 @@
     }
   },
   "scripts": {
-    "start": "yarn run compile:deps && webpack-dev-server --hot --host 0.0.0.0 --mode development",
-    "start:mocked": "yarn run compile:deps && cross-env MOCKED=true webpack-dev-server --hot --host 0.0.0.0 --mode development",
+    "start": "webpack-dev-server --hot --mode development --config webpack/renderer.config.js",
+    "start:mocked": "cross-env MOCKED=true yarn start",
+    "start:main": "yarn run compile:deps && webpack --progress --mode development --config webpack/main.config.js && electron build/main.js",
     "compile": "webpack --progress --mode production",
     "compile:deps": "node build-deps.js",
     "pack": "electron-builder --publish never",
@@ -119,12 +120,9 @@
     "themeprovider-storybook": "^1.7.1",
     "ts-jest": "*",
     "ts-loader": "^8.0.12",
-    "ts-node": "^8.8.2",
-    "tsconfig-paths": "^3.9.0",
-    "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "*",
     "webpack": "^5.11.1",
-    "webpack-cli": "^4.3.1",
+    "webpack-cli": "^3",
     "webpack-dev-server": "^3.11.1"
   }
 }

@@ -92,7 +92,6 @@ module.exports = {
 
     config.plugins.push(
       new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
-        // eslint-disable-next-line no-param-reassign
         resource.request += ".ts";
       })
     );
