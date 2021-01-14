@@ -109,6 +109,7 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
       },
     },
   ],

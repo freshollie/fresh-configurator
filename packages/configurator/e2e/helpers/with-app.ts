@@ -2,6 +2,15 @@ import { Application } from "spectron";
 
 import path from "path";
 import os from "os";
+import fs from "fs";
+
+const PRODUCTION = process.env.PRODUCTION === "true";
+
+const exists = (filePath: string): Promise<boolean> =>
+  fs.promises
+    .access(filePath)
+    .then(() => true)
+    .catch(() => false);
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const electronPath = require("electron");
@@ -31,20 +40,22 @@ const binaryPath = (): string => {
 };
 
 export default async (): Promise<Application> => {
+  const main = path.join(__dirname, "../../build/main.js");
+  if (!PRODUCTION && !(await exists(main))) {
+    throw new Error("E2E tests expect configurator to be running");
+  } else if (PRODUCTION && !(await exists(binaryPath()))) {
+    throw new Error("Production e2e tests expect configurator to be built");
+  }
   if (!app) {
     app = new Application({
       env: {
         E2E: "true",
         HEADLESS: "true",
       },
-      path:
-        process.env.CI === "true"
-          ? binaryPath()
-          : ((electronPath as unknown) as string),
-      args:
-        process.env.CI === "true"
-          ? undefined
-          : [path.join(__dirname, "../../dev.js")],
+      path: PRODUCTION ? binaryPath() : ((electronPath as unknown) as string),
+      args: PRODUCTION
+        ? undefined
+        : [path.join(__dirname, "../../build/main.js")],
     });
   }
 

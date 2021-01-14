@@ -1,8 +1,11 @@
+const WebpackBar = require("webpackbar");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { commonPlugins, devtool, ignoreWarnings } = require("./shared");
 
 module.exports = (_, { mode }) => ({
+  mode: mode || "development",
   entry: "./src/main.ts",
-  target: "electron-main",
+  target: "electron11.1-main",
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
   },
@@ -56,6 +59,21 @@ module.exports = (_, { mode }) => ({
     path: `${__dirname}/../build`,
     filename: "main.js",
   },
-  plugins: commonPlugins(mode),
+  plugins: [
+    ...commonPlugins(mode),
+    new WebpackBar({
+      name: "main",
+      color: "yellow",
+    }),
+    ...(process.env.REPORT
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+            reportFilename: "main-report.html",
+            openAnalyzer: false,
+          }),
+        ]
+      : []),
+  ],
   devtool: devtool(mode),
 });

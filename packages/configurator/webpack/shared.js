@@ -1,14 +1,9 @@
-const { DefinePlugin, SourceMapDevToolPlugin } = require("webpack");
+const { SourceMapDevToolPlugin } = require("webpack");
 
 const devtool = (mode) =>
   mode !== "production" ? "cheap-source-map" : undefined;
 
 const commonPlugins = (mode) => [
-  new DefinePlugin({
-    "process.env": {
-      NODE_ENV: JSON.stringify(mode),
-    },
-  }),
   ...(mode === "production"
     ? [
         new SourceMapDevToolPlugin({

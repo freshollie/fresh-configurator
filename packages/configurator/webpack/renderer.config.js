@@ -1,10 +1,14 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { NormalModuleReplacementPlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const WebpackBar = require("webpackbar");
 const { spawn } = require("child_process");
 const { commonPlugins, devtool, ignoreWarnings } = require("./shared");
 
 module.exports = (_, { mode }) => ({
+  target: "es2018",
+  mode: mode || "development",
   entry: "./src/index.tsx",
   watchOptions: {
     ignored: ["build/**/*"],
@@ -15,6 +19,7 @@ module.exports = (_, { mode }) => ({
       stream: false,
       util: false,
       path: false,
+      tty: false,
     },
   },
   externals: {
@@ -92,17 +97,32 @@ module.exports = (_, { mode }) => ({
         ]
       : []),
     ...commonPlugins(mode),
+    new WebpackBar({
+      name: "renderer",
+    }),
+    ...(process.env.REPORT
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+            reportFilename: "renderer-report.html",
+            openAnalyzer: false,
+          }),
+        ]
+      : []),
   ],
+  optimization: {
+    usedExports: true,
+  },
   devtool: devtool(mode),
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
     stats: {
       colors: true,
-      chunks: false,
-      children: false,
+      chunks: true,
+      children: true,
     },
     before() {
-      spawn("yarn", ["start:main"], {
+      spawn("electron", [`${__dirname}/../build/main.js`], {
         shell: true,
         env: {
           NODE_ENV: "development",

@@ -40,14 +40,15 @@
     }
   },
   "scripts": {
-    "start": "webpack-dev-server --hot --mode development --config webpack/renderer.config.js",
+    "start": "yarn compile:main && webpack-dev-server --hot --mode development --config webpack/renderer.config.js",
     "start:mocked": "cross-env MOCKED=true yarn start",
-    "start:main": "yarn run compile:deps && webpack --progress --mode development --config webpack/main.config.js && electron build/main.js",
-    "compile": "webpack --progress --mode production",
+    "compile": "yarn run compile:deps && webpack",
+    "compile:production": "yarn compile --mode production",
+    "compile:main": "yarn run compile:deps && webpack --config webpack/main.config.js",
     "compile:deps": "node build-deps.js",
     "pack": "electron-builder --publish never",
-    "build": "yarn run compile:deps && yarn compile && yarn run pack",
-    "release": "yarn compile && electron-builder --publish always",
+    "build": "yarn compile:production && yarn run pack",
+    "release": "electron-builder --publish always",
     "storybook": "start-storybook -p 6006 -s .storybook/public",
     "build-storybook": "build-storybook  -s .storybook/public",
     "storyshots": "storyshots-runner --url http://localhost:6006 --command 'start-storybook -p 6006 -s .storybook/public --ci'",
@@ -61,11 +62,11 @@
     "date-fns": "^2.11.0",
     "graphql": "*",
     "graphql-ws": "^3.2.0",
+    "markdown-to-jsx": "^7.1.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-error-boundary": "^3.1.0",
     "react-is": "^16.12.0",
-    "react-markdown": "^4.3.1",
     "react-modal": "^3.11.2",
     "react-switch": "^5.0.1",
     "react-three-fiber": "^5.3.10",
@@ -107,7 +108,7 @@
     "electron-rebuild": "^2.3.4",
     "file-loader": "^5.1.0",
     "fork-ts-checker-webpack-plugin": "^6.0.7",
-    "html-webpack-plugin": "^4.5.1",
+    "html-webpack-plugin": "^5.0.0-beta.4",
     "identity-obj-proxy": "^3.0.0",
     "jest-date-mock": "^1.0.8",
     "jest-styled-components": "^7.0.3",
@@ -122,7 +123,9 @@
     "ts-loader": "^8.0.12",
     "typescript": "*",
     "webpack": "^5.11.1",
+    "webpack-bundle-analyzer": "^4.3.0",
     "webpack-cli": "^3",
-    "webpack-dev-server": "^3.11.1"
+    "webpack-dev-server": "^3.11.1",
+    "webpackbar": "^5.0.0-3"
   }
 }

@@ -9,8 +9,9 @@ module.exports = {
     "<rootDir>/.*/__mocks__",
   ],
   rootDir: path.join(__dirname, "e2e"),
+  setupFilesAfterEnv: undefined,
   setupFiles: undefined,
-  setupFilesAfterEnv: ["<rootDir>/setup.ts"],
   collectCoverage: false,
+  testTimeout: 100000,
   maxWorkers: 2,
 };
