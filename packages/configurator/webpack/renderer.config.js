@@ -116,7 +116,7 @@ module.exports = (_, { mode }) => ({
         ]
       : []),
   ],
-  devtool: "source-map",
+  devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
     stats: {
