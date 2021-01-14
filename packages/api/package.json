@@ -30,7 +30,8 @@
   "devDependencies": {
     "@types/jest": "*",
     "@types/semver": "^7.1.0",
-    "ts-jest": "*",
+    "esbuild": "*",
+    "esbuild-jest": "*",
     "typescript": "*"
   }
 }

@@ -2471,6 +2471,8 @@ __metadata:
     apollo-server-express: ^2.19.1
     apollo-server-testing: ^2.19.1
     debug: ^4.1.1
+    esbuild: "*"
+    esbuild-jest: "*"
     express: ^4.17.1
     flush-promises: ^1.0.2
     get-port: ^5.1.1
@@ -2479,7 +2481,6 @@ __metadata:
     graphql-tools: ^4.0.7
     graphql-ws: ^3.2.0
     merge-graphql-schemas: ^1.7.7
-    ts-jest: "*"
     ts-node: ^8.8.2
     typescript: "*"
     uuid: ^7.0.3
@@ -2496,8 +2497,9 @@ __metadata:
     "@betaflight/msp": "workspace:^0.3.0"
     "@types/jest": "*"
     "@types/semver": ^7.1.0
+    esbuild: "*"
+    esbuild-jest: "*"
     semver: ^7.1.3
-    ts-jest: "*"
     typescript: "*"
   languageName: unknown
   linkType: soft
@@ -2541,6 +2543,8 @@ __metadata:
     electron-builder: 22.9.1
     electron-devtools-installer: ^3.1.1
     electron-rebuild: ^2.3.4
+    esbuild: "*"
+    esbuild-jest: "*"
     esbuild-loader: ^2.7.0
     file-loader: ^5.1.0
     fork-ts-checker-webpack-plugin: ^6.0.7
@@ -2569,7 +2573,6 @@ __metadata:
     styled-components: ^5.0.1
     themeprovider-storybook: ^1.7.1
     three: ^0.124.0
-    ts-jest: "*"
     typescript: "*"
     webpack: ^5.11.1
     webpack-bundle-analyzer: ^4.3.0
@@ -2592,8 +2595,9 @@ __metadata:
     "@types/serialport__bindings": "workspace:^8.0.0"
     "@types/serialport__stream": "workspace:^8.0.0"
     debug: ^4.1.1
+    esbuild: "*"
+    esbuild-jest: "*"
     flush-promises: ^1.0.2
-    ts-jest: "*"
     typescript: "*"
   languageName: unknown
   linkType: soft
@@ -9982,15 +9986,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"bs-logger@npm:0.x":
-  version: 0.2.6
-  resolution: "bs-logger@npm:0.2.6"
-  dependencies:
-    fast-json-stable-stringify: 2.x
-  checksum: f5f2f1315d6ceac655c3945d149086a5f5a90b3c908780757e12e938aad0125a7aa563cae2f7153ccf43443adb1b88a44960a61063903c3973e1dfdda6fc2d8c
-  languageName: node
-  linkType: hard
-
 "bser@npm:2.1.1":
   version: 2.1.1
   resolution: "bser@npm:2.1.1"
@@ -10021,7 +10016,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"buffer-from@npm:1.x, buffer-from@npm:^1.0.0":
+"buffer-from@npm:^1.0.0":
   version: 1.1.1
   resolution: "buffer-from@npm:1.1.1"
   checksum: 540ceb79c4f5bfcadaabbc18324fa84c50dc52905084be7c03596a339cf5a88513bee6831ce9b36ddd046fab09257a7c80686e129d0559a0cfd141da196ad956
@@ -13601,6 +13596,15 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
+"esbuild-jest@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "esbuild-jest@npm:0.3.0"
+  peerDependencies:
+    esbuild: ">=0.8.16"
+  checksum: 078a9d217ea1bf764a71eca75dcba655dd5a79d077e3973ae37f47434309e064183abf39abaa5bb4d6e9a8dc8d9ca5618aa676d9936c79d6f6c99a6222295bf3
+  languageName: node
+  linkType: hard
+
 "esbuild-loader@npm:^2.7.0":
   version: 2.7.0
   resolution: "esbuild-loader@npm:2.7.0"
@@ -13615,7 +13619,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.8.17":
+"esbuild@npm:^0.8.32":
   version: 0.8.32
   resolution: "esbuild@npm:0.8.32"
   bin:
@@ -14534,7 +14538,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"fast-json-stable-stringify@npm:2.x, fast-json-stable-stringify@npm:^2.0.0":
+"fast-json-stable-stringify@npm:^2.0.0":
   version: 2.1.0
   resolution: "fast-json-stable-stringify@npm:2.1.0"
   checksum: 7df3fabfe445d65953b2d9d9d3958bd895438b215a40fb87dae8b2165c5169a897785eb5d51e6cf0eb03523af756e3d82ea01083f6ac6341fe16db532fee3016
@@ -15146,7 +15150,6 @@ app-builder-lib@22.9.1:
     lint-staged: ^10.2.13
     prettier: ^2.1.1
     rimraf: ^3.0.2
-    ts-jest: "*"
     ts-node: ^8.6.2
     typescript: "*"
   dependenciesMeta:
@@ -18645,20 +18648,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jest-util@npm:26.x, jest-util@npm:^26.3.0":
-  version: 26.3.0
-  resolution: "jest-util@npm:26.3.0"
-  dependencies:
-    "@jest/types": ^26.3.0
-    "@types/node": "*"
-    chalk: ^4.0.0
-    graceful-fs: ^4.2.4
-    is-ci: ^2.0.0
-    micromatch: ^4.0.2
-  checksum: a3574473c503e44db396403823dc2c1495f31db5ae6a11182d3cfaa08af26a4a70c0efd848f199ce423cc9541b7cd2fe2430d22e5bbce28038352120203a116e
-  languageName: node
-  linkType: hard
-
 "jest-util@npm:^26.0.1":
   version: 26.0.1
   resolution: "jest-util@npm:26.0.1"
@@ -18669,6 +18658,20 @@ fsevents@~2.3.1:
     is-ci: ^2.0.0
     make-dir: ^3.0.0
   checksum: 9dd09166290f33d2edac2d2a9af54f82174f3931c3a28116aae5d0b8caf6a238ddd78dbea847b64e7312de87b6f18cdb20766da30c7815aba1e37d514d22136f
+  languageName: node
+  linkType: hard
+
+"jest-util@npm:^26.3.0":
+  version: 26.3.0
+  resolution: "jest-util@npm:26.3.0"
+  dependencies:
+    "@jest/types": ^26.3.0
+    "@types/node": "*"
+    chalk: ^4.0.0
+    graceful-fs: ^4.2.4
+    is-ci: ^2.0.0
+    micromatch: ^4.0.2
+  checksum: a3574473c503e44db396403823dc2c1495f31db5ae6a11182d3cfaa08af26a4a70c0efd848f199ce423cc9541b7cd2fe2430d22e5bbce28038352120203a116e
   languageName: node
   linkType: hard
 
@@ -18950,17 +18953,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"json5@npm:2.x, json5@npm:^2.1.2":
-  version: 2.1.3
-  resolution: "json5@npm:2.1.3"
-  dependencies:
-    minimist: ^1.2.5
-  bin:
-    json5: lib/cli.js
-  checksum: 957e4937106cf59975aa0281e68911534d65c8a25be5b4d3559aa55eba351ccab516a943a60ba33e461e4b8af749939986e311de910cbcfd197410b57d971741
-  languageName: node
-  linkType: hard
-
 "json5@npm:^1.0.1":
   version: 1.0.1
   resolution: "json5@npm:1.0.1"
@@ -18980,6 +18972,17 @@ fsevents@~2.3.1:
   bin:
     json5: lib/cli.js
   checksum: fd755a9551d59acaa08c61ff9f1227a946d55af52d94b08fa5b4180471125f363f924606b56fa46ce94b171045d4e17502e6ccdc443e9a0bb1a2cef7b4875928
+  languageName: node
+  linkType: hard
+
+"json5@npm:^2.1.2":
+  version: 2.1.3
+  resolution: "json5@npm:2.1.3"
+  dependencies:
+    minimist: ^1.2.5
+  bin:
+    json5: lib/cli.js
+  checksum: 957e4937106cf59975aa0281e68911534d65c8a25be5b4d3559aa55eba351ccab516a943a60ba33e461e4b8af749939986e311de910cbcfd197410b57d971741
   languageName: node
   linkType: hard
 
@@ -19669,13 +19672,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:4.x":
-  version: 4.1.2
-  resolution: "lodash.memoize@npm:4.1.2"
-  checksum: 080c1095b7795b293a06078737550dc0c8138192cadbafb4e4b1303357d367ac589a1a570fad8de154175b008ca7b2b48d6a7f1755a143e13b764e20a7104080
-  languageName: node
-  linkType: hard
-
 "lodash.merge@npm:^4.6.1":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -20011,7 +20007,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"make-error@npm:1.x, make-error@npm:^1":
+"make-error@npm:^1":
   version: 1.3.6
   resolution: "make-error@npm:1.3.6"
   checksum: 2c780bab8409b865e8ee86697c599a2bf2765ec64d21eb67ccda27050e039f983feacad05a0d43aba3c966ea03d305d2612e94fec45474bcbc61181f57c5bb88
@@ -20756,7 +20752,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:*, mkdirp@npm:1.x, mkdirp@npm:^1.0.3, mkdirp@npm:^1.0.4":
+"mkdirp@npm:*, mkdirp@npm:^1.0.3, mkdirp@npm:^1.0.4":
   version: 1.0.4
   resolution: "mkdirp@npm:1.0.4"
   bin:
@@ -25349,15 +25345,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"semver@npm:7.x, semver@npm:^7.3.2":
-  version: 7.3.2
-  resolution: "semver@npm:7.3.2"
-  bin:
-    semver: bin/semver.js
-  checksum: bceb46d396d039afb5be2b2860bce1b0a43ecbadc72dde7ebe9c56dd9035ca50d9b8e086208ff9bbe53773ebde0bcfc6fc0842d7358398bca7054bb9ced801e3
-  languageName: node
-  linkType: hard
-
 "semver@npm:^6.0.0, semver@npm:^6.2.0, semver@npm:^6.3.0":
   version: 6.3.0
   resolution: "semver@npm:6.3.0"
@@ -25391,6 +25378,15 @@ resolve@^1.18.1:
   bin:
     semver: bin/semver.js
   checksum: 90d0c84cf451623febce5b9c04d258e40880db1237144a3ea4fe1073782f51020bb5e0438be159ce0263b917028e79e57056a0973bbb7b721e090ef16f1692df
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.3.2":
+  version: 7.3.2
+  resolution: "semver@npm:7.3.2"
+  bin:
+    semver: bin/semver.js
+  checksum: bceb46d396d039afb5be2b2860bce1b0a43ecbadc72dde7ebe9c56dd9035ca50d9b8e086208ff9bbe53773ebde0bcfc6fc0842d7358398bca7054bb9ced801e3
   languageName: node
   linkType: hard
 
@@ -27430,30 +27426,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^26.3.0":
-  version: 26.3.0
-  resolution: "ts-jest@npm:26.3.0"
-  dependencies:
-    "@types/jest": 26.x
-    bs-logger: 0.x
-    buffer-from: 1.x
-    fast-json-stable-stringify: 2.x
-    jest-util: 26.x
-    json5: 2.x
-    lodash.memoize: 4.x
-    make-error: 1.x
-    mkdirp: 1.x
-    semver: 7.x
-    yargs-parser: 18.x
-  peerDependencies:
-    jest: ">=26 <27"
-    typescript: ">=3.8 <5.0"
-  bin:
-    ts-jest: cli.js
-  checksum: aa20f07590814fe6c587733cc0278da12e0f6ed08828ed2904671cf29d31b6d1fbb67320221ad2ac7396c369df1ee777bcec7c3dfda0e383968423e78b41bfe5
-  languageName: node
-  linkType: hard
-
 "ts-log@npm:^2.2.3":
   version: 2.2.3
   resolution: "ts-log@npm:2.2.3"
@@ -29456,16 +29428,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:18.x, yargs-parser@npm:^18.1.1":
-  version: 18.1.2
-  resolution: "yargs-parser@npm:18.1.2"
-  dependencies:
-    camelcase: ^5.0.0
-    decamelize: ^1.2.0
-  checksum: 500c5c4268fdbf8ba31ee97132f218b547607987714b1d543f44c7da78baf18ac84b0fa6270070d1e4ca40417a08e3a509073da80c3de4e5ccf076bce40dd85d
-  languageName: node
-  linkType: hard
-
 "yargs-parser@npm:^10.0.0":
   version: 10.1.0
   resolution: "yargs-parser@npm:10.1.0"
@@ -29492,6 +29454,16 @@ resolve@^1.18.1:
     camelcase: ^5.0.0
     decamelize: ^1.2.0
   checksum: 1969d5cf00b9ff37e4958f2fde76728b6ed0b3be36f25870348f825bc99671665488580179af344209c9e08acf12249a9812c0f426b4062cbf00509ee7815fee
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:^18.1.1":
+  version: 18.1.2
+  resolution: "yargs-parser@npm:18.1.2"
+  dependencies:
+    camelcase: ^5.0.0
+    decamelize: ^1.2.0
+  checksum: 500c5c4268fdbf8ba31ee97132f218b547607987714b1d543f44c7da78baf18ac84b0fa6270070d1e4ca40417a08e3a509073da80c3de4e5ccf076bce40dd85d
   languageName: node
   linkType: hard
 

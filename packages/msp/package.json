@@ -39,8 +39,9 @@
     "@types/serialport__binding-mock": "workspace:^8.0.0",
     "@types/serialport__bindings": "workspace:^8.0.0",
     "@types/serialport__stream": "workspace:^8.0.0",
+    "esbuild": "*",
+    "esbuild-jest": "*",
     "flush-promises": "^1.0.2",
-    "ts-jest": "*",
     "typescript": "*"
   }
 }
