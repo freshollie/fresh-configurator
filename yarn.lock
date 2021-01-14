@@ -2551,7 +2551,6 @@ __metadata:
     jest-styled-components: ^7.0.3
     markdown-to-jsx: ^7.1.1
     node-loader: ^0.6.0
-    parallel-webpack: ^2.6.0
     puppeteer: ^5.5.0
     react: ^16.12.0
     react-docgen-typescript-loader: ^3.6.0
@@ -2576,7 +2575,6 @@ __metadata:
     webpack-bundle-analyzer: ^4.3.0
     webpack-cli: ^3
     webpack-dev-server: ^3.11.1
-    webpack-shell-plugin-next: ^2.1.1
     webpackbar: ^5.0.0-3
   languageName: unknown
   linkType: soft
@@ -8016,16 +8014,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^4.9.2":
-  version: 4.11.8
-  resolution: "ajv@npm:4.11.8"
-  dependencies:
-    co: ^4.6.0
-    json-stable-stringify: ^1.0.1
-  checksum: 7f18135443a3d3c73002afb18ca70f287e3bb1096034bfb1f756a0c052b0d39e9d980374f3f6b8e6a5c170d981cfc02e590937e6742b897bf4b5de179f129c84
-  languageName: node
-  linkType: hard
-
 "ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.5.5":
   version: 6.11.0
   resolution: "ajv@npm:6.11.0"
@@ -9724,7 +9712,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.0.6, bluebird@npm:^3.3.5, bluebird@npm:^3.5.1, bluebird@npm:^3.5.3, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
+"bluebird@npm:^3.3.5, bluebird@npm:^3.5.1, bluebird@npm:^3.5.3, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 4f2288662f3d4eadbb82d4daa4a7d7976a28fa3c7eb4102c9b4033b03e5be4574ba123ac52a7c103cde4cb7b2d2afc1dbe41817ca15a29ff21ecd258d0286047
@@ -10550,7 +10538,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"chalk@npm:^1.0.0, chalk@npm:^1.1.1, chalk@npm:^1.1.3":
+"chalk@npm:^1.0.0, chalk@npm:^1.1.3":
   version: 1.1.3
   resolution: "chalk@npm:1.1.3"
   dependencies:
@@ -13034,13 +13022,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"easy-stack@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "easy-stack@npm:1.0.1"
-  checksum: 1b2d9e777e8ed1395665ea19ae07fc8fa0d78840b2284e2f6e4710c90ab9605e03fb7907541eb165a4a08d3f8f57109aec26e0f7bc1bd92f6c73e8966f382e7d
-  languageName: node
-  linkType: hard
-
 "ecc-jsbn@npm:~0.1.1":
   version: 0.1.2
   resolution: "ecc-jsbn@npm:0.1.2"
@@ -14117,13 +14098,6 @@ app-builder-lib@22.9.1:
   version: 1.8.1
   resolution: "etag@npm:1.8.1"
   checksum: f18341a3c12a554ec46c0d4756bc9cae177e92f25a4ebd9ceefebf0ee448b675972fc110879f22b1bf514174713921ae5de9ff77af2062d422b1085588465a57
-  languageName: node
-  linkType: hard
-
-"event-pubsub@npm:4.3.0":
-  version: 4.3.0
-  resolution: "event-pubsub@npm:4.3.0"
-  checksum: 55028bce1f5f312eb829a10f8360bff19c7c7cf1c2bd5d16df922362484383ed5255e9a8962e527356a31f8c75c3ba29188c358e26646628e97793c2f8e7e5c9
   languageName: node
   linkType: hard
 
@@ -16231,13 +16205,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"has-flag@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "has-flag@npm:1.0.0"
-  checksum: 556423170e15c694061a69052773114159c18ddf4ca0c72912591343f9568878c0ab29c16ab901f3466eaca25faf5ca4b1c6831b6795a3a3cd5d1606bdc6fa1f
-  languageName: node
-  linkType: hard
-
 "has-flag@npm:^3.0.0":
   version: 3.0.0
   resolution: "has-flag@npm:3.0.0"
@@ -17278,7 +17245,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"interpret@npm:^1.0.1, interpret@npm:^1.4.0":
+"interpret@npm:^1.4.0":
   version: 1.4.0
   resolution: "interpret@npm:1.4.0"
   checksum: f15725d76206525546f559030ddc967db025c6db904eb8798a70ec3c07e42c5537c5cbc73a15eafd4ae5cdabad35601abf8878261c03dcc8217747e8037575fe
@@ -18780,22 +18747,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"js-message@npm:1.0.7":
-  version: 1.0.7
-  resolution: "js-message@npm:1.0.7"
-  checksum: 2a13a7031a9a5fa7468a660fb7d27ee0598dce720fc2db352f4f2acec93089700aa1cea056320a425a5c95f14ae5563f8d280fd2c1a495ffcd77f28d21a7092f
-  languageName: node
-  linkType: hard
-
-"js-queue@npm:2.0.2":
-  version: 2.0.2
-  resolution: "js-queue@npm:2.0.2"
-  dependencies:
-    easy-stack: ^1.0.1
-  checksum: 7429a0fa774e2893fb77fa9e9649321b8e1337b55798dc3a690d784ede8ffe30ea225eeadb813b5dd1213463b8cb283938ca1c61123ec6b4b569509207022f03
-  languageName: node
-  linkType: hard
-
 "js-string-escape@npm:^1.0.1":
   version: 1.0.1
   resolution: "js-string-escape@npm:1.0.1"
@@ -19601,13 +19552,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash.assign@npm:^4.0.8":
-  version: 4.2.0
-  resolution: "lodash.assign@npm:4.2.0"
-  checksum: ef1a67138d5276b7df6552e3f83b83f2e0fd801d59bc217bb0cb07c3dc82398654733c6a37d6feb531cda331a741ab9007d1fa7c6d96a5872962b601ea99da06
-  languageName: node
-  linkType: hard
-
 "lodash.clonedeep@npm:^4.5.0":
   version: 4.5.0
   resolution: "lodash.clonedeep@npm:4.5.0"
@@ -19636,14 +19580,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash.endswith@npm:^4.0.1":
-  version: 4.2.1
-  resolution: "lodash.endswith@npm:4.2.1"
-  checksum: 97ac8e5a4b67b91dfc36a2cf1fa341d63a0449b941bfaf696954a88386b3fd25fb7aa12599221048d073435fed1d42f493ded260f03b00f850115a4c1772ec1c
-  languageName: node
-  linkType: hard
-
-"lodash.flatten@npm:^4.2.0, lodash.flatten@npm:^4.4.0":
+"lodash.flatten@npm:^4.4.0":
   version: 4.4.0
   resolution: "lodash.flatten@npm:4.4.0"
   checksum: f22a7f6f163256d87345b07c76122e03d03abbf943b6c3aa5e5fafb7d5bce765013aedfc2aae7e649af0907287a2cf85de24237dbdd3ecd485a77d56e070b54c
@@ -21217,17 +21154,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"node-ipc@npm:^9.1.0":
-  version: 9.1.3
-  resolution: "node-ipc@npm:9.1.3"
-  dependencies:
-    event-pubsub: 4.3.0
-    js-message: 1.0.7
-    js-queue: 2.0.2
-  checksum: abb4dde0a2357bee9c774f97ca832b5c68dac5e1059605035c8ba71c1c82ce5f5515587b6337a83e1e9031d46f59d620d295a6b708d5bbf470c6ee386be5a4c7
-  languageName: node
-  linkType: hard
-
 "node-libs-browser@npm:^2.2.1":
   version: 2.2.1
   resolution: "node-libs-browser@npm:2.2.1"
@@ -22237,30 +22163,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"parallel-webpack@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "parallel-webpack@npm:2.6.0"
-  dependencies:
-    ajv: ^4.9.2
-    bluebird: ^3.0.6
-    chalk: ^1.1.1
-    interpret: ^1.0.1
-    lodash.assign: ^4.0.8
-    lodash.endswith: ^4.0.1
-    lodash.flatten: ^4.2.0
-    minimist: ^1.2.0
-    node-ipc: ^9.1.0
-    pluralize: ^1.2.1
-    supports-color: ^3.1.2
-    worker-farm: ^1.3.1
-  peerDependencies:
-    webpack: ^1.12.9 || ^2.2.0 || ^3.x || ^4.x
-  bin:
-    parallel-webpack: bin/run.js
-  checksum: f0875f2673427b50555740b71604a67ea208cf632312b054829f102d5d4ca6785f1a84cdcbce1a9b31f6664ea35463d2b88963f53a808c2fdc843713aaa3bb97
-  languageName: node
-  linkType: hard
-
 "param-case@npm:3.0.3":
   version: 3.0.3
   resolution: "param-case@npm:3.0.3"
@@ -22764,13 +22666,6 @@ fsevents@~2.3.1:
   dependencies:
     semver-compare: ^1.0.0
   checksum: 34cf86f6d577877df5e9ced0bda57babd97bd2dc7e5965a67f990337f01ccd5203a98dc5aa7971e10088b2b1b29628d51d9770996151c7d306ed0069b4ecd745
-  languageName: node
-  linkType: hard
-
-"pluralize@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "pluralize@npm:1.2.1"
-  checksum: 86cae3decdc23c176aaf82a10bfe5283da5072586e3c136d8d5c260dcd8d551c7437a266854dcbf93074e84b015cdb10177bbd65938d269ca9aaaa7453c16596
   languageName: node
   linkType: hard
 
@@ -26775,15 +26670,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^3.1.2":
-  version: 3.2.3
-  resolution: "supports-color@npm:3.2.3"
-  dependencies:
-    has-flag: ^1.0.0
-  checksum: d26b4f5f7ab4408e3ecf5809896a399a0d388b948701a8958bb6610ca30aa837e75d56d7dfb5e175f8ffd92431dc1e149faa6183cf166178ea63c74e974a87ce
-  languageName: node
-  linkType: hard
-
 "supports-color@npm:^5.3.0, supports-color@npm:^5.5.0":
   version: 5.5.0
   resolution: "supports-color@npm:5.5.0"
@@ -28960,15 +28846,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"webpack-shell-plugin-next@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "webpack-shell-plugin-next@npm:2.1.1"
-  peerDependencies:
-    webpack: ">=5.0.0"
-  checksum: 8655332423725b55633f437ed348c42202a34cab5a1618680954194d6a446e4a5bd96385c05a332b86cb42de5f3d1a56d631558549b06f3fb7e894a991c2e893
-  languageName: node
-  linkType: hard
-
 "webpack-sources@npm:^1.3.0, webpack-sources@npm:^1.4.0, webpack-sources@npm:^1.4.1, webpack-sources@npm:^1.4.3":
   version: 1.4.3
   resolution: "webpack-sources@npm:1.4.3"
@@ -29272,7 +29149,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"worker-farm@npm:^1.3.1, worker-farm@npm:^1.7.0":
+"worker-farm@npm:^1.7.0":
   version: 1.7.0
   resolution: "worker-farm@npm:1.7.0"
   dependencies:
