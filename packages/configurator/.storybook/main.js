@@ -1,7 +1,31 @@
 /* eslint-disable no-param-reassign */
 const path = require("path");
-const { NormalModuleReplacementPlugin } = require("webpack");
-const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
+// TODO: use import webpack version when webpack 5 is supported by
+// storybook
+const NormalModuleReplacementPlugin = require("./NormalModuleReplacementPlugin");
+
+/**
+ * Patch the given babel config to allow it to
+ * work with yarn pnp.
+ *
+ * It might be possible to remove this with the next
+ * releases of storybook
+ */
+const fixBabel = (config) => {
+  // Filter for only plugins which make sense for us
+  const allowed = [
+    "babel-plugin-macros",
+    "syntax-dynamic-import",
+    "babel-plugin-emotion",
+    "proposal-class-properties",
+    "proposal-export-default-from",
+  ];
+  config.presets[0][1] = { targets: { esmodules: true } };
+  config.plugins = config.plugins.filter(([name]) =>
+    allowed.some((plugin) => name.includes(plugin))
+  );
+  return config;
+};
 
 module.exports = {
   stories: [path.resolve(__dirname, "../stories/**/*.stories.tsx")],
@@ -15,9 +39,6 @@ module.exports = {
     checkOptions: {
       tsconfig: path.resolve(__dirname, "../tsconfig.json"),
       reportFiles: [path.resolve(__dirname, "../stories/**/*.{ts,tsx}")],
-      compilerOptions: {
-        baseUrl: `${__dirname}../../../`,
-      },
     },
   },
   webpackFinal: (config) => {
@@ -35,7 +56,7 @@ module.exports = {
       test: /\.svg$/,
       use: [
         {
-          loader: "react-svg-loader",
+          loader: require.resolve("react-svg-loader"),
           options: {
             svgo: {
               plugins: [
@@ -52,17 +73,31 @@ module.exports = {
       ],
     });
 
-    config.resolve.plugins.push(
-      new TsconfigPathsPlugin({
-        configFile: path.resolve(__dirname, "../tsconfig.dev.json"),
-      })
+    const es6Rule = config.module.rules.find(
+      (rule) =>
+        rule.use &&
+        rule.use.find(
+          (loader) =>
+            loader && loader.loader && loader.loader.includes("babel-loader")
+        ) &&
+        rule.include instanceof RegExp &&
+        rule.include.exec("/node_modules/are-you-es5")
     );
+
+    if (es6Rule) {
+      es6Rule.use.forEach((loader) => {
+        loader.options = fixBabel(loader.options);
+      });
+    }
+
     config.plugins.push(
       new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
-        // eslint-disable-next-line no-param-reassign
         resource.request += ".ts";
       })
     );
     return config;
+  },
+  babel: (config) => {
+    return fixBabel(config);
   },
 };

@@ -17,8 +17,19 @@ jobs:
         with:
           node-version: "12.x"
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+  
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -36,8 +47,19 @@ jobs:
         with:
           node-version: "12.x"
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+  
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
@@ -59,8 +81,19 @@ jobs:
         with:
           node-version: "12.x"
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+  
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         
@@ -152,11 +185,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+  
       - name: Install
-        uses: bahmutov/npm-install@v1.4.0
+        run: yarn --immutable
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build

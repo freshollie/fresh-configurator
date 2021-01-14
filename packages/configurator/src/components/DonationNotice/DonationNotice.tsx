@@ -1,5 +1,5 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
+import Markdown from "markdown-to-jsx";
 import { Box, DonateLink } from "./DonationNotice.styles";
 
 const TEXT_CONTENT = `
@@ -19,9 +19,9 @@ should consider becoming a patron for us on [**Patreon**](https://www.patreon.co
 
 const DonationNotice: React.FC = () => (
   <Box>
-    <ReactMarkdown>{TEXT_CONTENT}</ReactMarkdown>
+    <Markdown>{TEXT_CONTENT}</Markdown>
     <DonateLink>Donate</DonateLink>
-    <ReactMarkdown>{TEXT_CONTENT_FOOTER}</ReactMarkdown>
+    <Markdown>{TEXT_CONTENT_FOOTER}</Markdown>
   </Box>
 );
 

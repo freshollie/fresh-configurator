@@ -2,7 +2,7 @@
 /* eslint-disable functional/no-this-expression */
 import { ApolloLink, Operation, FetchResult, Observable } from "@apollo/client";
 import { print, GraphQLError } from "graphql";
-import { createClient, ClientOptions, Client } from "graphql-ws";
+import { createClient, ClientOptions, Client } from "graphql-ws/lib/client";
 import persistedQueries from "./__generated__/persisted-queries.json";
 
 const PERSISTED_QUERY_MODE = window.location.search.includes("electron=true");

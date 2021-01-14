@@ -71,7 +71,8 @@ export const createServer = ({
   return {
     apolloServer,
     listen: async ({ port, hostname }) => {
-      const listeningPort = port ?? (await getPort({ port: 9000 }));
+      const listeningPort =
+        port ?? (await getPort({ port: 9000, host: hostname }));
       return new Promise((resolve, reject) => {
         try {
           server.listen(listeningPort, hostname, () => {

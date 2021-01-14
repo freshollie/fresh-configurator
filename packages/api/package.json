@@ -3,9 +3,12 @@
   "version": "0.3.0",
   "description": "A high-level API to read data from betaflight flight controllers",
   "author": "freshollie@gmail.com",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "typings": "./dist/cjs/index.d.ts",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "typings": "./dist/cjs/index.d.ts"
+  },
   "sideEffects": false,
   "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api",
   "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api#readme",
@@ -21,11 +24,13 @@
     "dist"
   ],
   "dependencies": {
-    "@betaflight/msp": "^0.3.0",
+    "@betaflight/msp": "workspace:^0.3.0",
     "semver": "^7.1.3"
   },
   "devDependencies": {
+    "@types/jest": "*",
     "@types/semver": "^7.1.0",
+    "ts-jest": "*",
     "typescript": "*"
   }
 }

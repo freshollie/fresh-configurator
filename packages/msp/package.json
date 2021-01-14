@@ -4,9 +4,12 @@
   "description": "A MultiWii Serial Protocol library to connect and communicate with flight controllers",
   "license": "MIT",
   "author": "freshollie@gmail.com",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "typings": "./dist/cjs/index.d.ts",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "typings": "./dist/cjs/index.d.ts"
+  },
   "sideEffects": false,
   "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/msp",
   "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/msp#readme",
@@ -32,11 +35,12 @@
   "devDependencies": {
     "@serialport/binding-mock": "^9.0.2",
     "@types/debug": "^4.1.5",
-    "@types/serialport__binding-mock": "^8.0.0",
-    "@types/serialport__bindings": "^8.0.0",
-    "@types/serialport__stream": "^8.0.0",
+    "@types/jest": "*",
+    "@types/serialport__binding-mock": "workspace:^8.0.0",
+    "@types/serialport__bindings": "workspace:^8.0.0",
+    "@types/serialport__stream": "workspace:^8.0.0",
     "flush-promises": "^1.0.2",
-    "rimraf": "^3.0.2",
+    "ts-jest": "*",
     "typescript": "*"
   }
 }

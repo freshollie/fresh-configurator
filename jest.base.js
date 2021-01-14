@@ -1,9 +1,7 @@
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
-
 module.exports = {
   config: {
-    resetMocks: true,
     preset: "ts-jest",
+    resetMocks: true,
     testPathIgnorePatterns: [
       "/node_modules/",
       "/dist/",
@@ -32,14 +30,5 @@ module.exports = {
       "<rootDir>/.*/__mocks__",
     ],
     testEnvironment: "node",
-    testRunner: "jest-circus/runner",
-    moduleNameMapper: pathsToModuleNameMapper(
-      {
-        "@betaflight/*": ["*/src"],
-      },
-      {
-        prefix: `${__dirname}/node_modules/@betaflight/`,
-      }
-    ),
   },
 };

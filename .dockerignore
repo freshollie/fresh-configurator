@@ -114,3 +114,9 @@ storybook-static
 .git
 *.Dockerfile
 *.graphql.d.ts
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

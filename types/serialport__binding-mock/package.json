@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@types/serialport__bindings": "^8.0.0",
-    "@types/serialport": "^8.0.0"
+    "@types/serialport": "^8.0.0",
+    "@types/serialport__bindings": "^8.0.0"
   }
 }

@@ -113,3 +113,10 @@ storybook-static
 *.graphql.ts
 __diff_output__
 schema.graphql
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

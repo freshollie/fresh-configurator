@@ -46,7 +46,7 @@ const disableAnimations = (): void => {
   const callbacks: FrameRequestCallback[] = [];
   const overflowCallbacks: FrameRequestCallback[] = [];
   const resolvedListeners: { cb: () => void; cancelTimeout: () => void }[] = [];
-  let resolveRAFTimer: number | null;
+  let resolveRAFTimer: NodeJS.Timeout | null;
 
   // Speed up with 10x, but beware stepping too fast might cause
   // react-motion to pause them instead.

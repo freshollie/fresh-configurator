@@ -14,9 +14,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "paths": {
-      "@betaflight/*": ["./packages/*/src"]
-    },
     "composite": true
   },
   "exclude": ["/node_modules/", "/dist/"]
