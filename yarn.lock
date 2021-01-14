@@ -2541,6 +2541,7 @@ __metadata:
     electron-builder: 22.9.1
     electron-devtools-installer: ^3.1.1
     electron-rebuild: ^2.3.4
+    esbuild-loader: ^2.7.0
     file-loader: ^5.1.0
     fork-ts-checker-webpack-plugin: ^6.0.7
     graphql: "*"
@@ -2569,7 +2570,6 @@ __metadata:
     themeprovider-storybook: ^1.7.1
     three: ^0.124.0
     ts-jest: "*"
-    ts-loader: ^8.0.12
     typescript: "*"
     webpack: ^5.11.1
     webpack-bundle-analyzer: ^4.3.0
@@ -10527,7 +10527,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"chalk@npm:2.4.2, chalk@npm:^2.0.0, chalk@npm:^2.0.1, chalk@npm:^2.1.0, chalk@npm:^2.3.0, chalk@npm:^2.3.1, chalk@npm:^2.3.2, chalk@npm:^2.4.1, chalk@npm:^2.4.2":
+"chalk@npm:2.4.2, chalk@npm:^2.0.0, chalk@npm:^2.0.1, chalk@npm:^2.1.0, chalk@npm:^2.3.1, chalk@npm:^2.3.2, chalk@npm:^2.4.1, chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
   dependencies:
@@ -13334,17 +13334,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^4.0.0":
-  version: 4.1.1
-  resolution: "enhanced-resolve@npm:4.1.1"
-  dependencies:
-    graceful-fs: ^4.1.2
-    memory-fs: ^0.5.0
-    tapable: ^1.0.0
-  checksum: 613ad8cf82b9aba7180782e50539c046b92fff5e6b60e93c6e37e5f2c7eef26abf8f965efc4b2fe6d600dccb6baf48caff64cd4f7e8267e1ca5ca323e5fdde9d
-  languageName: node
-  linkType: hard
-
 "enhanced-resolve@npm:^4.1.1":
   version: 4.4.0
   resolution: "enhanced-resolve@npm:4.4.0"
@@ -13609,6 +13598,29 @@ app-builder-lib@22.9.1:
     d: ^1.0.1
     ext: ^1.1.2
   checksum: 0915d72de8760b56b69ca4360276123a4f61de5a3172fe340ce9288271cf48bcebe3ee46ca8ee0f2fd73206bbbefa7c4a40a6673d278a87c97d3a155de778931
+  languageName: node
+  linkType: hard
+
+"esbuild-loader@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "esbuild-loader@npm:2.7.0"
+  dependencies:
+    esbuild: ^0.8.17
+    loader-utils: ^2.0.0
+    type-fest: ^0.20.2
+    webpack-sources: ^2.2.0
+  peerDependencies:
+    webpack: ^4.40.0 || ^5.0.0
+  checksum: 667600b27393001f21324d75de0b97480d670ba384a48d5f66b962b6e942c3bc6dc71ff8e9e04bfe9c4bae71f396d01c093a3bf238487b9ca08c3af28fd8847f
+  languageName: node
+  linkType: hard
+
+"esbuild@npm:^0.8.17":
+  version: 0.8.32
+  resolution: "esbuild@npm:0.8.32"
+  bin:
+    esbuild: bin/esbuild
+  checksum: fb543146c63ca07a3b777a76d107c454eb33757c0696c21a8d8d3bf5f893259df56fad5366f55b5793693716ae2f57a6e2641921b5515807e00f21132a568a2a
   languageName: node
   linkType: hard
 
@@ -20396,7 +20408,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2":
+"micromatch@npm:^4.0.2":
   version: 4.0.2
   resolution: "micromatch@npm:4.0.2"
   dependencies:
@@ -27442,22 +27454,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:^8.0.12":
-  version: 8.0.12
-  resolution: "ts-loader@npm:8.0.12"
-  dependencies:
-    chalk: ^2.3.0
-    enhanced-resolve: ^4.0.0
-    loader-utils: ^1.0.2
-    micromatch: ^4.0.0
-    semver: ^6.0.0
-  peerDependencies:
-    typescript: "*"
-    webpack: "*"
-  checksum: 70da090dacb77ff51eb71ddb506a63e4617487855637441f99e8f66553933c410af1a54e71316caa0b05522fb47eaf2c9a6aaa3a0abb8b6a12ebf50b6a80f54e
-  languageName: node
-  linkType: hard
-
 "ts-log@npm:^2.2.3":
   version: 2.2.3
   resolution: "ts-log@npm:2.2.3"
@@ -27679,6 +27675,13 @@ resolve@^1.18.1:
   version: 0.18.1
   resolution: "type-fest@npm:0.18.1"
   checksum: 0d6d338e72b625a0d2c8fb4c138f5221301e40ac127e1b909bc12890ce358ef9cf11136e13aa0efd82e248bbeefd7148c01985dce2e5ab79d47a2efa75dfe8d2
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^0.20.2":
+  version: 0.20.2
+  resolution: "type-fest@npm:0.20.2"
+  checksum: 1f887bc6150e632fb772fd28e33c22a4ab036c6f484fa9ac2e2115f6cae9d62bba7ca0368e3332b539d85bd2c8391c7bff22ad410abcbc9ab3774d61e250b210
   languageName: node
   linkType: hard
 
@@ -28856,7 +28859,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"webpack-sources@npm:^2.1.1":
+"webpack-sources@npm:^2.1.1, webpack-sources@npm:^2.2.0":
   version: 2.2.0
   resolution: "webpack-sources@npm:2.2.0"
   dependencies:

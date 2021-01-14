@@ -2,9 +2,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { NormalModuleReplacementPlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const WebpackBar = require("webpackbar");
 const { spawn } = require("child_process");
-const { commonPlugins, devtool, ignoreWarnings } = require("./shared");
+const tsconfig = require("../tsconfig.json");
+const { ignoreWarnings } = require("./shared");
 
 module.exports = (_, { mode }) => ({
   target: "es2018",
@@ -34,18 +36,13 @@ module.exports = (_, { mode }) => ({
         },
       },
       {
-        test: /\.ts(x?)$/,
-        include: /src/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true,
-              projectReferences: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        loader: "esbuild-loader",
+        options: {
+          loader: "tsx",
+          tsconfigRaw: tsconfig,
+          target: tsconfig.compilerOptions.target.toLowerCase(),
+        },
       },
       {
         test: /\.svg$/,
@@ -77,7 +74,17 @@ module.exports = (_, { mode }) => ({
     path: `${__dirname}/../build`,
     filename: "renderer.js",
   },
+  optimization: {
+    minimize: mode === "production",
+    minimizer: [
+      new ESBuildMinifyPlugin({
+        target: tsconfig.compilerOptions.target.toLowerCase(),
+      }),
+    ],
+    usedExports: true,
+  },
   plugins: [
+    new ESBuildPlugin(),
     new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
       // eslint-disable-next-line no-param-reassign
       resource.request += ".ts";
@@ -96,7 +103,6 @@ module.exports = (_, { mode }) => ({
           }),
         ]
       : []),
-    ...commonPlugins(mode),
     new WebpackBar({
       name: "renderer",
     }),
@@ -110,10 +116,7 @@ module.exports = (_, { mode }) => ({
         ]
       : []),
   ],
-  optimization: {
-    usedExports: true,
-  },
-  devtool: devtool(mode),
+  devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
     stats: {
