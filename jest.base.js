@@ -1,6 +1,8 @@
 module.exports = {
   config: {
-    preset: "ts-jest",
+    transform: {
+      "^.+\\.tsx?$": "esbuild-jest",
+    },
     resetMocks: true,
     testPathIgnorePatterns: [
       "/node_modules/",
