@@ -1,6 +1,8 @@
 const WebpackBar = require("webpackbar");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { commonPlugins, devtool, ignoreWarnings } = require("./shared");
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
+const { ignoreWarnings } = require("./shared");
+const tsconfig = require("../tsconfig.json");
 
 module.exports = (_, { mode }) => ({
   mode: mode || "development",
@@ -32,18 +34,13 @@ module.exports = (_, { mode }) => ({
         },
       },
       {
-        test: /\.ts(x?)$/,
-        include: /src/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true,
-              projectReferences: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        loader: "esbuild-loader",
+        options: {
+          loader: "ts",
+          tsconfigRaw: tsconfig,
+          target: tsconfig.compilerOptions.target.toLowerCase(),
+        },
       },
       {
         test: /\.js$/,
@@ -59,8 +56,17 @@ module.exports = (_, { mode }) => ({
     path: `${__dirname}/../build`,
     filename: "main.js",
   },
+  optimization: {
+    minimize: mode === "production",
+    minimizer: [
+      new ESBuildMinifyPlugin({
+        target: tsconfig.compilerOptions.target.toLowerCase(),
+      }),
+    ],
+  },
+
   plugins: [
-    ...commonPlugins(mode),
+    new ESBuildPlugin(),
     new WebpackBar({
       name: "main",
       color: "yellow",
@@ -75,5 +81,5 @@ module.exports = (_, { mode }) => ({
         ]
       : []),
   ],
-  devtool: devtool(mode),
+  devtool: "source-map",
 });

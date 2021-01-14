@@ -1,18 +1,3 @@
-const { SourceMapDevToolPlugin } = require("webpack");
-
-const devtool = (mode) =>
-  mode !== "production" ? "cheap-source-map" : undefined;
-
-const commonPlugins = (mode) => [
-  ...(mode === "production"
-    ? [
-        new SourceMapDevToolPlugin({
-          noSources: true,
-        }),
-      ]
-    : []),
-];
-
 const ignoreWarnings = () => [
   // Can't help these
   {
@@ -28,7 +13,5 @@ const ignoreWarnings = () => [
 ];
 
 module.exports = {
-  devtool,
-  commonPlugins,
   ignoreWarnings,
 };
