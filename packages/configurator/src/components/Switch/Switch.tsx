@@ -6,13 +6,14 @@ const SIZES = {
   small: [20, 10],
   default: [35, 14],
   large: [66, 40],
-};
+} as const;
 
 export type SwitchProps = {
   checked: boolean;
   onChange?: (checked: boolean) => unknown;
   disabled?: boolean;
   size?: keyof typeof SIZES;
+  id?: string;
 };
 
 const Switch: React.FC<SwitchProps> = ({
@@ -20,14 +21,16 @@ const Switch: React.FC<SwitchProps> = ({
   onChange = () => {},
   disabled,
   size = "default",
+  id,
 }) => {
   const theme = useTheme();
 
   return (
     <ReactSwitch
+      id={id}
       checked={checked}
       onColor={theme.colors.accent}
-      handleDiameter={SIZES[size][1]}
+      handleDiameter={SIZES[size][1] - 2}
       checkedIcon={false}
       uncheckedIcon={false}
       disabled={disabled}

@@ -36,3 +36,10 @@ mutation SetMotorDigitalIdleSpeed($connection: ID!, $idlePercentage: Float!) {
     idlePercentage: $idlePercentage
   )
 }
+
+mutation SetDshotBeeperConfig(
+  $connection: ID!
+  $config: DshotBeeperConfigInput!
+) {
+  deviceSetDshotBeeperConfig(connectionId: $connection, config: $config)
+}

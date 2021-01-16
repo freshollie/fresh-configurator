@@ -1,7 +1,7 @@
-import { open, ports, readMixerConfig } from "./src";
+import { open, ports, readBeeperConfig } from "./src";
 
 (async () => {
   const port = (await ports())[1]!;
   await open(port);
-  console.log(await readMixerConfig(port));
+  console.log(await readBeeperConfig(port));
 })();
