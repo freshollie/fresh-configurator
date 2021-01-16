@@ -16,6 +16,7 @@ generates:
         RC: ../../mappers#FlightControllerMapping
         PidConfig: ../../mappers#FlightControllerMapping
         MotorsConfig: ../../mappers#FlightControllerMapping
+        Sensors: ../../mappers#FlightControllerMapping
 
     plugins:
       - typescript
