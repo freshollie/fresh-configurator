@@ -20,9 +20,7 @@ import {
   RawGpsData,
   BoardInfo,
   DisarmFlags,
-  Sensors,
   Feature,
-  SerialPortFunctions,
   SerialConfig,
   RebootTypes,
   AdvancedPidConfig,
@@ -30,6 +28,8 @@ import {
   PartialNullable,
   EscProtocols,
   MixerConfig,
+  BeeperConfig,
+  Beepers,
 } from "./types";
 import {
   getFeatureBits,
@@ -37,21 +37,13 @@ import {
   sensorBits,
   serialPortFunctionBits,
   legacySerialPortFunctionsMap,
+  beeperBits,
 } from "./features";
-import { times, filterUnset } from "./utils";
+import { times, filterUnset, unpackValues, packValues } from "./utils";
 
 export * from "./osd";
 
-export {
-  Features,
-  DisarmFlags,
-  Sensors,
-  SerialPortFunctions,
-  RebootTypes,
-  Axes3D,
-  EscProtocols,
-  McuTypes,
-} from "./types";
+export * from "./types";
 export {
   apiVersion,
   open,
@@ -167,13 +159,10 @@ export const readAttitude = async (port: string): Promise<Axes3D> => {
   };
 };
 
-const activeSensors = (sensorFlags: number): Sensors[] =>
-  sensorBits().filter((_, i) => (sensorFlags >> i) % 2 !== 0);
-
 const extractStatus = (data: MspDataView): Status => ({
   cycleTime: data.readU16(),
   i2cError: data.readU16(),
-  sensors: activeSensors(data.readU16()),
+  sensors: unpackValues(data.readU16(), sensorBits()),
   mode: data.readU32(),
   profile: data.readU8(),
 });
@@ -365,20 +354,6 @@ export const BAUD_RATES = [
   2470000,
 ];
 
-export const unpackSerialPortFunctions = (
-  serialPortsData: number
-): SerialPortFunctions[] =>
-  serialPortFunctionBits().filter((_, i) => (serialPortsData >> i) % 2 !== 0);
-
-export const packSerialPortFunctions = (
-  functions: SerialPortFunctions[]
-): number => {
-  const functionBits = serialPortFunctionBits();
-  return functions
-    .filter((func) => functionBits.includes(func))
-    .reduce((func, acc) => acc | (1 << functionBits.indexOf(func)));
-};
-
 export const toBaudRate = (baudRateIdentifier: number): number =>
   BAUD_RATES[baudRateIdentifier] ?? -1;
 
@@ -396,7 +371,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
         const start = data.remaining();
         const serialPort = {
           id: data.readU8(),
-          functions: unpackSerialPortFunctions(data.readU32()),
+          functions: unpackValues(data.readU32(), serialPortFunctionBits()),
           mspBaudRate: toBaudRate(data.readU8()),
           gpsBaudRate: toBaudRate(data.readU8()),
           telemetryBaudRate: toBaudRate(data.readU8()),
@@ -446,7 +421,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
     ports: times(
       () => ({
         id: data.readU8(),
-        functions: unpackSerialPortFunctions(data.readU16()),
+        functions: unpackValues(data.readU16(), serialPortFunctionBits()),
         mspBaudRate: toBaudRate(data.readU8()),
         gpsBaudRate: toBaudRate(data.readU8()),
         telemetryBaudRate: toBaudRate(data.readU8()),
@@ -471,9 +446,8 @@ export const writeSerialConfig = async (
     config.ports.forEach((portSettings) => {
       buffer.push8(portSettings.id);
 
-      const functionMask = packSerialPortFunctions(portSettings.functions);
       buffer
-        .push32(functionMask)
+        .push32(packValues(portSettings.functions, serialPortFunctionBits()))
         .push8(BAUD_RATES.indexOf(portSettings.mspBaudRate))
         .push8(BAUD_RATES.indexOf(portSettings.gpsBaudRate))
         .push8(BAUD_RATES.indexOf(portSettings.telemetryBaudRate))
@@ -497,9 +471,8 @@ export const writeSerialConfig = async (
       config.ports.forEach((portSettings) => {
         buffer.push8(portSettings.id);
 
-        const functionMask = packSerialPortFunctions(portSettings.functions);
         buffer
-          .push16(functionMask)
+          .push16(packValues(portSettings.functions, serialPortFunctionBits()))
           .push8(BAUD_RATES.indexOf(portSettings.mspBaudRate))
           .push8(BAUD_RATES.indexOf(portSettings.gpsBaudRate))
           .push8(BAUD_RATES.indexOf(portSettings.telemetryBaudRate))
@@ -745,4 +718,63 @@ export const writeDigitalIdleSpeed = async (
     digitalIdlePercent: idlePercentage,
   };
   await writeAdvancedPidConfig(port, newConfig);
+};
+
+const ALLOWED_DSHOT_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST] as (
+  | Beepers.RX_SET
+  | Beepers.RX_LOST
+)[];
+
+export const readBeeperConfig = async (port: string): Promise<BeeperConfig> => {
+  const data = await execute(port, { code: codes.MSP_BEEPER_CONFIG });
+  const api = apiVersion(port);
+  const beeperSchema = beeperBits(api);
+  return {
+    conditions: unpackValues(data.readU32(), beeperSchema),
+    dshot: {
+      tone: semver.gte(api, "1.37.0") ? data.readU8() : 0,
+      conditions: semver.gte(api, "1.39.0")
+        ? (unpackValues(
+            data.readU32(),
+            beeperSchema
+          ) as typeof ALLOWED_DSHOT_CONDITIONS)
+        : [],
+    },
+  };
+};
+
+export const writeBeeperConfig = async (
+  port: string,
+  config: BeeperConfig
+): Promise<void> => {
+  const api = apiVersion(port);
+  const beeperSchema = beeperBits(api);
+  const buffer = new WriteBuffer();
+
+  buffer.push32(packValues(config.conditions, beeperSchema));
+
+  if (semver.gte(api, "1.37.0")) {
+    buffer.push8(config.dshot.tone);
+  }
+
+  if (semver.gte(api, "1.39.0")) {
+    buffer.push32(
+      packValues(
+        config.dshot.conditions.filter((con) =>
+          ALLOWED_DSHOT_CONDITIONS.includes(con)
+        ),
+        beeperSchema
+      )
+    );
+  }
+
+  await execute(port, { code: codes.MSP_SET_BEEPER_CONFIG, data: buffer });
+};
+
+export const writeDshotBeeperConfig = async (
+  port: string,
+  dshotConfig: BeeperConfig["dshot"]
+): Promise<void> => {
+  const existing = await readBeeperConfig(port);
+  await writeBeeperConfig(port, { ...existing, dshot: dshotConfig });
 };

@@ -179,3 +179,16 @@ query MotorDigitalIdleSpeed($connection: ID!) {
     }
   }
 }
+
+query DshotBeeperConfig($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      beeper {
+        dshot {
+          conditions
+          tone
+        }
+      }
+    }
+  }
+}

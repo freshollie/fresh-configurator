@@ -10,6 +10,8 @@ import {
   DisarmFlags,
   SerialPortFunctions,
   Axes3D,
+  Beepers,
+  BeeperConfig,
 } from "@betaflight/api";
 import { v4 } from "uuid";
 
@@ -149,6 +151,13 @@ const mockDevice = {
   mixerConfig: {
     mixer: 3,
     reversedMotors: false,
+  },
+  beeper: {
+    conditions: [],
+    dshot: {
+      tone: 0,
+      conditions: [Beepers.RX_LOST],
+    },
   },
 };
 
@@ -309,4 +318,15 @@ export const writeMotorDirection = (port: string, reversed: boolean) =>
 export const writeDigitalIdleSpeed = (port: string, idlePercentage: number) =>
   delay(10).then(() => {
     mockDevice.advancedPidConfig.digitalIdlePercent = idlePercentage;
+  });
+
+export const readBeeperConfig = (port: string) =>
+  delay(20).then(() => mockDevice.beeper);
+
+export const writeDshotBeeperConfig = (
+  port: string,
+  config: BeeperConfig["dshot"]
+) =>
+  delay(50).then(() => {
+    mockDevice.beeper.dshot = config;
   });

@@ -336,3 +336,37 @@ export type MixerConfig = {
   mixer: number;
   reversedMotors: boolean;
 };
+
+export enum Beepers {
+  GYRO_CALIBRATED,
+  RX_LOST,
+  RX_LOST_LANDING,
+  DISARMING,
+  ARMING,
+  ARMING_GPS_FIX,
+  BAT_CRIT_LOW,
+  BAT_LOW,
+  GPS_STATUS,
+  RX_SET,
+  ACC_CALIBRATION,
+  ACC_CALIBRATION_FAIL,
+  READY_BEEP,
+  MULTI_BEEPS,
+  DISARM_REPEAT,
+  ARMED,
+  SYSTEM_INIT,
+  USB,
+  BLACKBOX_ERASE,
+  CRASH_FLIP,
+  CAM_CONNECTION_OPEN,
+  CAM_CONNECTION_CLOSE,
+  RC_SMOOTHING_INIT_FAIL,
+}
+
+export type BeeperConfig = {
+  conditions: Beepers[];
+  dshot: {
+    conditions: (Beepers.RX_LOST | Beepers.RX_SET)[];
+    tone: number;
+  };
+};

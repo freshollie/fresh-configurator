@@ -7,6 +7,7 @@ import {
   SerialPortFunctions,
   EscProtocols,
   McuTypes,
+  Beepers,
 } from "./types";
 
 const BASE_FEATURE_BITS: FeatureBits = {
@@ -27,7 +28,6 @@ const BASE_FEATURE_BITS: FeatureBits = {
   17: Features.DISPLAY,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const getFeatureBits = (apiVersion: string): FeatureBits => {
   const featureBits = { ...BASE_FEATURE_BITS };
   if (!semver.gte(apiVersion, "1.33.0")) {
@@ -142,6 +142,36 @@ export const serialPortFunctionBits = (): SerialPortFunctions[] => [
   SerialPortFunctions.IRC_TRAMP,
   SerialPortFunctions.RUNCAM_DEVICE_CONTROL,
   SerialPortFunctions.LIDAR_TF,
+];
+
+export const beeperBits = (apiVersion: string): Beepers[] => [
+  Beepers.GYRO_CALIBRATED,
+  Beepers.RX_LOST,
+  Beepers.RX_LOST_LANDING,
+  Beepers.DISARMING,
+  Beepers.ARMING,
+  Beepers.ARMING_GPS_FIX,
+  Beepers.BAT_CRIT_LOW,
+  Beepers.BAT_LOW,
+  Beepers.GPS_STATUS,
+  Beepers.RX_SET,
+  Beepers.ACC_CALIBRATION,
+  Beepers.ACC_CALIBRATION_FAIL,
+  Beepers.READY_BEEP,
+  Beepers.MULTI_BEEPS,
+  Beepers.DISARM_REPEAT,
+  Beepers.ARMED,
+  Beepers.SYSTEM_INIT,
+  Beepers.USB,
+  Beepers.BLACKBOX_ERASE,
+  ...(semver.gte(apiVersion, "1.37.0")
+    ? [
+        Beepers.CRASH_FLIP,
+        Beepers.CAM_CONNECTION_OPEN,
+        Beepers.CAM_CONNECTION_CLOSE,
+      ]
+    : []),
+  ...(semver.gte(apiVersion, "1.39.0") ? [Beepers.RC_SMOOTHING_INIT_FAIL] : []),
 ];
 
 export const legacySerialPortFunctionsMap: Record<

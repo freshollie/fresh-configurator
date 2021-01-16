@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Widget from "../components/Widget";
+import BeeperManager from "../managers/BeeperManager";
 import BoardAlignmentManager from "../managers/BoardAlignmentManager";
 import CpuDefaultsManager from "../managers/CpuDefaultsManager";
 import MotorDirectionManager from "../managers/MotorDirectionManager";
@@ -44,6 +45,7 @@ const General: React.FC = () => (
               <MotorDirectionManager />
               <h4>Idle speed</h4>
               <MotorIdleSpeedManager />
+              <BeeperManager />
             </div>
           </main>
         </Widget>
