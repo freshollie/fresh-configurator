@@ -1,3 +1,4 @@
+/* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /**
  * Hacky mock data generator to be able to test this API without
