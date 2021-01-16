@@ -28,10 +28,22 @@ query Status($connection: ID!) {
   }
 }
 
-query Sensors($connection: ID!) {
+query AvailableSensors($connection: ID!) {
   connection(connectionId: $connection) {
     device {
-      sensors
+      sensors {
+        available
+      }
+    }
+  }
+}
+
+query DisabledSensors($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      sensors {
+        disabled
+      }
     }
   }
 }

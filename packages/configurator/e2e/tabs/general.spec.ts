@@ -1,6 +1,6 @@
 import withApp from "../helpers/with-app";
 
-describe("setup", () => {
+describe("general", () => {
   it("should be the first tab visisble after connecting", async () => {
     const app = await withApp();
 
@@ -8,10 +8,10 @@ describe("setup", () => {
     await connectButton.waitForExist();
     await connectButton.click();
 
-    await (await app.client.$("#setup")).waitForExist();
+    await (await app.client.$("#general")).waitForExist();
 
-    expect(await (await app.client.$("#setup h1")).getText()).toContain(
-      "Setup"
+    expect(await (await app.client.$("#general h1")).getText()).toContain(
+      "General"
     );
   });
 });

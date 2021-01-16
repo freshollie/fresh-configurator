@@ -6,6 +6,8 @@ import BoardAlignmentManager from "../managers/BoardAlignmentManager";
 import CpuDefaultsManager from "../managers/CpuDefaultsManager";
 import MotorDirectionManager from "../managers/MotorDirectionManager";
 import MotorIdleSpeedManager from "../managers/MotorIdleSpeedManager";
+import DisabledSensorsManager from "../managers/DisabledSensorsManager";
+import Title from "../components/Title";
 
 const Layout = styled.div`
   display: flex;
@@ -23,6 +25,7 @@ const Layout = styled.div`
 
 const General: React.FC = () => (
   <div className="content">
+    <Title>General</Title>
     <Layout>
       <Widget>
         <header>FC Orientation</header>
@@ -47,6 +50,12 @@ const General: React.FC = () => (
               <MotorIdleSpeedManager />
               <BeeperManager />
             </div>
+          </main>
+        </Widget>
+        <Widget>
+          <header>Sensors</header>
+          <main>
+            <DisabledSensorsManager />
           </main>
         </Widget>
       </div>

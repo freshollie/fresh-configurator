@@ -2,7 +2,7 @@ import React from "react";
 import { Sensors } from "@betaflight/api";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
-import { SensorsDocument } from "../gql/queries/Device.graphql";
+import { AvailableSensorsDocument } from "../gql/queries/Device.graphql";
 import SensorStatusPanel from "../components/SensorStatusPanel";
 import { useQuery } from "../gql/apollo";
 
@@ -27,7 +27,7 @@ const SENSORS_ORDER = [
 const SensorsListProvider: React.FC = () => {
   const { connection } = useConnectionState();
 
-  const { data } = useQuery(SensorsDocument, {
+  const { data } = useQuery(AvailableSensorsDocument, {
     variables: {
       connection: connection ?? "",
     },
@@ -44,7 +44,7 @@ const SensorsListProvider: React.FC = () => {
         <li
           key={sensor}
           className={
-            data.connection.device.sensors.includes(sensor)
+            data.connection.device.sensors.available.includes(sensor)
               ? "active"
               : undefined
           }

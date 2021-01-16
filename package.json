@@ -16,7 +16,7 @@
     "build:cjs": "tsc -b tsconfig.cjs.build.json",
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
     "storybook": "yarn workspace @betaflight/configurator storybook",
-    "codegen": "yarn clean:codegen && graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen --config codegen.yml",
     "test": "jest",
     "storyshots": "yarn workspace @betaflight/configurator storyshots",
     "storyshots:production": "yarn workspace @betaflight/configurator storyshots:production",
@@ -24,7 +24,7 @@
     "e2e:production": "cross-env PRODUCTION=true jest --config packages/configurator/jest.e2e.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
-    "postinstall": "yarn codegen",
+    "postinstall": "yarn clean:codegen && yarn codegen",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
     "release": "yarn workspace @betaflight/configurator release"

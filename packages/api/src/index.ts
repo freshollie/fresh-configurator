@@ -30,6 +30,7 @@ import {
   MixerConfig,
   BeeperConfig,
   Beepers,
+  Sensors,
 } from "./types";
 import {
   getFeatureBits,
@@ -777,4 +778,29 @@ export const writeDshotBeeperConfig = async (
 ): Promise<void> => {
   const existing = await readBeeperConfig(port);
   await writeBeeperConfig(port, { ...existing, dshot: dshotConfig });
+};
+
+export const readDisabledSensors = async (port: string): Promise<Sensors[]> => {
+  const data = await execute(port, { code: codes.MSP_SENSOR_CONFIG });
+  const schema = sensorBits();
+  const disabled: Sensors[] = [];
+  schema.forEach((sensor) => {
+    if (data.remaining() > 0 && data.read8() === 1) {
+      disabled.push(sensor);
+    }
+  });
+
+  return disabled;
+};
+
+export const writeDisabledSensors = async (
+  port: string,
+  disabledSensors: Sensors[]
+): Promise<void> => {
+  const schema = sensorBits().slice(0, 3);
+  const buffer = new WriteBuffer();
+  schema.forEach((sensor) => {
+    buffer.push8(disabledSensors.includes(sensor) ? 1 : 0);
+  });
+  await execute(port, { code: codes.MSP_SET_SENSOR_CONFIG, data: buffer });
 };

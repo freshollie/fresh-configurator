@@ -156,9 +156,10 @@ const mockDevice = {
     conditions: [],
     dshot: {
       tone: 0,
-      conditions: [Beepers.RX_LOST],
+      conditions: [Beepers.RX_LOST] as (Beepers.RX_LOST | Beepers.RX_SET)[],
     },
   },
+  disabledSensors: [Sensors.MAGNETOMETER],
 };
 
 const tickAttitude = (): void => {
@@ -329,4 +330,15 @@ export const writeDshotBeeperConfig = (
 ) =>
   delay(50).then(() => {
     mockDevice.beeper.dshot = config;
+  });
+
+export const readDisabledSensors = (port: string) =>
+  delay(15).then(() => mockDevice.disabledSensors);
+
+export const writeDisabledSensors = (
+  port: string,
+  disabledSensors: Sensors[]
+) =>
+  delay(20).then(() => {
+    mockDevice.disabledSensors = disabledSensors;
   });

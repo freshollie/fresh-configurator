@@ -11,8 +11,8 @@ afterEach(() => {
   reset();
 });
 
-describe("device.alignment", () => {
-  it("should provide the board alignment config", async () => {
+describe("device.beeper", () => {
+  it("should provide the beeper config", async () => {
     mockApi.readBeeperConfig.mockResolvedValue({
       conditions: [Beepers.ARMED, Beepers.BLACKBOX_ERASE],
       dshot: {

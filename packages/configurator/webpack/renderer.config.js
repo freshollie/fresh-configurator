@@ -93,16 +93,12 @@ module.exports = (_, { mode }) => ({
       template: "./src/index.html",
     }),
     // Only typecheck in production
-    ...(mode === "production"
-      ? [
-          new ForkTsCheckerWebpackPlugin({
-            typescript: {
-              reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
-              build: true,
-            },
-          }),
-        ]
-      : []),
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
+        build: true,
+      },
+    }),
     new WebpackBar({
       name: "renderer",
     }),
