@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "../theme";
+import Range from "../components/Range";
 import { useMutation, useQuery } from "../gql/apollo";
 import { SetMotorDigitalIdleSpeedDocument } from "../gql/mutations/Device.graphql";
 import { MotorDigitalIdleSpeedDocument } from "../gql/queries/Device.graphql";
@@ -10,10 +11,13 @@ const Indicators = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
+  & > :first-child {
+    transform: translateX(-50%);
+  }
 
-const Slider = styled.input`
-  width: 100%;
+  & > :last-child {
+    transform: translateX(50%);
+  }
 `;
 
 const RANGE_TO_PERCENTAGE: Record<number, number> = {
@@ -63,8 +67,7 @@ const MotorIdleSpeedManager: React.FC = () => {
 
   return (
     <div>
-      <Slider
-        type="range"
+      <Range
         value={
           PERCENTAGE_TO_RANGE[
             data?.connection.device.motors.digitalIdlePercent ?? 0
