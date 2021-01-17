@@ -721,24 +721,25 @@ export const writeDigitalIdleSpeed = async (
   await writeAdvancedPidConfig(port, newConfig);
 };
 
-const ALLOWED_DSHOT_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST] as (
-  | Beepers.RX_SET
-  | Beepers.RX_LOST
-)[];
+const ALLOWED_DSHOT_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];
 
 export const readBeeperConfig = async (port: string): Promise<BeeperConfig> => {
   const data = await execute(port, { code: codes.MSP_BEEPER_CONFIG });
   const api = apiVersion(port);
   const beeperSchema = beeperBits(api);
   return {
-    conditions: unpackValues(data.readU32(), beeperSchema),
+    // For some reason, the flag bits are actually inverted for both
+    // read and write
+    conditions: unpackValues(data.readU32(), beeperSchema, { inverted: true }),
     dshot: {
       tone: semver.gte(api, "1.37.0") ? data.readU8() : 0,
       conditions: semver.gte(api, "1.39.0")
-        ? (unpackValues(
-            data.readU32(),
-            beeperSchema
-          ) as typeof ALLOWED_DSHOT_CONDITIONS)
+        ? (unpackValues(data.readU32(), beeperSchema, {
+            inverted: true,
+          }).filter((beeper) => ALLOWED_DSHOT_CONDITIONS.includes(beeper)) as (
+            | Beepers.RX_SET
+            | Beepers.RX_LOST
+          )[])
         : [],
     },
   };
@@ -752,7 +753,11 @@ export const writeBeeperConfig = async (
   const beeperSchema = beeperBits(api);
   const buffer = new WriteBuffer();
 
-  buffer.push32(packValues(config.conditions, beeperSchema));
+  buffer.push32(
+    packValues(config.conditions, beeperSchema, {
+      inverted: true,
+    })
+  );
 
   if (semver.gte(api, "1.37.0")) {
     buffer.push8(config.dshot.tone);
@@ -764,7 +769,8 @@ export const writeBeeperConfig = async (
         config.dshot.conditions.filter((con) =>
           ALLOWED_DSHOT_CONDITIONS.includes(con)
         ),
-        beeperSchema
+        beeperSchema,
+        { inverted: true }
       )
     );
   }
