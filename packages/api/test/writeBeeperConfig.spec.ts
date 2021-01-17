@@ -22,7 +22,7 @@ describe("writeBeeperConfig", () => {
 
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/someport", {
       code: codes.MSP_SET_BEEPER_CONFIG,
-      data: [9, 18, 32, 0, 4, 2, 0, 0, 0],
+      data: [246, 237, 95, 0, 4, 253, 255, 127, 0],
     });
   });
 
@@ -46,7 +46,7 @@ describe("writeBeeperConfig", () => {
 
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/someport", {
       code: codes.MSP_SET_BEEPER_CONFIG,
-      data: [9, 18, 32, 0, 4],
+      data: [246, 237, 31, 0, 4],
     });
   });
 
@@ -69,7 +69,7 @@ describe("writeBeeperConfig", () => {
 
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/someport", {
       code: codes.MSP_SET_BEEPER_CONFIG,
-      data: [9, 18, 0, 0],
+      data: [246, 237, 7, 0],
     });
   });
 });

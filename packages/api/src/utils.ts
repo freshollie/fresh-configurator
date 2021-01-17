@@ -38,10 +38,18 @@ export const filterUnset = <T extends Record<string, unknown>>(
     )
   ) as RequiredAndNotNull<T>;
 
-export const unpackValues = <T>(mask: number, schema: T[]): T[] =>
-  schema.filter((_, i) => (mask >> i) % 2 !== 0);
+export const unpackValues = <T>(
+  mask: number,
+  schema: T[],
+  { inverted = false } = {}
+): T[] => schema.filter((_, i) => ((mask >> i) % 2 !== 0) !== inverted);
 
-export const packValues = <T>(values: T[], schema: T[]): number =>
-  values
-    .filter((val) => schema.includes(val))
-    .reduce((acc, val) => acc | (1 << schema.indexOf(val)), 0);
+export const packValues = <T>(
+  values: T[],
+  schema: T[],
+  { inverted = false } = {}
+): number =>
+  (inverted
+    ? schema.filter((bit) => !values.includes(bit))
+    : values.filter((val) => schema.includes(val))
+  ).reduce((acc, val) => acc | (1 << schema.indexOf(val)), 0);

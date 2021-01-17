@@ -19,6 +19,7 @@ const BeeperManager: React.FC = () => {
   const [setBeeperConfig, { loading: setting }] = useMutation(
     SetDshotBeeperConfigDocument,
     {
+      awaitRefetchQueries: true,
       refetchQueries: [
         {
           query: DshotBeeperConfigDocument,
