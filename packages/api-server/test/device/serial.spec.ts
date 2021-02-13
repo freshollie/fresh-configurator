@@ -65,4 +65,52 @@ describe("device.serial", () => {
     });
     expect(mockApi.readSerialConfig).toHaveBeenCalledWith("/dev/something");
   });
+
+  describe("setSerialFunctions", () => {
+    it("should set the functions for the provided serial ports", async () => {
+      mockApi.writeSerialFunctions.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const newFunctions = [
+        {
+          id: 0,
+          functions: [SerialPortFunctions.ESC_SENSOR],
+        },
+        {
+          id: 1,
+          functions: [SerialPortFunctions.GPS],
+        },
+        {
+          id: 3,
+          functions: [SerialPortFunctions.RX_SERIAL],
+        },
+      ];
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetSerialFunctions(
+            $connection: ID!
+            $portFunctions: [PortFunctionsInput!]!
+          ) {
+            deviceSetSerialFunctions(
+              connectionId: $connection
+              portFunctions: $portFunctions
+            )
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          portFunctions: newFunctions,
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeSerialFunctions).toHaveBeenCalledWith(
+        "/dev/something",
+        newFunctions
+      );
+    });
+  });
 });

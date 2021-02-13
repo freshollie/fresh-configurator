@@ -6,9 +6,21 @@ const typeDefs = gql`
     serial: SerialConfig!
   }
 
+  extend type Mutation {
+    deviceSetSerialFunctions(
+      connectionId: ID!
+      portFunctions: [PortFunctionsInput!]!
+    ): Boolean
+  }
+
   type SerialConfig {
     ports: [PortSettings!]!
     legacy: LegacyBaudRates
+  }
+
+  input PortFunctionsInput {
+    id: Int!
+    functions: [Int!]!
   }
 
   type PortSettings {
@@ -31,6 +43,16 @@ const typeDefs = gql`
 const resolvers: Resolvers = {
   FlightController: {
     serial: ({ port }, _, { api }) => api.readSerialConfig(port),
+  },
+  Mutation: {
+    deviceSetSerialFunctions: (
+      _,
+      { connectionId, portFunctions },
+      { api, connections }
+    ) =>
+      api
+        .writeSerialFunctions(connections.getPort(connectionId), portFunctions)
+        .then(() => null),
   },
 };
 
