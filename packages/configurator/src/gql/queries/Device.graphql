@@ -123,17 +123,13 @@ query RcSettings($connection: ID!) {
   }
 }
 
-query DevicePortSettings($connection: ID!) {
+query DevicePortFunctions($connection: ID!) {
   connection(connectionId: $connection) {
     device {
       serial {
         ports {
           id
           functions
-          blackboxBaudRate
-          gpsBaudRate
-          mspBaudRate
-          telemetryBaudRate
         }
       }
     }

@@ -50,3 +50,13 @@ mutation SetDisabledSensors($connection: ID!, $disabledSensors: [Int!]!) {
     disabledSensors: $disabledSensors
   )
 }
+
+mutation SetSerialFunctions(
+  $connection: ID!
+  $portFunctions: [PortFunctionsInput!]!
+) {
+  deviceSetSerialFunctions(
+    connectionId: $connection
+    portFunctions: $portFunctions
+  )
+}

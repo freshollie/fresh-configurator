@@ -34,6 +34,41 @@ describe("readRCTuning", () => {
       code: codes.MSP_CF_SERIAL_CONFIG,
     });
     expect(config.ports).toHaveLength(3);
-    expect(config).toMatchSnapshot();
+    expect(config).toMatchInlineSnapshot(`
+      Object {
+        "ports": Array [
+          Object {
+            "blackboxBaudRate": 115200,
+            "functions": Array [
+              0,
+            ],
+            "gpsBaudRate": 57600,
+            "id": 0,
+            "mspBaudRate": 115200,
+            "telemetryBaudRate": -1,
+          },
+          Object {
+            "blackboxBaudRate": 115200,
+            "functions": Array [
+              13,
+            ],
+            "gpsBaudRate": 57600,
+            "id": 1,
+            "mspBaudRate": 115200,
+            "telemetryBaudRate": -1,
+          },
+          Object {
+            "blackboxBaudRate": 115200,
+            "functions": Array [
+              7,
+            ],
+            "gpsBaudRate": 57600,
+            "id": 2,
+            "mspBaudRate": 115200,
+            "telemetryBaudRate": -1,
+          },
+        ],
+      }
+    `);
   });
 });

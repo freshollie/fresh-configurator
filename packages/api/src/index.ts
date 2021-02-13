@@ -31,6 +31,7 @@ import {
   BeeperConfig,
   Beepers,
   Sensors,
+  SerialPortFunctions,
 } from "./types";
 import {
   getFeatureBits,
@@ -485,6 +486,23 @@ export const writeSerialConfig = async (
       data: buffer,
     });
   }
+};
+
+/**
+ * Set the functions for the device serial ports
+ */
+export const writeSerialFunctions = async (
+  port: string,
+  portsConfig: { id: number; functions: SerialPortFunctions[] }[]
+): Promise<void> => {
+  const config = await readSerialConfig(port);
+  const newPortsConfig = config.ports.map((serialPort) => ({
+    ...serialPort,
+    functions:
+      portsConfig.find(({ id }) => id === serialPort.id)?.functions ??
+      serialPort.functions,
+  }));
+  await writeSerialConfig(port, { ...config, ports: newPortsConfig });
 };
 
 /**
