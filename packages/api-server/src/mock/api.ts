@@ -71,18 +71,32 @@ const mockDevice = {
   },
   channels: new Array(16).fill(0),
   serial: {
-    ports: new Array(5).fill(0).map((i) => ({
-      id: i,
-      functions: [
-        SerialPortFunctions.BLACKBOX,
-        SerialPortFunctions.MSP,
-        SerialPortFunctions.TELEMETRY_LTM,
-      ],
-      mspBaudRate: 115200,
-      gpsBaudRate: -1,
-      telemetryBaudRate: 115200,
-      blackboxBaudRate: 115200,
-    })),
+    ports: [
+      {
+        id: 0,
+        functions: [SerialPortFunctions.MSP],
+        mspBaudRate: 115200,
+        gpsBaudRate: -1,
+        telemetryBaudRate: -1,
+        blackboxBaudRate: -1,
+      },
+      {
+        id: 1,
+        functions: [SerialPortFunctions.GPS],
+        mspBaudRate: -1,
+        gpsBaudRate: 115200,
+        telemetryBaudRate: -1,
+        blackboxBaudRate: -1,
+      },
+      {
+        id: 2,
+        functions: [SerialPortFunctions.RX_SERIAL],
+        mspBaudRate: -1,
+        gpsBaudRate: -1,
+        telemetryBaudRate: -1,
+        blackboxBaudRate: -1,
+      },
+    ],
   },
   advancedPidConfig: {
     gyroSyncDenom: 3,
@@ -264,11 +278,26 @@ export const readAnalogValues = (
 ): Promise<typeof mockDevice["analogValues"]> =>
   delay(10).then(() => mockDevice.analogValues);
 
-export const readRcValues = (): Promise<number[]> =>
+export const readRcValues = (port: string): Promise<number[]> =>
   delay(10).then(() => mockDevice.channels);
 
-export const readSerialConfig = (): Promise<typeof mockDevice["serial"]> =>
+export const readSerialConfig = (
+  port: string
+): Promise<typeof mockDevice["serial"]> =>
   delay(50).then(() => mockDevice.serial);
+
+export const writeSerialFunctions = (
+  port: string,
+  functions: { id: number; functions: SerialPortFunctions[] }[]
+): Promise<void> =>
+  delay(50).then(() => {
+    mockDevice.serial.ports = mockDevice.serial.ports.map((portData) => ({
+      ...portData,
+      functions:
+        functions.find(({ id }) => id === portData.id)?.functions ??
+        portData.functions,
+    }));
+  });
 
 export const readUID = (port: string): Promise<string> =>
   delay(30).then(() => {
