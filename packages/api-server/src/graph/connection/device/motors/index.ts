@@ -41,10 +41,9 @@ const resolvers: Resolvers = {
       { connectionId, reversed },
       { api, connections }
     ) => {
-      await api.writeMotorDirection(
-        connections.getPort(connectionId),
-        reversed
-      );
+      await api.writePartialMixerConfig(connections.getPort(connectionId), {
+        reversedMotors: reversed,
+      });
       return null;
     },
     deviceSetDigitalIdleSpeed: async (
@@ -52,9 +51,9 @@ const resolvers: Resolvers = {
       { connectionId, idlePercentage },
       { api, connections }
     ) => {
-      await api.writeDigitalIdleSpeed(
+      await api.writePartialAdvancedPidConfig(
         connections.getPort(connectionId),
-        idlePercentage
+        { digitalIdlePercent: idlePercentage }
       );
       return null;
     },

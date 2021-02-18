@@ -54,7 +54,7 @@ describe("device.motors", () => {
 
   describe("setDeviceMotorsDirection", () => {
     it("should write the motor direction to the board", async () => {
-      mockApi.writeMotorDirection.mockResolvedValue();
+      mockApi.writePartialMixerConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
       const { mutate } = createTestClient(apolloServer);
@@ -75,16 +75,18 @@ describe("device.motors", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writeMotorDirection).toHaveBeenCalledWith(
+      expect(mockApi.writePartialMixerConfig).toHaveBeenCalledWith(
         "/dev/something",
-        true
+        {
+          reversedMotors: true,
+        }
       );
     });
   });
 
   describe("deviceSetDigitalIdleSpeed", () => {
     it("should write the digital idle percentage to the baord", async () => {
-      mockApi.writeDigitalIdleSpeed.mockResolvedValue();
+      mockApi.writePartialAdvancedPidConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
       const { mutate } = createTestClient(apolloServer);
@@ -108,9 +110,11 @@ describe("device.motors", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writeDigitalIdleSpeed).toHaveBeenCalledWith(
+      expect(mockApi.writePartialAdvancedPidConfig).toHaveBeenCalledWith(
         "/dev/something",
-        7.5
+        {
+          digitalIdlePercent: 7.5,
+        }
       );
     });
   });

@@ -40,7 +40,9 @@ const resolvers: Resolvers = {
       { api, connections }
     ) =>
       api
-        .writeDshotBeeperConfig(connections.getPort(connectionId), config)
+        .writePartialBeeperConfig(connections.getPort(connectionId), {
+          dshot: config,
+        })
         .then(() => null),
   },
 };

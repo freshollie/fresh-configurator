@@ -24,14 +24,18 @@ import {
   SerialConfig,
   RebootTypes,
   AdvancedPidConfig,
-  PidProtocols,
-  PartialNullable,
-  EscProtocols,
   MixerConfig,
   BeeperConfig,
   Beepers,
   Sensors,
   SerialPortFunctions,
+  SpiRxProtocols,
+  RcInterpolations,
+  RcSmoothingChannels,
+  RcSmoothingTypes,
+  RcSmoothingInputTypes,
+  RcSmoothingDerivativeTypes,
+  RxConfig,
 } from "./types";
 import {
   getFeatureBits,
@@ -40,8 +44,23 @@ import {
   serialPortFunctionBits,
   legacySerialPortFunctionsMap,
   beeperBits,
+  escProtocols,
+  serialRxProviders,
+  spiRxProtocols,
+  rcInterpolations,
+  rcSmoothingChannels,
+  rcSmoothingTypes,
+  rcSmoothingInputTypes,
+  rcSmoothingDerivativeTypes,
 } from "./features";
-import { times, filterUnset, unpackValues, packValues } from "./utils";
+import {
+  times,
+  unpackValues,
+  packValues,
+  toIdentifier,
+  fromIdentifier,
+  partialWriteFunc,
+} from "./utils";
 
 export * from "./osd";
 
@@ -58,10 +77,18 @@ export {
 } from "@betaflight/msp";
 export {
   escProtocols,
+  serialRxProviders,
+  spiRxProtocols,
+  rcInterpolations,
+  rcSmoothingChannels,
+  rcSmoothingTypes,
+  rcSmoothingInputTypes,
+  rcSmoothingDerivativeTypes,
   MCU_GROUPS,
   mcuGroupFromId,
   MIXER_LIST,
 } from "./features";
+export { mergeDeep } from "./utils";
 
 export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
   const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
@@ -557,44 +584,12 @@ export const writeBoardAlignmentConfig = async (
   });
 };
 
-const reorderPwmProtocols = (
-  api: string,
-  currentProtocol: EscProtocols
-): EscProtocols => {
-  let result = currentProtocol;
-  if (semver.lt(api, "1.26.0")) {
-    switch (currentProtocol) {
-      case EscProtocols.DSHOT150:
-        result = EscProtocols.DSHOT600;
-
-        break;
-      case EscProtocols.DSHOT600:
-        result = EscProtocols.DSHOT150;
-
-        break;
-      default:
-        break;
-    }
-  } else if (
-    semver.gte(api, "1.43.0") &&
-    currentProtocol > EscProtocols.DSHOT1200
-  ) {
-    // for some reason, DSHOT1200 was removed in later
-    // verions of betaflight, and thus
-    // the protocol written to the board has
-    // to be reduced for anything after DSHOT1200
-    result -= 1;
-  }
-
-  return result;
-};
-
 export const readAdvancedPidConfig = async (
   port: string
 ): Promise<AdvancedPidConfig> => {
   const api = apiVersion(port);
   const data = await execute(port, { code: codes.MSP_ADVANCED_CONFIG });
-  const config = {
+  const config: AdvancedPidConfig = {
     gyroSyncDenom: 0,
     pidProcessDenom: 0,
     useUnsyncedPwm: false,
@@ -616,7 +611,7 @@ export const readAdvancedPidConfig = async (
   config.gyroSyncDenom = data.readU8();
   config.pidProcessDenom = data.readU8();
   config.useUnsyncedPwm = data.readU8() !== 0;
-  config.fastPwmProtocol = reorderPwmProtocols(api, data.readU8());
+  config.fastPwmProtocol = toIdentifier(escProtocols(api), data.readU8());
   config.motorPwmRate = data.readU16();
   if (semver.gte(api, "1.24.0")) {
     config.digitalIdlePercent = data.readU16() / 100;
@@ -656,7 +651,10 @@ export const writeAdvancedPidConfig = async (
     .push8(config.gyroSyncDenom)
     .push8(config.pidProcessDenom)
     .push8(config.useUnsyncedPwm ? 1 : 0)
-    .push8(reorderPwmProtocols(api, config.fastPwmProtocol))
+    .push8(
+      fromIdentifier(escProtocols(api), config.fastPwmProtocol) ??
+        config.fastPwmProtocol
+    )
     .push16(config.motorPwmRate);
   if (semver.gte(api, "1.24.0")) {
     buffer.push16(config.digitalIdlePercent * 100);
@@ -684,18 +682,6 @@ export const writeAdvancedPidConfig = async (
   await execute(port, { code: codes.MSP_SET_ADVANCED_CONFIG, data: buffer });
 };
 
-export const writePidProtocols = async (
-  port: string,
-  protocols: PartialNullable<PidProtocols>
-): Promise<void> => {
-  const config = await readAdvancedPidConfig(port);
-  const newConfig = {
-    ...config,
-    ...filterUnset(protocols),
-  };
-  await writeAdvancedPidConfig(port, newConfig);
-};
-
 export const readMixerConfig = async (port: string): Promise<MixerConfig> => {
   const data = await execute(port, { code: codes.MSP_MIXER_CONFIG });
   const api = apiVersion(port);
@@ -719,25 +705,15 @@ export const writeMixerConfig = async (
   await execute(port, { code: codes.MSP_SET_MIXER_CONFIG, data: buffer });
 };
 
-export const writeMotorDirection = async (
-  port: string,
-  reversed: boolean
-): Promise<void> => {
-  const { mixer } = await readMixerConfig(port);
-  await writeMixerConfig(port, { mixer, reversedMotors: reversed });
-};
+export const writePartialMixerConfig = partialWriteFunc(
+  readMixerConfig,
+  writeMixerConfig
+);
 
-export const writeDigitalIdleSpeed = async (
-  port: string,
-  idlePercentage: number
-): Promise<void> => {
-  const config = await readAdvancedPidConfig(port);
-  const newConfig = {
-    ...config,
-    digitalIdlePercent: idlePercentage,
-  };
-  await writeAdvancedPidConfig(port, newConfig);
-};
+export const writePartialAdvancedPidConfig = partialWriteFunc(
+  readAdvancedPidConfig,
+  writeAdvancedPidConfig
+);
 
 const ALLOWED_DSHOT_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];
 
@@ -796,13 +772,10 @@ export const writeBeeperConfig = async (
   await execute(port, { code: codes.MSP_SET_BEEPER_CONFIG, data: buffer });
 };
 
-export const writeDshotBeeperConfig = async (
-  port: string,
-  dshotConfig: BeeperConfig["dshot"]
-): Promise<void> => {
-  const existing = await readBeeperConfig(port);
-  await writeBeeperConfig(port, { ...existing, dshot: dshotConfig });
-};
+export const writePartialBeeperConfig = partialWriteFunc(
+  readBeeperConfig,
+  writeBeeperConfig
+);
 
 export const readDisabledSensors = async (port: string): Promise<Sensors[]> => {
   const data = await execute(port, { code: codes.MSP_SENSOR_CONFIG });
@@ -821,10 +794,168 @@ export const writeDisabledSensors = async (
   port: string,
   disabledSensors: Sensors[]
 ): Promise<void> => {
-  const schema = sensorBits().slice(0, 3);
   const buffer = new WriteBuffer();
-  schema.forEach((sensor) => {
-    buffer.push8(disabledSensors.includes(sensor) ? 1 : 0);
-  });
+  [Sensors.ACCELEROMETER, Sensors.BAROMETER, Sensors.MAGNETOMETER].forEach(
+    (sensor) => {
+      buffer.push8(disabledSensors.includes(sensor) ? 1 : 0);
+    }
+  );
   await execute(port, { code: codes.MSP_SET_SENSOR_CONFIG, data: buffer });
 };
+
+export const readRxConfig = async (port: string): Promise<RxConfig> => {
+  const api = apiVersion(port);
+  const data = await execute(port, { code: codes.MSP_RX_CONFIG });
+
+  const initial = {
+    serialProvider: toIdentifier(serialRxProviders(api), data.readU8()),
+    stick: {
+      max: data.readU16(),
+      center: data.readU16(),
+      min: data.readU16(),
+    },
+    spektrumSatBind: data.readU8(),
+    rxMinUsec: data.readU16(),
+    rxMaxUsec: data.readU16(),
+    ...(semver.gte(api, "1.20.0")
+      ? {
+          interpolation: toIdentifier(rcInterpolations(), data.readU8()),
+          interpolationInterval: data.readU8(),
+          airModeActivateThreshold: data.readU16(),
+        }
+      : {
+          interpolation: RcInterpolations.AUTO,
+          interpolationInterval: 0,
+          airModeActivateThreshold: 0,
+        }),
+    ...(semver.gte(api, "1.31.0")
+      ? {
+          spi: {
+            protocol: toIdentifier(
+              spiRxProtocols(api),
+              data.readU8()
+            ) as SpiRxProtocols,
+            id: data.readU32(),
+            rfChannelCount: data.readU8(),
+          },
+          fpvCamAngleDegrees: data.readU8(),
+        }
+      : {
+          spi: {
+            protocol: SpiRxProtocols.NRF24_V202_250K,
+            id: 0,
+            rfChannelCount: 0,
+          },
+          fpvCamAngleDegrees: 0,
+        }),
+  };
+  const smoothing = semver.gte(api, "1.40.0")
+    ? {
+        channels: toIdentifier(rcSmoothingChannels(), data.readU8()),
+        type: toIdentifier(rcSmoothingTypes(), data.readU8()),
+        inputCutoff: data.readU8(),
+        derivativeCutoff: data.readU8(),
+        inputType: toIdentifier(rcSmoothingInputTypes(), data.readU8()),
+        derivativeType: toIdentifier(
+          rcSmoothingDerivativeTypes(api),
+          data.readU8()
+        ),
+      }
+    : {
+        channels: RcSmoothingChannels.RP,
+        type: RcSmoothingTypes.INTERPOLATION,
+        inputCutoff: 0,
+        derivativeCutoff: 0,
+        inputType: RcSmoothingInputTypes.PT1,
+        derivativeType: RcSmoothingDerivativeTypes.AUTO,
+      };
+
+  return {
+    ...initial,
+    ...(semver.gte(api, "1.42.0")
+      ? { usbCdcHidType: data.readU8() }
+      : { usbCdcHidType: 0 }),
+    rcSmoothing: {
+      ...smoothing,
+      ...(semver.gte(api, "1.42.0")
+        ? {
+            autoSmoothness: data.readU8(),
+          }
+        : { autoSmoothness: 0 }),
+    },
+  };
+};
+
+export const writeRxConfig = async (
+  port: string,
+  config: RxConfig
+): Promise<void> => {
+  const api = apiVersion(port);
+  const buffer = new WriteBuffer();
+
+  buffer
+    .push8(
+      fromIdentifier(serialRxProviders(api), config.serialProvider) ??
+        config.serialProvider
+    )
+    .push16(config.stick.max)
+    .push16(config.stick.center)
+    .push16(config.stick.center)
+    .push8(config.spektrumSatBind)
+    .push16(config.rxMinUsec)
+    .push16(config.rxMaxUsec);
+  if (semver.gte(api, "1.20.0")) {
+    buffer
+      .push8(
+        fromIdentifier(rcInterpolations(), config.interpolation) ??
+          config.interpolation
+      )
+      .push8(config.interpolationInterval)
+      .push16(config.airModeActivateThreshold);
+  }
+  if (semver.gte(api, "1.31.0")) {
+    buffer
+      .push8(
+        fromIdentifier(spiRxProtocols(api), config.spi.protocol) ??
+          config.spi.protocol
+      )
+      .push32(config.spi.id)
+      .push8(config.spi.rfChannelCount)
+      .push8(config.fpvCamAngleDegrees);
+  }
+
+  if (semver.gte(api, "1.40.0")) {
+    buffer
+      .push8(
+        fromIdentifier(rcSmoothingChannels(), config.rcSmoothing.channels) ??
+          config.rcSmoothing.channels
+      )
+      .push8(
+        fromIdentifier(rcSmoothingTypes(), config.rcSmoothing.type) ??
+          config.rcSmoothing.type
+      )
+      .push8(config.rcSmoothing.inputCutoff)
+      .push8(config.rcSmoothing.derivativeCutoff)
+      .push8(
+        fromIdentifier(rcSmoothingInputTypes(), config.rcSmoothing.inputType) ??
+          config.rcSmoothing.inputType
+      )
+      .push8(
+        fromIdentifier(
+          rcSmoothingDerivativeTypes(api),
+          config.rcSmoothing.derivativeType
+        ) ?? config.rcSmoothing.derivativeType
+      );
+  }
+
+  if (semver.gte(api, "1.42.0")) {
+    buffer.push8(config.usbCdcHidType).push8(config.rcSmoothing.autoSmoothness);
+  }
+
+  await execute(port, { code: codes.MSP_SET_RX_CONFIG, data: buffer });
+};
+
+export const writePartialRxConfig = partialWriteFunc(
+  readRxConfig,
+  writeRxConfig
+);
