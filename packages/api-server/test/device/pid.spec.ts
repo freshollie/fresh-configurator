@@ -77,7 +77,7 @@ describe("device.pid", () => {
       add("/dev/somedevice", "abcd");
 
       const { mutate } = createTestClient(apolloServer);
-      mockApi.writePidProtocols.mockResolvedValue(undefined);
+      mockApi.writePartialAdvancedPidConfig.mockResolvedValue(undefined);
 
       const { errors } = await mutate({
         mutation: gql`
@@ -102,7 +102,7 @@ describe("device.pid", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writePidProtocols).toHaveBeenCalledWith(
+      expect(mockApi.writePartialAdvancedPidConfig).toHaveBeenCalledWith(
         "/dev/somedevice",
         {
           fastPwmProtocol: 9000,

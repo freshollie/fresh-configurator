@@ -11,8 +11,9 @@ import {
   SerialPortFunctions,
   Axes3D,
   Beepers,
-  BeeperConfig,
+  mergeDeep,
 } from "@betaflight/api";
+import * as api from "@betaflight/api";
 import { v4 } from "uuid";
 
 export * from "@betaflight/api";
@@ -167,7 +168,7 @@ const mockDevice = {
     reversedMotors: false,
   },
   beeper: {
-    conditions: [],
+    conditions: [] as Beepers[],
     dshot: {
       tone: 0,
       conditions: [Beepers.RX_LOST] as (Beepers.RX_LOST | Beepers.RX_SET)[],
@@ -325,40 +326,40 @@ export const writeBoardAlignmentConfig = (
 export const readAdvancedPidConfig = (port: string) =>
   delay(30).then(() => mockDevice.advancedPidConfig);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const writePidProtocols = (port: string, protocols: any) =>
-  delay(20).then(() => {
-    mockDevice.advancedPidConfig = {
-      ...mockDevice.advancedPidConfig,
-      ...protocols,
-    };
-  });
-
 export const readBoardInfo = (port: string) =>
   delay(10).then(() => mockDevice.boardInfo);
 
 export const readMixerConfig = (port: string) =>
   delay(15).then(() => mockDevice.mixerConfig);
 
-export const writeMotorDirection = (port: string, reversed: boolean) =>
+export const writePartialMixerConfig: typeof api.writePartialMixerConfig = (
+  port,
+  config
+) =>
   delay(50).then(() => {
-    mockDevice.mixerConfig.reversedMotors = reversed;
+    mockDevice.mixerConfig = mergeDeep(mockDevice.mixerConfig, config);
   });
 
-export const writeDigitalIdleSpeed = (port: string, idlePercentage: number) =>
+export const writePartialAdvancedPidConfig: typeof api.writePartialAdvancedPidConfig = (
+  port,
+  config
+) =>
   delay(10).then(() => {
-    mockDevice.advancedPidConfig.digitalIdlePercent = idlePercentage;
+    mockDevice.advancedPidConfig = mergeDeep(
+      mockDevice.advancedPidConfig,
+      config
+    );
   });
 
 export const readBeeperConfig = (port: string) =>
   delay(20).then(() => mockDevice.beeper);
 
-export const writeDshotBeeperConfig = (
-  port: string,
-  config: BeeperConfig["dshot"]
+export const writePartialBeeperConfig: typeof api.writePartialBeeperConfig = (
+  port,
+  config
 ) =>
   delay(50).then(() => {
-    mockDevice.beeper.dshot = config;
+    mockDevice.beeper = mergeDeep(mockDevice.beeper, config);
   });
 
 export const readDisabledSensors = (port: string) =>

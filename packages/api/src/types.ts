@@ -119,29 +119,26 @@ export type FilterConfig = {
 };
 
 export enum EscProtocols {
-  PWM = 0,
-  ONESHOT125 = 1,
-  ONESHOT42 = 2,
-  MULTISHOT = 3,
-  BRUSHED = 4,
-  DSHOT150 = 5,
-  DSHOT300 = 6,
-  DSHOT600 = 7,
-  DSHOT1200 = 8,
-  PROSHOT1000 = 9,
-  DISABLED = 10,
+  PWM,
+  ONESHOT125,
+  ONESHOT42,
+  MULTISHOT,
+  BRUSHED,
+  DSHOT150,
+  DSHOT300,
+  DSHOT600,
+  DSHOT1200,
+  PROSHOT1000,
+  DISABLED,
 }
 
-export type PidProtocols = {
+export type AdvancedPidConfig = {
   gyroSyncDenom: number;
   pidProcessDenom: number;
   useUnsyncedPwm: boolean;
   fastPwmProtocol: EscProtocols;
   gyroUse32kHz: boolean;
   motorPwmRate: number;
-};
-
-export type AdvancedPidConfig = PidProtocols & {
   gyroToUse: number;
   digitalIdlePercent: number;
   motorPwmInversion: number;
@@ -369,4 +366,103 @@ export type BeeperConfig = {
     conditions: (Beepers.RX_LOST | Beepers.RX_SET)[];
     tone: number;
   };
+};
+
+export enum SerialRxProviders {
+  SPEKTRUM1024,
+  SBUS,
+  SUMD,
+  SUMH,
+  XBUS_MODE_B,
+  XBUS_MODE_B_RJ01,
+  IBUS,
+  JETIEXBUS,
+  CRSF,
+  SPEKTRUM2048,
+  SPEKTRUM2048_SRXL,
+  TARGET_CUSTOM,
+  FRSKY_FPORT,
+  SPEKTRUM_SRXL2,
+}
+
+export enum SpiRxProtocols {
+  NRF24_V202_250K,
+  NRF24_V202_1M,
+  NRF24_SYMA_X,
+  NRF24_SYMA_X5C,
+  NRF24_CX10,
+  CX10A,
+  NRF24_H8_3D,
+  NRF24_INAV,
+  FRSKY_D,
+  FRSKY_X,
+  A7105_FLYSKY,
+  A7105_FLYSKY_2A,
+  NRF24_KN,
+  SFHSS,
+  SPEKTRUM,
+  FRSKY_X_LBT,
+}
+
+export enum RcInterpolations {
+  OFF,
+  DEFAULT,
+  AUTO,
+  MANUAL,
+}
+
+export enum RcSmoothingChannels {
+  RP,
+  RPY,
+  RPYT,
+  T,
+  RPT,
+}
+
+export enum RcSmoothingTypes {
+  INTERPOLATION,
+  FILTER,
+}
+
+export enum RcSmoothingInputTypes {
+  PT1,
+  BIQUAD,
+}
+
+export enum RcSmoothingDerivativeTypes {
+  OFF,
+  PT1,
+  BIQUAD,
+  AUTO,
+}
+
+export type RxConfig = {
+  serialProvider: SerialRxProviders;
+  stick: {
+    max: number;
+    center: number;
+    min: number;
+  };
+  spektrumSatBind: number;
+  rxMinUsec: number;
+  rxMaxUsec: number;
+  interpolation: RcInterpolations;
+  interpolationInterval: number;
+  airModeActivateThreshold: number;
+  spi: {
+    protocol: SpiRxProtocols;
+    id: number;
+    rfChannelCount: number;
+  };
+  fpvCamAngleDegrees: number;
+  rcSmoothing: {
+    channels: RcSmoothingChannels;
+    type: RcSmoothingTypes;
+    inputCutoff: number;
+    derivativeCutoff: number;
+    inputType: RcSmoothingInputTypes;
+    derivativeType: RcSmoothingDerivativeTypes;
+    autoSmoothness: number;
+  };
+  usbCdcHidType: number;
 };

@@ -56,7 +56,10 @@ const resolvers: Resolvers = {
     ) => {
       log("Setting pid protocols", protocols);
       return api
-        .writePidProtocols(connections.getPort(connectionId), protocols)
+        .writePartialAdvancedPidConfig(
+          connections.getPort(connectionId),
+          protocols
+        )
         .then(() => null);
     },
   },

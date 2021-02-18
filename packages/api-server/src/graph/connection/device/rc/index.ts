@@ -11,6 +11,7 @@ const typeDefs = gql`
     tuning: RCTuning!
     deadband: RCDeadband!
     rssi: Int!
+    receiver: RxConfig!
   }
 
   type RCTuning {
@@ -33,6 +34,21 @@ const typeDefs = gql`
     rollRateLimit: Float!
     pitchRateLimit: Float!
     yawRateLimit: Float!
+  }
+
+  type RcSmoothing {
+    channels: Int!
+    type: Int!
+    inputCutoff: Int!
+    derivativeCutoff: Int!
+    inputType: Int!
+    derivativeType: Int!
+    autoSmoothness: Int!
+  }
+
+  type RxConfig {
+    serialProvider: Int!
+    spiProtocol: Int!
   }
 
   type RCDeadband {

@@ -1,4 +1,9 @@
-import { EscProtocols, escProtocols } from "../src";
+import {
+  EscProtocols,
+  escProtocols,
+  spiRxProtocols,
+  SpiRxProtocols,
+} from "../src";
 
 describe("escProtocols", () => {
   it.each([
@@ -57,5 +62,65 @@ describe("escProtocols", () => {
     ],
   ])("should return available protocols for %s", (version, expected) => {
     expect(escProtocols(version)).toEqual(expected);
+  });
+});
+
+describe("spiRxProtocols", () => {
+  it.each([
+    [
+      "1.36.0",
+      [
+        SpiRxProtocols.NRF24_V202_250K,
+        SpiRxProtocols.NRF24_V202_1M,
+        SpiRxProtocols.NRF24_SYMA_X,
+        SpiRxProtocols.NRF24_SYMA_X5C,
+        SpiRxProtocols.NRF24_CX10,
+        SpiRxProtocols.CX10A,
+        SpiRxProtocols.NRF24_H8_3D,
+        SpiRxProtocols.NRF24_INAV,
+        SpiRxProtocols.FRSKY_D,
+      ],
+    ],
+    [
+      "1.37.0",
+      [
+        SpiRxProtocols.NRF24_V202_250K,
+        SpiRxProtocols.NRF24_V202_1M,
+        SpiRxProtocols.NRF24_SYMA_X,
+        SpiRxProtocols.NRF24_SYMA_X5C,
+        SpiRxProtocols.NRF24_CX10,
+        SpiRxProtocols.CX10A,
+        SpiRxProtocols.NRF24_H8_3D,
+        SpiRxProtocols.NRF24_INAV,
+        SpiRxProtocols.FRSKY_D,
+        SpiRxProtocols.FRSKY_X,
+        SpiRxProtocols.A7105_FLYSKY,
+        SpiRxProtocols.A7105_FLYSKY_2A,
+        SpiRxProtocols.NRF24_KN,
+      ],
+    ],
+    [
+      "1.41.0",
+      [
+        SpiRxProtocols.NRF24_V202_250K,
+        SpiRxProtocols.NRF24_V202_1M,
+        SpiRxProtocols.NRF24_SYMA_X,
+        SpiRxProtocols.NRF24_SYMA_X5C,
+        SpiRxProtocols.NRF24_CX10,
+        SpiRxProtocols.CX10A,
+        SpiRxProtocols.NRF24_H8_3D,
+        SpiRxProtocols.NRF24_INAV,
+        SpiRxProtocols.FRSKY_D,
+        SpiRxProtocols.FRSKY_X,
+        SpiRxProtocols.A7105_FLYSKY,
+        SpiRxProtocols.A7105_FLYSKY_2A,
+        SpiRxProtocols.NRF24_KN,
+        SpiRxProtocols.SFHSS,
+        SpiRxProtocols.SPEKTRUM,
+        SpiRxProtocols.FRSKY_X_LBT,
+      ],
+    ],
+  ])("should return available protocols for %s", (version, expected) => {
+    expect(spiRxProtocols(version)).toEqual(expected);
   });
 });

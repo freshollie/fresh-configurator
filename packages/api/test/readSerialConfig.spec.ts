@@ -2,7 +2,7 @@ import mockMsp from "./mockMsp";
 import { readSerialConfig } from "../src";
 import codes from "../src/codes";
 
-describe("readRCTuning", () => {
+describe("readSerialConfig", () => {
   it("should respond correctly for version 1.42.0", async () => {
     mockMsp.setApiVersion("1.42.0");
     mockMsp.setResponse([

@@ -8,7 +8,15 @@ import {
   EscProtocols,
   McuTypes,
   Beepers,
+  SerialRxProviders,
+  SpiRxProtocols,
+  RcInterpolations,
+  RcSmoothingChannels,
+  RcSmoothingTypes,
+  RcSmoothingInputTypes,
+  RcSmoothingDerivativeTypes,
 } from "./types";
+import { includeIf } from "./utils";
 
 const BASE_FEATURE_BITS: FeatureBits = {
   0: Features.RX_PPM,
@@ -90,9 +98,8 @@ export const disarmFlagBits = (apiVersion: string): DisarmFlags[] => [
   DisarmFlags.BAD_RX_RECOVERY,
   DisarmFlags.BOXFAILSAFE,
   DisarmFlags.THROTTLE,
-  ...(semver.gte(apiVersion, "1.38.0") ? [DisarmFlags.RUNAWAY_TAKEOFF] : []),
-
-  ...(semver.gte(apiVersion, "1.42.0") ? [DisarmFlags.CRASH] : []),
+  ...includeIf(semver.gte(apiVersion, "1.38.0"), DisarmFlags.RUNAWAY_TAKEOFF),
+  ...includeIf(semver.gte(apiVersion, "1.42.0"), DisarmFlags.CRASH),
   DisarmFlags.ANGLE,
   DisarmFlags.BOOT_GRACE_TIME,
   DisarmFlags.NOPREARM,
@@ -100,19 +107,22 @@ export const disarmFlagBits = (apiVersion: string): DisarmFlags[] => [
   DisarmFlags.CALIBRATING,
   DisarmFlags.CLI,
   DisarmFlags.CMS_MENU,
-  ...(semver.lt(apiVersion, "1.41.0") ? [DisarmFlags.OSD_MENU] : []),
+  ...includeIf(semver.lt(apiVersion, "1.41.0"), DisarmFlags.OSD_MENU),
   DisarmFlags.BST,
   DisarmFlags.MSP,
-  ...(semver.gte(apiVersion, "1.39.0")
-    ? [DisarmFlags.PARALYZE, DisarmFlags.GPS]
-    : []),
-  ...(semver.gte(apiVersion, "1.41.0")
-    ? [DisarmFlags.RESC, DisarmFlags.RPMFILTER]
-    : []),
-  ...(semver.gte(apiVersion, "1.42.0")
-    ? [DisarmFlags.REBOOT_REQD, DisarmFlags.DSHOT_BBANG]
-    : []),
-  ...(semver.gte(apiVersion, "1.43.0") ? [DisarmFlags.NO_ACC_CAL] : []),
+  ...includeIf(semver.gte(apiVersion, "1.39.0"), [
+    DisarmFlags.PARALYZE,
+    DisarmFlags.GPS,
+  ]),
+  ...includeIf(semver.gte(apiVersion, "1.41.0"), [
+    DisarmFlags.RESC,
+    DisarmFlags.RPMFILTER,
+  ]),
+  ...includeIf(semver.gte(apiVersion, "1.42.0"), [
+    DisarmFlags.REBOOT_REQD,
+    DisarmFlags.DSHOT_BBANG,
+  ]),
+  ...includeIf(semver.gte(apiVersion, "1.43.0"), [DisarmFlags.NO_ACC_CAL]),
   DisarmFlags.ARM_SWITCH,
 ];
 
@@ -164,14 +174,14 @@ export const beeperBits = (apiVersion: string): Beepers[] => [
   Beepers.SYSTEM_INIT,
   Beepers.USB,
   Beepers.BLACKBOX_ERASE,
-  ...(semver.gte(apiVersion, "1.37.0")
-    ? [
-        Beepers.CRASH_FLIP,
-        Beepers.CAM_CONNECTION_OPEN,
-        Beepers.CAM_CONNECTION_CLOSE,
-      ]
-    : []),
-  ...(semver.gte(apiVersion, "1.39.0") ? [Beepers.RC_SMOOTHING_INIT_FAIL] : []),
+  ...includeIf(semver.gte(apiVersion, "1.37.0"), [
+    Beepers.CRASH_FLIP,
+    Beepers.CAM_CONNECTION_OPEN,
+    Beepers.CAM_CONNECTION_CLOSE,
+  ]),
+  ...includeIf(semver.gte(apiVersion, "1.39.0"), [
+    Beepers.RC_SMOOTHING_INIT_FAIL,
+  ]),
 ];
 
 export const legacySerialPortFunctionsMap: Record<
@@ -192,15 +202,17 @@ export const escProtocols = (version: string): EscProtocols[] => [
   EscProtocols.ONESHOT125,
   EscProtocols.ONESHOT42,
   EscProtocols.MULTISHOT,
-  ...(semver.gte(version, "1.20.0") ? [EscProtocols.BRUSHED] : []),
-  ...(semver.gte(version, "1.31.0")
-    ? [EscProtocols.DSHOT150, EscProtocols.DSHOT300, EscProtocols.DSHOT600]
-    : []),
-  ...(semver.gte(version, "1.31.0") && semver.lt(version, "1.42.0")
-    ? [EscProtocols.DSHOT1200]
-    : []),
-  ...(semver.gte(version, "1.36.0") ? [EscProtocols.PROSHOT1000] : []),
-  ...(semver.gte(version, "1.43.0") ? [EscProtocols.DISABLED] : []),
+  ...includeIf(semver.gte(version, "1.20.0"), [EscProtocols.BRUSHED]),
+  ...includeIf(semver.gte(version, "1.31.0"), [
+    EscProtocols.DSHOT150,
+    EscProtocols.DSHOT300,
+    EscProtocols.DSHOT600,
+  ]),
+  ...includeIf(semver.gte(version, "1.31.0") && semver.lt(version, "1.42.0"), [
+    EscProtocols.DSHOT1200,
+  ]),
+  ...includeIf(semver.gte(version, "1.36.0"), [EscProtocols.PROSHOT1000]),
+  ...includeIf(semver.gte(version, "1.43.0"), [EscProtocols.DISABLED]),
 ];
 
 export const MCU_GROUPS = {
@@ -253,4 +265,92 @@ export const MIXER_LIST = [
   { name: "Custom Airplane", id: 24, model: "custom", image: "custom" },
   { name: "Custom Tricopter", id: 25, model: "custom", image: "custom" },
   { name: "Quad X 1234", id: 1, model: "quad_x", image: "quad_x_1234" },
+];
+
+export const serialRxProviders = (apiVersion: string): SerialRxProviders[] => [
+  SerialRxProviders.SPEKTRUM1024,
+  SerialRxProviders.SPEKTRUM2048,
+  SerialRxProviders.SBUS,
+  SerialRxProviders.SUMD,
+  SerialRxProviders.SUMH,
+  SerialRxProviders.XBUS_MODE_B,
+  SerialRxProviders.XBUS_MODE_B_RJ01,
+  ...includeIf(semver.gte(apiVersion, "1.15.0"), SerialRxProviders.IBUS),
+  ...includeIf(semver.gte(apiVersion, "1.31.0"), [
+    SerialRxProviders.JETIEXBUS,
+    SerialRxProviders.CRSF,
+  ]),
+  ...includeIf(
+    semver.gte(apiVersion, "1.24.0"),
+    SerialRxProviders.SPEKTRUM2048_SRXL
+  ),
+  ...includeIf(
+    semver.gte(apiVersion, "1.35.0"),
+    SerialRxProviders.TARGET_CUSTOM
+  ),
+  ...includeIf(semver.gte(apiVersion, "1.37.0"), SerialRxProviders.FRSKY_FPORT),
+  ...includeIf(
+    semver.gte(apiVersion, "1.42.0"),
+    SerialRxProviders.SPEKTRUM_SRXL2
+  ),
+];
+
+export const spiRxProtocols = (apiVersion: string): SpiRxProtocols[] => [
+  SpiRxProtocols.NRF24_V202_250K,
+  SpiRxProtocols.NRF24_V202_1M,
+  SpiRxProtocols.NRF24_SYMA_X,
+  SpiRxProtocols.NRF24_SYMA_X5C,
+  SpiRxProtocols.NRF24_CX10,
+  SpiRxProtocols.CX10A,
+  SpiRxProtocols.NRF24_H8_3D,
+  SpiRxProtocols.NRF24_INAV,
+  SpiRxProtocols.FRSKY_D,
+  ...includeIf(semver.gte(apiVersion, "1.37.0"), [
+    SpiRxProtocols.FRSKY_X,
+    SpiRxProtocols.A7105_FLYSKY,
+    SpiRxProtocols.A7105_FLYSKY_2A,
+    SpiRxProtocols.NRF24_KN,
+  ]),
+  ...includeIf(semver.gte(apiVersion, "1.41.0"), [
+    SpiRxProtocols.SFHSS,
+    SpiRxProtocols.SPEKTRUM,
+    SpiRxProtocols.FRSKY_X_LBT,
+  ]),
+];
+
+export const rcInterpolations = (): RcInterpolations[] => [
+  RcInterpolations.AUTO,
+  RcInterpolations.DEFAULT,
+  RcInterpolations.MANUAL,
+  RcInterpolations.OFF,
+];
+
+export const rcSmoothingChannels = (): RcSmoothingChannels[] => [
+  RcSmoothingChannels.RP,
+  RcSmoothingChannels.RPY,
+  RcSmoothingChannels.RPYT,
+  RcSmoothingChannels.T,
+  RcSmoothingChannels.RPT,
+];
+
+export const rcSmoothingTypes = (): RcSmoothingTypes[] => [
+  RcSmoothingTypes.INTERPOLATION,
+  RcSmoothingTypes.FILTER,
+];
+
+export const rcSmoothingInputTypes = (): RcSmoothingInputTypes[] => [
+  RcSmoothingInputTypes.PT1,
+  RcSmoothingInputTypes.BIQUAD,
+];
+
+export const rcSmoothingDerivativeTypes = (
+  apiVersion: string
+): RcSmoothingDerivativeTypes[] => [
+  RcSmoothingDerivativeTypes.OFF,
+  RcSmoothingDerivativeTypes.PT1,
+  RcSmoothingDerivativeTypes.BIQUAD,
+  ...includeIf(
+    semver.gte(apiVersion, "1.43.0"),
+    RcSmoothingDerivativeTypes.AUTO
+  ),
 ];

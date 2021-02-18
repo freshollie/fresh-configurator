@@ -55,7 +55,7 @@ describe("device.beeper", () => {
 
   describe("setDeviceDshotBeeperConfig", () => {
     it("should set the dshot beeper config for the device", async () => {
-      mockApi.writeDshotBeeperConfig.mockResolvedValue();
+      mockApi.writePartialBeeperConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
       const { mutate } = createTestClient(apolloServer);
@@ -82,11 +82,13 @@ describe("device.beeper", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writeDshotBeeperConfig).toHaveBeenCalledWith(
+      expect(mockApi.writePartialBeeperConfig).toHaveBeenCalledWith(
         "/dev/something",
         {
-          tone: 3,
-          conditions: [Beepers.RX_SET],
+          dshot: {
+            tone: 3,
+            conditions: [Beepers.RX_SET],
+          },
         }
       );
     });
