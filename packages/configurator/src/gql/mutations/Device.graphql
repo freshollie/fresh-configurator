@@ -51,12 +51,32 @@ mutation SetDisabledSensors($connection: ID!, $disabledSensors: [Int!]!) {
   )
 }
 
-mutation SetSerialFunctions(
+mutation SetDeviceFeatures($connection: ID!, $features: [Int!]!) {
+  deviceSetFeatures(connectionId: $connection, features: $features)
+}
+
+mutation SetDeviceSerialFunctions(
   $connection: ID!
-  $portFunctions: [PortFunctionsInput!]!
+  $functions: [PortFunctionsInput!]!
 ) {
-  deviceSetSerialFunctions(
+  deviceSetSerialFunctions(connectionId: $connection, portFunctions: $functions)
+}
+
+mutation SetRcReceiverSerialPort($connection: ID!, $port: Int) {
+  deviceSetReceiverSerialPort(connectionId: $connection, port: $port)
+}
+
+mutation SetRcReceiverConfig(
+  $connection: ID!
+  $serialProvider: Int
+  $smoothingType: Int
+) {
+  deviceSetReceiverConfig(
     connectionId: $connection
-    portFunctions: $portFunctions
+    receiverConfig: { serialProvider: $serialProvider }
+  )
+  deviceSetRcSmoothingConfig(
+    connectionId: $connection
+    smoothingConfig: { type: $smoothingType }
   )
 }

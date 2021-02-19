@@ -36,7 +36,7 @@ const BASE_FEATURE_BITS: FeatureBits = {
   17: Features.DISPLAY,
 };
 
-export const getFeatureBits = (apiVersion: string): FeatureBits => {
+export const availableFeatures = (apiVersion: string): FeatureBits => {
   const featureBits = { ...BASE_FEATURE_BITS };
   if (!semver.gte(apiVersion, "1.33.0")) {
     featureBits[19] = Features.BLACKBOX;

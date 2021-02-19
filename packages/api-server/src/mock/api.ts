@@ -12,6 +12,13 @@ import {
   Axes3D,
   Beepers,
   mergeDeep,
+  RcInterpolations,
+  RcSmoothingDerivativeTypes,
+  RcSmoothingInputTypes,
+  RcSmoothingTypes,
+  SpiRxProtocols,
+  SerialRxProviders,
+  Features,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
@@ -175,6 +182,64 @@ const mockDevice = {
     },
   },
   disabledSensors: [Sensors.MAGNETOMETER],
+  rxConfig: {
+    airModeActivateThreshold: 1320,
+    fpvCamAngleDegrees: 0,
+    interpolation: RcInterpolations.MANUAL,
+    interpolationInterval: 19,
+    rcSmoothing: {
+      autoSmoothness: 0,
+      channels: 2,
+      derivativeCutoff: 0,
+      derivativeType: RcSmoothingDerivativeTypes.BIQUAD,
+      inputCutoff: 0,
+      inputType: RcSmoothingInputTypes.BIQUAD,
+      type: RcSmoothingTypes.INTERPOLATION,
+    },
+    rxMaxUsec: 2115,
+    rxMinUsec: 885,
+    spi: {
+      id: 0,
+      protocol: SpiRxProtocols.NRF24_V202_250K,
+      rfChannelCount: 0,
+    },
+    serialProvider: SerialRxProviders.SPEKTRUM1024,
+    spektrumSatBind: 0,
+    stick: {
+      center: 1500,
+      max: 1900,
+      min: 1050,
+    },
+    usbCdcHidType: 0,
+  },
+  features: [Features.RX_SERIAL, Features.OSD, Features.SOFTSERIAL],
+  rcTuning: {
+    dynamicThrottleBreakpoint: 1500,
+    dynamicThrottlePid: 0.05,
+    pitchRate: 0.05,
+    pitchRateLimit: 1500,
+    rcExpo: 0.05,
+    rcPitchExpo: 0.06,
+    rcPitchRate: 1.39,
+    rcRate: 2.2,
+    rcYawExpo: 2.2,
+    rcYawRate: 0.05,
+    rollPitchRate: 0,
+    rollRate: 2.2,
+    rollRateLimit: 1500,
+    throttleExpo: 0.03,
+    throttleLimitPercent: 5,
+    throttleLimitType: 220,
+    throttleMid: 1.17,
+    yawRate: 2.2,
+    yawRateLimit: 1500,
+  },
+  rcDeadband: {
+    deadband: 0,
+    yawDeadband: 0,
+    altHoldDeadhand: 0,
+    deadband3dThrottle: 0,
+  },
 };
 
 const tickAttitude = (): void => {
@@ -287,17 +352,12 @@ export const readSerialConfig = (
 ): Promise<typeof mockDevice["serial"]> =>
   delay(50).then(() => mockDevice.serial);
 
-export const writeSerialFunctions = (
-  port: string,
-  functions: { id: number; functions: SerialPortFunctions[] }[]
+export const writeSerialConfig: typeof api.writeSerialConfig = (
+  port,
+  config
 ): Promise<void> =>
   delay(50).then(() => {
-    mockDevice.serial.ports = mockDevice.serial.ports.map((portData) => ({
-      ...portData,
-      functions:
-        functions.find(({ id }) => id === portData.id)?.functions ??
-        portData.functions,
-    }));
+    mockDevice.serial = config;
   });
 
 export const readUID = (port: string): Promise<string> =>
@@ -309,7 +369,7 @@ export const readUID = (port: string): Promise<string> =>
     throw new Error("Port does not exist");
   });
 
-export const writeReboot = (port: string): Promise<boolean> =>
+export const reboot = (port: string): Promise<boolean> =>
   delay(100).then(() => true);
 
 export const readBoardAlignmentConfig = (port: string): Promise<Axes3D> =>
@@ -372,3 +432,31 @@ export const writeDisabledSensors = (
   delay(20).then(() => {
     mockDevice.disabledSensors = disabledSensors;
   });
+
+export const readRxConfig: typeof api.readRxConfig = (port) =>
+  delay(20).then(() => mockDevice.rxConfig);
+
+export const writePartialRxConfig: typeof api.writePartialRxConfig = (
+  port,
+  config
+) =>
+  delay(20).then(() => {
+    mockDevice.rxConfig = mergeDeep(mockDevice.rxConfig, config);
+  });
+
+export const readEnabledFeatures: typeof api.readEnabledFeatures = (port) =>
+  delay(20).then(() => mockDevice.features);
+
+export const writeEnabledFeatures: typeof api.writeEnabledFeatures = (
+  port,
+  features
+) =>
+  delay(20).then(() => {
+    mockDevice.features = features;
+  });
+
+export const readRCTuning: typeof api.readRCTuning = (port) =>
+  delay(20).then(() => mockDevice.rcTuning);
+
+export const readRCDeadband: typeof api.readRCDeadband = (port) =>
+  delay(20).then(() => mockDevice.rcDeadband);

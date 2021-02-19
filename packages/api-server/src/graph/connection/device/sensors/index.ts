@@ -22,12 +22,12 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    sensors: ({ port }) => ({ port }),
+    sensors: () => ({} as never),
   },
   Sensors: {
-    available: ({ port }, _, { api }) =>
+    available: (_, __, { api, port }) =>
       api.readExtendedStatus(port).then(({ sensors }) => sensors),
-    disabled: ({ port }, _, { api }) => api.readDisabledSensors(port),
+    disabled: (_, __, { api, port }) => api.readDisabledSensors(port),
   },
 
   Mutation: {

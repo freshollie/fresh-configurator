@@ -56,7 +56,8 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
-    connect: async (_, { port, baudRate }, { connections, api }) => {
+    connect: async (_, { port, baudRate }, context) => {
+      const { connections, api } = context;
       let deviceId: string | undefined;
       let connectionId = uuid.v4();
 
@@ -137,10 +138,16 @@ const resolvers: Resolvers = {
       connections.closeConnections(port);
       // start a new connection with a new connection id
       connections.add(port, connectionId);
+      context.port = port;
 
       return {
         id: connectionId,
         port,
+        apiVersion: "0.0.0",
+        bytesRead: 0,
+        bytesWritten: 0,
+        packetErrors: 0,
+        device: {} as never,
       };
     },
 
@@ -153,10 +160,19 @@ const resolvers: Resolvers = {
   },
 
   Query: {
-    connection: (_, { connectionId }, { connections }) => ({
-      id: connectionId,
-      port: connections.getPort(connectionId),
-    }),
+    connection: (_, { connectionId }, context) => {
+      const port = context.connections.getPort(connectionId);
+      context.port = port;
+      return {
+        id: connectionId,
+        port,
+        apiVersion: "0.0.0",
+        bytesRead: 0,
+        bytesWritten: 0,
+        packetErrors: 0,
+        device: {} as never,
+      };
+    },
   },
   Connection: {
     apiVersion: ({ port }, _, { api }) => api.apiVersion(port),

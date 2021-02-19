@@ -21,7 +21,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    arming: ({ port }, _, { api }) =>
+    arming: (_, __, { api, port }) =>
       api.readExtendedStatus(port).then(({ armingDisabledFlags }) => ({
         disabledFlags: armingDisabledFlags,
       })),

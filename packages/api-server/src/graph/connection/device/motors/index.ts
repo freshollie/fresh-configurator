@@ -23,14 +23,14 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    motors: ({ port }) => ({ port }),
+    motors: () => ({} as never),
   },
   MotorsConfig: {
-    mixer: ({ port }, _, { api }) =>
+    mixer: (_, __, { api, port }) =>
       api.readMixerConfig(port).then((config) => config.mixer),
-    reversedDirection: ({ port }, _, { api }) =>
+    reversedDirection: (_, __, { api, port }) =>
       api.readMixerConfig(port).then((config) => config.reversedMotors),
-    digitalIdlePercent: ({ port }, _, { api }) =>
+    digitalIdlePercent: (_, __, { api, port }) =>
       api
         .readAdvancedPidConfig(port)
         .then((config) => config.digitalIdlePercent),

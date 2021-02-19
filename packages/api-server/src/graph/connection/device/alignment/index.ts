@@ -28,7 +28,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    alignment: ({ port }, _, { api }) => api.readBoardAlignmentConfig(port),
+    alignment: (_, __, { api, port }) => api.readBoardAlignmentConfig(port),
   },
   Mutation: {
     deviceSetBoardAlignment: (

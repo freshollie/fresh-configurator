@@ -123,19 +123,6 @@ query RcSettings($connection: ID!) {
   }
 }
 
-query DevicePortFunctions($connection: ID!) {
-  connection(connectionId: $connection) {
-    device {
-      serial {
-        ports {
-          id
-          functions
-        }
-      }
-    }
-  }
-}
-
 query DeviceBoardAlignment($connection: ID!) {
   connection(connectionId: $connection) {
     device {
@@ -195,6 +182,19 @@ query DshotBeeperConfig($connection: ID!) {
         dshot {
           conditions
           tone
+        }
+      }
+    }
+  }
+}
+
+query DeviceSerialPortFunctions($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      serial {
+        ports {
+          id
+          functions
         }
       }
     }

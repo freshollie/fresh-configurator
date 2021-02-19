@@ -41,12 +41,10 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    pid: ({ port }) => ({
-      port,
-    }),
+    pid: () => ({} as never),
   },
   PidConfig: {
-    protocols: ({ port }, _, { api }) => api.readAdvancedPidConfig(port),
+    protocols: (_, __, { api, port }) => api.readAdvancedPidConfig(port),
   },
   Mutation: {
     deviceSetPidProtocols: (

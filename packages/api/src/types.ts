@@ -255,11 +255,6 @@ export enum Sensors {
 
 export type FeatureBits = Record<number, Features>;
 
-export type Feature = {
-  key: Features;
-  enabled: boolean;
-};
-
 export enum SerialPortFunctions {
   MSP,
   GPS,
@@ -281,7 +276,7 @@ export enum SerialPortFunctions {
 }
 
 export type PortSettings = {
-  id: number;
+  id: SerialPortIdentifiers;
   functions: SerialPortFunctions[];
   mspBaudRate: number;
   gpsBaudRate: number;
@@ -466,3 +461,19 @@ export type RxConfig = {
   };
   usbCdcHidType: number;
 };
+
+export enum SerialPortIdentifiers {
+  UART1 = 0,
+  UART2 = 1,
+  UART3 = 2,
+  UART4 = 3,
+  UART5 = 4,
+  UART6 = 5,
+  UART7 = 6,
+  UART8 = 7,
+  UART9 = 8,
+  UART10 = 9,
+  USB_VCP = 20,
+  SOFTSERIAL1 = 30,
+  SOFTSERIAL2 = 31,
+}

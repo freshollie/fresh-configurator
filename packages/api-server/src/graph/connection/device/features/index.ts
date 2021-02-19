@@ -3,18 +3,27 @@ import { Resolvers } from "../../../__generated__";
 
 const typeDefs = gql`
   extend type FlightController {
-    features: [Feature!]!
+    features: [Int!]!
   }
 
-  type Feature {
-    key: Int!
-    enabled: Boolean!
+  extend type Mutation {
+    deviceSetFeatures(connectionId: ID!, features: [Int!]!): Boolean
   }
 `;
 
 const resolvers: Resolvers = {
   FlightController: {
-    features: ({ port }, _, { api }) => api.readFeatures(port),
+    features: (_, __, { api, port }) => api.readEnabledFeatures(port),
+  },
+  Mutation: {
+    deviceSetFeatures: async (
+      _,
+      { connectionId, features },
+      { connections, api }
+    ) =>
+      api
+        .writeEnabledFeatures(connections.getPort(connectionId), features)
+        .then(() => null),
   },
 };
 

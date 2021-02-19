@@ -20,7 +20,6 @@ import {
   RawGpsData,
   BoardInfo,
   DisarmFlags,
-  Feature,
   SerialConfig,
   RebootTypes,
   AdvancedPidConfig,
@@ -28,7 +27,6 @@ import {
   BeeperConfig,
   Beepers,
   Sensors,
-  SerialPortFunctions,
   SpiRxProtocols,
   RcInterpolations,
   RcSmoothingChannels,
@@ -36,9 +34,11 @@ import {
   RcSmoothingInputTypes,
   RcSmoothingDerivativeTypes,
   RxConfig,
+  Features,
+  SerialPortIdentifiers,
 } from "./types";
 import {
-  getFeatureBits,
+  availableFeatures,
   disarmFlagBits,
   sensorBits,
   serialPortFunctionBits,
@@ -87,6 +87,7 @@ export {
   MCU_GROUPS,
   mcuGroupFromId,
   MIXER_LIST,
+  availableFeatures,
 } from "./features";
 export { mergeDeep } from "./utils";
 
@@ -237,15 +238,35 @@ export const readExtendedStatus = async (
   return status;
 };
 
-export const readFeatures = async (port: string): Promise<Feature[]> => {
-  const featureBits = getFeatureBits(apiVersion(port));
+export const readEnabledFeatures = async (
+  port: string
+): Promise<Features[]> => {
+  const schema = availableFeatures(apiVersion(port));
   const data = await execute(port, { code: codes.MSP_FEATURE_CONFIG });
 
   const featureMask = data.readU32();
-  return Object.entries(featureBits).map(([bit, key]) => ({
-    key,
-    enabled: (featureMask >> parseInt(bit, 10)) % 2 !== 0,
-  }));
+  return Object.entries(schema)
+    .filter(([bit]) => (featureMask >> Number(bit)) % 2 !== 0)
+    .map(([, feature]) => feature);
+};
+
+export const writeEnabledFeatures = async (
+  port: string,
+  features: Features[]
+): Promise<void> => {
+  const schema = availableFeatures(apiVersion(port));
+
+  const buffer = new WriteBuffer();
+  buffer.push32(
+    Object.entries(schema)
+      .filter(([, feature]) => features.includes(feature))
+      .reduce((acc, [bit]) => acc | (1 << Number(bit)), 0)
+  );
+
+  await execute(port, {
+    code: codes.MSP_SET_FEATURE_CONFIG,
+    data: buffer,
+  });
 };
 
 export const readRcValues = async (port: string): Promise<number[]> => {
@@ -399,7 +420,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
       ports: times(() => {
         const start = data.remaining();
         const serialPort = {
-          id: data.readU8(),
+          id: data.readU8() as SerialPortIdentifiers,
           functions: unpackValues(data.readU32(), serialPortFunctionBits()),
           mspBaudRate: toBaudRate(data.readU8()),
           gpsBaudRate: toBaudRate(data.readU8()),
@@ -428,7 +449,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
     return {
       ports: times(
         () => ({
-          id: data.readU8(),
+          id: data.readU8() as SerialPortIdentifiers,
           functions: legacySerialPortFunctionsMap[data.readU8()] ?? [],
           mspBaudRate: -1,
           gpsBaudRate: -1,
@@ -449,7 +470,7 @@ export const readSerialConfig = async (port: string): Promise<SerialConfig> => {
   return {
     ports: times(
       () => ({
-        id: data.readU8(),
+        id: data.readU8() as SerialPortIdentifiers,
         functions: unpackValues(data.readU16(), serialPortFunctionBits()),
         mspBaudRate: toBaudRate(data.readU8()),
         gpsBaudRate: toBaudRate(data.readU8()),
@@ -516,26 +537,9 @@ export const writeSerialConfig = async (
 };
 
 /**
- * Set the functions for the device serial ports
- */
-export const writeSerialFunctions = async (
-  port: string,
-  portsConfig: { id: number; functions: SerialPortFunctions[] }[]
-): Promise<void> => {
-  const config = await readSerialConfig(port);
-  const newPortsConfig = config.ports.map((serialPort) => ({
-    ...serialPort,
-    functions:
-      portsConfig.find(({ id }) => id === serialPort.id)?.functions ??
-      serialPort.functions,
-  }));
-  await writeSerialConfig(port, { ...config, ports: newPortsConfig });
-};
-
-/**
  * Set the device to reboot, returning true if successful
  */
-export const writeReboot = async (
+export const reboot = async (
   port: string,
   type?: RebootTypes
 ): Promise<boolean> => {
@@ -561,6 +565,10 @@ export const writeReboot = async (
   }
 
   return true;
+};
+
+export const commit = async (port: string): Promise<void> => {
+  await execute(port, { code: codes.MSP_EEPROM_WRITE });
 };
 
 export const readBoardAlignmentConfig = async (
