@@ -28,15 +28,13 @@ const typeDefs = gql`
   }
 
   type FlightController {
-    port: String!
+    _void: Boolean
   }
 `;
 
 const resolvers: Resolvers = {
   Connection: {
-    device: ({ port }) => ({
-      port,
-    }),
+    device: () => ({} as never),
   },
   Mutation: {
     deviceReset: (_, { connectionId }, { api, connections }) =>

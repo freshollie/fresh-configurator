@@ -74,7 +74,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    osd: ({ port }, _, { api }) => api.readOSDConfig(port),
+    osd: (_, __, { api, port }) => api.readOSDConfig(port),
   },
 };
 

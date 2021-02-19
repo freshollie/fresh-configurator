@@ -15,7 +15,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    attitude: ({ port }, _, { api }) => api.readAttitude(port),
+    attitude: (_, __, { api, port }) => api.readAttitude(port),
   },
 };
 

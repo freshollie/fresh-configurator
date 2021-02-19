@@ -1,13 +1,13 @@
 import mockMsp from "./mockMsp";
-import { writeReboot, RebootTypes } from "../src";
+import { reboot, RebootTypes } from "../src";
 import codes from "../src/codes";
 
-describe("writeReboot", () => {
+describe("reboot", () => {
   it("should return true if the reboot request was successful for 1.40.0", async () => {
     mockMsp.setResponse([44, 0, 62, 0, 12, 87, 52, 87, 52, 54, 48, 32]);
     mockMsp.setApiVersion("1.40.0");
 
-    expect(await writeReboot("/dev/somedevice")).toBeTruthy();
+    expect(await reboot("/dev/somedevice")).toBeTruthy();
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/somedevice", {
       code: codes.MSP_SET_REBOOT,
       data: undefined,
@@ -20,7 +20,7 @@ describe("writeReboot", () => {
     mockMsp.setApiVersion("1.40.0");
 
     expect(
-      await writeReboot("/dev/somedevice", RebootTypes.BOOTLOADER)
+      await reboot("/dev/somedevice", RebootTypes.BOOTLOADER)
     ).toBeTruthy();
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/somedevice", {
       code: codes.MSP_SET_REBOOT,

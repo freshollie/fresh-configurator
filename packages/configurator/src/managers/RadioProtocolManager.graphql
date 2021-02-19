@@ -1,0 +1,29 @@
+query RadioProtocolManagerData($connection: ID!) {
+  connection(connectionId: $connection) {
+    device {
+      rc {
+        receiver {
+          serialProvider
+        }
+        smoothing {
+          type
+        }
+      }
+    }
+  }
+}
+
+mutation SetReceiverProtocolAndSmoothingData(
+  $connection: ID!
+  $serialProvider: Int
+  $smoothingType: Int!
+) {
+  deviceSetReceiverConfig(
+    connectionId: $connection
+    receiverConfig: { serialProvider: $serialProvider }
+  )
+  deviceSetRcSmoothingConfig(
+    connectionId: $connection
+    smoothingConfig: { type: $smoothingType }
+  )
+}

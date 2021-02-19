@@ -42,17 +42,29 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    serial: ({ port }, _, { api }) => api.readSerialConfig(port),
+    serial: (_, __, { api, port }) => api.readSerialConfig(port),
   },
   Mutation: {
-    deviceSetSerialFunctions: (
+    deviceSetSerialFunctions: async (
       _,
       { connectionId, portFunctions },
       { api, connections }
-    ) =>
-      api
-        .writeSerialFunctions(connections.getPort(connectionId), portFunctions)
-        .then(() => null),
+    ) => {
+      const connectionPort = connections.getPort(connectionId);
+      const serialConfig = await api.readSerialConfig(connectionPort);
+
+      await api.writeSerialConfig(connectionPort, {
+        ...serialConfig,
+        ports: serialConfig.ports.map((portConfig) => ({
+          ...portConfig,
+          functions:
+            portFunctions.find(({ id }) => id === portConfig.id)?.functions ??
+            portConfig.functions,
+        })),
+      });
+
+      return null;
+    },
   },
 };
 

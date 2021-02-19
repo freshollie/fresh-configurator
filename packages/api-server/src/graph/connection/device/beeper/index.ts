@@ -31,7 +31,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    beeper: ({ port }, _, { api }) => api.readBeeperConfig(port),
+    beeper: (_, __, { api, port }) => api.readBeeperConfig(port),
   },
   Mutation: {
     deviceSetDshotBeeperConfig: (

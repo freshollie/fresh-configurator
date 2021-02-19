@@ -15,7 +15,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers = {
   FlightController: {
-    status: ({ port }, _, { api }) => api.readExtendedStatus(port),
+    status: (_, __, { api, port }) => api.readExtendedStatus(port),
   },
 };
 

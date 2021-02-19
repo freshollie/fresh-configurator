@@ -3,12 +3,16 @@ import { Resolvers } from "../../../__generated__";
 
 const typeDefs = gql`
   extend type FlightController {
-    profiles: Profiles!
+    msp: Msp!
   }
 
-  type Profiles {
-    length: Int!
-    selected: Int!
+  type Msp {
+    ports: [Int!]!
+  }
+
+  type MspPort {
+    id: Int!
+    boardRate: Int!
   }
 `;
 
