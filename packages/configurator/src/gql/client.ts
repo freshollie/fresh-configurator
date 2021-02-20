@@ -1,14 +1,10 @@
 import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
 import WebSocketLink from "./WebSocketLink";
-import { Resolvers, Configurator } from "./__generated__";
+import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
-import {
-  LogsDocument,
-  SelectedTabDocument,
-  ConnectionSettingsDocument,
-} from "./queries/Configurator.graphql";
 
+// eslint-disable-next-line @betaflight-tools/ts-graphql/gql-type-assertion
 const typeDefs = gql`
   type Query {
     configurator: Configurator!
@@ -38,6 +34,32 @@ const typeDefs = gql`
     message: String!
   }
 `;
+
+const ConnectionSettings = gql`
+  query ConnectionSettings {
+    configurator @client {
+      port
+      baudRate
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client").ConnectionSettingsQuery,
+  import("./__generated__/client").ConnectionSettingsQueryVariables
+>;
+
+const Logs = gql`
+  query Logs {
+    configurator @client {
+      logs {
+        time
+        message
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client").LogsQuery,
+  import("./__generated__/client").LogsQueryVariables
+>;
 
 export const cache = (): InMemoryCache =>
   new InMemoryCache({
@@ -73,7 +95,16 @@ export const resolvers = (initialState?: {
     Mutation: {
       setTab: (_, { tabId }, { client }) => {
         client.writeQuery({
-          query: SelectedTabDocument,
+          query: gql`
+            query SelectedTab {
+              configurator @client {
+                tab
+              }
+            }
+          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+            import("./__generated__/client").SelectedTabQuery,
+            import("./__generated__/client").SelectedTabQueryVariables
+          >,
           data: {
             __typename: "Query",
             configurator: {
@@ -88,7 +119,7 @@ export const resolvers = (initialState?: {
         const existingData = {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           ...client.readQuery({
-            query: ConnectionSettingsDocument,
+            query: ConnectionSettings,
           })!.configurator,
         };
 
@@ -98,7 +129,7 @@ export const resolvers = (initialState?: {
         existingData.port = port;
 
         client.writeQuery({
-          query: ConnectionSettingsDocument,
+          query: ConnectionSettings,
           data: {
             __typename: "Query",
             configurator: {
@@ -112,12 +143,15 @@ export const resolvers = (initialState?: {
       setConnecting: (_, { value }, { client }) => {
         client.writeQuery({
           query: gql`
-            query {
+            query ClientConnecting {
               configurator {
                 connecting
               }
             }
-          `,
+          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+            import("./__generated__/client").ClientConnectingQuery,
+            import("./__generated__/client").ClientConnectingQueryVariables
+          >,
           data: {
             __typename: "Query",
             configurator: {
@@ -132,12 +166,15 @@ export const resolvers = (initialState?: {
       setConnection: (_, { connection }, { client }) => {
         client.writeQuery({
           query: gql`
-            query {
+            query ClientConnection {
               configurator {
                 connection
               }
             }
-          `,
+          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+            import("./__generated__/client").ClientConnectionQuery,
+            import("./__generated__/client").ClientConnectionQueryVariables
+          >,
           data: {
             __typename: "Query",
             configurator: {
@@ -166,11 +203,11 @@ export const resolvers = (initialState?: {
       log: (_, { message }, { client }) => {
         const logs =
           client.readQuery({
-            query: LogsDocument,
+            query: Logs,
           })?.configurator.logs ?? [];
 
         client.writeQuery({
-          query: LogsDocument,
+          query: Logs,
           data: {
             __typename: "Query",
             configurator: {
@@ -212,7 +249,7 @@ const writeInitial = (): void => {
   const { os, version, chromeVersion } = versionInfo();
   client.writeQuery({
     query: gql`
-      query {
+      query InitWrite {
         configurator {
           port
           baudRate
@@ -226,7 +263,10 @@ const writeInitial = (): void => {
           }
         }
       }
-    `,
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/client").InitWriteQuery,
+      import("./__generated__/client").InitWriteQueryVariables
+    >,
     data: {
       __typename: "Query",
       configurator: {
@@ -244,7 +284,7 @@ const writeInitial = (): void => {
           },
         ],
         __typename: "Configurator",
-      } as Configurator,
+      },
     },
   });
 };

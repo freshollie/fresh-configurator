@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "../theme";
 import Range from "../components/Range";
-import { useMutation, useQuery } from "../gql/apollo";
-import { SetMotorDigitalIdleSpeedDocument } from "../gql/mutations/Device.graphql";
-import { MotorDigitalIdleSpeedDocument } from "../gql/queries/Device.graphql";
+import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
 
@@ -11,6 +9,7 @@ const Indicators = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
   & > :first-child {
     transform: translateX(-50%);
   }
@@ -32,10 +31,25 @@ const PERCENTAGE_TO_RANGE: Record<number, number> = {
   7: 2,
 };
 
+const IdleSpeedConfig = gql`
+  query MotorDigitalIdleSpeed($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        motors {
+          digitalIdlePercent
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/MotorIdleSpeedManager").MotorDigitalIdleSpeedQuery,
+  import("./__generated__/MotorIdleSpeedManager").MotorDigitalIdleSpeedQueryVariables
+>;
+
 const MotorIdleSpeedManager: React.FC = () => {
   const { connection } = useConnectionState();
   const log = useLogger();
-  const { data, loading } = useQuery(MotorDigitalIdleSpeedDocument, {
+  const { data, loading } = useQuery(IdleSpeedConfig, {
     variables: {
       connection: connection ?? "",
     },
@@ -43,7 +57,20 @@ const MotorIdleSpeedManager: React.FC = () => {
   });
 
   const [setConnection, { loading: setting }] = useMutation(
-    SetMotorDigitalIdleSpeedDocument,
+    gql`
+      mutation SetMotorDigitalIdleSpeed(
+        $connection: ID!
+        $idlePercentage: Float!
+      ) {
+        deviceSetDigitalIdleSpeed(
+          connectionId: $connection
+          idlePercentage: $idlePercentage
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/MotorIdleSpeedManager").SetMotorDigitalIdleSpeedMutation,
+      import("./__generated__/MotorIdleSpeedManager").SetMotorDigitalIdleSpeedMutationVariables
+    >,
     {
       onError: (e) =>
         log(
@@ -55,7 +82,7 @@ const MotorIdleSpeedManager: React.FC = () => {
         ),
       refetchQueries: [
         {
-          query: MotorDigitalIdleSpeedDocument,
+          query: IdleSpeedConfig,
           variables: {
             connection,
           },

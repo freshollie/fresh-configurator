@@ -1,8 +1,8 @@
+import { gql } from "@apollo/client";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Beepers } from "@betaflight/api";
 import React from "react";
 import { resolvers } from "../src/gql/client";
-import { DshotBeeperConfigDocument } from "../src/gql/queries/Device.graphql";
 import BeeperManager from "../src/managers/BeeperManager";
 
 export default {
@@ -12,7 +12,23 @@ export default {
 
 const dshotBeeperConfigMock = (enabled: boolean): MockedResponse => ({
   request: {
-    query: DshotBeeperConfigDocument,
+    query: gql`
+      query DshotBeeperConfig($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            beeper {
+              dshot {
+                tone
+                conditions
+              }
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/BeeperManager.stories").DshotBeeperConfigQuery,
+      import("./__generated__/BeeperManager.stories").DshotBeeperConfigQueryVariables
+    >,
     variables: {
       connection: "abc",
     },

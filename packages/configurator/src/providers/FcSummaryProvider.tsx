@@ -1,9 +1,8 @@
 import React from "react";
 import { DisarmFlags } from "@betaflight/api";
-import { FcSummaryDocument } from "../gql/queries/Device.graphql";
 import Table from "../components/Table";
 import useConnectionState from "../hooks/useConnectionState";
-import { useQuery } from "../gql/apollo";
+import { gql, useQuery } from "../gql/apollo";
 
 const ARM_SWITCH_KEY = DisarmFlags[DisarmFlags.ARM_SWITCH];
 
@@ -13,13 +12,37 @@ type Props = {
 
 const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
-  const { data } = useQuery(FcSummaryDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    pollInterval: 1000 / refreshRate,
-    skip: !connection,
-  });
+  const { data } = useQuery(
+    gql`
+      query FcSummary($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            arming {
+              disabledFlags
+            }
+            power {
+              voltage
+              mahDrawn
+              amperage
+            }
+            rc {
+              rssi
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/FcSummaryProvider").FcSummaryQuery,
+      import("./__generated__/FcSummaryProvider").FcSummaryQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      pollInterval: 1000 / refreshRate,
+      skip: !connection,
+    }
+  );
 
   const flagNames =
     data?.connection.device.arming.disabledFlags

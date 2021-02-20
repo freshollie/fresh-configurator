@@ -1,8 +1,5 @@
 /* eslint-disable no-param-reassign */
 const path = require("path");
-// TODO: use import webpack version when webpack 5 is supported by
-// storybook
-const NormalModuleReplacementPlugin = require("./NormalModuleReplacementPlugin");
 
 /**
  * Patch the given babel config to allow it to
@@ -90,14 +87,7 @@ module.exports = {
       });
     }
 
-    config.plugins.push(
-      new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
-        resource.request += ".ts";
-      })
-    );
     return config;
   },
-  babel: (config) => {
-    return fixBabel(config);
-  },
+  babel: (config) => fixBabel(config),
 };

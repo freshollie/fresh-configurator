@@ -1,1 +1,13 @@
+**/coverage
+**/dist
+**/node_modules
+**/__generated__
+!.storybook/
+**/build
+**/storybook-static
+!.jest
+!.eslintrc.js
 lerna.json
+*.graphql.d.ts
+*.graphql.ts
+.pnp.js

@@ -1,19 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 import semver from "semver";
-import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
 import config from "../config";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
-import { ConnectionSettingsDocument } from "../gql/queries/Configurator.graphql";
-import {
-  ConnectDocument,
-  DisconnectDocument,
-} from "../gql/mutations/Connection.graphql";
-import { SetArmingDocument } from "../gql/mutations/Device.graphql";
 
 import BigButton from "../components/BigButton";
-import { useMutation, useQuery, useSubscription } from "../gql/apollo";
+import { gql, useMutation, useQuery, useSubscription } from "../gql/apollo";
 
 /**
  * Handle all aspects of tracking the app connection
@@ -23,7 +16,19 @@ import { useMutation, useQuery, useSubscription } from "../gql/apollo";
 const ConnectionManager: React.FC = () => {
   const log = useLogger();
 
-  const { data: configuratorQuery } = useQuery(ConnectionSettingsDocument);
+  const { data: configuratorQuery } = useQuery(
+    gql`
+      query ConnectionSettings {
+        configurator @client {
+          port
+          baudRate
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager").ConnectionSettingsQuery,
+      import("./__generated__/ConnectionManager").ConnectionSettingsQueryVariables
+    >
+  );
   const { port, baudRate } = configuratorQuery?.configurator ?? {};
 
   const {
@@ -33,18 +38,41 @@ const ConnectionManager: React.FC = () => {
     setConnecting,
   } = useConnectionState();
 
-  const [disableArming] = useMutation(SetArmingDocument, {
-    onCompleted: () => {
-      log("<b>Arming disabled</b>");
-    },
-    onError: (e) => {
-      log(
-        `<span class="message-negative">Error disabling arming: ${e.message}</span>`
-      );
-    },
-  });
+  const [disableArming] = useMutation(
+    gql`
+      mutation DisableArming($connection: ID!) {
+        deviceSetArming(
+          connectionId: $connection
+          armingDisabled: true
+          runawayTakeoffPreventionDisabled: false
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager").DisableArmingMutation,
+      import("./__generated__/ConnectionManager").DisableArmingMutationVariables
+    >,
+    {
+      onCompleted: () => {
+        log("<b>Arming disabled</b>");
+      },
+      onError: (e) => {
+        log(
+          `<span class="message-negative">Error disabling arming: ${e.message}</span>`
+        );
+      },
+    }
+  );
 
-  const [disconnectMutation] = useMutation(DisconnectDocument);
+  const [disconnectMutation] = useMutation(
+    gql`
+      mutation Disconnect($connection: ID!) {
+        close(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager").DisconnectMutation,
+      import("./__generated__/ConnectionManager").DisconnectMutationVariables
+    >
+  );
 
   const disconnect = (
     notify = true,
@@ -68,48 +96,59 @@ const ConnectionManager: React.FC = () => {
         }
       });
 
-  const [connect] = useMutation(ConnectDocument, {
-    variables: {
-      port: port ?? "",
-      baudRate: baudRate ?? 0,
-    },
-    onCompleted: ({ connect: { id: connectionId, apiVersion } }) => {
-      if (!connecting) {
-        disconnect(false, connectionId);
-        return;
+  const [connect] = useMutation(
+    gql`
+      mutation Connect($port: String!, $baudRate: Int!) {
+        connect(port: $port, baudRate: $baudRate) {
+          id
+          apiVersion
+        }
       }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager").ConnectMutation,
+      import("./__generated__/ConnectionManager").ConnectMutationVariables
+    >,
+    {
+      variables: {
+        port: port ?? "",
+        baudRate: baudRate ?? 0,
+      },
+      onCompleted: ({ connect: { id: connectionId, apiVersion } }) => {
+        if (!connecting) {
+          disconnect(false, connectionId);
+          return;
+        }
 
-      log(
-        `Serial port <span class="message-positive">successfully</span> opened, connectionId=${connectionId}`
-      );
-      log(`MultiWii API version: <strong>${apiVersion}</strong>`);
-      if (semver.lt(apiVersion, config.apiVersionAccepted)) {
         log(
-          `MSP version not supported: <span class="message-negative">${apiVersion}</span>`
+          `Serial port <span class="message-positive">successfully</span> opened, connectionId=${connectionId}`
         );
-        disconnect(true, connectionId);
-      } else {
-        setConnection(connectionId);
-        disableArming({
-          variables: {
-            connection: connectionId,
-            armingDisabled: true,
-            runawayTakeoffPreventionDisabled: false,
-          },
-        });
-      }
-      setConnecting(false);
-    },
-    onError: (e) => {
-      if (!connecting) {
-        return;
-      }
-      log(
-        `Could not open connection (<span class="message-negative">${e.message}</span>), communication <span class="message-negative">failed</span>`
-      );
-      setConnecting(false);
-    },
-  });
+        log(`MultiWii API version: <strong>${apiVersion}</strong>`);
+        if (semver.lt(apiVersion, config.apiVersionAccepted)) {
+          log(
+            `MSP version not supported: <span class="message-negative">${apiVersion}</span>`
+          );
+          disconnect(true, connectionId);
+        } else {
+          setConnection(connectionId);
+          disableArming({
+            variables: {
+              connection: connectionId,
+            },
+          });
+        }
+        setConnecting(false);
+      },
+      onError: (e) => {
+        if (!connecting) {
+          return;
+        }
+        log(
+          `Could not open connection (<span class="message-negative">${e.message}</span>), communication <span class="message-negative">failed</span>`
+        );
+        setConnecting(false);
+      },
+    }
+  );
 
   const connectionClosed = useCallback(() => {
     setConnection(null);
@@ -120,7 +159,14 @@ const ConnectionManager: React.FC = () => {
   // and handle updating the app state when connection
   // is closed
   const { error: subscriptionError } = useSubscription(
-    OnConnectionChangedDocument,
+    gql`
+      subscription OnConnectionChanged($connection: ID!) {
+        onConnectionChanged(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager").OnConnectionChangedSubscription,
+      import("./__generated__/ConnectionManager").OnConnectionChangedSubscriptionVariables
+    >,
     {
       variables: {
         connection: connection ?? "",

@@ -4,13 +4,8 @@ import {
   SerialPortFunctions,
   SerialRxProviders,
 } from "@betaflight/api";
-import { useMutation, useQuery } from "../gql/apollo";
+import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
-import {
-  RadioProtocolManagerDataDocument,
-  SetReceiverProtocolAndSmoothingDataDocument,
-} from "./RadioProtocolManager.graphql";
-import { DeviceSerialPortFunctionsDocument } from "../gql/queries/Device.graphql";
 
 const PROVIDERS = [
   {
@@ -21,29 +16,83 @@ const PROVIDERS = [
   { name: "CrossFire", value: SerialRxProviders.CRSF },
 ];
 
+const DataQuery = gql`
+  query RadioProtocolManagerData($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        rc {
+          receiver {
+            serialProvider
+          }
+          smoothing {
+            type
+          }
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/RadioProtocolManager").RadioProtocolManagerDataQuery,
+  import("./__generated__/RadioProtocolManager").RadioProtocolManagerDataQueryVariables
+>;
+
 const RadioProtocolManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data: serialConfigData } = useQuery(
-    DeviceSerialPortFunctionsDocument,
+  const { data: serialPortsData } = useQuery(
+    gql`
+      query SerialPortFunctions($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            serial {
+              ports {
+                id
+                functions
+              }
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/RadioProtocolManager").SerialPortFunctionsQuery,
+      import("./__generated__/RadioProtocolManager").SerialPortFunctionsQueryVariables
+    >,
     {
       variables: {
         connection: connection ?? "",
       },
     }
   );
-  const { data, loading } = useQuery(RadioProtocolManagerDataDocument, {
+  const { data, loading } = useQuery(DataQuery, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
   const [setReceiverConfig, { loading: setting }] = useMutation(
-    SetReceiverProtocolAndSmoothingDataDocument,
+    gql`
+      mutation SetReceiverProtocolAndSmoothingData(
+        $connection: ID!
+        $serialProvider: Int
+        $smoothingType: Int!
+      ) {
+        deviceSetReceiverConfig(
+          connectionId: $connection
+          receiverConfig: { serialProvider: $serialProvider }
+        )
+        deviceSetRcSmoothingConfig(
+          connectionId: $connection
+          smoothingConfig: { type: $smoothingType }
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/RadioProtocolManager").SetReceiverProtocolAndSmoothingDataMutation,
+      import("./__generated__/RadioProtocolManager").SetReceiverProtocolAndSmoothingDataMutationVariables
+    >,
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: RadioProtocolManagerDataDocument,
+          query: DataQuery,
           variables: {
             connection,
           },
@@ -52,7 +101,7 @@ const RadioProtocolManager: React.FC = () => {
     }
   );
 
-  const hasSerialPortSet = !!serialConfigData?.connection.device.serial.ports.find(
+  const hasSerialPortSet = !!serialPortsData?.connection.device.serial.ports.find(
     ({ functions }) => functions.includes(SerialPortFunctions.RX_SERIAL)
   );
   const selectedProtocol =

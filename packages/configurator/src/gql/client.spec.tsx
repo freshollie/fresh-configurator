@@ -1,16 +1,71 @@
 import { advanceTo, advanceBy } from "jest-date-mock";
 import client from "./client";
-import {
-  SetConnectionSettingsDocument,
-  SelectTabDocument,
-  LogDocument,
-} from "./mutations/Configurator.graphql";
-import {
-  SelectedTabDocument,
-  ConnectionSettingsDocument,
-  LogsDocument,
-} from "./queries/Configurator.graphql";
 import { versionInfo } from "../util";
+import { gql } from "./apollo";
+
+const ConnectionSettings = gql`
+  query ConnectionSettings {
+    configurator @client {
+      port
+      baudRate
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").ConnectionSettingsQuery,
+  import("./__generated__/client.spec").ConnectionSettingsQueryVariables
+>;
+
+const SetConnectionSettngs = gql`
+  mutation SetConnectionSettings($port: String!, $baudRate: Int) {
+    setConnectionSettings(port: $port, baudRate: $baudRate) @client
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").SetConnectionSettingsMutation,
+  import("./__generated__/client.spec").SetConnectionSettingsMutationVariables
+>;
+
+const Logs = gql`
+  query Logs {
+    configurator @client {
+      logs {
+        message
+        time
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").LogsQuery,
+  import("./__generated__/client.spec").LogsQueryVariables
+>;
+
+const Log = gql`
+  mutation Log($message: String!) {
+    log(message: $message) @client
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").LogMutation,
+  import("./__generated__/client.spec").LogMutationVariables
+>;
+
+const SelectedTab = gql`
+  query SelectedTab {
+    configurator @client {
+      tab
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").SelectedTabQuery,
+  import("./__generated__/client.spec").SelectedTabQueryVariables
+>;
+
+const SelectTab = gql`
+  mutation SelectTab($tabId: String!) {
+    setTab(tabId: $tabId) @client
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/client.spec").SelectTabMutation,
+  import("./__generated__/client.spec").SelectTabMutationVariables
+>;
 
 beforeEach(async () => {
   advanceTo(new Date("2020-03-01T19:00:00.000Z"));
@@ -21,20 +76,20 @@ describe("client", () => {
   describe("configurator", () => {
     it("should allow a port to be selected", async () => {
       let { data } = await client.query({
-        query: ConnectionSettingsDocument,
+        query: ConnectionSettings,
       });
 
       expect(data.configurator.port).toEqual(null);
 
       await client.mutate({
-        mutation: SetConnectionSettingsDocument,
+        mutation: SetConnectionSettngs,
         variables: {
           port: "/a/test/port",
         },
       });
 
       ({ data } = await client.query({
-        query: ConnectionSettingsDocument,
+        query: ConnectionSettings,
       }));
 
       expect(data.configurator.port).toEqual("/a/test/port");
@@ -42,20 +97,20 @@ describe("client", () => {
 
     it("should allow tab to be selected", async () => {
       let { data } = await client.query({
-        query: SelectedTabDocument,
+        query: SelectedTab,
       });
 
       expect(data.configurator.tab).toEqual(null);
 
       await client.mutate({
-        mutation: SelectTabDocument,
+        mutation: SelectTab,
         variables: {
           tabId: "some-tab",
         },
       });
 
       ({ data } = await client.query({
-        query: SelectedTabDocument,
+        query: SelectedTab,
       }));
 
       expect(data.configurator.tab).toEqual("some-tab");
@@ -63,7 +118,7 @@ describe("client", () => {
 
     it("should allow logs to be appended", async () => {
       let { data } = await client.query({
-        query: LogsDocument,
+        query: Logs,
       });
 
       const initialMessage = {
@@ -80,7 +135,7 @@ describe("client", () => {
       advanceBy(60 * 1000 * 50);
 
       const response = await client.mutate({
-        mutation: LogDocument,
+        mutation: Log,
         variables: {
           message: "Some message to log",
         },
@@ -89,7 +144,7 @@ describe("client", () => {
       expect(response.errors).toBeFalsy();
 
       ({ data } = await client.query({
-        query: LogsDocument,
+        query: Logs,
       }));
 
       expect(data.configurator.logs).toEqual([

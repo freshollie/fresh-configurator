@@ -1,13 +1,9 @@
 import React from "react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 
-import { FetchResult } from "@apollo/client";
 import { render, fireEvent, waitFor } from "../test-utils";
 import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager";
-import {
-  CallibrateAccelerometerDocument,
-  CallibrateAccelerometerMutation,
-} from "../gql/mutations/Device.graphql";
+import { gql } from "../gql/apollo";
 
 const mockConnectionId = "someconnectionid";
 
@@ -31,12 +27,19 @@ const mockCallibrateMutation = (
   callback: () => void
 ): MockedResponse => ({
   request: {
-    query: CallibrateAccelerometerDocument,
+    query: gql`
+      mutation CallibrateAccelerometer($connection: ID!) {
+        deviceCallibrateAccelerometer(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/AccelerometerCallibrationManager.spec").CallibrateAccelerometerMutation,
+      import("./__generated__/AccelerometerCallibrationManager.spec").CallibrateAccelerometerMutationVariables
+    >,
     variables: {
       connection,
     },
   },
-  result: (): FetchResult<CallibrateAccelerometerMutation> => {
+  result: () => {
     callback();
     return {
       data: {

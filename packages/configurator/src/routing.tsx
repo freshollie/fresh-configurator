@@ -1,8 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React from "react";
 import { isElement } from "react-is";
-import { useQuery } from "./gql/apollo";
-import { SelectedTabDocument } from "./gql/queries/Configurator.graphql";
+import { useQuery, gql } from "./gql/apollo";
 
 type TabElement = React.ReactElement<{ id: string }>;
 
@@ -13,7 +12,18 @@ type TabElement = React.ReactElement<{ id: string }>;
 export const TabRouter: React.FC<{ children: TabElement | TabElement[] }> = ({
   children,
 }) => {
-  const { data } = useQuery(SelectedTabDocument);
+  const { data } = useQuery(
+    gql`
+      query SelectedTab {
+        configurator @client {
+          tab
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/routing").SelectedTabQuery,
+      import("./__generated__/routing").SelectedTabQueryVariables
+    >
+  );
   const selectedTab = data?.configurator.tab ?? undefined;
 
   const visibleTab =

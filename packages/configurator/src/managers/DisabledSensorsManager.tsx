@@ -1,16 +1,29 @@
 import { Sensors } from "@betaflight/api";
 import React from "react";
 import Switch from "../components/Switch";
-import { useMutation, useQuery } from "../gql/apollo";
-import { SetDisabledSensorsDocument } from "../gql/mutations/Device.graphql";
-import { DisabledSensorsDocument } from "../gql/queries/Device.graphql";
+import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
+
+const DisabledSensors = gql`
+  query DisabledSensors($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        sensors {
+          disabled
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/DisabledSensorsManager").DisabledSensorsQuery,
+  import("./__generated__/DisabledSensorsManager").DisabledSensorsQueryVariables
+>;
 
 const DisabledSensorsManager: React.FC = () => {
   const { connection } = useConnectionState();
   const log = useLogger();
-  const { data, loading } = useQuery(DisabledSensorsDocument, {
+  const { data, loading } = useQuery(DisabledSensors, {
     variables: {
       connection: connection ?? "",
     },
@@ -18,12 +31,22 @@ const DisabledSensorsManager: React.FC = () => {
   });
 
   const [setDisabledSensors, { loading: setting }] = useMutation(
-    SetDisabledSensorsDocument,
+    gql`
+      mutation SetDisabledSensors($connection: ID!, $disabledSensors: [Int!]!) {
+        deviceSetDisabledSensors(
+          connectionId: $connection
+          disabledSensors: $disabledSensors
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/DisabledSensorsManager").SetDisabledSensorsMutation,
+      import("./__generated__/DisabledSensorsManager").SetDisabledSensorsMutationVariables
+    >,
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: DisabledSensorsDocument,
+          query: DisabledSensors,
           variables: {
             connection,
           },

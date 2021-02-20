@@ -2,9 +2,8 @@ import React from "react";
 import { Sensors } from "@betaflight/api";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
-import { AvailableSensorsDocument } from "../gql/queries/Device.graphql";
 import SensorStatusPanel from "../components/SensorStatusPanel";
-import { useQuery } from "../gql/apollo";
+import { gql, useQuery } from "../gql/apollo";
 
 const SENSOR_ELEMENTS = {
   [Sensors.GYRO]: [<Icon name="gyro-sensor" />, "Gyro"],
@@ -27,12 +26,28 @@ const SENSORS_ORDER = [
 const SensorsListProvider: React.FC = () => {
   const { connection } = useConnectionState();
 
-  const { data } = useQuery(AvailableSensorsDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-  });
+  const { data } = useQuery(
+    gql`
+      query AvailableSensors($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            sensors {
+              available
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/SensorListProvider").AvailableSensorsQuery,
+      import("./__generated__/SensorListProvider").AvailableSensorsQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+    }
+  );
 
   if (!data || !connection) {
     return null;

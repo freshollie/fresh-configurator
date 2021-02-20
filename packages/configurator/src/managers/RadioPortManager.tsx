@@ -4,12 +4,7 @@ import {
   SerialPortIdentifiers,
 } from "@betaflight/api";
 import React from "react";
-import { useMutation, useQuery } from "../gql/apollo";
-import {
-  SetDeviceSerialFunctionsAndFeaturesDocument,
-  RadioPortManagerDataDocument,
-} from "./RadioPortManager.graphql";
-
+import { useMutation, useQuery, gql } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
 
 const RX_FEATURES = [
@@ -52,9 +47,28 @@ const featureToId = (features: readonly Features[]): number | undefined =>
 const idToFeature = (rxMode: number): Features =>
   RX_MODE_VALUES.find(({ id }) => rxMode === id)?.feature ?? Features.RX_SERIAL;
 
+const DataQuery = gql`
+  query RadioPortManagerData($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        serial {
+          ports {
+            id
+            functions
+          }
+        }
+        features
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/RadioPortManager").RadioPortManagerDataQuery,
+  import("./__generated__/RadioPortManager").RadioPortManagerDataQueryVariables
+>;
+
 const RadioPortManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading } = useQuery(RadioPortManagerDataDocument, {
+  const { data, loading } = useQuery(DataQuery, {
     variables: {
       connection: connection ?? "",
     },
@@ -62,12 +76,27 @@ const RadioPortManager: React.FC = () => {
   });
 
   const [setFunctionsAndFeatures, { loading: setting }] = useMutation(
-    SetDeviceSerialFunctionsAndFeaturesDocument,
+    gql`
+      mutation SetDeviceSerialFunctionsAndFeatures(
+        $connection: ID!
+        $portFunctions: [PortFunctionsInput!]!
+        $features: [Int!]!
+      ) {
+        deviceSetSerialFunctions(
+          connectionId: $connection
+          portFunctions: $portFunctions
+        )
+        deviceSetFeatures(connectionId: $connection, features: $features)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/RadioPortManager").SetDeviceSerialFunctionsAndFeaturesMutation,
+      import("./__generated__/RadioPortManager").SetDeviceSerialFunctionsAndFeaturesMutationVariables
+    >,
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: RadioPortManagerDataDocument,
+          query: DataQuery,
           variables: {
             connection,
           },

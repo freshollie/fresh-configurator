@@ -1,29 +1,60 @@
 import React from "react";
 import BoardAligner from "../components/BoardAligner";
-import { useMutation, useQuery } from "../gql/apollo";
-import { SetBoardAlignmentDocument } from "../gql/mutations/Device.graphql";
-import { DeviceBoardAlignmentDocument } from "../gql/queries/Device.graphql";
+import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
+
+const BoadAlignment = gql`
+  query DeviceBoardAlignment($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        alignment {
+          roll
+          pitch
+          yaw
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/BoardAlignmentManager").DeviceBoardAlignmentQuery,
+  import("./__generated__/BoardAlignmentManager").DeviceBoardAlignmentQueryVariables
+>;
 
 const BoardAlignmentManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading } = useQuery(DeviceBoardAlignmentDocument, {
+  const { data, loading } = useQuery(BoadAlignment, {
     variables: {
       connection: connection ?? "",
     },
     skip: !connection,
   });
 
-  const [setAlignment] = useMutation(SetBoardAlignmentDocument, {
-    refetchQueries: [
-      {
-        query: DeviceBoardAlignmentDocument,
-        variables: {
-          connection,
+  const [setAlignment] = useMutation(
+    gql`
+      mutation SetBoardAlignment(
+        $connection: ID!
+        $alignment: AlignmentInput!
+      ) {
+        deviceSetBoardAlignment(
+          connectionId: $connection
+          alignment: $alignment
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/BoardAlignmentManager").SetBoardAlignmentMutation,
+      import("./__generated__/BoardAlignmentManager").SetBoardAlignmentMutationVariables
+    >,
+    {
+      refetchQueries: [
+        {
+          query: BoadAlignment,
+          variables: {
+            connection,
+          },
         },
-      },
-    ],
-  });
+      ],
+    }
+  );
 
   return (
     <div style={{ opacity: loading ? 0.5 : 1 }}>

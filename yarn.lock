@@ -2439,6 +2439,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@betaflight-tools/eslint-plugin-ts-graphql@^0.1.1, @betaflight-tools/eslint-plugin-ts-graphql@workspace:tools/eslint-plugin-ts-graphql":
+  version: 0.0.0-use.local
+  resolution: "@betaflight-tools/eslint-plugin-ts-graphql@workspace:tools/eslint-plugin-ts-graphql"
+  dependencies:
+    "@typescript-eslint/experimental-utils": ^2.29.0
+    lodash: ^4.17.19
+  languageName: unknown
+  linkType: soft
+
 "@betaflight-tools/storyshots-runner@^0.1.0, @betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner":
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner"
@@ -7111,6 +7120,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/experimental-utils@npm:^2.29.0":
+  version: 2.34.0
+  resolution: "@typescript-eslint/experimental-utils@npm:2.34.0"
+  dependencies:
+    "@types/json-schema": ^7.0.3
+    "@typescript-eslint/typescript-estree": 2.34.0
+    eslint-scope: ^5.0.0
+    eslint-utils: ^2.0.0
+  peerDependencies:
+    eslint: "*"
+  checksum: 53cbbcfe67ddc53b4bc23f78b3726b0c2de5ea04ee849ca8b619f1fcad16f644d9d72bb3ea9a08aabfc605ea4a9769fe1b81931af09ce2223ec49de749cde2d4
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/parser@npm:4.4.1":
   version: 4.4.1
   resolution: "@typescript-eslint/parser@npm:4.4.1"
@@ -7176,6 +7199,24 @@ __metadata:
   version: 4.4.1
   resolution: "@typescript-eslint/types@npm:4.4.1"
   checksum: efd95464f30dd9a76342913d07a6df59d998eff61a9e29dc5a1bc2ba44768b4f710a38422972d1b2ba5a741381a8456036f7c2da078b48d7a80d3472cf7b4add
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/typescript-estree@npm:2.34.0":
+  version: 2.34.0
+  resolution: "@typescript-eslint/typescript-estree@npm:2.34.0"
+  dependencies:
+    debug: ^4.1.1
+    eslint-visitor-keys: ^1.1.0
+    glob: ^7.1.6
+    is-glob: ^4.0.1
+    lodash: ^4.17.15
+    semver: ^7.3.2
+    tsutils: ^3.17.1
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 77d1a758dfd4a2813fb51d6102aa79d7eccb006c66db8cff49a10706c8cf64cae6b256b8ec6694058c1c333775e1dbc6ca7501769138fc89165b9c10f8201e40
   languageName: node
   linkType: hard
 
@@ -13853,21 +13894,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "eslint-plugin-prettier@npm:3.3.1"
-  dependencies:
-    prettier-linter-helpers: ^1.0.0
-  peerDependencies:
-    eslint: ">=5.0.0"
-    prettier: ">=1.13.0"
-  peerDependenciesMeta:
-    eslint-config-prettier:
-      optional: true
-  checksum: cf35b0f0e9ef30782fe82913db92f6874181723d77f0c4613f9d69c87069f73d0dc420ef850ebc844613c00a8e87eb9762a36b7d028334c5c7b091763118347b
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-react-hooks@npm:^4.2.0":
   version: 4.2.0
   resolution: "eslint-plugin-react-hooks@npm:4.2.0"
@@ -14478,13 +14504,6 @@ app-builder-lib@22.9.1:
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
   checksum: 451526766b219503131d11e823eaadd1533080b0be4860e316670b039dcaf31cd1007c2fe036a9b922abba7c040dfad5e942ed79d21f2ff849e50049f36e0fb7
-  languageName: node
-  linkType: hard
-
-"fast-diff@npm:^1.1.2":
-  version: 1.2.0
-  resolution: "fast-diff@npm:1.2.0"
-  checksum: 9c5407d9c4869407854fe8838b8d9d26065ca747c9b80697957ae37482e982e880de823efa2c97ea1cba05dc06fce853a005e7557d10550c64c052cf7021ba9e
   languageName: node
   linkType: hard
 
@@ -15103,6 +15122,7 @@ app-builder-lib@22.9.1:
   version: 0.0.0-use.local
   resolution: "fresh-configurator@workspace:."
   dependencies:
+    "@betaflight-tools/eslint-plugin-ts-graphql": ^0.1.1
     "@graphql-codegen/add": ^2.0.1
     "@graphql-codegen/cli": ^1.17.10
     "@graphql-codegen/introspection": ^1.18.1
@@ -15124,7 +15144,6 @@ app-builder-lib@22.9.1:
     eslint-plugin-import: ^2.22.1
     eslint-plugin-jest: ^24.1.3
     eslint-plugin-jsx-a11y: ^6.4.1
-    eslint-plugin-prettier: ^3.3.1
     eslint-plugin-react: ^7.22.0
     eslint-plugin-react-hooks: ^4.2.0
     graphql: "*"
@@ -22882,15 +22901,6 @@ fsevents@~2.3.1:
   version: 2.0.0
   resolution: "prepend-http@npm:2.0.0"
   checksum: d39325775adce38e18213fd19656af4abd7672ef6b1e330437079bb237de011d49a70bfb56b35037603d30ef279cceddb33794f70168582d50845c2ade29968e
-  languageName: node
-  linkType: hard
-
-"prettier-linter-helpers@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "prettier-linter-helpers@npm:1.0.0"
-  dependencies:
-    fast-diff: ^1.1.2
-  checksum: 6d698b9c8dc28e52c8d69df520cde3410cc06cc40471acf81b4b7c18ca08e73d0efb0f878654985bb02fce4f8d3d64cdf64fe9f3ffad3e1dc7e17b837d4ddcb2
   languageName: node
   linkType: hard
 

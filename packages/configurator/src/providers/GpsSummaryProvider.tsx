@@ -2,12 +2,8 @@ import React from "react";
 import { Sensors } from "@betaflight/api";
 import Status from "../components/Status";
 import Table from "../components/Table";
-import {
-  GpsSummaryDocument,
-  AvailableSensorsDocument,
-} from "../gql/queries/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
-import { useQuery } from "../gql/apollo";
+import { gql, useQuery } from "../gql/apollo";
 
 type Props = {
   refreshRate: number;
@@ -16,21 +12,56 @@ type Props = {
 const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
 
-  const { data: sensorsData } = useQuery(AvailableSensorsDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-  });
+  const { data: sensorsData } = useQuery(
+    gql`
+      query AvailableSensors($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            sensors {
+              available
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/GpsSummaryProvider").AvailableSensorsQuery,
+      import("./__generated__/GpsSummaryProvider").AvailableSensorsQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+    }
+  );
   const sensors = sensorsData?.connection.device.sensors.available ?? [];
 
-  const { data } = useQuery(GpsSummaryDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !sensors.includes(Sensors.GPS) || !connection,
-    pollInterval: 1000 / refreshRate,
-  });
+  const { data } = useQuery(
+    gql`
+      query GpsSummary($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            gps {
+              fix
+              numSat
+              lat
+              lon
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/GpsSummaryProvider").GpsSummaryQuery,
+      import("./__generated__/GpsSummaryProvider").GpsSummaryQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !sensors.includes(Sensors.GPS) || !connection,
+      pollInterval: 1000 / refreshRate,
+    }
+  );
 
   return (
     <Table>
