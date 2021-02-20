@@ -75,9 +75,8 @@ const filterUnset = <T extends Record<string, unknown>>(
     )
   ) as RequiredAndNotNull<T>;
 
-const isObject = (item: unknown): item is Record<string, unknown> => {
-  return !!item && typeof item === "object" && !Array.isArray(item);
-};
+const isObject = (item: unknown): item is Record<string, unknown> =>
+  !!item && typeof item === "object" && !Array.isArray(item);
 
 type RecursivePartial<T> = {
   [P in keyof T]?:

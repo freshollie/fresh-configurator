@@ -68,13 +68,11 @@ export const closeConnections = (port: string): void => {
 
 export const onChanged = (
   connectionId: string
-): AsyncIterator<string | undefined> => {
-  return changeEvents.asyncIterator(connectionId);
-};
+): AsyncIterator<string | undefined> =>
+  changeEvents.asyncIterator(connectionId);
 
-export const onReconnecting = (connectionId: string): AsyncIterator<number> => {
-  return reconnectingEvents.asyncIterator(connectionId);
-};
+export const onReconnecting = (connectionId: string): AsyncIterator<number> =>
+  reconnectingEvents.asyncIterator(connectionId);
 
 export const reset = (): void => {
   connectionsMap = {};

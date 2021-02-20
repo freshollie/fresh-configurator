@@ -115,14 +115,13 @@ describe("open", () => {
       }, 100);
     }));
 
-  it("should provide a callback and close the connection when the connection closes", () => {
-    return new Promise<void>((done) => {
+  it("should provide a callback and close the connection when the connection closes", () =>
+    new Promise<void>((done) => {
       open("/dev/something", () => {
         expect(isOpen("/dev/something")).toBe(false);
         done();
       }).then(() => raw("/dev/something")?.close());
-    });
-  });
+    }));
 
   it("should close the connection when an error occurs", () =>
     new Promise<void>((done) => {
