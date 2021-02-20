@@ -35,7 +35,6 @@ jobs:
 
       - name: Lint
         run: yarn lint:all
-    jobs:
 
   format:
     runs-on: ubuntu-latest
@@ -205,7 +204,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
-    needs: [test, lint, storybook]
+    needs: [test, lint, format, storybook]
 
     steps:
       - uses: actions/checkout@v1
