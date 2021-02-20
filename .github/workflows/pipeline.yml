@@ -3,7 +3,7 @@ name: pipeline
 on:
   push:
     branches:
-      - master 
+      - master
   pull_request:
 
 jobs:
@@ -27,14 +27,44 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-  
+
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - name: Lint
         run: yarn lint:all
+    jobs:
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install
+        run: yarn --immutable
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
+      - name: Format
+        run: yarn fmt:check
 
   test:
     runs-on: ubuntu-latest
@@ -57,11 +87,11 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-  
+
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - name: Test
         run: yarn test --coverage
@@ -70,7 +100,7 @@ jobs:
 
       - name: Publish Coverage
         uses: codecov/codecov-action@v1
-    
+
   storybook:
     runs-on: ubuntu-latest
     steps:
@@ -91,15 +121,15 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-  
+
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-        
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
       - name: Build
         run: yarn build:storybook
-      
+
       - name: Test
         uses: ianwalter/puppeteer@12728ddef82390d1ecd4732fb543f62177392fbb
         env:
@@ -114,7 +144,7 @@ jobs:
           name: diff
           path: |
             packages/configurator/__image_snapshots__/__diff_output__/*
-      
+
       - name: Preview
         id: storybook-preview
         if: github.ref != 'refs/heads/master'
@@ -131,10 +161,10 @@ jobs:
         with:
           body: |
             Storybook has been automatically deployed to Netlify.
-            
+
             🔍 Inspect: ${{ steps.storybook-preview.outputs.NETLIFY_LOGS_URL }}
             ✅ Preview: ${{ steps.storybook-preview.outputs.NETLIFY_URL }}
-      
+
       - name: Publish
         if: github.ref == 'refs/heads/master'
         uses: netlify/actions/cli@master
@@ -152,21 +182,20 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Login to Heroku
-        env: 
+        env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
-        run: heroku container:login 
+        run: heroku container:login
 
       - name: Build and push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
-        run: 
-          heroku container:push -a betaflight-mock-api web --recursive
+        run: heroku container:push -a betaflight-mock-api web --recursive
 
       - name: Release
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_TOKEN }}
         run: heroku container:release -a betaflight-mock-api web
-  
+
   configurator:
     runs-on: ${{ matrix.os }}
 
@@ -196,18 +225,18 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-  
+
       - name: Install
         run: yarn --immutable
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
-      
+
       - name: E2E
         uses: GabrielBB/xvfb-action@v1.2
         with:
           run: yarn e2e:production
-      
+
       - name: Preview demo
         id: preview-demo
         if: github.ref != 'refs/heads/master' && matrix.os == 'ubuntu-latest'
@@ -224,10 +253,10 @@ jobs:
         with:
           body: |
             The configurator has been automatically deployed to Netlify.
-            
+
             🔍 Inspect: ${{ steps.preview-demo.outputs.NETLIFY_LOGS_URL }}
             ✅ Preview: ${{ steps.preview-demo.outputs.NETLIFY_URL }}?backend=wss://betaflight-api-pr-${{ github.event.number }}.herokuapp.com
-      
+
       - name: Publish demo
         if: github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest'
         uses: netlify/actions/cli@master
@@ -242,7 +271,7 @@ jobs:
         run: yarn workspace @betaflight/configurator release
         env:
           GH_TOKEN: ${{ secrets.github_token }}
-          
+
       - name: Output Linux
         uses: actions/upload-artifact@v2-preview
         if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"

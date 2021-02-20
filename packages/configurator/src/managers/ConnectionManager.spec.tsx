@@ -5,21 +5,23 @@ import {
   MockSubscriptionLink,
 } from "@apollo/client/testing";
 import { GraphQLError } from "graphql";
-import { InMemoryCache } from "@apollo/client";
+import { gql, InMemoryCache } from "@apollo/client";
 import { render, waitFor, fireEvent } from "../test-utils";
-import {
-  ConnectDocument,
-  DisconnectDocument,
-} from "../gql/mutations/Connection.graphql";
-import { OnConnectionChangedDocument } from "../gql/queries/Connection.graphql";
-import {
-  ConnectionStateDocument,
-  LogsDocument,
-} from "../gql/queries/Configurator.graphql";
-import { SetArmingDocument } from "../gql/mutations/Device.graphql";
 import { Connection } from "../gql/__generated__";
 import ConnectionManager from "./ConnectionManager";
 import { cache as clientCache, resolvers } from "../gql/client";
+
+const Connect = gql`
+  mutation Connect($port: String!, $baudRate: Int!) {
+    connect(port: $port, baudRate: $baudRate) {
+      id
+      apiVersion
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/ConnectionManager.spec").ConnectMutation,
+  import("./__generated__/ConnectionManager.spec").ConnectMutationVariables
+>;
 
 const connectMock = (
   port: string,
@@ -29,7 +31,7 @@ const connectMock = (
   onConnect = () => {}
 ): MockedResponse => ({
   request: {
-    query: ConnectDocument,
+    query: Connect,
     variables: {
       port,
       baudRate,
@@ -53,7 +55,7 @@ const connectMock = (
 
 const connectErrorMock = (port: string, baudRate: number): MockedResponse => ({
   request: {
-    query: ConnectDocument,
+    query: Connect,
     variables: {
       port,
       baudRate,
@@ -68,7 +70,14 @@ const disconnectMock = (
   onDisconnect: () => void
 ): MockedResponse => ({
   request: {
-    query: DisconnectDocument,
+    query: gql`
+      mutation Disconnect($connection: ID!) {
+        close(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager.spec").DisconnectMutation,
+      import("./__generated__/ConnectionManager.spec").DisconnectMutationVariables
+    >,
     variables: {
       connection: connectionId,
     },
@@ -85,16 +94,23 @@ const disconnectMock = (
 
 const setArmingMock = (
   connection: string,
-  armingDisabled: boolean,
-  runawayTakeoffPreventionDisabled: boolean,
   onSet: () => void
 ): MockedResponse => ({
   request: {
-    query: SetArmingDocument,
+    query: gql`
+      mutation DisableArming($connection: ID!) {
+        deviceSetArming(
+          connectionId: $connection
+          armingDisabled: true
+          runawayTakeoffPreventionDisabled: false
+        )
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager.spec").DisableArmingMutation,
+      import("./__generated__/ConnectionManager.spec").DisableArmingMutationVariables
+    >,
     variables: {
       connection,
-      armingDisabled,
-      runawayTakeoffPreventionDisabled,
     },
   },
   result: () => {
@@ -113,7 +129,14 @@ const onChangedMock = (
   onSubscribed = () => {}
 ): MockedResponse => ({
   request: {
-    query: OnConnectionChangedDocument,
+    query: gql`
+      subscription OnConnectionChanged($connection: ID!) {
+        onConnectionChanged(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager.spec").OnConnectionChangedSubscription,
+      import("./__generated__/ConnectionManager.spec").OnConnectionChangedSubscriptionVariables
+    >,
     variables: {
       connection: connectionId,
     },
@@ -133,12 +156,35 @@ const connectionState = (
   cache: InMemoryCache
 ): { connecting: boolean; connection?: string | null } =>
   cache.readQuery({
-    query: ConnectionStateDocument,
+    query: gql`
+      query ConnectionState {
+        configurator @client {
+          connecting
+          connection
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionManager.spec").ConnectionStateQuery,
+      import("./__generated__/ConnectionManager.spec").ConnectionStateQueryVariables
+    >,
   })!.configurator;
 
 const logs = (cache: InMemoryCache) =>
   cache
-    .readQuery({ query: LogsDocument })!
+    .readQuery({
+      query: gql`
+        query Logs {
+          configurator @client {
+            logs {
+              message
+            }
+          }
+        }
+      ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+        import("./__generated__/ConnectionManager.spec").LogsQuery,
+        import("./__generated__/ConnectionManager.spec").LogsQueryVariables
+      >,
+    })!
     .configurator.logs.map((line) => line.message);
 
 describe("ConnectionManager", () => {
@@ -166,7 +212,7 @@ describe("ConnectionManager", () => {
             connect
           ),
           onChangedMock(mockConnectionId, null),
-          setArmingMock(mockConnectionId, true, false, setDisarmed),
+          setArmingMock(mockConnectionId, setDisarmed),
         ]}
       >
         <ConnectionManager />
@@ -423,7 +469,7 @@ describe("ConnectionManager", () => {
           disconnectMock(mockConnectionId1, disconnect),
           connectMock("/dev/something", 115200, mockConnectionId2, "1.40.1"),
           onChangedMock(mockConnectionId2, null),
-          setArmingMock(mockConnectionId2, true, false, setDisarmed),
+          setArmingMock(mockConnectionId2, setDisarmed),
         ]}
       >
         <ConnectionManager />

@@ -5,11 +5,9 @@ import {
   McuTypes,
 } from "@betaflight/api";
 import React from "react";
-import { PidProtocolsAndProcessorDocument } from "../gql/queries/Device.graphql";
-import { SetPidProtocolsDocument } from "../gql/mutations/Device.graphql";
 import useConnectionState from "../hooks/useConnectionState";
 import Button from "../components/Button";
-import { useMutation, useQuery } from "../gql/apollo";
+import { useMutation, useQuery, gql } from "../gql/apollo";
 
 type McuGroupName = keyof typeof MCU_GROUPS;
 const MCU_GROUP_NAMES = Object.keys(MCU_GROUPS) as McuGroupName[];
@@ -58,9 +56,34 @@ const findProcessorType = ({
     targetName.toLocaleLowerCase().includes(name.toLowerCase())
   );
 
+const PidProtocolsAndProcessor = gql`
+  query PidProtocolsAndProcessor($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        pid {
+          protocols {
+            gyroSyncDenom
+            pidProcessDenom
+            fastPwmProtocol
+            useUnsyncedPwm
+            motorPwmRate
+          }
+        }
+        info {
+          targetName
+          mcuTypeId
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/CpuDefaultsManager").PidProtocolsAndProcessorQuery,
+  import("./__generated__/CpuDefaultsManager").PidProtocolsAndProcessorQueryVariables
+>;
+
 const CpuDefaultsManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading, error } = useQuery(PidProtocolsAndProcessorDocument, {
+  const { data, loading, error } = useQuery(PidProtocolsAndProcessor, {
     variables: {
       connection: connection ?? "",
     },
@@ -68,11 +91,21 @@ const CpuDefaultsManager: React.FC = () => {
   });
 
   const [setProtocols, { loading: saving }] = useMutation(
-    SetPidProtocolsDocument,
+    gql`
+      mutation SetPidProtocols(
+        $connection: ID!
+        $protocols: PidProtocolsInput!
+      ) {
+        deviceSetPidProtocols(connectionId: $connection, protocols: $protocols)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/CpuDefaultsManager").SetPidProtocolsMutation,
+      import("./__generated__/CpuDefaultsManager").SetPidProtocolsMutationVariables
+    >,
     {
       refetchQueries: [
         {
-          query: PidProtocolsAndProcessorDocument,
+          query: PidProtocolsAndProcessor,
           variables: {
             connection,
           },

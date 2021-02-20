@@ -1,15 +1,21 @@
 import React from "react";
-import { CallibrateAccelerometerDocument } from "../gql/mutations/Device.graphql";
 import Button from "../components/Button";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
-import { useMutation } from "../gql/apollo";
+import { gql, useMutation } from "../gql/apollo";
 
 const AccelerometerCallibrationManager: React.FC = () => {
   const { connection } = useConnectionState();
   const log = useLogger();
   const [calibrate, { loading }] = useMutation(
-    CallibrateAccelerometerDocument,
+    gql`
+      mutation CallibrateAccelerometer($connection: ID!) {
+        deviceCallibrateAccelerometer(connectionId: $connection)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/AccelerometerCallibrationManager").CallibrateAccelerometerMutation,
+      import("./__generated__/AccelerometerCallibrationManager").CallibrateAccelerometerMutationVariables
+    >,
     {
       variables: {
         connection: connection ?? "",

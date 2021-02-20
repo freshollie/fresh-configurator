@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { NormalModuleReplacementPlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const WebpackBar = require("webpackbar");
@@ -85,10 +84,6 @@ module.exports = (_, { mode }) => ({
   },
   plugins: [
     new ESBuildPlugin(),
-    new NormalModuleReplacementPlugin(/\.graphql$/, (resource) => {
-      // eslint-disable-next-line no-param-reassign
-      resource.request += ".ts";
-    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),

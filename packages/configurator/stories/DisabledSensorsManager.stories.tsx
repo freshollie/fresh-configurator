@@ -1,8 +1,8 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Sensors } from "@betaflight/api";
 import React from "react";
+import { gql } from "../src/gql/apollo";
 import { resolvers } from "../src/gql/client";
-import { DisabledSensorsDocument } from "../src/gql/queries/Device.graphql";
 import DisabledSensorsManager from "../src/managers/DisabledSensorsManager";
 
 export default {
@@ -12,7 +12,20 @@ export default {
 
 const disabledSensorsMock = (disabled: Sensors[]): MockedResponse => ({
   request: {
-    query: DisabledSensorsDocument,
+    query: gql`
+      query DisabledSensors($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            sensors {
+              disabled
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/DisabledSensorsManager.stories").DisabledSensorsQuery,
+      import("./__generated__/DisabledSensorsManager.stories").DisabledSensorsQueryVariables
+    >,
     variables: {
       connection: "abc",
     },

@@ -1,8 +1,7 @@
 import React from "react";
 import Attitude from "../flightindicators/Attitude";
 import Heading from "../flightindicators/Heading";
-import { useQuery } from "../gql/apollo";
-import { AttitudeDocument } from "../gql/queries/Device.graphql";
+import { gql, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
 
 type Props = {
@@ -11,13 +10,31 @@ type Props = {
 
 const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
   const { connection } = useConnectionState();
-  const { data: deviceData } = useQuery(AttitudeDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-    pollInterval: 1000 / refreshRate,
-  });
+  const { data: deviceData } = useQuery(
+    gql`
+      query Attitude($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            attitude {
+              roll
+              pitch
+              yaw
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ModelInstrumentsProvider").AttitudeQuery,
+      import("./__generated__/ModelInstrumentsProvider").AttitudeQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+      pollInterval: 1000 / refreshRate,
+    }
+  );
 
   const { roll = 0, pitch = 0, yaw = 0 } =
     deviceData?.connection.device.attitude ?? {};

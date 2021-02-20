@@ -1,15 +1,32 @@
 import React from "react";
 import { Beepers } from "@betaflight/api";
-import { useMutation, useQuery } from "../gql/apollo";
+import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnectionState from "../hooks/useConnectionState";
-import { DshotBeeperConfigDocument } from "../gql/queries/Device.graphql";
-import { SetDshotBeeperConfigDocument } from "../gql/mutations/Device.graphql";
 import Switch from "../components/Switch";
 
 const REQUIRED_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];
+
+const BeeperConfig = gql`
+  query DshotBeeperConfig($connection: ID!) {
+    connection(connectionId: $connection) {
+      device {
+        beeper {
+          dshot {
+            conditions
+            tone
+          }
+        }
+      }
+    }
+  }
+` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+  import("./__generated__/BeeperManager").DshotBeeperConfigQuery,
+  import("./__generated__/BeeperManager").DshotBeeperConfigQueryVariables
+>;
+
 const BeeperManager: React.FC = () => {
   const { connection } = useConnectionState();
-  const { data, loading } = useQuery(DshotBeeperConfigDocument, {
+  const { data, loading } = useQuery(BeeperConfig, {
     variables: {
       connection: connection ?? "",
     },
@@ -17,12 +34,22 @@ const BeeperManager: React.FC = () => {
   });
 
   const [setBeeperConfig, { loading: setting }] = useMutation(
-    SetDshotBeeperConfigDocument,
+    gql`
+      mutation SetDshotBeeperConfig(
+        $connection: ID!
+        $config: DshotBeeperConfigInput!
+      ) {
+        deviceSetDshotBeeperConfig(connectionId: $connection, config: $config)
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/BeeperManager").SetDshotBeeperConfigMutation,
+      import("./__generated__/BeeperManager").SetDshotBeeperConfigMutationVariables
+    >,
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: DshotBeeperConfigDocument,
+          query: BeeperConfig,
           variables: {
             connection,
           },

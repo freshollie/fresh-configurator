@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
-
-import { NavigationDataDocument } from "../gql/queries/Configurator.graphql";
-import { SelectTabDocument } from "../gql/mutations/Configurator.graphql";
-
 import NavLinks from "../components/NavLinks";
 import Icon from "../components/Icon";
 import useConnectionState from "../hooks/useConnectionState";
-import { useMutation, useQuery } from "../gql/apollo";
+import { useMutation, useQuery, gql } from "../gql/apollo";
 
 const DISCONNECTED_LINKS = [
   {
@@ -234,11 +230,32 @@ const CONNECTED_LINKS = [
 //   </ul> */
 
 const NavigationManager: React.FC = () => {
-  const { data: navigationQuery, loading } = useQuery(NavigationDataDocument);
+  const { data: navigationQuery, loading } = useQuery(
+    gql`
+      query NavigationData {
+        configurator @client {
+          tab
+          port
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/NavigationManager").NavigationDataQuery,
+      import("./__generated__/NavigationManager").NavigationDataQueryVariables
+    >
+  );
   const selectedTab = navigationQuery?.configurator.tab ?? undefined;
 
   const { connected } = useConnectionState();
-  const [selectTab] = useMutation(SelectTabDocument);
+  const [selectTab] = useMutation(
+    gql`
+      mutation SelectTab($tabId: String!) {
+        setTab(tabId: $tabId) @client
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/NavigationManager").SelectTabMutation,
+      import("./__generated__/NavigationManager").SelectTabMutationVariables
+    >
+  );
 
   const links = connected ? CONNECTED_LINKS : DISCONNECTED_LINKS;
 

@@ -1,47 +1,92 @@
 import React from "react";
 import semver from "semver";
 import Model from "../components/Model";
-import {
-  RcSettingsDocument,
-  ApiVersionDocument,
-  RcChannelsDocument,
-} from "../gql/queries/Device.graphql";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
 import useConnectionState from "../hooks/useConnectionState";
-import { useQuery } from "../gql/apollo";
+import { gql, useQuery } from "../gql/apollo";
 
 const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
   const { connection } = useConnectionState();
-  const { data: rcSettingsData } = useQuery(RcSettingsDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-  });
+  const { data } = useQuery(
+    gql`
+      query RcModelViewData($connection: ID!) {
+        connection(connectionId: $connection) {
+          apiVersion
+          device {
+            rc {
+              tuning {
+                rcRate
+                rcExpo
+                rollPitchRate
+                pitchRate
+                rollRate
+                yawRate
+                dynamicThrottlePid
+                throttleMid
+                throttleExpo
+                dynamicThrottleBreakpoint
+                rcYawExpo
+                rcYawRate
+                rcPitchRate
+                rcPitchExpo
+                throttleLimitType
+                throttleLimitPercent
+                rollRateLimit
+                pitchRateLimit
+                yawRateLimit
+              }
+              deadband {
+                deadband
+                yawDeadband
+              }
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/RcModelViewProvider").RcModelViewDataQuery,
+      import("./__generated__/RcModelViewProvider").RcModelViewDataQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+    }
+  );
 
-  const { data: apiVersionData } = useQuery(ApiVersionDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-  });
+  const apiVersion = data?.connection.apiVersion ?? "0.0.0";
 
-  const apiVersion = apiVersionData?.connection.apiVersion ?? "0.0.0";
-
-  const { data: channelsData } = useQuery(RcChannelsDocument, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-    pollInterval: 1000 / refreshRate,
-  });
+  const { data: channelsData } = useQuery(
+    gql`
+      query RcChannels($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            rc {
+              channels
+            }
+          }
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/RcModelViewProvider").RcChannelsQuery,
+      import("./__generated__/RcModelViewProvider").RcChannelsQueryVariables
+    >,
+    {
+      variables: {
+        connection: connection ?? "",
+      },
+      skip: !connection,
+      pollInterval: 1000 / refreshRate,
+    }
+  );
 
   const attitude = useSimulatedAttitude(
     channelsData?.connection.device.rc.channels,
-    rcSettingsData?.connection.device.rc.tuning,
-    rcSettingsData?.connection.device.rc.deadband,
+    data?.connection.device.rc.tuning,
+    data?.connection.device.rc.deadband,
     semver.lte(apiVersion, "1.20.0")
   );
 

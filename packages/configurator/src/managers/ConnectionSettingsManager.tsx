@@ -1,19 +1,35 @@
 import React, { useEffect } from "react";
-import { AvailablePortsDocument } from "../gql/queries/Connection.graphql";
-import { ConnectionSettingsDocument } from "../gql/queries/Configurator.graphql";
-import { SetConnectionSettingsDocument } from "../gql/mutations/Configurator.graphql";
 import ConnectionSelector from "../components/ConnectionSelector";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
-import { useMutation, useQuery } from "../gql/apollo";
+import { useMutation, useQuery, gql } from "../gql/apollo";
 
 const ConnectionSettingsManager: React.FC = () => {
-  const [updateSettings] = useMutation(SetConnectionSettingsDocument);
+  const [updateSettings] = useMutation(
+    gql`
+      mutation SetConnectionSettings($port: String!, $baudRate: Int) {
+        setConnectionSettings(port: $port, baudRate: $baudRate) @client
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionSettingsManager").SetConnectionSettingsMutation,
+      import("./__generated__/ConnectionSettingsManager").SetConnectionSettingsMutationVariables
+    >
+  );
 
   const log = useLogger();
 
   const { data: configuratorData, loading } = useQuery(
-    ConnectionSettingsDocument
+    gql`
+      query ConnectionSettings {
+        configurator @client {
+          port
+          baudRate
+        }
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionSettingsManager").ConnectionSettingsQuery,
+      import("./__generated__/ConnectionSettingsManager").ConnectionSettingsQueryVariables
+    >
   );
   const { port, baudRate } = configuratorData?.configurator ?? {};
 
@@ -22,7 +38,14 @@ const ConnectionSettingsManager: React.FC = () => {
   // Constantly query the available ports, unless we have already
   // selected a port
   const { data: portsData, loading: loadingPorts } = useQuery(
-    AvailablePortsDocument,
+    gql`
+      query AvailablePorts {
+        ports
+      }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/ConnectionSettingsManager").AvailablePortsQuery,
+      import("./__generated__/ConnectionSettingsManager").AvailablePortsQueryVariables
+    >,
     {
       pollInterval: 1000,
       skip: connected,
