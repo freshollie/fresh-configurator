@@ -15,8 +15,7 @@ export const crc8DvbS2Data = (
   data: Uint8Array,
   start: number,
   end: number
-): number => {
-  return data
+): number =>
+  data
     .slice(start, end)
     .reduce((computed, byte) => crc8DvbS2(computed, byte), 0);
-};

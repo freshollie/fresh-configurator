@@ -16,8 +16,8 @@ export default class WebSocketLink extends ApolloLink {
   }
 
   public request(operation: Operation): Observable<FetchResult> {
-    return new Observable((sink) => {
-      return this.client.subscribe<FetchResult>(
+    return new Observable((sink) =>
+      this.client.subscribe<FetchResult>(
         {
           ...operation,
           // Use the operation name to find the hash of the
@@ -56,7 +56,7 @@ export default class WebSocketLink extends ApolloLink {
             }
           },
         }
-      );
-    });
+      )
+    );
   }
 }

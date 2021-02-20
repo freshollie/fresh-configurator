@@ -7,7 +7,7 @@ import {
 import { GraphQLError } from "graphql";
 import { gql, InMemoryCache } from "@apollo/client";
 import { render, waitFor, fireEvent } from "../test-utils";
-import { Connection } from "../gql/__generated__";
+import { Connection } from "../gql/__generated__/schema";
 import ConnectionManager from "./ConnectionManager";
 import { cache as clientCache, resolvers } from "../gql/client";
 
