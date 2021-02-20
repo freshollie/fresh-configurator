@@ -20,6 +20,15 @@ const RX_FEATURES = [
   Features.RX_SPI,
 ];
 
+const SERIAL_TELEMENTRY = [
+  SerialPortFunctions.TELEMETRY_FRSKY,
+  SerialPortFunctions.TELEMETRY_HOTT,
+  SerialPortFunctions.TELEMETRY_IBUS,
+  SerialPortFunctions.TELEMETRY_LTM,
+  SerialPortFunctions.TELEMETRY_MAVLINK,
+  SerialPortFunctions.TELEMETRY_SMARTPORT,
+];
+
 const RX_MODE_VALUES = [
   {
     name: "PPM",
@@ -37,6 +46,7 @@ const RX_MODE_VALUES = [
     feature: Features.RX_MSP,
   },
 ];
+
 const featureToId = (features: readonly Features[]): number | undefined =>
   RX_MODE_VALUES.find(({ feature }) => features.includes(feature))?.id;
 const idToFeature = (rxMode: number): Features =>
@@ -91,7 +101,17 @@ const RadioPortManager: React.FC = () => {
                   ({ id: portId, functions }) => ({
                     id: portId,
                     functions: functions
-                      .filter((fun) => fun !== SerialPortFunctions.RX_SERIAL)
+                      .filter((fun) => {
+                        // remove the serial function from all ports
+                        if (fun === SerialPortFunctions.RX_SERIAL) {
+                          return false;
+                        }
+                        // and if this the port to be set, remove any function
+                        // which is note related to telemetry
+                        return !SERIAL_TELEMENTRY.includes(fun)
+                          ? portId !== id
+                          : true;
+                      })
                       .concat(
                         portId === id ? [SerialPortFunctions.RX_SERIAL] : []
                       ),
@@ -100,7 +120,7 @@ const RadioPortManager: React.FC = () => {
                 // remove any existing rx features, add add the one required for the
                 features: features
                   .filter((feature) => !RX_FEATURES.includes(feature))
-                  .concat(enabledFeature ? [enabledFeature] : [enabledFeature]),
+                  .concat(enabledFeature ? [enabledFeature] : []),
                 connection: connection ?? "",
               },
             });
