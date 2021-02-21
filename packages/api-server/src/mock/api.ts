@@ -242,6 +242,9 @@ const mockDevice = {
     deadband3dThrottle: 0,
   },
   rxMap: ["A", "E", "T", "R", "1", "2", "3", "4"] as ChannelMap,
+  rssi: {
+    channel: 0,
+  },
 };
 
 const tickAttitude = (): void => {
@@ -469,4 +472,12 @@ export const readRxMap: typeof api.readRxMap = (port) =>
 export const writeRxMap: typeof api.writeRxMap = (port, channelMap) =>
   delay(20).then(() => {
     mockDevice.rxMap = channelMap;
+  });
+
+export const readRssiConfig: typeof api.readRssiConfig = (port) =>
+  delay(10).then(() => mockDevice.rssi);
+
+export const writeRssiConfig: typeof api.writeRssiConfig = (port, config) =>
+  delay(20).then(() => {
+    mockDevice.rssi = config;
   });

@@ -16,6 +16,9 @@ import {
   RcSmoothingInputTypes,
   RcSmoothingDerivativeTypes,
   ChannelLetter,
+  GpsProtocols,
+  GpsSbasTypes,
+  GpsBaudRates,
 } from "./types";
 import { includeIf } from "./utils";
 
@@ -365,4 +368,26 @@ export const channelLetters = (): ChannelLetter[] => [
   "2",
   "3",
   "4",
+];
+
+export const gpsProtocols = (apiVersion: string): GpsProtocols[] => [
+  GpsProtocols.NMEA,
+  GpsProtocols.UBLOX,
+  ...includeIf(semver.gte(apiVersion, "1.41.0"), GpsProtocols.MSP),
+];
+
+export const gpsSbasTypes = (): GpsSbasTypes[] => [
+  GpsSbasTypes.AUTO,
+  GpsSbasTypes.EGNOS,
+  GpsSbasTypes.WAAS,
+  GpsSbasTypes.MSAS,
+  GpsSbasTypes.GAGAN,
+];
+
+export const gpsBaudRates = (): GpsBaudRates[] => [
+  GpsBaudRates.BAUD_115200,
+  GpsBaudRates.BAUD_57600,
+  GpsBaudRates.BAUD_38400,
+  GpsBaudRates.BAUD_19200,
+  GpsBaudRates.BAUD_9600,
 ];

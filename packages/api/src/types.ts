@@ -478,3 +478,38 @@ export enum SerialPortIdentifiers {
 
 export type ChannelLetter = "A" | "E" | "R" | "T" | "1" | "2" | "3" | "4";
 export type ChannelMap = TupleOf<ChannelLetter, 8>;
+
+export enum GpsProtocols {
+  NMEA,
+  UBLOX,
+  MSP,
+}
+
+export enum GpsSbasTypes {
+  AUTO,
+  EGNOS,
+  WAAS,
+  MSAS,
+  GAGAN,
+}
+
+export enum GpsBaudRates {
+  BAUD_115200,
+  BAUD_57600,
+  BAUD_38400,
+  BAUD_19200,
+  BAUD_9600,
+}
+
+export type RssiConfig = {
+  channel: number;
+};
+
+export type GpsConfig = {
+  provider: GpsProtocols;
+  ubloxSbas: GpsSbasTypes;
+  autoConfig: boolean;
+  autoBaud: boolean;
+  homePointOnce: boolean;
+  ubloxUseGalileo: boolean;
+};

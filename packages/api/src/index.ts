@@ -37,6 +37,10 @@ import {
   Features,
   SerialPortIdentifiers,
   ChannelMap,
+  GpsConfig,
+  RssiConfig,
+  GpsProtocols,
+  GpsSbasTypes,
 } from "./types";
 import {
   availableFeatures,
@@ -54,6 +58,7 @@ import {
   rcSmoothingInputTypes,
   rcSmoothingDerivativeTypes,
   channelLetters,
+  gpsProtocols,
 } from "./features";
 import {
   times,
@@ -91,6 +96,7 @@ export {
   MIXER_LIST,
   availableFeatures,
   channelLetters,
+  gpsProtocols,
 } from "./features";
 export { mergeDeep } from "./utils";
 
@@ -993,4 +999,73 @@ export const writeRxMap = async (
   });
 
   await execute(port, { code: codes.MSP_SET_RX_MAP, data: buffer });
+};
+
+export const readRssiConfig = async (port: string): Promise<RssiConfig> => {
+  const data = await execute(port, { code: codes.MSP_RSSI_CONFIG });
+
+  return {
+    channel: data.readU8(),
+  };
+};
+
+export const writeRssiConfig = async (
+  port: string,
+  config: RssiConfig
+): Promise<void> => {
+  const buffer = new WriteBuffer();
+
+  buffer.push8(config.channel);
+
+  await execute(port, { code: codes.MSP_SET_RSSI_CONFIG, data: buffer });
+};
+
+export const readGpsConfig = async (port: string): Promise<GpsConfig> => {
+  const api = apiVersion(port);
+  const data = await execute(port, { code: codes.MSP_GPS_CONFIG });
+
+  // gps not enabled, not exactly good api from the FC
+  if (data.byteLength === 0) {
+    return {
+      provider: GpsProtocols.NMEA,
+      ubloxSbas: GpsSbasTypes.AUTO,
+      autoConfig: false,
+      autoBaud: false,
+      homePointOnce: false,
+      ubloxUseGalileo: false,
+    };
+  }
+
+  return {
+    provider: toIdentifier(gpsProtocols(api), data.readU8()),
+    ubloxSbas: data.readU8(),
+    autoConfig: semver.gte(api, "1.34.0") ? data.readU8() === 1 : false,
+    autoBaud: semver.gte(api, "1.34.0") ? data.readU8() === 1 : false,
+    homePointOnce: semver.gte(api, "1.43.0") ? data.readU8() === 1 : false,
+    ubloxUseGalileo: semver.gte(api, "1.43.0") ? data.readU8() === 1 : false,
+  };
+};
+
+export const writeGpsConfig = async (
+  port: string,
+  config: GpsConfig
+): Promise<void> => {
+  const api = apiVersion(port);
+  const buffer = new WriteBuffer();
+  buffer
+    .push8(
+      fromIdentifier(gpsProtocols(api), config.provider) ?? config.provider
+    )
+    .push8(config.ubloxSbas);
+  if (semver.gte(api, "1.34.0")) {
+    buffer.push8(config.autoConfig ? 1 : 0).push8(config.autoBaud ? 1 : 0);
+  }
+
+  if (semver.gte(api, "1.43.0")) {
+    buffer
+      .push8(config.homePointOnce ? 1 : 0)
+      .push8(config.ubloxUseGalileo ? 1 : 0);
+  }
+
+  await execute(port, { code: codes.MSP_SET_GPS_CONFIG, data: buffer });
 };

@@ -22,7 +22,7 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: QueryHookOptions<TData, TVariables>
 ): QueryResult<TData, TVariables> {
-  return useQueryOrig(
+  const result = useQueryOrig(
     query,
     options
       ? {
@@ -36,6 +36,11 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
         }
       : undefined
   );
+  // Use the original apollo implementation to show the previous data
+  // when loading new data from a query change
+  // https://github.com/apollographql/apollo-client/issues/7038
+  result.data = result.data ?? result.previousData;
+  return result;
 }
 
 export type ApolloContext = { client: ApolloClient<InMemoryCache> };
