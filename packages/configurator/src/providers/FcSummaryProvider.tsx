@@ -26,7 +26,9 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
               amperage
             }
             rc {
-              rssi
+              rssi {
+                value
+              }
             }
           }
         }
@@ -85,7 +87,7 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
         </tr>
         <tr>
           <td>RSSI:</td>
-          <td>{data?.connection.device.rc.rssi ?? ""}%</td>
+          <td>{data?.connection.device.rc.rssi.value ?? ""}%</td>
         </tr>
       </tbody>
     </Table>

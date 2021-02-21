@@ -35,7 +35,7 @@ describe("device.rc", () => {
         "1",
         "2",
         "3",
-        9,
+        "4",
       ]);
 
       add("/dev/something", "abcd");
@@ -68,7 +68,7 @@ describe("device.rc", () => {
         spi: {
           protocol: SpiRxProtocols.FRSKY_D,
         },
-        channelMap: ["A", "E", "T", "R", "1", "2", "3", "9"],
+        channelMap: ["A", "E", "T", "R", "1", "2", "3", "4"],
       });
       expect(mockApi.readRxConfig).toHaveBeenCalledWith("/dev/something");
       expect(mockApi.readRxMap).toHaveBeenCalledWith("/dev/something");
@@ -126,6 +126,46 @@ describe("device.rc", () => {
         type: RcSmoothingTypes.INTERPOLATION,
       });
       expect(mockApi.readRxConfig).toHaveBeenCalledWith("/dev/something");
+    });
+  });
+
+  describe("rssi", () => {
+    it("should provide the rssi receiver data", async () => {
+      mockApi.readRssiConfig.mockResolvedValue({
+        channel: 3,
+      });
+      mockApi.readAnalogValues.mockResolvedValue({
+        rssi: 50,
+      } as any);
+
+      add("/dev/something", "abcd");
+
+      const { query } = createTestClient(apolloServer);
+
+      const { data, errors } = await query({
+        query: gql`
+          query {
+            connection(connectionId: "abcd") {
+              device {
+                rc {
+                  rssi {
+                    channel
+                    value
+                  }
+                }
+              }
+            }
+          }
+        `,
+      });
+
+      expect(errors).toBeFalsy();
+      expect(data?.connection.device.rc.rssi).toEqual({
+        value: 50,
+        channel: 3,
+      });
+      expect(mockApi.readRssiConfig).toHaveBeenCalledWith("/dev/something");
+      expect(mockApi.readAnalogValues).toHaveBeenCalledWith("/dev/something");
     });
   });
 
@@ -225,7 +265,7 @@ describe("device.rc", () => {
         `,
         variables: {
           connection: "testconnectionId",
-          map: ["A", "E", "T", "R", "1", "2", "3", 9],
+          map: ["A", "E", "T", "R", "1", "2", "3", "4"],
         },
       });
 
@@ -238,7 +278,7 @@ describe("device.rc", () => {
         "1",
         "2",
         "3",
-        9,
+        "4",
       ]);
     });
 
@@ -256,7 +296,7 @@ describe("device.rc", () => {
         `,
         variables: {
           connection: "testconnectionId",
-          map: ["A", "E", "T", "F", "1", "2", "3", "4"],
+          map: ["A", "E", "T", "F", "1", "2", "3", "G"],
         },
       });
 
@@ -272,7 +312,7 @@ describe("device.rc", () => {
                 "line": 2,
               },
             ],
-            "message": "Invalid map value: F",
+            "message": "Invalid channel value: F",
             "path": Array [
               "deviceSetChannelMap",
             ],
@@ -318,6 +358,32 @@ describe("device.rc", () => {
           },
         ]
       `);
+    });
+  });
+
+  describe("deviceSetRssiChannel", () => {
+    it("should write the rssi channel to the board", async () => {
+      mockApi.writeRssiConfig.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetRssiChannel($connection: ID!, $channel: Int!) {
+            deviceSetRssiChannel(connectionId: $connection, channel: $channel)
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          channel: 4,
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeRssiConfig).toHaveBeenCalledWith("/dev/something", {
+        channel: 4,
+      });
     });
   });
 });

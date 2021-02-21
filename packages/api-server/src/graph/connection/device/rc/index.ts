@@ -1,4 +1,4 @@
-import { ChannelLetter, channelLetters, ChannelMap } from "@betaflight/api";
+import { channelLetters, ChannelMap } from "@betaflight/api";
 import { ApolloError } from "apollo-server-express";
 import gql from "graphql-tag";
 import debug from "debug";
@@ -21,6 +21,7 @@ const typeDefs = gql`
       receiverConfig: RxConfigInput!
     ): Boolean
     deviceSetChannelMap(connectionId: ID!, channelMap: [ID!]!): Boolean
+    deviceSetRssiChannel(connectionId: ID!, channel: Int!): Boolean
   }
 
   type RC {
@@ -28,7 +29,7 @@ const typeDefs = gql`
     tuning: RCTuning!
     smoothing: RcSmoothing!
     deadband: RCDeadband!
-    rssi: Int!
+    rssi: RcRssi!
     receiver: RxConfig!
   }
 
@@ -59,6 +60,11 @@ const typeDefs = gql`
     yawDeadband: Int!
     altHoldDeadhand: Int!
     deadband3dThrottle: Int!
+  }
+
+  type RcRssi {
+    value: Int!
+    channel: Int!
   }
 
   type RcSmoothing {
@@ -110,8 +116,7 @@ const resolvers: Resolvers = {
     channels: (_, __, { api, port }) => api.readRcValues(port),
     tuning: (_, __, { api, port }) => api.readRCTuning(port),
     deadband: (_, __, { api, port }) => api.readRCDeadband(port),
-    rssi: (_, __, { api, port }) =>
-      api.readAnalogValues(port).then(({ rssi }) => rssi),
+    rssi: () => ({} as never),
     receiver: (_, __, { api, port }) =>
       api.readRxConfig(port).then((config) => ({
         channelMap: [],
@@ -122,8 +127,13 @@ const resolvers: Resolvers = {
       api.readRxConfig(port).then(({ rcSmoothing }) => rcSmoothing),
   },
   RxConfig: {
-    channelMap: (_, __, { api, port }) =>
-      api.readRxMap(port).then((ids) => ids.map((id) => id.toString())),
+    channelMap: (_, __, { api, port }) => api.readRxMap(port),
+  },
+  RcRssi: {
+    value: (_, __, { api, port }) =>
+      api.readAnalogValues(port).then(({ rssi }) => rssi),
+    channel: (_, __, { api, port }) =>
+      api.readRssiConfig(port).then(({ channel }) => channel),
   },
   Mutation: {
     deviceSetReceiverConfig: (
@@ -149,34 +159,34 @@ const resolvers: Resolvers = {
       { connectionId, channelMap },
       { api, connections }
     ) => {
-      const availableLetters = channelLetters();
-      const correctedMap = channelMap
-        .slice(0, 8)
-        .map((letter) =>
-          availableLetters.includes(letter as ChannelLetter)
-            ? letter
-            : Number(letter)
-        );
-
-      correctedMap.forEach((value, i) => {
-        if (Number.isNaN(value)) {
-          throw new Error(`Invalid map value: ${channelMap[i]}`);
-        }
-      });
-
-      if (correctedMap.length < 8) {
+      if (channelMap.length < 8) {
         throw new ApolloError("Channel map must be at least 8");
       }
 
-      log(`Writing rxMap ${correctedMap}`);
+      const availableLetters = channelLetters();
+      const slicedMap = channelMap.slice(0, 8) as ChannelMap;
 
-      await api.writeRxMap(
-        connections.getPort(connectionId),
-        correctedMap as ChannelMap
-      );
+      slicedMap.forEach((letter) => {
+        if (!availableLetters.includes(letter)) {
+          throw new Error(`Invalid channel value: ${letter}`);
+        }
+      });
+
+      log(`Writing rxMap ${slicedMap}`);
+
+      await api.writeRxMap(connections.getPort(connectionId), slicedMap);
 
       return null;
     },
+
+    deviceSetRssiChannel: (
+      _,
+      { connectionId, channel },
+      { api, connections }
+    ) =>
+      api
+        .writeRssiConfig(connections.getPort(connectionId), { channel })
+        .then(() => null),
   },
 };
 

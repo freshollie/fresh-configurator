@@ -5,6 +5,7 @@ import RcModelViewProvider from "../providers/RcModelViewProvider";
 import RadioPortManager from "../managers/RadioPortManager";
 import RadioProtocolManager from "../managers/RadioProtocolManager";
 import ChannelMapManager from "../managers/ChannelMapManager";
+import RssiChannelManager from "../managers/RssiChannelManager";
 
 const ReceiverTab: React.FC = () => (
   <div className="content">
@@ -15,6 +16,7 @@ const ReceiverTab: React.FC = () => (
       <RadioPortManager />
       <RadioProtocolManager />
       <ChannelMapManager />
+      <RssiChannelManager />
       <ChannelsListProvider refreshRate={60} />
       <RcModelViewProvider refreshRate={60} />
     </main>
