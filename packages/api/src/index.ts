@@ -36,6 +36,7 @@ import {
   RxConfig,
   Features,
   SerialPortIdentifiers,
+  ChannelMap,
 } from "./types";
 import {
   availableFeatures,
@@ -52,6 +53,7 @@ import {
   rcSmoothingTypes,
   rcSmoothingInputTypes,
   rcSmoothingDerivativeTypes,
+  channelLetters,
 } from "./features";
 import {
   times,
@@ -88,6 +90,7 @@ export {
   mcuGroupFromId,
   MIXER_LIST,
   availableFeatures,
+  channelLetters,
 } from "./features";
 export { mergeDeep } from "./utils";
 
@@ -967,3 +970,27 @@ export const writePartialRxConfig = partialWriteFunc(
   readRxConfig,
   writeRxConfig
 );
+
+export const readRxMap = async (port: string): Promise<ChannelMap> => {
+  const data = await execute(port, { code: codes.MSP_RX_MAP });
+  const schema = channelLetters();
+  const map = new Array(8).fill("A") as ChannelMap;
+  schema.forEach((letter) => {
+    map[data.readU8()] = letter;
+  });
+  return map;
+};
+
+export const writeRxMap = async (
+  port: string,
+  map: ChannelMap
+): Promise<void> => {
+  const buffer = new WriteBuffer();
+  const schema = channelLetters();
+  schema.forEach((letter) => {
+    const value = typeof letter !== "number" ? map.indexOf(letter) : letter;
+    buffer.push8(value);
+  });
+
+  await execute(port, { code: codes.MSP_SET_RX_MAP, data: buffer });
+};

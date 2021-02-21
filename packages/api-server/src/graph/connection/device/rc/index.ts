@@ -1,13 +1,10 @@
-import { Features, SerialPortFunctions } from "@betaflight/api";
+import { ChannelLetter, channelLetters, ChannelMap } from "@betaflight/api";
+import { ApolloError } from "apollo-server-express";
 import gql from "graphql-tag";
+import debug from "debug";
 import { Resolvers } from "../../../__generated__";
 
-const RECEIVER_MODES = [
-  Features.RX_MSP,
-  Features.RX_SPI,
-  Features.RX_PPM,
-  Features.RX_SERIAL,
-];
+const log = debug("api-server:rc");
 
 const typeDefs = gql`
   extend type FlightController {
@@ -23,8 +20,7 @@ const typeDefs = gql`
       connectionId: ID!
       receiverConfig: RxConfigInput!
     ): Boolean
-    deviceSetReceiverMode(connectionId: ID!, mode: Int): Boolean
-    deviceSetReceiverSerialPort(connectionId: ID!, port: Int): Boolean
+    deviceSetChannelMap(connectionId: ID!, channelMap: [ID!]!): Boolean
   }
 
   type RC {
@@ -76,10 +72,9 @@ const typeDefs = gql`
   }
 
   type RxConfig {
-    # Will be an enum value for "Features.(RX_SPI | RX_PPM | RX_SERIAL)"
-    mode: Int
     serialProvider: Int!
     spi: RxSpiConfig!
+    channelMap: [ID!]!
   }
 
   type RxSpiConfig {
@@ -119,12 +114,16 @@ const resolvers: Resolvers = {
       api.readAnalogValues(port).then(({ rssi }) => rssi),
     receiver: (_, __, { api, port }) =>
       api.readRxConfig(port).then((config) => ({
-        mode: 0,
+        channelMap: [],
         ...config,
         serial: { provider: config.serialProvider },
       })),
     smoothing: (_, __, { api, port }) =>
       api.readRxConfig(port).then(({ rcSmoothing }) => rcSmoothing),
+  },
+  RxConfig: {
+    channelMap: (_, __, { api, port }) =>
+      api.readRxMap(port).then((ids) => ids.map((id) => id.toString())),
   },
   Mutation: {
     deviceSetReceiverConfig: (
@@ -145,49 +144,36 @@ const resolvers: Resolvers = {
           rcSmoothing: smoothingConfig,
         })
         .then(() => null),
-    deviceSetReceiverMode: async (
+    deviceSetChannelMap: async (
       _,
-      { connectionId, mode },
-      { connections, api }
+      { connectionId, channelMap },
+      { api, connections }
     ) => {
-      if (mode && !RECEIVER_MODES.includes(mode)) {
-        throw new Error(
-          `Mode must be one of ${RECEIVER_MODES.map(
-            (feature) => `Features.${Features[feature]}`
-          )}`
+      const availableLetters = channelLetters();
+      const correctedMap = channelMap
+        .slice(0, 8)
+        .map((letter) =>
+          availableLetters.includes(letter as ChannelLetter)
+            ? letter
+            : Number(letter)
         );
+
+      correctedMap.forEach((value, i) => {
+        if (Number.isNaN(value)) {
+          throw new Error(`Invalid map value: ${channelMap[i]}`);
+        }
+      });
+
+      if (correctedMap.length < 8) {
+        throw new ApolloError("Channel map must be at least 8");
       }
 
-      const port = connections.getPort(connectionId);
-      const currentFeatures = await api.readEnabledFeatures(port);
-      await api.writeEnabledFeatures(
-        port,
-        currentFeatures
-          .filter((feature) => !RECEIVER_MODES.includes(feature))
-          .concat(mode ? [mode] : [])
+      log(`Writing rxMap ${correctedMap}`);
+
+      await api.writeRxMap(
+        connections.getPort(connectionId),
+        correctedMap as ChannelMap
       );
-
-      return null;
-    },
-    deviceSetReceiverSerialPort: async (
-      _,
-      { connectionId, port },
-      { connections, api }
-    ) => {
-      const connectionPort = connections.getPort(connectionId);
-      const serialConfig = await api.readSerialConfig(connectionPort);
-
-      await api.writeSerialConfig(connectionPort, {
-        ...serialConfig,
-        ports: serialConfig.ports.map((portConfig) => ({
-          ...portConfig,
-          functions: portConfig.functions
-            .filter((fun) => fun !== SerialPortFunctions.RX_SERIAL)
-            .concat(
-              portConfig.id === port ? [SerialPortFunctions.RX_SERIAL] : []
-            ),
-        })),
-      });
 
       return null;
     },
