@@ -1,6 +1,4 @@
-export type PartialNullable<T> = {
-  [P in keyof T]?: T[P] | null;
-};
+import { TupleOf } from "./utils";
 
 export type VoltageMeters = {
   id: number;
@@ -477,3 +475,6 @@ export enum SerialPortIdentifiers {
   SOFTSERIAL1 = 30,
   SOFTSERIAL2 = 31,
 }
+
+export type ChannelLetter = "A" | "E" | "R" | "T" | "1" | "2" | "3" | "4";
+export type ChannelMap = TupleOf<ChannelLetter, 8>;

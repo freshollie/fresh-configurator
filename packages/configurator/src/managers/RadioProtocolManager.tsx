@@ -60,6 +60,7 @@ const RadioProtocolManager: React.FC = () => {
       variables: {
         connection: connection ?? "",
       },
+      skip: !connection,
     }
   );
   const { data, loading } = useQuery(DataQuery, {
@@ -132,7 +133,7 @@ const RadioProtocolManager: React.FC = () => {
             });
           }}
         >
-          <option value={-1} hidden>
+          <option value={-1} disabled>
             Select protocol
           </option>
           {PROVIDERS.map(({ name, value }) => (

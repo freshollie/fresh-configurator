@@ -15,6 +15,7 @@ import {
   RcSmoothingTypes,
   RcSmoothingInputTypes,
   RcSmoothingDerivativeTypes,
+  ChannelLetter,
 } from "./types";
 import { includeIf } from "./utils";
 
@@ -353,4 +354,15 @@ export const rcSmoothingDerivativeTypes = (
     semver.gte(apiVersion, "1.43.0"),
     RcSmoothingDerivativeTypes.AUTO
   ),
+];
+
+export const channelLetters = (): ChannelLetter[] => [
+  "A",
+  "E",
+  "R",
+  "T",
+  "1",
+  "2",
+  "3",
+  "4",
 ];

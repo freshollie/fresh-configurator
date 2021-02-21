@@ -100,7 +100,13 @@ export const createServer = ({
                 schema,
                 execute: async (args) => {
                   const result = await execute(args);
-                  result.errors?.forEach((error) => log(error));
+                  result.errors
+                    ?.filter(
+                      (e) =>
+                        !e.message.includes("not open") &&
+                        !e.message.includes("is not active")
+                    )
+                    .forEach((error) => log(error));
                   return result;
                 },
                 subscribe,

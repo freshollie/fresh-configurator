@@ -1,7 +1,11 @@
 export const bitCheck = (num: number, bit: number): boolean =>
   (num >> bit) % 2 !== 0;
 
-type TupleOf<T, N extends number> = N extends N
+export type PartialNullable<T> = {
+  [P in keyof T]?: T[P] | null;
+};
+
+export type TupleOf<T, N extends number> = N extends N
   ? number extends N
     ? T[]
     : _TupleOf<T, N, []>

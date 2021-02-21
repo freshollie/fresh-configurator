@@ -19,6 +19,7 @@ import {
   SpiRxProtocols,
   SerialRxProviders,
   Features,
+  ChannelMap,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
@@ -240,6 +241,7 @@ const mockDevice = {
     altHoldDeadhand: 0,
     deadband3dThrottle: 0,
   },
+  rxMap: ["A", "E", "T", "R", "1", "2", "3", "4"] as ChannelMap,
 };
 
 const tickAttitude = (): void => {
@@ -460,3 +462,11 @@ export const readRCTuning: typeof api.readRCTuning = (port) =>
 
 export const readRCDeadband: typeof api.readRCDeadband = (port) =>
   delay(20).then(() => mockDevice.rcDeadband);
+
+export const readRxMap: typeof api.readRxMap = (port) =>
+  delay(10).then(() => mockDevice.rxMap);
+
+export const writeRxMap: typeof api.writeRxMap = (port, channelMap) =>
+  delay(20).then(() => {
+    mockDevice.rxMap = channelMap;
+  });

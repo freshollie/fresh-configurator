@@ -27,6 +27,17 @@ describe("device.rc", () => {
         },
       } as any);
 
+      mockApi.readRxMap.mockResolvedValue([
+        "A",
+        "E",
+        "T",
+        "R",
+        "1",
+        "2",
+        "3",
+        9,
+      ]);
+
       add("/dev/something", "abcd");
 
       const { query } = createTestClient(apolloServer);
@@ -38,6 +49,7 @@ describe("device.rc", () => {
               device {
                 rc {
                   receiver {
+                    channelMap
                     serialProvider
                     spi {
                       protocol
@@ -56,8 +68,10 @@ describe("device.rc", () => {
         spi: {
           protocol: SpiRxProtocols.FRSKY_D,
         },
+        channelMap: ["A", "E", "T", "R", "1", "2", "3", "9"],
       });
       expect(mockApi.readRxConfig).toHaveBeenCalledWith("/dev/something");
+      expect(mockApi.readRxMap).toHaveBeenCalledWith("/dev/something");
     });
   });
 
@@ -193,6 +207,117 @@ describe("device.rc", () => {
           },
         }
       );
+    });
+  });
+
+  describe("deviceSetChannelMap", () => {
+    it("should write the rx channel map to the board", async () => {
+      mockApi.writeRxMap.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
+            deviceSetChannelMap(connectionId: $connection, channelMap: $map)
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          map: ["A", "E", "T", "R", "1", "2", "3", 9],
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeRxMap).toHaveBeenCalledWith("/dev/something", [
+        "A",
+        "E",
+        "T",
+        "R",
+        "1",
+        "2",
+        "3",
+        9,
+      ]);
+    });
+
+    it("should throw an error if a map value is not valid", async () => {
+      mockApi.writeRxMap.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
+            deviceSetChannelMap(connectionId: $connection, channelMap: $map)
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          map: ["A", "E", "T", "F", "1", "2", "3", "4"],
+        },
+      });
+
+      expect(errors).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "extensions": Object {
+              "code": "INTERNAL_SERVER_ERROR",
+            },
+            "locations": Array [
+              Object {
+                "column": 3,
+                "line": 2,
+              },
+            ],
+            "message": "Invalid map value: F",
+            "path": Array [
+              "deviceSetChannelMap",
+            ],
+          },
+        ]
+      `);
+    });
+
+    it("should throw an error if full map is not given", async () => {
+      mockApi.writeRxMap.mockResolvedValue();
+      add("/dev/something", "testconnectionId");
+
+      const { mutate } = createTestClient(apolloServer);
+
+      const { errors } = await mutate({
+        mutation: gql`
+          mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
+            deviceSetChannelMap(connectionId: $connection, channelMap: $map)
+          }
+        `,
+        variables: {
+          connection: "testconnectionId",
+          map: ["A", "E", "T", "R"],
+        },
+      });
+
+      expect(errors).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "extensions": Object {
+              "code": "INTERNAL_SERVER_ERROR",
+            },
+            "locations": Array [
+              Object {
+                "column": 3,
+                "line": 2,
+              },
+            ],
+            "message": "Channel map must be at least 8",
+            "path": Array [
+              "deviceSetChannelMap",
+            ],
+          },
+        ]
+      `);
     });
   });
 });
