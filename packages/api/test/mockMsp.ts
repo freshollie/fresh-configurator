@@ -31,5 +31,10 @@ export default {
   setApiVersion,
   setResponse,
   setResponseForCode,
+  resetResponses: () => {
+    Object.keys(responses).forEach((key) => {
+      delete responses[key];
+    });
+  },
   execute: mockExecute,
 };

@@ -2,6 +2,10 @@ import mockMsp from "./mockMsp";
 import { readModeRangeSlots } from "../src";
 import codes from "../src/codes";
 
+beforeEach(() => {
+  mockMsp.resetResponses();
+});
+
 describe("readModeRangeSlots", () => {
   it("should return the mode range slots without extra information for v1.40.0", async () => {
     mockMsp.setApiVersion("1.40.0");
