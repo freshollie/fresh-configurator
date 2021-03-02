@@ -120,7 +120,7 @@ module.exports = (_, { mode }) => ({
         shell: true,
         env: {
           NODE_ENV: "development",
-          DEBUG: "msp:*",
+          DEBUG: "api-server:*",
           ...process.env,
         },
         stdio: "inherit",
