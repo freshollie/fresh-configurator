@@ -17,6 +17,7 @@ import alignment from "./alignment";
 import pid from "./pid";
 import motors from "./motors";
 import beepers from "./beeper";
+import modes from "./modes";
 
 const typeDefs = gql`
   extend type Connection {
@@ -60,6 +61,7 @@ export default {
     pid.typeDefs,
     motors.typeDefs,
     beepers.typeDefs,
+    modes.typeDefs,
   ]),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolvers: mergeResolvers<unknown, any>([
@@ -79,5 +81,6 @@ export default {
     pid.resolvers,
     motors.resolvers,
     beepers.resolvers,
+    modes.resolvers,
   ]),
 };
