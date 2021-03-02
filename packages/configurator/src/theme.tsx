@@ -73,7 +73,7 @@ const {
   ThemeProvider,
   ThemeContext,
   css,
-} = styledComponents as ThemedStyledComponentsModule<Theme>;
+} = (styledComponents as unknown) as ThemedStyledComponentsModule<Theme>;
 
 const GlobalStyle = createGlobalStyle`
   * {
