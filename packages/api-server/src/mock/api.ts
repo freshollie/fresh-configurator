@@ -20,6 +20,7 @@ import {
   SerialRxProviders,
   Features,
   ChannelMap,
+  Modes,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
@@ -245,6 +246,32 @@ const mockDevice = {
   rssi: {
     channel: 0,
   },
+  modeRangeSlots: [
+    { modeId: 0, auxChannel: 3, range: { start: 1300, end: 1700 } },
+    { modeId: 0, auxChannel: 3, range: { start: 1300, end: 900 } },
+    {
+      modeId: Modes.ANGLE,
+      auxChannel: 5,
+      range: { start: 950, end: 1350 },
+    },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+  ],
 };
 
 const tickAttitude = (): void => {
@@ -480,4 +507,16 @@ export const readRssiConfig: typeof api.readRssiConfig = (port) =>
 export const writeRssiConfig: typeof api.writeRssiConfig = (port, config) =>
   delay(20).then(() => {
     mockDevice.rssi = config;
+  });
+
+export const readModeRangeSlots: typeof api.readModeRangeSlots = (port) =>
+  delay(20).then(() => mockDevice.modeRangeSlots);
+
+export const writeModeRangeSlot: typeof api.writeModeRangeSlot = (
+  port,
+  slotId,
+  config
+) =>
+  delay(20).then(() => {
+    mockDevice.modeRangeSlots[slotId] = config;
   });

@@ -28,7 +28,7 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
       ? {
           ...options,
           pollInterval:
-            options.skip && options.pollInterval ? 0 : options.pollInterval,
+            options.skip && options.pollInterval ? undefined : undefined,
 
           // IMPORTANT: Apollo has some bug where components don't rerender when
           // they should unless this is enabled!
