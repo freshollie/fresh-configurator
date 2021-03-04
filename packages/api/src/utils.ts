@@ -129,3 +129,6 @@ export const partialWriteFunc = <T extends Record<string, unknown>, R>(
   port,
   config
 ) => writeFunc(port, mergeDeep(await readFunc(port), config));
+
+export const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));

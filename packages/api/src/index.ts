@@ -43,6 +43,9 @@ import {
   GpsSbasTypes,
   ModeSlot,
   Modes,
+  BlackboxConfig,
+  DataFlashSummary,
+  SdCardSummary,
 } from "./types";
 import {
   availableFeatures,
@@ -69,7 +72,10 @@ import {
   toIdentifier,
   fromIdentifier,
   partialWriteFunc,
+  includeIf,
+  sleep,
 } from "./utils";
+import { huffmanDecodeBuffer } from "./huffman";
 
 export * from "./osd";
 
@@ -386,14 +392,14 @@ export const calibrateAccelerometer = async (port: string): Promise<void> => {
   await execute(port, { code: codes.MSP_ACC_CALIBRATION });
   // This command executes on the device, but doesn't actually produce anything
   // for about 2 seconds, so resolve after 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await sleep(2000);
 };
 
 export const resetConfig = async (port: string): Promise<void> => {
   await execute(port, { code: codes.MSP_RESET_CONF });
   // This command executes on the device, but doesn't actually produce anything
   // for about 2 seconds, so resolve after 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await sleep(2000);
 };
 
 export const BAUD_RATES = [
@@ -1130,4 +1136,148 @@ export const writeModeRangeSlots = async (
   slots: ModeSlot[]
 ): Promise<void> => {
   await Promise.all(slots.map((slot, i) => writeModeRangeSlot(port, i, slot)));
+};
+
+export const readBlackboxConfig = async (
+  port: string
+): Promise<BlackboxConfig> => {
+  const api = apiVersion(port);
+  const data = await execute(port, { code: codes.MSP_BLACKBOX_CONFIG });
+  return {
+    supported: (data.readU8() & 1) !== 0,
+    blackboxDevice: data.readU8(),
+    blackboxRateNum: data.readU8(),
+    blackboxRateDenom: data.readU8(),
+    blackboxPDenom: semver.gte(api, "1.36.0") ? data.readU16() : 0,
+    blackboxSampleRate: semver.gte(api, "1.44.0") ? data.readU8() : 0,
+  };
+};
+
+export const writeBlackboxConfig = async (
+  port: string,
+  config: Omit<BlackboxConfig, "supported">
+): Promise<void> => {
+  const api = apiVersion(port);
+  const buffer = new WriteBuffer();
+
+  buffer
+    .push8(config.blackboxDevice)
+    .push8(config.blackboxRateNum)
+    .push8(config.blackboxRateDenom);
+  if (semver.gte(api, "1.36.0")) {
+    buffer.push16(config.blackboxPDenom);
+  }
+  if (semver.gte(api, "1.44.0")) {
+    buffer.push8(config.blackboxSampleRate);
+  }
+
+  await execute(port, { code: codes.MSP_SET_BLACKBOX_CONFIG, data: buffer });
+};
+
+/**
+ * Return the base 64 encoded result of the blackbox config
+ */
+export const readDataFlashChunk = async (
+  port: string,
+  address: number,
+  blockSize: number
+): Promise<Buffer> => {
+  const api = apiVersion(port);
+  const args = [
+    address & 0xff,
+    (address >> 8) & 0xff,
+    (address >> 16) & 0xff,
+    (address >> 24) & 0xff,
+    ...includeIf(semver.gte(api, "1.31.0"), [
+      blockSize & 0xff,
+      (blockSize >> 8) & 0xff,
+    ]),
+    ...includeIf(semver.gte(api, "1.36.0"), [1]),
+  ];
+
+  const data = await execute(port, {
+    code: codes.MSP_DATAFLASH_READ,
+    data: args,
+  });
+
+  const chunkAddress = data.readU32();
+
+  if (chunkAddress !== address) {
+    throw new Error(`Received wrong response address: ${address}`);
+  }
+
+  const headerSize = semver.gte(api, "1.31.0") ? 7 : 4;
+  const dataSize = semver.gte(api, "1.31.0")
+    ? data.readU16()
+    : data.buffer.byteLength - headerSize;
+  const compressed = semver.gte(api, "1.31.0") && data.readU8() === 1;
+
+  /* Strip that address off the front of the reply and deliver it separately so the caller doesn't have to
+   * figure out the reply format:
+   */
+  if (!compressed) {
+    return Buffer.from(
+      new DataView(data.buffer, data.byteOffset + headerSize, dataSize).buffer
+    );
+  }
+  // Read compressed char count to avoid decoding stray bit sequences as bytes
+  const compressedCharCount = data.readU16();
+
+  // Compressed format uses 2 additional bytes as a pseudo-header to denote the number of uncompressed bytes
+  const compressedArray = Buffer.from(
+    new Uint8Array(data.buffer, data.byteOffset + headerSize + 2, dataSize - 2)
+  );
+  const decompressedArray = huffmanDecodeBuffer(
+    compressedArray,
+    compressedCharCount
+  );
+
+  return Buffer.from(new DataView(decompressedArray.buffer, dataSize).buffer);
+};
+
+export const readDataFlashSummary = async (
+  port: string
+): Promise<DataFlashSummary> => {
+  const data = await execute(port, { code: codes.MSP_DATAFLASH_SUMMARY });
+  if (data.byteLength >= 13) {
+    const flags = data.readU8();
+    return {
+      ready: (flags & 1) !== 0,
+      supported: (flags & 2) !== 0,
+      sectors: data.readU32(),
+      totalSize: data.readU32(),
+      usedSize: data.readU32(),
+    };
+  }
+  // Firmware version too old to support MSP_DATAFLASH_SUMMARY
+  return {
+    ready: false,
+    supported: false,
+    sectors: 0,
+    totalSize: 0,
+    usedSize: 0,
+  };
+};
+
+export const readSdCardSummary = async (
+  port: string
+): Promise<SdCardSummary> => {
+  const data = await execute(port, { code: codes.MSP_SDCARD_SUMMARY });
+  const flags = data.readU8();
+  return {
+    supported: (flags & 0x01) !== 0,
+    state: data.readU8(),
+    filesystemLastError: data.readU8(),
+    freeSizeKB: data.readU32(),
+    totalSizeKB: data.readU32(),
+  };
+};
+
+export const eraseDataFlash = async (port: string): Promise<void> => {
+  await execute(port, { code: codes.MSP_DATAFLASH_ERASE });
+  // eslint-disable-next-line no-await-in-loop
+  while (isOpen(port) && !(await readDataFlashSummary(port)).ready) {
+    // eslint-disable-next-line no-await-in-loop
+    await sleep(500);
+  }
 };

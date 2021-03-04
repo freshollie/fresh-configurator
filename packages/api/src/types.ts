@@ -607,3 +607,28 @@ export type ModeSlot = {
   modeLogic?: number;
   linkedTo?: number;
 };
+
+export type BlackboxConfig = {
+  supported: boolean;
+  blackboxDevice: number;
+  blackboxRateNum: number;
+  blackboxRateDenom: number;
+  blackboxPDenom: number;
+  blackboxSampleRate: number;
+};
+
+export type DataFlashSummary = {
+  ready: boolean;
+  supported: boolean;
+  sectors: number;
+  totalSize: number;
+  usedSize: number;
+};
+
+export type SdCardSummary = {
+  supported: boolean;
+  state: number;
+  filesystemLastError: number;
+  freeSizeKB: number;
+  totalSizeKB: number;
+};
