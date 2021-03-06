@@ -40,7 +40,7 @@ const connectionsMap: Record<string, Connection> = {};
  */
 export const execute = async (
   port: string,
-  { code, data, timeout = 2500 }: MspCommand
+  { code, data, timeout = 100, match }: MspCommand
 ): Promise<MspDataView> => {
   const connection = connectionsMap[port];
   if (!connection) {
@@ -56,7 +56,7 @@ export const execute = async (
       ? encodeMessageV2(code, sendData)
       : encodeMessageV1(code, sendData);
 
-  const requestKey = request.toString("utf-8");
+  const requestKey = request.toString("base64");
   let mspRequest = requests[requestKey];
 
   // Prevent FC lockup by checking if this request is currently being performed
@@ -84,6 +84,11 @@ export const execute = async (
             connection.packetErrors += 1;
             return;
           }
+
+          if (match && !match(new MspDataView(message.data))) {
+            return;
+          }
+
           log(
             `request: ${request.toJSON().data}, response: ${
               Buffer.from(message.data).toJSON().data

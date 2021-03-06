@@ -260,31 +260,40 @@ describe("execute", () => {
 
     await Promise.all([
       execute("/dev/something", {
-        code: 254,
-        data: Buffer.from("This is a message"),
+        code: 71,
+        data: [0, 128, 0, 0, 0, 16, 1],
         timeout: 0,
       }).catch(() => {}),
       execute("/dev/something", {
-        code: 254,
-        data: Buffer.from("This is a message"),
+        code: 71,
+        data: [0, 128, 0, 0, 0, 16, 1],
+        timeout: 0,
+      }).catch(() => {}),
+      execute("/dev/something", {
+        code: 71,
+        data: [0, 144, 0, 0, 0, 16, 1],
         timeout: 0,
       }).catch(() => {}),
     ]);
 
     expect(writtenData("/dev/something")).toEqual(
-      encodeMessageV1(254, Buffer.from("This is a message"))
+      Buffer.concat([
+        encodeMessageV1(71, Buffer.from([0, 128, 0, 0, 0, 16, 1])),
+        encodeMessageV1(71, Buffer.from([0, 144, 0, 0, 0, 16, 1])),
+      ])
     );
 
     await execute("/dev/something", {
-      code: 254,
+      code: 71,
       data: Buffer.from("This is a different request"),
       timeout: 0,
     }).catch(() => {});
 
     expect(writtenData("/dev/something")).toEqual(
       Buffer.concat([
-        encodeMessageV1(254, Buffer.from("This is a message")),
-        encodeMessageV1(254, Buffer.from("This is a different request")),
+        encodeMessageV1(71, Buffer.from([0, 128, 0, 0, 0, 16, 1])),
+        encodeMessageV1(71, Buffer.from([0, 144, 0, 0, 0, 16, 1])),
+        encodeMessageV1(71, Buffer.from("This is a different request")),
       ])
     );
   });
@@ -294,18 +303,39 @@ describe("execute", () => {
     const execution = execute("/dev/something", {
       code: 108,
     });
-    await flushPromises();
 
     // Reply the data in 2 parts to ensure that it can
     // handle data coming in chunks
     reply("/dev/something", Buffer.from([36, 77, 62, 6, 108]));
-    await flushPromises();
     reply("/dev/something", Buffer.from([129, 0, 62, 1, 100, 1, 177]));
 
     const response = await execution;
     expect(Buffer.from(response.buffer)).toEqual(
       Buffer.from([129, 0, 62, 1, 100, 1])
     );
+  });
+
+  it("should use the match function to match responses to the request", async () => {
+    await open("/dev/something");
+    const execution = execute("/dev/something", {
+      code: 108,
+      match: (response) => response.readU8() === 129,
+    });
+
+    reply(
+      "/dev/something",
+      Buffer.from([36, 77, 62, 6, 108, 10, 0, 62, 1, 100, 1, 58])
+    );
+    reply(
+      "/dev/something",
+      Buffer.from([36, 77, 62, 6, 108, 129, 0, 62, 1, 100, 1, 177])
+    );
+
+    const response = await execution;
+    expect(Buffer.from(response.buffer)).toEqual(
+      Buffer.from([129, 0, 62, 1, 100, 1])
+    );
+    expect(packetErrors("/dev/something")).toBe(0);
   });
 
   it("should ignore responses which are not related", async () => {
