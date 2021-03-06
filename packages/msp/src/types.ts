@@ -1,4 +1,5 @@
 import SerialPort from "@serialport/stream";
+import { MspDataView } from ".";
 import { MspParser } from "./parser";
 
 export type MspInfo = {
@@ -42,4 +43,5 @@ export type MspCommand = {
   code: number;
   data?: number[] | Buffer;
   timeout?: number;
+  match?: (data: MspDataView) => boolean;
 };
