@@ -64,6 +64,7 @@ import {
   rcSmoothingDerivativeTypes,
   channelLetters,
   gpsProtocols,
+  blackboxDevices,
 } from "./features";
 import {
   times,
@@ -72,7 +73,6 @@ import {
   toIdentifier,
   fromIdentifier,
   partialWriteFunc,
-  includeIf,
   sleep,
 } from "./utils";
 import { huffmanDecodeBuffer } from "./huffman";
@@ -1145,7 +1145,7 @@ export const readBlackboxConfig = async (
   const data = await execute(port, { code: codes.MSP_BLACKBOX_CONFIG });
   return {
     supported: (data.readU8() & 1) !== 0,
-    blackboxDevice: data.readU8(),
+    blackboxDevice: toIdentifier(blackboxDevices(api), data.readU8()),
     blackboxRateNum: data.readU8(),
     blackboxRateDenom: data.readU8(),
     blackboxPDenom: semver.gte(api, "1.36.0") ? data.readU16() : 0,
@@ -1161,7 +1161,10 @@ export const writeBlackboxConfig = async (
   const buffer = new WriteBuffer();
 
   buffer
-    .push8(config.blackboxDevice)
+    .push8(
+      fromIdentifier(blackboxDevices(api), config.blackboxDevice) ??
+        config.blackboxDevice
+    )
     .push8(config.blackboxRateNum)
     .push8(config.blackboxRateDenom);
   if (semver.gte(api, "1.36.0")) {
@@ -1183,28 +1186,27 @@ export const readDataFlashChunk = async (
   blockSize: number
 ): Promise<Buffer> => {
   const api = apiVersion(port);
-  const args = [
-    address & 0xff,
-    (address >> 8) & 0xff,
-    (address >> 16) & 0xff,
-    (address >> 24) & 0xff,
-    ...includeIf(semver.gte(api, "1.31.0"), [
-      blockSize & 0xff,
-      (blockSize >> 8) & 0xff,
-    ]),
-    ...includeIf(semver.gte(api, "1.36.0"), [1]),
-  ];
+
+  const args = new WriteBuffer();
+  args.push32(address);
+  if (semver.gte(api, "1.31.0")) {
+    args.push16(blockSize);
+  }
+
+  if (semver.gte(api, "1.36.0")) {
+    args.push8(1);
+  }
 
   const data = await execute(port, {
     code: codes.MSP_DATAFLASH_READ,
     data: args,
+    timeout: 1000,
+    match: (response) => response.readU32() === address,
   });
 
-  const chunkAddress = data.readU32();
-
-  if (chunkAddress !== address) {
-    throw new Error(`Received wrong response address: ${address}`);
-  }
+  // ignore the address as this was
+  // checked by the executor
+  data.readU32();
 
   const headerSize = semver.gte(api, "1.31.0") ? 7 : 4;
   const dataSize = semver.gte(api, "1.31.0")
@@ -1217,7 +1219,7 @@ export const readDataFlashChunk = async (
    */
   if (!compressed) {
     return Buffer.from(
-      new DataView(data.buffer, data.byteOffset + headerSize, dataSize).buffer
+      new Uint8Array(data.buffer, data.byteOffset + headerSize, dataSize)
     );
   }
   // Read compressed char count to avoid decoding stray bit sequences as bytes
@@ -1227,12 +1229,13 @@ export const readDataFlashChunk = async (
   const compressedArray = Buffer.from(
     new Uint8Array(data.buffer, data.byteOffset + headerSize + 2, dataSize - 2)
   );
+
   const decompressedArray = huffmanDecodeBuffer(
     compressedArray,
     compressedCharCount
   );
 
-  return Buffer.from(new DataView(decompressedArray.buffer, dataSize).buffer);
+  return decompressedArray;
 };
 
 export const readDataFlashSummary = async (
@@ -1275,9 +1278,4 @@ export const readSdCardSummary = async (
 
 export const eraseDataFlash = async (port: string): Promise<void> => {
   await execute(port, { code: codes.MSP_DATAFLASH_ERASE });
-  // eslint-disable-next-line no-await-in-loop
-  while (isOpen(port) && !(await readDataFlashSummary(port)).ready) {
-    // eslint-disable-next-line no-await-in-loop
-    await sleep(500);
-  }
 };
