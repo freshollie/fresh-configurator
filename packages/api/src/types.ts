@@ -608,9 +608,24 @@ export type ModeSlot = {
   linkedTo?: number;
 };
 
+export enum BlackboxDevices {
+  NONE,
+  SERIAL,
+  FLASH,
+  SDCARD,
+}
+
+export enum SdCardStates {
+  NOT_PRESENT = 0,
+  FATAL = 1,
+  CARD_INIT = 2,
+  FS_INIT = 3,
+  READY = 4,
+}
+
 export type BlackboxConfig = {
   supported: boolean;
-  blackboxDevice: number;
+  blackboxDevice: BlackboxDevices;
   blackboxRateNum: number;
   blackboxRateDenom: number;
   blackboxPDenom: number;
@@ -627,7 +642,7 @@ export type DataFlashSummary = {
 
 export type SdCardSummary = {
   supported: boolean;
-  state: number;
+  state: SdCardStates;
   filesystemLastError: number;
   freeSizeKB: number;
   totalSizeKB: number;

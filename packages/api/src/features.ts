@@ -19,6 +19,7 @@ import {
   GpsProtocols,
   GpsSbasTypes,
   GpsBaudRates,
+  BlackboxDevices,
 } from "./types";
 import { includeIf } from "./utils";
 
@@ -390,4 +391,11 @@ export const gpsBaudRates = (): GpsBaudRates[] => [
   GpsBaudRates.BAUD_38400,
   GpsBaudRates.BAUD_19200,
   GpsBaudRates.BAUD_9600,
+];
+
+export const blackboxDevices = (api: string): BlackboxDevices[] => [
+  semver.gte(api, "1.33.0") ? BlackboxDevices.NONE : BlackboxDevices.SERIAL,
+  BlackboxDevices.FLASH,
+  BlackboxDevices.SDCARD,
+  BlackboxDevices.SERIAL,
 ];

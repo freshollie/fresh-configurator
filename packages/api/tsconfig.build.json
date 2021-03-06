@@ -5,6 +5,7 @@
     "rootDir": "src"
   },
   "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"],
   "references": [
     {
       "path": "../msp/tsconfig.build.json"
