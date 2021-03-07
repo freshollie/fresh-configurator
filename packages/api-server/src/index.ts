@@ -22,6 +22,7 @@ type ServerOptions = {
   mocked?: boolean;
   playground?: boolean;
   persistedQueries?: Record<string, string>;
+  offloadDirectory?: string;
 };
 
 type Server = {
@@ -34,6 +35,7 @@ export const createServer = ({
   mocked,
   playground,
   persistedQueries,
+  offloadDirectory = `${__dirname}/offloaded/`,
 }: ServerOptions = {}): Server => {
   const schema = makeExecutableSchema(graph);
 
@@ -50,7 +52,7 @@ export const createServer = ({
 
   const apolloServer = new ApolloServer({
     schema,
-    context: mocked ? mockedContext : context,
+    context: mocked ? mockedContext : context({ offloadDir: offloadDirectory }),
     playground,
     formatError: (error) => {
       log(error);
@@ -61,12 +63,18 @@ export const createServer = ({
   apolloServer.applyMiddleware({ app });
 
   const server = http.createServer(app);
+  if (!persistedQueries) {
+    apolloServer.installSubscriptionHandlers(server);
+  }
 
-  // create websocket server
-  const wsServer = new ws.Server({
-    server,
-    path: "/graphql",
-  });
+  // Use the `graphql-ws` server if we are using persisted queries
+  // as it's the only server type which can cope with this
+  const wsServer = persistedQueries
+    ? new ws.Server({
+        server,
+        path: "/graphql",
+      })
+    : undefined;
 
   return {
     apolloServer,
@@ -80,39 +88,44 @@ export const createServer = ({
               startTicks();
             }
 
-            useServer(
-              {
-                context: mocked ? mockedContext : context,
-                onSubscribe: persistedQueriesStore
-                  ? (_ctx, msg) => {
-                      const document = persistedQueriesStore[msg.payload.query];
-                      if (!document) {
-                        // for extra security you only allow the queries from the store
-                        throw new Error("404: Query Not Found");
+            if (wsServer) {
+              useServer(
+                {
+                  context: mocked
+                    ? mockedContext
+                    : context({ offloadDir: offloadDirectory }),
+                  onSubscribe: persistedQueriesStore
+                    ? (_ctx, msg) => {
+                        const document =
+                          persistedQueriesStore[msg.payload.query];
+                        if (!document) {
+                          // for extra security you only allow the queries from the store
+                          throw new Error("404: Query Not Found");
+                        }
+                        return {
+                          document,
+                          schema,
+                          variableValues: msg.payload.variables,
+                        };
                       }
-                      return {
-                        document,
-                        schema,
-                        variableValues: msg.payload.variables,
-                      };
-                    }
-                  : undefined,
-                schema,
-                execute: async (args) => {
-                  const result = await execute(args);
-                  result.errors
-                    ?.filter(
-                      (e) =>
-                        !e.message.includes("not open") &&
-                        !e.message.includes("is not active")
-                    )
-                    .forEach((error) => log(error));
-                  return result;
+                    : undefined,
+                  schema,
+                  execute: async (args) => {
+                    const result = await execute(args);
+                    result.errors
+                      ?.filter(
+                        (e) =>
+                          !e.message.includes("not open") &&
+                          !e.message.includes("is not active")
+                      )
+                      .forEach((error) => log(error));
+                    return result;
+                  },
+                  subscribe,
                 },
-                subscribe,
-              },
-              wsServer
-            );
+                wsServer
+              );
+            }
             resolve(listeningPort);
           });
         } catch (e) {

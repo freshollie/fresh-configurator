@@ -25,11 +25,11 @@
     "dist"
   ],
   "scripts": {
-    "start": "DEBUG=connection ts-node -T --compiler-options '{\"module\": \"commonjs\"}' start.ts"
+    "start": "ts-node -T --compiler-options '{\"module\": \"commonjs\"}' start.ts"
   },
   "dependencies": {
     "@betaflight/api": "workspace:^0.3.0",
-    "apollo-server-express": "^2.19.1",
+    "apollo-server-express": "^2.21.0",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "get-port": "^5.1.1",
@@ -47,7 +47,7 @@
     "@types/node": "*",
     "@types/uuid": "^7.0.2",
     "@types/ws": "^7.4.0",
-    "apollo-server-testing": "^2.19.1",
+    "apollo-server-testing": "^2.21.0",
     "flush-promises": "^1.0.2",
     "graphql": "*",
     "ts-jest": "*",

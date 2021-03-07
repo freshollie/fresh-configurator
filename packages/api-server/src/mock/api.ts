@@ -21,6 +21,8 @@ import {
   Features,
   ChannelMap,
   Modes,
+  BlackboxDevices,
+  SdCardStates,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
@@ -272,6 +274,28 @@ const mockDevice = {
     { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
     { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
   ],
+  blackboxConfig: {
+    supported: true,
+    device: BlackboxDevices.FLASH,
+    rateNum: 1,
+    rateDenom: 1,
+    pDenom: 32,
+    sampleRate: 0,
+  },
+  blackboxDataFlashSummary: {
+    ready: true,
+    supported: true,
+    sectors: 128,
+    totalSize: 8388608,
+    usedSize: 5000034,
+  },
+  blackboxSdCardSummary: {
+    supported: true,
+    state: SdCardStates.NOT_PRESENT,
+    filesystemLastError: 0,
+    freeSizeKB: 167772160,
+    totalSizeKB: 335545600,
+  },
 };
 
 const tickAttitude = (): void => {
@@ -325,6 +349,9 @@ const delay = (ms?: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 export const ports = (): Promise<string[]> => delay(10).then(() => mockPorts);
+export const isOpen: typeof api.isOpen = (port) => mockPorts.includes(port);
+export const close: typeof api.close = (port) =>
+  delay(10).then(() => undefined);
 
 type OnClose = () => void;
 export const open = async (
@@ -519,4 +546,39 @@ export const writeModeRangeSlot: typeof api.writeModeRangeSlot = (
 ) =>
   delay(20).then(() => {
     mockDevice.modeRangeSlots[slotId] = config;
+  });
+
+export const readBlackboxConfig: typeof api.readBlackboxConfig = (port) =>
+  delay(10).then(() => mockDevice.blackboxConfig);
+
+export const readSdCardSummary: typeof api.readSdCardSummary = (port) =>
+  delay(10).then(() => mockDevice.blackboxSdCardSummary);
+
+export const readDataFlashSummary: typeof api.readDataFlashSummary = (port) =>
+  delay(10).then(() => mockDevice.blackboxDataFlashSummary);
+
+export const writeBlackboxConfig: typeof api.writeBlackboxConfig = (
+  port,
+  config
+) =>
+  delay(20).then(() => {
+    mockDevice.blackboxConfig = { ...mockDevice.blackboxConfig, ...config };
+  });
+
+export const readDataFlashChunk: typeof api.readDataFlashChunk = (
+  port,
+  _,
+  chunkSize
+) =>
+  delay(100).then(() =>
+    Buffer.from(new Array(chunkSize - Math.round(Math.random() * 100)).fill(1))
+  );
+
+export const eraseDataFlash: typeof api.eraseDataFlash = (port) =>
+  delay(20).then(() => {
+    mockDevice.blackboxDataFlashSummary.ready = false;
+    delay(20000).then(() => {
+      mockDevice.blackboxDataFlashSummary.ready = true;
+      mockDevice.blackboxDataFlashSummary.usedSize = 0;
+    });
   });
