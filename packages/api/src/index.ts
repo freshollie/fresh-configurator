@@ -1145,11 +1145,11 @@ export const readBlackboxConfig = async (
   const data = await execute(port, { code: codes.MSP_BLACKBOX_CONFIG });
   return {
     supported: (data.readU8() & 1) !== 0,
-    blackboxDevice: toIdentifier(blackboxDevices(api), data.readU8()),
-    blackboxRateNum: data.readU8(),
-    blackboxRateDenom: data.readU8(),
-    blackboxPDenom: semver.gte(api, "1.36.0") ? data.readU16() : 0,
-    blackboxSampleRate: semver.gte(api, "1.44.0") ? data.readU8() : 0,
+    device: toIdentifier(blackboxDevices(api), data.readU8()),
+    rateNum: data.readU8(),
+    rateDenom: data.readU8(),
+    pDenom: semver.gte(api, "1.36.0") ? data.readU16() : 0,
+    sampleRate: semver.gte(api, "1.44.0") ? data.readU8() : 0,
   };
 };
 
@@ -1161,17 +1161,14 @@ export const writeBlackboxConfig = async (
   const buffer = new WriteBuffer();
 
   buffer
-    .push8(
-      fromIdentifier(blackboxDevices(api), config.blackboxDevice) ??
-        config.blackboxDevice
-    )
-    .push8(config.blackboxRateNum)
-    .push8(config.blackboxRateDenom);
+    .push8(fromIdentifier(blackboxDevices(api), config.device) ?? config.device)
+    .push8(config.rateNum)
+    .push8(config.rateDenom);
   if (semver.gte(api, "1.36.0")) {
-    buffer.push16(config.blackboxPDenom);
+    buffer.push16(config.pDenom);
   }
   if (semver.gte(api, "1.44.0")) {
-    buffer.push8(config.blackboxSampleRate);
+    buffer.push8(config.sampleRate);
   }
 
   await execute(port, { code: codes.MSP_SET_BLACKBOX_CONFIG, data: buffer });

@@ -5,6 +5,7 @@ import { mergeResolvers, mergeTypes } from "merge-graphql-schemas";
 import debug from "debug";
 import device from "./device";
 import { Resolvers } from "../__generated__";
+import { Context } from "../../context";
 
 const log = debug("api-server:connection");
 
@@ -183,6 +184,6 @@ const resolvers: Resolvers = {
 };
 
 export default {
-  resolvers: mergeResolvers([device.resolvers, resolvers]),
+  resolvers: mergeResolvers<Context, Resolvers>([device.resolvers, resolvers]),
   typeDefs: mergeTypes([device.typeDefs, typeDefs]),
 };

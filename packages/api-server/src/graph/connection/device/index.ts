@@ -18,6 +18,8 @@ import pid from "./pid";
 import motors from "./motors";
 import beepers from "./beeper";
 import modes from "./modes";
+import blackbox from "./blackbox";
+import { Context } from "../../../context";
 
 const typeDefs = gql`
   extend type Connection {
@@ -62,9 +64,9 @@ export default {
     motors.typeDefs,
     beepers.typeDefs,
     modes.typeDefs,
+    blackbox.typeDefs,
   ]),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolvers: mergeResolvers<unknown, any>([
+  resolvers: mergeResolvers<Context, Resolvers>([
     resolvers,
     arming.resolvers,
     alignment.resolvers,
@@ -82,5 +84,6 @@ export default {
     motors.resolvers,
     beepers.resolvers,
     modes.resolvers,
+    blackbox.resolvers,
   ]),
 };

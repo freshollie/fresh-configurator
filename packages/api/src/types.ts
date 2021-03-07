@@ -625,11 +625,11 @@ export enum SdCardStates {
 
 export type BlackboxConfig = {
   supported: boolean;
-  blackboxDevice: BlackboxDevices;
-  blackboxRateNum: number;
-  blackboxRateDenom: number;
-  blackboxPDenom: number;
-  blackboxSampleRate: number;
+  device: BlackboxDevices;
+  rateNum: number;
+  rateDenom: number;
+  pDenom: number;
+  sampleRate: number;
 };
 
 export type DataFlashSummary = {

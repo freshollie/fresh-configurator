@@ -9,11 +9,11 @@ describe("readBlackboxConfig", () => {
 
     expect(await readBlackboxConfig("/dev/something")).toEqual({
       supported: true,
-      blackboxDevice: BlackboxDevices.FLASH,
-      blackboxRateNum: 1,
-      blackboxRateDenom: 1,
-      blackboxPDenom: 32,
-      blackboxSampleRate: 0,
+      device: BlackboxDevices.FLASH,
+      rateNum: 1,
+      rateDenom: 1,
+      pDenom: 32,
+      sampleRate: 0,
     });
 
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/something", {
