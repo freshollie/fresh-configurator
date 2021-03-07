@@ -1,5 +1,5 @@
 import SerialPort from "@serialport/stream";
-import { MspDataView } from ".";
+import MspDataView from "./dataview";
 import { MspParser } from "./parser";
 
 export type MspInfo = {
