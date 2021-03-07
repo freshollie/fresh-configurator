@@ -276,12 +276,8 @@ export const huffmanDecodeBuffer = (
   let code = 0;
   let depth = 0;
   let bitOffset = 0;
-  const outBuf = [];
-  if (inBuf.byteLength < 1) {
-    return Buffer.from([]);
-  }
-
   let currentByte = 0;
+  const outBuf = [];
 
   while (bitOffset / 8 < inBuf.byteLength) {
     if (outBuf.length === expectedSize) {
