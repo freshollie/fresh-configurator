@@ -567,6 +567,14 @@ export const writeBlackboxConfig: typeof api.writeBlackboxConfig = (
     mockDevice.blackboxConfig = { ...mockDevice.blackboxConfig, ...config };
   });
 
+export const writePartialBlackboxConfig: typeof api.writePartialBlackboxConfig = (
+  port,
+  config
+) =>
+  delay(50).then(() => {
+    mockDevice.blackboxConfig = mergeDeep(mockDevice.blackboxConfig, config);
+  });
+
 export const readDataFlashChunk: typeof api.readDataFlashChunk = (
   port,
   _,

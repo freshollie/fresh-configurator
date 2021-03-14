@@ -15,6 +15,7 @@ import Setup from "./tabs/Setup";
 import Landing from "./tabs/Landing";
 import Receiver from "./tabs/Receiver";
 import General from "./tabs/General";
+import Blackbox from "./tabs/Blackbox";
 
 const App: React.FC = () => (
   <MainLayout>
@@ -45,6 +46,9 @@ const App: React.FC = () => (
           </div>
           <div id="receiver">
             <Receiver />
+          </div>
+          <div id="blackbox">
+            <Blackbox />
           </div>
         </TabRouter>
       </div>

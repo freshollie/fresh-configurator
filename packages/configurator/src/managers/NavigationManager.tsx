@@ -49,6 +49,11 @@ const CONNECTED_LINKS = [
     icon: <Icon name="receiver" />,
     id: "receiver",
   },
+  {
+    title: "Blackbox",
+    icon: <Icon name="blackbox" />,
+    id: "blackbox",
+  },
 ];
 
 /*

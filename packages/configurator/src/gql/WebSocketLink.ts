@@ -30,8 +30,12 @@ export default class WebSocketLink extends ApolloLink {
             : print(operation.query),
         },
         {
-          next: sink.next.bind(sink),
-          complete: sink.complete.bind(sink),
+          next: (result) => {
+            sink.next(result);
+          },
+          complete: () => {
+            sink.complete();
+          },
           error: (err) => {
             if (err instanceof Error) {
               sink.error(err);

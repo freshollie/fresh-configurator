@@ -105,6 +105,7 @@ export {
   availableFeatures,
   channelLetters,
   gpsProtocols,
+  blackboxDevices,
 } from "./features";
 export { mergeDeep } from "./utils";
 
@@ -1191,7 +1192,7 @@ export const writeBlackboxConfig = async (
   await execute(port, { code: codes.MSP_SET_BLACKBOX_CONFIG, data: buffer });
 };
 
-export const writePartialBlackBoxConfig = partialWriteFunc(
+export const writePartialBlackboxConfig = partialWriteFunc(
   readBlackboxConfig,
   writeBlackboxConfig
 );

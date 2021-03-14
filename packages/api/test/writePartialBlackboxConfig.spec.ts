@@ -1,4 +1,4 @@
-import { BlackboxDevices, writePartialBlackBoxConfig } from "../src";
+import { BlackboxDevices, writePartialBlackboxConfig } from "../src";
 import codes from "../src/codes";
 import mockMsp from "./mockMsp";
 
@@ -7,7 +7,7 @@ describe("writePartialBlackboxConfig", () => {
     mockMsp.setApiVersion("1.40.0");
     mockMsp.setResponse([1, 1, 1, 1, 32, 0]);
 
-    await writePartialBlackBoxConfig("/dev/something", {
+    await writePartialBlackboxConfig("/dev/something", {
       device: BlackboxDevices.SDCARD,
       rateNum: 1,
       pDenom: 10,
