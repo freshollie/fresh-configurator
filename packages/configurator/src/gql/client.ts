@@ -1,4 +1,4 @@
-import { InMemoryCache, ApolloClient, gql } from "@apollo/client";
+import { InMemoryCache, ApolloClient, gql, ApolloLink } from "@apollo/client";
 import WebSocketLink from "./WebSocketLink";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
@@ -233,16 +233,41 @@ export const resolvers = (initialState?: {
 // extract the backend address from the URL search query, as this can
 // be dynamically passed to us by electron
 const searchParams = new URLSearchParams(window.location.search.slice(1));
-const BACKEND = searchParams.get("backend") ?? "ws://localhost:9000";
+const wsBackend = searchParams.get("backend") ?? "ws://localhost:9000";
+export const artifactsAddress = `${wsBackend.replace(
+  "ws",
+  "http"
+)}/job-artifacts`;
 
 const client = new ApolloClient({
   cache: cache(),
   typeDefs,
   resolvers: resolvers(),
-  link: new WebSocketLink({
-    url: `${BACKEND}/graphql`,
-    keepAlive: 99999999999,
-  }),
+  link: ApolloLink.from([
+    // new RetryLink({
+    //   // Retry all operations unless retry is explicitly disabled
+    //   attempts: (_, operation) => operation.getContext().retry !== false,
+    //   delay: {
+    //     initial: 10,
+    //     max: 5,
+    //     jitter: true,
+    //   },
+    // }),
+    // new ApolloLink((operation, forward) =>
+    //   forward(operation).map((data) => {
+    //     if (data.errors?.[0]) {
+    //       console.log("test");
+    //       throw new Error(`${data.errors[0].message}`);
+    //     }
+    //     return data;
+    //   })
+    // ),
+    new WebSocketLink({
+      url: `${wsBackend}/graphql`,
+      keepAlive: 99999999999,
+      lazy: false,
+    }),
+  ]),
 });
 
 const writeInitial = (): void => {

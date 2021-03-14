@@ -226,7 +226,7 @@ describe("device.blackbox", () => {
 
   describe("deviceSetBlackboxConfig", () => {
     it("should update the blackbox config with the provided values", async () => {
-      mockApi.writePartialBlackBoxConfig.mockResolvedValue();
+      mockApi.writePartialBlackboxConfig.mockResolvedValue();
       add("/dev/serial", "fsu9dfgjkhdsfgk");
       const client = createTestClient(apolloServer);
 

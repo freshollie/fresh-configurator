@@ -87,7 +87,7 @@ const resolvers: Resolvers = {
       { connections, api }
     ) =>
       api
-        .writePartialBlackBoxConfig(connections.getPort(connectionId), config)
+        .writePartialBlackboxConfig(connections.getPort(connectionId), config)
         .then(() => null),
     createFlashDataOffloadJob: async (
       _,

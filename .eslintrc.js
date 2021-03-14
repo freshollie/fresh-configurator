@@ -64,6 +64,7 @@ module.exports = {
         ],
       },
     ],
+    "default-case": "off",
     "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
     "@typescript-eslint/no-require-imports": "error",
     "@typescript-eslint/array-type": ["error", { default: "array" }],
@@ -71,6 +72,7 @@ module.exports = {
     "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/no-extra-non-null-assertion": "error",
     "@typescript-eslint/no-inferrable-types": "error",
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
   },
   parserOptions: {
     project: "./tsconfig.eslint.json",

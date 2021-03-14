@@ -109,6 +109,7 @@ const ConnectionManager: React.FC = () => {
       import("./__generated__/ConnectionManager").ConnectMutationVariables
     >,
     {
+      context: { retry: false },
       variables: {
         port: port ?? "",
         baudRate: baudRate ?? 0,

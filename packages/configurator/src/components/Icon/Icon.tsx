@@ -15,6 +15,7 @@ import MagnetometerSensorIcon from "./assets/sensor_mag.svg";
 import BarometerSensorIcon from "./assets/sensor_baro.svg";
 import GpsSensorIcon from "./assets/sensor_sat.svg";
 import SonarSensorIcon from "./assets/sensor_sonar.svg";
+import LogIcon from "./assets/cf_icon_log_white.svg";
 
 const ICONS_MAP = {
   "usb-disconnect": UsbDisconnectIcon,
@@ -32,6 +33,7 @@ const ICONS_MAP = {
   "bar-sensor": BarometerSensorIcon,
   "gps-sensor": GpsSensorIcon,
   "sonar-sensor": SonarSensorIcon,
+  blackbox: LogIcon,
 };
 
 export type AllIcons = keyof typeof ICONS_MAP;
