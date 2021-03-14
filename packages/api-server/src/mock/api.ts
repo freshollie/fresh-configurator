@@ -45,6 +45,8 @@ const ids = Object.fromEntries(mockPorts.map((port) => [port, v4()]));
 const badBaudrate = 38400;
 
 const mockDevice = {
+  name: "mock-device",
+  variant: "BTFL",
   attitude: {
     roll: 0,
     pitch: 0,
@@ -287,7 +289,7 @@ const mockDevice = {
     supported: true,
     sectors: 128,
     totalSize: 8388608,
-    usedSize: 5000034,
+    usedSize: 2561024,
   },
   blackboxSdCardSummary: {
     supported: true,
@@ -570,7 +572,7 @@ export const readDataFlashChunk: typeof api.readDataFlashChunk = (
   _,
   chunkSize
 ) =>
-  delay(100).then(() =>
+  delay(chunkSize / 50).then(() =>
     Buffer.from(new Array(chunkSize - Math.round(Math.random() * 100)).fill(1))
   );
 
@@ -582,3 +584,9 @@ export const eraseDataFlash: typeof api.eraseDataFlash = (port) =>
       mockDevice.blackboxDataFlashSummary.usedSize = 0;
     });
   });
+
+export const readName: typeof api.readName = (port) =>
+  delay(15).then(() => mockDevice.name);
+
+export const readFcVariant: typeof api.readFcVariant = (port) =>
+  delay(5).then(() => mockDevice.variant);

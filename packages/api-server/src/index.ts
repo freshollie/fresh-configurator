@@ -1,4 +1,4 @@
-import { ApolloServer } from "apollo-server-express";
+import { ApolloError, ApolloServer } from "apollo-server-express";
 import { makeExecutableSchema } from "graphql-tools";
 import debug from "debug";
 import express from "express";
@@ -22,11 +22,12 @@ type ServerOptions = {
   mocked?: boolean;
   playground?: boolean;
   persistedQueries?: Record<string, string>;
-  offloadDirectory?: string;
+  artifactsDirectory?: string;
 };
 
 type Server = {
   apolloServer: ApolloServer;
+  rest: express.Express;
   listen: (options: ListenOptions) => Promise<number>;
 };
 
@@ -35,7 +36,7 @@ export const createServer = ({
   mocked,
   playground,
   persistedQueries,
-  offloadDirectory = `${__dirname}/offloaded/`,
+  artifactsDirectory = `${__dirname}/artifacts/`,
 }: ServerOptions = {}): Server => {
   const schema = makeExecutableSchema(graph);
 
@@ -49,10 +50,15 @@ export const createServer = ({
     : undefined;
 
   const app = express();
+  const server = http.createServer(app);
+
+  app.use("/job-artifacts", express.static(artifactsDirectory));
 
   const apolloServer = new ApolloServer({
     schema,
-    context: mocked ? mockedContext : context({ offloadDir: offloadDirectory }),
+    context: mocked
+      ? mockedContext
+      : context({ artifactsDir: artifactsDirectory }),
     playground,
     formatError: (error) => {
       log(error);
@@ -62,7 +68,6 @@ export const createServer = ({
 
   apolloServer.applyMiddleware({ app });
 
-  const server = http.createServer(app);
   if (!persistedQueries) {
     apolloServer.installSubscriptionHandlers(server);
   }
@@ -76,8 +81,47 @@ export const createServer = ({
       })
     : undefined;
 
+  if (wsServer) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useServer(
+      {
+        context: mocked
+          ? mockedContext
+          : context({ artifactsDir: artifactsDirectory }),
+        onSubscribe: persistedQueriesStore
+          ? (_ctx, msg) => {
+              const document = persistedQueriesStore[msg.payload.query];
+              if (!document) {
+                // for extra security you only allow the queries from the store
+                throw new ApolloError("404: Query Not Found");
+              }
+              return {
+                document,
+                schema,
+                variableValues: msg.payload.variables,
+              };
+            }
+          : undefined,
+        schema,
+        execute: async (args) => {
+          const result = await execute(args);
+          result.errors
+            ?.filter(
+              (e) =>
+                !e.message.includes("not open") &&
+                !e.message.includes("is not active")
+            )
+            .forEach((error) => log(error));
+          return result;
+        },
+        subscribe,
+      },
+      wsServer
+    );
+  }
   return {
     apolloServer,
+    rest: app,
     listen: async ({ port, hostname }) => {
       const listeningPort =
         port ?? (await getPort({ port: 9000, host: hostname }));
@@ -88,44 +132,6 @@ export const createServer = ({
               startTicks();
             }
 
-            if (wsServer) {
-              useServer(
-                {
-                  context: mocked
-                    ? mockedContext
-                    : context({ offloadDir: offloadDirectory }),
-                  onSubscribe: persistedQueriesStore
-                    ? (_ctx, msg) => {
-                        const document =
-                          persistedQueriesStore[msg.payload.query];
-                        if (!document) {
-                          // for extra security you only allow the queries from the store
-                          throw new Error("404: Query Not Found");
-                        }
-                        return {
-                          document,
-                          schema,
-                          variableValues: msg.payload.variables,
-                        };
-                      }
-                    : undefined,
-                  schema,
-                  execute: async (args) => {
-                    const result = await execute(args);
-                    result.errors
-                      ?.filter(
-                        (e) =>
-                          !e.message.includes("not open") &&
-                          !e.message.includes("is not active")
-                      )
-                      .forEach((error) => log(error));
-                    return result;
-                  },
-                  subscribe,
-                },
-                wsServer
-              );
-            }
             resolve(listeningPort);
           });
         } catch (e) {

@@ -1,13 +1,29 @@
-import { ApolloError, PubSub } from "apollo-server-express";
+import { PubSub } from "apollo-server-express";
+import debug from "debug";
+import type { JobType, JobUpdateType } from "./graph/__generated__";
+
+const log = debug("api-server:jobs");
+
+export type JobError = {
+  message: string;
+};
 
 type JobDetails = {
-  type: string;
+  type: JobType;
+  connectionId?: string;
   completed: boolean;
-  error?: ApolloError;
+  error?: JobError;
   progress: number;
   cancelled: boolean;
+  artifact?: string;
+  createdAt: string;
 };
-export type JobDetailsWithId = JobDetails & { id: string };
+
+type JobUpdate = {
+  type: JobUpdateType;
+  details: JobDetails & { id: string };
+};
+
 const updatedEvents = new PubSub();
 
 const jobs: Record<string, JobDetails> = {};
@@ -18,18 +34,27 @@ export const reset = (): void => {
   });
 };
 
-export const add = (jobId: string, type: string): void => {
+export const add = (
+  jobId: string,
+  type: JobType,
+  connectionId?: string
+): void => {
   const newJob = {
     type,
     completed: false,
     cancelled: false,
     progress: 0,
+    createdAt: new Date().toISOString(),
+    connectionId,
   };
   jobs[jobId] = newJob;
   updatedEvents.publish("updated", {
-    id: jobId,
-    ...newJob,
-  } as JobDetailsWithId);
+    type: "NEW",
+    details: {
+      id: jobId,
+      ...newJob,
+    },
+  } as JobUpdate);
 };
 
 export const details = (jobId: string): JobDetails | undefined => jobs[jobId];
@@ -39,32 +64,42 @@ export const all = (): ({ id: string } & JobDetails)[] =>
 
 export const progress = (jobId: string, progressValue: number): void => {
   const jobDetails = details(jobId);
-  if (jobDetails) {
+  if (jobDetails && !jobDetails.cancelled) {
     const updatedDetails = {
       ...jobDetails,
       progress: progressValue,
     };
     jobs[jobId] = updatedDetails;
-    updatedEvents.publish(jobId, {
-      id: jobId,
-      ...updatedDetails,
-    } as JobDetailsWithId);
+    updatedEvents.publish("updated", {
+      type: "CHANGED",
+      details: {
+        id: jobId,
+        ...updatedDetails,
+      },
+    } as JobUpdate);
   }
 };
 
-export const completed = (jobId: string, error?: ApolloError): void => {
+export const completed = (
+  jobId: string,
+  params?: { error?: JobError; artifact?: string }
+): void => {
   const jobDetails = details(jobId);
   if (jobDetails && !jobDetails.completed) {
+    log("Job completed", jobId);
     const updatedDetails = {
       ...jobDetails,
       completed: true,
-      error,
+      ...params,
     };
     jobs[jobId] = updatedDetails;
     updatedEvents.publish("updated", {
-      id: jobId,
-      ...updatedDetails,
-    } as JobDetailsWithId);
+      type: "CHANGED",
+      details: {
+        id: jobId,
+        ...updatedDetails,
+      },
+    } as JobUpdate);
   }
 };
 
@@ -74,14 +109,18 @@ export const cancel = (jobId: string): void => {
     const updatedDetails = {
       ...jobDetails,
       cancelled: true,
+      completed: false,
     };
     jobs[jobId] = updatedDetails;
     updatedEvents.publish("updated", {
-      id: jobId,
-      ...updatedDetails,
-    } as JobDetailsWithId);
+      type: "CHANGED",
+      details: {
+        id: jobId,
+        ...updatedDetails,
+      },
+    } as JobUpdate);
   }
 };
 
-export const onUpdated = (): AsyncIterator<JobDetailsWithId> =>
+export const onUpdated = (): AsyncIterator<JobUpdate> =>
   updatedEvents.asyncIterator("updated");
