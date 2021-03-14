@@ -55,7 +55,7 @@
     "storyshots:production": "storyshots-runner --url http://localhost:6006 --command 'serve storybook-static -l 6006'"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.6",
+    "@apollo/client": "^3.3.11",
     "@betaflight/api": "workspace:^0.3.0",
     "@betaflight/api-server": "workspace:^0.4.0",
     "@graphql-typed-document-node/core": "^3.1.0",
