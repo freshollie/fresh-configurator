@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import { apiVersion, open, ports, readSdCardSummary } from "./src";
+import { apiVersion, open, ports, readName, writeName } from "./src";
 
 (async () => {
   console.log(await ports());
@@ -11,8 +11,9 @@ import { apiVersion, open, ports, readSdCardSummary } from "./src";
   await open(port);
   console.log(apiVersion(port));
 
+  await writeName(port, "freshpv");
   // const chunk = await readDataFlashChunk(port, 10 * 4096, 512);
   // console.log(chunk);
 
-  console.log(await readSdCardSummary(port));
+  console.log(await readName(port));
 })();
