@@ -144,6 +144,23 @@ export const readBoardInfo = async (port: string): Promise<BoardInfo> => {
   };
 };
 
+export const readFcVariant = async (port: string): Promise<string> => {
+  const data = await execute(port, { code: codes.MSP_FC_VARIANT });
+  return String.fromCharCode(...times(() => data.readU8(), 4));
+};
+
+export const readName = async (port: string): Promise<string> => {
+  const data = await execute(port, { code: codes.MSP_NAME });
+  return String.fromCharCode(...times(() => data.readU8(), data.byteLength));
+};
+
+const MAX_NAME_BUFFER_SIZE = 64;
+
+export const writeName = async (port: string, name: string): Promise<void> => {
+  const buffer = Buffer.from(name.slice(0, MAX_NAME_BUFFER_SIZE));
+  await execute(port, { code: codes.MSP_SET_NAME, data: buffer });
+};
+
 export const readUID = async (port: string): Promise<string> => {
   const data = await execute(port, { code: codes.MSP_UID });
   return times(
@@ -1173,6 +1190,11 @@ export const writeBlackboxConfig = async (
 
   await execute(port, { code: codes.MSP_SET_BLACKBOX_CONFIG, data: buffer });
 };
+
+export const writePartialBlackBoxConfig = partialWriteFunc(
+  readBlackboxConfig,
+  writeBlackboxConfig
+);
 
 /**
  * Return the base 64 encoded result of the blackbox config
