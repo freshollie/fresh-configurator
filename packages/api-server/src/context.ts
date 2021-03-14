@@ -9,7 +9,7 @@ export type Context = {
   connections: typeof connections;
   jobs: typeof jobs;
   port: string;
-  offloadDir: string;
+  artifactsDir: string;
 };
 
 export const mockedContext = (): Context => ({
@@ -17,13 +17,13 @@ export const mockedContext = (): Context => ({
   connections: mockedConnections,
   jobs,
   port: "",
-  offloadDir: `${__dirname}/offloaded`,
+  artifactsDir: `${__dirname}/artifacts`,
 });
 
-export default ({ offloadDir }: { offloadDir: string }) => (): Context => ({
+export default ({ artifactsDir }: { artifactsDir: string }) => (): Context => ({
   api,
   connections,
   port: "",
   jobs,
-  offloadDir,
+  artifactsDir,
 });

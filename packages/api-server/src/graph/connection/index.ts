@@ -155,6 +155,7 @@ const resolvers: Resolvers = {
     close: async (_, { connectionId }, { connections, api }) => {
       const port = connections.getPort(connectionId);
       await api.close(port);
+      connections.close(connectionId);
       connections.closeConnections(port);
       return connectionId;
     },

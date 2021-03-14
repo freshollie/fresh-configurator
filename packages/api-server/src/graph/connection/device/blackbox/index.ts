@@ -3,14 +3,19 @@ import gql from "graphql-tag";
 import * as uuid from "uuid";
 import fs from "fs";
 import debug from "debug";
-import { Resolvers } from "../../../__generated__";
+import { format } from "date-fns";
+import { Resolvers, JobType } from "../../../__generated__";
 
 const log = debug("api-server:blackbox");
 
 const typeDefs = gql`
   type Mutation {
     createFlashDataOffloadJob(connectionId: ID!, chunkSize: Int!): JobDetails!
-    eraseFlashData(connectionId: ID!): Boolean
+    deviceEraseFlashData(connectionId: ID!): Boolean
+    deviceSetBlackboxConfig(
+      connectionId: ID!
+      config: BlackboxConfigInput!
+    ): Boolean
   }
 
   type FlightController {
@@ -34,6 +39,14 @@ const typeDefs = gql`
     rateDenom: Int!
     pDenom: Int!
     sampleRate: Int!
+  }
+
+  input BlackboxConfigInput {
+    device: Int
+    rateNum: Int
+    rateDenom: Int
+    pDenom: Int
+    sampleRate: Int
   }
 
   type BlackboxFlash {
@@ -66,13 +79,27 @@ const resolvers: Resolvers = {
   },
 
   Mutation: {
+    deviceEraseFlashData: (_, { connectionId }, { connections, api }) =>
+      api.eraseDataFlash(connections.getPort(connectionId)).then(() => null),
+    deviceSetBlackboxConfig: (
+      _,
+      { connectionId, config },
+      { connections, api }
+    ) =>
+      api
+        .writePartialBlackBoxConfig(connections.getPort(connectionId), config)
+        .then(() => null),
     createFlashDataOffloadJob: async (
       _,
       { connectionId, chunkSize },
-      { connections, jobs, api, offloadDir }
+      { connections, jobs, api, artifactsDir }
     ) => {
       const port = connections.getPort(connectionId);
-      const { usedSize, ready } = await api.readDataFlashSummary(port);
+      const [{ usedSize, ready }, variant, name] = await Promise.all([
+        api.readDataFlashSummary(port),
+        api.readFcVariant(port),
+        api.readName(port),
+      ]);
       if (!ready) {
         throw new ApolloError("Flash data is not ready to be read");
       }
@@ -80,28 +107,48 @@ const resolvers: Resolvers = {
       const jobId = uuid.v4();
 
       await fs.promises
-        .mkdir(offloadDir)
+        .mkdir(artifactsDir)
         .catch((e: { code?: string } & Error) => {
           if (e.code !== "EEXIST") {
             throw new ApolloError(
-              `Could not create offload directory: ${e.message}`
+              `Could not create artifacts directory: ${e.message}`
             );
           }
         });
+      if (!(await fs.promises.lstat(artifactsDir)).isDirectory()) {
+        throw new ApolloError(
+          `Artifacts directory (${artifactsDir}) is not a directory`
+        );
+      }
 
-      const offloadFilePath = `${offloadDir}/${jobId}`;
+      const now = new Date();
+      const artifact = `${[
+        "blackbox_log",
+        variant,
+        name,
+        format(now, "yyyyMMdd"),
+        format(now, "hhmmss"),
+      ]
+        .map((s) => s.split(" ").join(""))
+        .filter((s) => s !== "")
+        .join("_")}.bbl`;
+
+      const offloadFilePath = `${artifactsDir}/${artifact}`;
       const offloadFile = await fs.promises.open(offloadFilePath, "w");
       log(
         `Created flash data offload job: ${jobId}. Expecting to read ${usedSize}`
       );
 
-      jobs.add(jobId, "OFFLOAD_FLASH_DATA");
+      jobs.add(jobId, JobType.Offload, connectionId);
 
       (async () => {
         let address = 0;
+        let fileError: Error | undefined;
         while (
+          api.isOpen(port) &&
           connections.isOpen(connectionId) &&
           address < usedSize &&
+          jobs.details(jobId) &&
           !jobs.details(jobId)?.cancelled
         ) {
           log(`Reading chunk ${address}`);
@@ -116,34 +163,44 @@ const resolvers: Resolvers = {
 
           if (chunk) {
             log(`Read chunk ${chunk.byteLength}`);
-            // eslint-disable-next-line no-await-in-loop
-            await offloadFile.write(chunk);
+            if (chunk.length < 1) {
+              break;
+            }
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              await offloadFile.write(chunk);
+            } catch (e) {
+              fileError = e;
+              break;
+            }
             address += chunk.byteLength;
             jobs.progress(jobId, address);
           }
         }
 
-        const connectionClosed = !connections.isOpen(connectionId)
-          ? new ApolloError("Connection closed to device")
-          : undefined;
+        const connectionClosed =
+          !api.isOpen(port) || !connections.isOpen(connectionId)
+            ? { message: "Connection closed to device" }
+            : undefined;
         const cancelled = jobs.details(jobId)?.cancelled;
-        const errorClosing = await offloadFile.close().catch((e: Error) => {
-          log(`Error closing file: ${e.message}`);
-          return new ApolloError("Could not finish storing data offload");
-        });
+        const errorClosing = await offloadFile
+          .close()
+          .then(() => undefined)
+          .catch((e: Error) => {
+            log(`Error closing file: ${e.message}`);
+            return { message: "Could not finish storing data offload" };
+          });
 
-        const error = (errorClosing || connectionClosed) ?? cancelled;
+        const error = errorClosing ?? connectionClosed ?? fileError;
 
-        if (!error) {
-          jobs.completed(jobId);
+        if (!error && !cancelled) {
+          jobs.completed(jobId, { artifact });
         } else {
           await fs.promises.unlink(offloadFilePath).catch((e) => {
             log(`Error removing file after error: ${e.message}`);
           });
 
-          if (!cancelled) {
-            jobs.completed(jobId, error as ApolloError);
-          }
+          jobs.completed(jobId, { error });
         }
       })();
 
