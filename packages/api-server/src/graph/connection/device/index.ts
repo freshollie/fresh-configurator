@@ -31,7 +31,8 @@ const typeDefs = gql`
   }
 
   type FlightController {
-    _void: Boolean
+    variant: String!
+    name: String!
   }
 `;
 
@@ -42,6 +43,10 @@ const resolvers: Resolvers = {
   Mutation: {
     deviceReset: (_, { connectionId }, { api, connections }) =>
       api.resetConfig(connections.getPort(connectionId)).then(() => null),
+  },
+  FlightController: {
+    variant: (_, __, { port, api }) => api.readFcVariant(port),
+    name: (_, __, { port, api }) => api.readName(port),
   },
 };
 
