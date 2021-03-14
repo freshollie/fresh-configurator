@@ -248,7 +248,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writePartialBlackBoxConfig).toHaveBeenCalledWith(
+      expect(mockApi.writePartialBlackboxConfig).toHaveBeenCalledWith(
         "/dev/serial",
         {
           device: BlackboxDevices.SERIAL,
