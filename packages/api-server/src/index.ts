@@ -23,6 +23,7 @@ type ServerOptions = {
   playground?: boolean;
   persistedQueries?: Record<string, string>;
   artifactsDirectory?: string;
+  legacyWsProtocol?: boolean;
 };
 
 type Server = {
@@ -37,6 +38,7 @@ export const createServer = ({
   playground,
   persistedQueries,
   artifactsDirectory = `${__dirname}/artifacts/`,
+  legacyWsProtocol = false,
 }: ServerOptions = {}): Server => {
   const schema = makeExecutableSchema(graph);
 
@@ -68,13 +70,11 @@ export const createServer = ({
 
   apolloServer.applyMiddleware({ app });
 
-  if (!persistedQueries) {
+  if (legacyWsProtocol) {
     apolloServer.installSubscriptionHandlers(server);
   }
 
-  // Use the `graphql-ws` server if we are using persisted queries
-  // as it's the only server type which can cope with this
-  const wsServer = persistedQueries
+  const wsServer = !legacyWsProtocol
     ? new ws.Server({
         server,
         path: "/graphql",
