@@ -3,6 +3,7 @@ import "source-map-support/register";
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import url from "url";
+import fs from "fs";
 import { createServer } from "@betaflight/api-server";
 import persistedQueries from "./gql/__generated__/persisted-queries-server.json";
 
@@ -16,11 +17,20 @@ const PRODUCTION = process.env.NODE_ENV === "production";
 let backendPort: number;
 
 const startBackend = async (): Promise<void> => {
+  const artifactsDirectory = `${app.getPath(
+    "temp"
+  )}/artifacts-${new Date().getTime()}`;
+  await fs.promises.mkdir(artifactsDirectory);
+
   const mocked = process.env.MOCKED === "true" || E2E;
   if (mocked) {
     console.log("Creating backend in mocked mode");
   }
-  const backend = createServer({ mocked, persistedQueries });
+  const backend = createServer({
+    mocked,
+    persistedQueries,
+    artifactsDirectory,
+  });
 
   const port = await backend.listen({
     hostname: "127.0.0.1",
