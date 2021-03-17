@@ -30,6 +30,12 @@ module.exports = {
     "@storybook/addon-actions",
     "@storybook/addon-links",
     "@storybook/addon-docs",
+    {
+      name: "storybook-addon-turbo-build",
+      options: {
+        optimizationLevel: 2,
+      },
+    },
   ],
   typescript: {
     check: true,
