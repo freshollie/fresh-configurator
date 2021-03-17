@@ -75,8 +75,7 @@
     "serialize-error": "^8.0.1",
     "source-map-support": "^0.5.19",
     "styled-components": "^5.0.1",
-    "three": "^0.124.0",
-    "zen-observable-ts": "^1.0.0"
+    "three": "^0.124.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
