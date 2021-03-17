@@ -2583,6 +2583,7 @@ __metadata:
     graphql-ws: ^3.2.0
     html-webpack-plugin: ^5.0.0-beta.4
     identity-obj-proxy: ^3.0.0
+    iterall: ^1.3.0
     jest-date-mock: ^1.0.8
     jest-styled-components: ^7.0.3
     markdown-to-jsx: ^7.1.1
@@ -2598,6 +2599,7 @@ __metadata:
     react-switch: ^5.0.1
     react-three-fiber: ^5.3.10
     semver: ^7.1.3
+    serialize-error: ^8.0.1
     serve: ^11.3.2
     source-map-support: ^0.5.19
     spectron: ^13.0.0
@@ -2612,6 +2614,7 @@ __metadata:
     webpack-cli: ^3
     webpack-dev-server: ^3.11.1
     webpackbar: ^5.0.0-3
+    zen-observable-ts: ^1.0.0
   languageName: unknown
   linkType: soft
 
@@ -7127,6 +7130,13 @@ __metadata:
   version: 0.8.0
   resolution: "@types/zen-observable@npm:0.8.0"
   checksum: 63a7bf7d119c4239201952b004902a85be41643f8bfaee14b1881ea5a35508b6dce2cb63b9402152d7ccff8afde03ead9e3192c2666532fb5227667f297eb32f
+  languageName: node
+  linkType: hard
+
+"@types/zen-observable@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "@types/zen-observable@npm:0.8.2"
+  checksum: f48643c09a5fb00503d5b5c156779870bc5c96c4cc7f3d0f643619752a04eed784de6a37c9121e284d2cdd8ec70e3e00a73613797f009f37dbe6795ffb9607c5
   languageName: node
   linkType: hard
 
@@ -25594,6 +25604,15 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
+"serialize-error@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "serialize-error@npm:8.0.1"
+  dependencies:
+    type-fest: ^0.20.2
+  checksum: 7410009c1e35c08ca13b38d6871e4584bbf75788f133db25d1c3d66402fceb6a3642ebd4e795c7dad1f412167bfcd10289b7379de0655ea933404f4d2c53cd75
+  languageName: node
+  linkType: hard
+
 "serialize-javascript@npm:^2.1.2":
   version: 2.1.2
   resolution: "serialize-javascript@npm:2.1.2"
@@ -29823,7 +29842,17 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"zen-observable@npm:^0.8.0, zen-observable@npm:^0.8.14":
+"zen-observable-ts@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "zen-observable-ts@npm:1.0.0"
+  dependencies:
+    "@types/zen-observable": ^0.8.2
+    zen-observable: ^0.8.15
+  checksum: 285d473b5aefeabdeb434fedbcf4698f286d807bb1aece10a6e6372f30f996fb169fd8a8ee729b24a0ea0f723fde967dd2459f0396bdd377d3d101f846ccf45e
+  languageName: node
+  linkType: hard
+
+"zen-observable@npm:^0.8.0, zen-observable@npm:^0.8.14, zen-observable@npm:^0.8.15":
   version: 0.8.15
   resolution: "zen-observable@npm:0.8.15"
   checksum: 7d155f8a75b9314f9f31e70a31edcd897b0e8a1313737502ab84a573e49d2c333b738e415c156334a6e910c363ce546b59fa7921eff61440285caa99c843df74

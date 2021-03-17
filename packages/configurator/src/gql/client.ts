@@ -1,8 +1,10 @@
 import { InMemoryCache, ApolloClient, gql, ApolloLink } from "@apollo/client";
-import WebSocketLink from "./WebSocketLink";
+import WebSocketLink from "./links/WebSocketLink";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
+import persistedQueries from "./__generated__/persisted-queries.json";
+import IpcLink from "./links/IpcLink";
 
 // eslint-disable-next-line @betaflight-tools/ts-graphql/gql-type-assertion
 const typeDefs = gql`
@@ -239,6 +241,19 @@ export const artifactsAddress = `${wsBackend.replace(
   "http"
 )}/job-artifacts`;
 
+const electron = window.location.search.includes("electron=true");
+const link = electron
+  ? // Dynamically import electron only if we are running in an electron environment
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports, global-require, import/no-extraneous-dependencies
+    new IpcLink({ ipc: require("electron").ipcRenderer }, persistedQueries)
+  : new WebSocketLink(
+      {
+        url: `${wsBackend}/graphql`,
+        keepAlive: 99999999999,
+      },
+      persistedQueries
+    );
+
 const client = new ApolloClient({
   cache: cache(),
   typeDefs,
@@ -262,11 +277,7 @@ const client = new ApolloClient({
     //     return data;
     //   })
     // ),
-    new WebSocketLink({
-      url: `${wsBackend}/graphql`,
-      keepAlive: 99999999999,
-      lazy: false,
-    }),
+    link,
   ]),
 });
 

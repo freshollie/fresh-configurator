@@ -1,11 +1,12 @@
 import "source-map-support/register";
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import url from "url";
 import fs from "fs";
 import { createServer } from "@betaflight/api-server";
-import persistedQueries from "./gql/__generated__/persisted-queries-server.json";
+import persistedQueries from "../gql/__generated__/persisted-queries-server.json";
+import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -14,12 +15,11 @@ let mainWindow: BrowserWindow | undefined;
 const E2E = process.env.E2E === "true";
 const PRODUCTION = process.env.NODE_ENV === "production";
 
-let backendPort: number;
+const artifactsDirectory = `${app.getPath(
+  "temp"
+)}/artifacts-${new Date().getTime()}`;
 
 const startBackend = async (): Promise<void> => {
-  const artifactsDirectory = `${app.getPath(
-    "temp"
-  )}/artifacts-${new Date().getTime()}`;
   await fs.promises.mkdir(artifactsDirectory);
 
   const mocked = process.env.MOCKED === "true" || E2E;
@@ -32,12 +32,22 @@ const startBackend = async (): Promise<void> => {
     artifactsDirectory,
   });
 
-  const port = await backend.listen({
-    hostname: "127.0.0.1",
+  const link = createSchemaLink({
+    schema: backend.schema,
+    context: backend.context,
   });
-  console.log(`Starting backend on ${port}`);
+  createIpcExecutor({ link, ipc: ipcMain, persistedQueries });
 
-  backendPort = port;
+  if (mocked && !PRODUCTION) {
+    backend.startMockTicks();
+  }
+
+  if (!PRODUCTION) {
+    const port = await backend.listen({
+      hostname: "127.0.0.1",
+    });
+    console.log(`Starting backend on ${port}`);
+  }
 };
 
 // Temporary fix broken high-dpi scale factor on Windows (125% scaling)
@@ -59,8 +69,7 @@ const createWindow = (): void => {
     },
   });
 
-  const backendAddress = `ws://localhost:${backendPort}`;
-  const searchQuery = `backend=${backendAddress}&electron=true`;
+  const searchQuery = `electron=true&artifacts=file://${artifactsDirectory}`;
   if (!PRODUCTION) {
     console.log("loading renderer in development");
     mainWindow.loadURL(

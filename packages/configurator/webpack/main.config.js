@@ -6,7 +6,7 @@ const tsconfig = require("../tsconfig.json");
 
 module.exports = (_, { mode }) => ({
   mode: mode || "development",
-  entry: "./src/main.ts",
+  entry: "./src/electron/main.ts",
   target: "electron11.1-main",
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
