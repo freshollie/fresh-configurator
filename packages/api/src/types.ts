@@ -1,10 +1,5 @@
 import { TupleOf } from "./utils";
 
-export type VoltageMeters = {
-  id: number;
-  voltage: number;
-};
-
 export type AnalogValues = {
   voltage: number;
   mahDrawn: number;
