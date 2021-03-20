@@ -9,7 +9,6 @@ import {
 import codes from "./codes";
 
 import {
-  VoltageMeters,
   ImuData,
   Axes3D,
   Status,
@@ -78,6 +77,8 @@ import {
 import { huffmanDecodeBuffer } from "./huffman";
 
 export * from "./osd";
+export * from "./power";
+export * from "./power/types";
 
 export * from "./types";
 export {
@@ -108,17 +109,6 @@ export {
   blackboxDevices,
 } from "./features";
 export { mergeDeep } from "./utils";
-
-export const readVoltages = async (port: string): Promise<VoltageMeters[]> => {
-  const data = await execute(port, { code: codes.MSP_VOLTAGE_METERS });
-  return times(
-    () => ({
-      id: data.readU8(),
-      voltage: data.readU8() / 10.0,
-    }),
-    3
-  );
-};
 
 export const readBoardInfo = async (port: string): Promise<BoardInfo> => {
   const api = apiVersion(port);
