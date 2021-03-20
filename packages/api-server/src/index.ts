@@ -5,11 +5,11 @@ import express from "express";
 import http from "http";
 import ws from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
-import { execute, parse, subscribe } from "graphql";
+import { execute, GraphQLSchema, parse, subscribe } from "graphql";
 import getPort from "get-port";
 import { startTicks } from "./mock/api";
 import graph from "./graph";
-import context, { mockedContext } from "./context";
+import context, { Context, mockedContext } from "./context";
 
 const log = debug("api-server:errors");
 
@@ -27,7 +27,10 @@ type ServerOptions = {
 };
 
 type Server = {
+  schema: GraphQLSchema;
+  context: () => Context;
   apolloServer: ApolloServer;
+  startMockTicks: () => void;
   rest: express.Express;
   listen: (options: ListenOptions) => Promise<number>;
 };
@@ -56,11 +59,13 @@ export const createServer = ({
 
   app.use("/job-artifacts", express.static(artifactsDirectory));
 
+  const contextGenerator = mocked
+    ? mockedContext
+    : context({ artifactsDir: artifactsDirectory });
+
   const apolloServer = new ApolloServer({
     schema,
-    context: mocked
-      ? mockedContext
-      : context({ artifactsDir: artifactsDirectory }),
+    context: contextGenerator,
     playground,
     formatError: (error) => {
       log(error);
@@ -85,9 +90,7 @@ export const createServer = ({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useServer(
       {
-        context: mocked
-          ? mockedContext
-          : context({ artifactsDir: artifactsDirectory }),
+        context: contextGenerator,
         onSubscribe: persistedQueriesStore
           ? (_ctx, msg) => {
               const document = persistedQueriesStore[msg.payload.query];
@@ -120,6 +123,9 @@ export const createServer = ({
     );
   }
   return {
+    schema,
+    context: contextGenerator,
+    startMockTicks: startTicks,
     apolloServer,
     rest: app,
     listen: async ({ port, hostname }) => {

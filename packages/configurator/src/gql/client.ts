@@ -1,8 +1,10 @@
 import { InMemoryCache, ApolloClient, gql, ApolloLink } from "@apollo/client";
-import WebSocketLink from "./WebSocketLink";
+import WebSocketLink from "./links/WebSocketLink";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
+import persistedQueries from "./__generated__/persisted-queries.json";
+import IpcLink from "./links/IpcLink";
 
 // eslint-disable-next-line @betaflight-tools/ts-graphql/gql-type-assertion
 const typeDefs = gql`
@@ -234,10 +236,16 @@ export const resolvers = (initialState?: {
 // be dynamically passed to us by electron
 const searchParams = new URLSearchParams(window.location.search.slice(1));
 const wsBackend = searchParams.get("backend") ?? "ws://localhost:9000";
-export const artifactsAddress = `${wsBackend.replace(
-  "ws",
-  "http"
-)}/job-artifacts`;
+export const artifactsAddress =
+  searchParams.get("artifacts") ??
+  `${wsBackend.replace("ws", "http")}/job-artifacts`;
+
+const link = window.ipcRenderer
+  ? new IpcLink({ ipc: window.ipcRenderer }, persistedQueries)
+  : new WebSocketLink({
+      url: `${wsBackend}/graphql`,
+      keepAlive: 99999999999,
+    });
 
 const client = new ApolloClient({
   cache: cache(),
@@ -262,11 +270,7 @@ const client = new ApolloClient({
     //     return data;
     //   })
     // ),
-    new WebSocketLink({
-      url: `${wsBackend}/graphql`,
-      keepAlive: 99999999999,
-      lazy: false,
-    }),
+    link,
   ]),
 });
 

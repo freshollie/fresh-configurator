@@ -232,7 +232,7 @@ jobs:
         run: yarn workspace @betaflight/configurator build
 
       - name: E2E
-        uses: GabrielBB/xvfb-action@v1.2
+        uses: GabrielBB/xvfb-action@v1.4
         with:
           run: yarn e2e:production
 

@@ -6,7 +6,10 @@ const tsconfig = require("../tsconfig.json");
 
 module.exports = (_, { mode }) => ({
   mode: mode || "development",
-  entry: "./src/main.ts",
+  entry: {
+    main: "./src/electron/main.ts",
+    preload: "./src/electron/preload.ts",
+  },
   target: "electron11.1-main",
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
@@ -54,7 +57,6 @@ module.exports = (_, { mode }) => ({
   },
   output: {
     path: `${__dirname}/../build`,
-    filename: "main.js",
   },
   optimization: {
     minimize: mode === "production",
