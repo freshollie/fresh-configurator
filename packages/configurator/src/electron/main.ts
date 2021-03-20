@@ -67,7 +67,8 @@ const createWindow = (): void => {
       // Allow acccess to temp directory
       webSecurity: false,
       allowRunningInsecureContent: false,
-      nodeIntegration: false,
+      // Need these enabled when e2e is running
+      nodeIntegration: E2E,
       enableRemoteModule: E2E,
       preload: `${__dirname}/preload.js`,
     },
