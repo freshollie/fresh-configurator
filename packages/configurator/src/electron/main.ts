@@ -64,12 +64,16 @@ const createWindow = (): void => {
     height: 768,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
+      // Allow acccess to temp directory
+      webSecurity: false,
+      allowRunningInsecureContent: false,
+      nodeIntegration: false,
       enableRemoteModule: E2E,
+      preload: `${__dirname}/preload.js`,
     },
   });
 
-  const searchQuery = `electron=true&artifacts=file://${artifactsDirectory}`;
+  const searchQuery = `artifacts=file://${artifactsDirectory}`;
   if (!PRODUCTION) {
     console.log("loading renderer in development");
     mainWindow.loadURL(

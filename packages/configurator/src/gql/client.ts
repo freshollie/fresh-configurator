@@ -236,23 +236,16 @@ export const resolvers = (initialState?: {
 // be dynamically passed to us by electron
 const searchParams = new URLSearchParams(window.location.search.slice(1));
 const wsBackend = searchParams.get("backend") ?? "ws://localhost:9000";
-export const artifactsAddress = `${wsBackend.replace(
-  "ws",
-  "http"
-)}/job-artifacts`;
+export const artifactsAddress =
+  searchParams.get("artifacts") ??
+  `${wsBackend.replace("ws", "http")}/job-artifacts`;
 
-const electron = window.location.search.includes("electron=true");
-const link = electron
-  ? // Dynamically import electron only if we are running in an electron environment
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports, global-require, import/no-extraneous-dependencies
-    new IpcLink({ ipc: require("electron").ipcRenderer }, persistedQueries)
-  : new WebSocketLink(
-      {
-        url: `${wsBackend}/graphql`,
-        keepAlive: 99999999999,
-      },
-      persistedQueries
-    );
+const link = window.ipcRenderer
+  ? new IpcLink({ ipc: window.ipcRenderer }, persistedQueries)
+  : new WebSocketLink({
+      url: `${wsBackend}/graphql`,
+      keepAlive: 99999999999,
+    });
 
 const client = new ApolloClient({
   cache: cache(),

@@ -47,7 +47,6 @@ module.exports = {
   webpackFinal: (config) => {
     config.externals = {
       "@serialport/bindings": "commonjs @serialport/bindings",
-      electron: "commonjs electron",
     };
     config.module.rules = config.module.rules.map((data) => {
       if (`${data.test}`.includes("svg")) {

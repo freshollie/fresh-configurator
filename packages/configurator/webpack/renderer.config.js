@@ -25,7 +25,6 @@ module.exports = (_, { mode }) => ({
   },
   externals: {
     "@serialport/bindings": "commonjs @serialport/bindings",
-    electron: "commonjs electron",
   },
   module: {
     rules: [
