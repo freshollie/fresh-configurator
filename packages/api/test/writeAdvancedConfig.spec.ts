@@ -1,12 +1,12 @@
 import mockMsp from "./mockMsp";
-import { writeAdvancedPidConfig } from "../src";
+import { writeAdvancedConfig } from "../src";
 import codes from "../src/codes";
 
-describe("writeAdvancedPidConfig", () => {
+describe("writeAdvancedConfig", () => {
   it("should write the advanced pid config for a v1.31.0 device", async () => {
     mockMsp.setApiVersion("1.31.0");
 
-    await writeAdvancedPidConfig("/dev/someport", {
+    await writeAdvancedConfig("/dev/someport", {
       gyroSyncDenom: 3,
       pidProcessDenom: 2,
       useUnsyncedPwm: false,

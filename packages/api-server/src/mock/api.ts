@@ -112,7 +112,7 @@ const mockDevice = {
       },
     ],
   },
-  advancedPidConfig: {
+  advancedConfig: {
     gyroSyncDenom: 3,
     pidProcessDenom: 2,
     useUnsyncedPwm: false,
@@ -444,8 +444,8 @@ export const writeBoardAlignmentConfig = (
     mockDevice.alignment = alignment;
   });
 
-export const readAdvancedPidConfig = (port: string) =>
-  delay(30).then(() => mockDevice.advancedPidConfig);
+export const readAdvancedConfig = (port: string) =>
+  delay(30).then(() => mockDevice.advancedConfig);
 
 export const readBoardInfo = (port: string) =>
   delay(10).then(() => mockDevice.boardInfo);
@@ -461,15 +461,12 @@ export const writePartialMixerConfig: typeof api.writePartialMixerConfig = (
     mockDevice.mixerConfig = mergeDeep(mockDevice.mixerConfig, config);
   });
 
-export const writePartialAdvancedPidConfig: typeof api.writePartialAdvancedPidConfig = (
+export const writePartialAdvancedConfig: typeof api.writePartialAdvancedConfig = (
   port,
   config
 ) =>
   delay(10).then(() => {
-    mockDevice.advancedPidConfig = mergeDeep(
-      mockDevice.advancedPidConfig,
-      config
-    );
+    mockDevice.advancedConfig = mergeDeep(mockDevice.advancedConfig, config);
   });
 
 export const readBeeperConfig = (port: string) =>

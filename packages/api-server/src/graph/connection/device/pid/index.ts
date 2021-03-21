@@ -44,7 +44,7 @@ const resolvers: Resolvers = {
     pid: () => ({} as never),
   },
   PidConfig: {
-    protocols: (_, __, { api, port }) => api.readAdvancedPidConfig(port),
+    protocols: (_, __, { api, port }) => api.readAdvancedConfig(port),
   },
   Mutation: {
     deviceSetPidProtocols: (
@@ -54,7 +54,7 @@ const resolvers: Resolvers = {
     ) => {
       log("Setting pid protocols", protocols);
       return api
-        .writePartialAdvancedPidConfig(
+        .writePartialAdvancedConfig(
           connections.getPort(connectionId),
           protocols
         )

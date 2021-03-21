@@ -1,8 +1,8 @@
 import mockMsp from "./mockMsp";
-import { readAdvancedPidConfig } from "../src";
+import { readAdvancedConfig } from "../src";
 import codes from "../src/codes";
 
-describe("readAdvancedPidConfig", () => {
+describe("readAdvancedConfig", () => {
   it("should read the advanced pid config from a v1.31.0 device", async () => {
     mockMsp.setApiVersion("1.31.0");
     mockMsp.setResponse([
@@ -26,7 +26,7 @@ describe("readAdvancedPidConfig", () => {
       2,
     ]);
 
-    expect(await readAdvancedPidConfig("/dev/someport")).toEqual({
+    expect(await readAdvancedConfig("/dev/someport")).toEqual({
       gyroSyncDenom: 3,
       pidProcessDenom: 2,
       useUnsyncedPwm: false,

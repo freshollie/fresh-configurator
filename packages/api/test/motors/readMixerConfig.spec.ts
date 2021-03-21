@@ -1,5 +1,5 @@
-import mockMsp from "./mockMsp";
-import { readMixerConfig } from "../src";
+import mockMsp from "../mockMsp";
+import { readMixerConfig } from "../../src";
 
 describe("readMixerConfig", () => {
   it("should read the mixer config for a v1.38.0 device", async () => {

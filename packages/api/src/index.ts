@@ -21,8 +21,7 @@ import {
   DisarmFlags,
   SerialConfig,
   RebootTypes,
-  AdvancedPidConfig,
-  MixerConfig,
+  AdvancedConfig,
   BeeperConfig,
   Beepers,
   Sensors,
@@ -79,6 +78,10 @@ import { huffmanDecodeBuffer } from "./huffman";
 export * from "./osd";
 export * from "./power";
 export * from "./power/types";
+export * from "./pid";
+export * from "./pid/types";
+export * from "./motors";
+export * from "./motors/types";
 
 export * from "./types";
 export {
@@ -617,12 +620,12 @@ export const writeBoardAlignmentConfig = async (
   });
 };
 
-export const readAdvancedPidConfig = async (
+export const readAdvancedConfig = async (
   port: string
-): Promise<AdvancedPidConfig> => {
+): Promise<AdvancedConfig> => {
   const api = apiVersion(port);
   const data = await execute(port, { code: codes.MSP_ADVANCED_CONFIG });
-  const config: AdvancedPidConfig = {
+  const config: AdvancedConfig = {
     gyroSyncDenom: 0,
     pidProcessDenom: 0,
     useUnsyncedPwm: false,
@@ -674,9 +677,9 @@ export const readAdvancedPidConfig = async (
   return config;
 };
 
-export const writeAdvancedPidConfig = async (
+export const writeAdvancedConfig = async (
   port: string,
-  config: AdvancedPidConfig
+  config: AdvancedConfig
 ): Promise<void> => {
   const api = apiVersion(port);
   const buffer = new WriteBuffer();
@@ -715,37 +718,9 @@ export const writeAdvancedPidConfig = async (
   await execute(port, { code: codes.MSP_SET_ADVANCED_CONFIG, data: buffer });
 };
 
-export const readMixerConfig = async (port: string): Promise<MixerConfig> => {
-  const data = await execute(port, { code: codes.MSP_MIXER_CONFIG });
-  const api = apiVersion(port);
-  return {
-    mixer: data.readU8(),
-    reversedMotors: !!(semver.gte(api, "1.36.0") ? data.readU8() : 0),
-  };
-};
-
-export const writeMixerConfig = async (
-  port: string,
-  config: MixerConfig
-): Promise<void> => {
-  const buffer = new WriteBuffer();
-  const api = apiVersion(port);
-
-  buffer.push8(config.mixer);
-  if (semver.gte(api, "1.36.0")) {
-    buffer.push8(config.reversedMotors ? 1 : 0);
-  }
-  await execute(port, { code: codes.MSP_SET_MIXER_CONFIG, data: buffer });
-};
-
-export const writePartialMixerConfig = partialWriteFunc(
-  readMixerConfig,
-  writeMixerConfig
-);
-
-export const writePartialAdvancedPidConfig = partialWriteFunc(
-  readAdvancedPidConfig,
-  writeAdvancedPidConfig
+export const writePartialAdvancedConfig = partialWriteFunc(
+  readAdvancedConfig,
+  writeAdvancedConfig
 );
 
 const ALLOWED_DSHOT_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];

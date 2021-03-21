@@ -60,57 +60,6 @@ export type ExtendedStatus = Status & {
   armingDisabledFlags: DisarmFlags[];
 };
 
-export enum FilterTypes {
-  PT1 = 0,
-  BIQUAD = 1,
-}
-
-export type LowpassFilter = {
-  hz: number;
-  type: FilterTypes;
-};
-
-export type NotchFilter = {
-  hz: number;
-  cutoff: number;
-};
-
-export type FilterConfig = {
-  gryo: {
-    hardwareLPF: number;
-    hardware32KhzLPF: number;
-    rpmNotchHarmonics: number;
-    rpmNotchMinHz: number;
-    lowpass: LowpassFilter & {
-      dynMinHz: number;
-      dynMaxHz: number;
-    };
-    lowpass2: LowpassFilter;
-    notch: NotchFilter;
-    notch2: NotchFilter;
-  };
-  derm: {
-    lowpass: LowpassFilter & {
-      dynMinHz: number;
-      dynMaxHz: number;
-    };
-    lowpass2: LowpassFilter;
-    notch: NotchFilter & {
-      range: number;
-      widthPercent: number;
-      q: number;
-      minHz: number;
-      maxHz: number;
-    };
-  };
-  yaw: {
-    lowpass: {
-      hz: number;
-    };
-  };
-  dynLpfCurveExpo: 0;
-};
-
 export enum EscProtocols {
   PWM,
   ONESHOT125,
@@ -125,7 +74,7 @@ export enum EscProtocols {
   DISABLED,
 }
 
-export type AdvancedPidConfig = {
+export type AdvancedConfig = {
   gyroSyncDenom: number;
   pidProcessDenom: number;
   useUnsyncedPwm: boolean;
@@ -316,11 +265,6 @@ export enum McuTypes {
   H723_725,
   UNKNOWN = 255,
 }
-
-export type MixerConfig = {
-  mixer: number;
-  reversedMotors: boolean;
-};
 
 export enum Beepers {
   GYRO_CALIBRATED,

@@ -1,11 +1,11 @@
 import mockMsp from "./mockMsp";
-import { writePartialAdvancedPidConfig } from "../src";
+import { writePartialAdvancedConfig } from "../src";
 import codes from "../src/codes";
 
-describe("writePartialAdvancedPidConfig", () => {
+describe("writePartialAdvancedConfig", () => {
   it("should write the digital idle percentage for a v1.31.0 device", async () => {
     mockMsp.setApiVersion("1.31.0");
-    // Respond to `readAdvancedPidConfig`
+    // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
       3,
       2,
@@ -27,7 +27,7 @@ describe("writePartialAdvancedPidConfig", () => {
       2,
     ]);
 
-    await writePartialAdvancedPidConfig("/dev/someport", {
+    await writePartialAdvancedConfig("/dev/someport", {
       digitalIdlePercent: 10,
     });
 
@@ -39,7 +39,7 @@ describe("writePartialAdvancedPidConfig", () => {
 
   it("should write the pid protocols for a v1.31.0 device", async () => {
     mockMsp.setApiVersion("1.31.0");
-    // Respond to `readAdvancedPidConfig`
+    // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
       3,
       2,
@@ -61,7 +61,7 @@ describe("writePartialAdvancedPidConfig", () => {
       2,
     ]);
 
-    await writePartialAdvancedPidConfig("/dev/someport", {
+    await writePartialAdvancedConfig("/dev/someport", {
       gyroSyncDenom: 10,
       gyroUse32kHz: true,
       fastPwmProtocol: 5,
@@ -78,7 +78,7 @@ describe("writePartialAdvancedPidConfig", () => {
 
   it("should allow pid partial protocol properties to be given", async () => {
     mockMsp.setApiVersion("1.31.0");
-    // Respond to `readAdvancedPidConfig`
+    // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
       3,
       2,
@@ -100,7 +100,7 @@ describe("writePartialAdvancedPidConfig", () => {
       2,
     ]);
 
-    await writePartialAdvancedPidConfig("/dev/someport", {
+    await writePartialAdvancedConfig("/dev/someport", {
       gyroSyncDenom: 10,
       fastPwmProtocol: 5,
       pidProcessDenom: 4,

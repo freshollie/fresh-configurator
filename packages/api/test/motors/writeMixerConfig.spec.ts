@@ -1,6 +1,6 @@
-import mockMsp from "./mockMsp";
-import { writeMixerConfig } from "../src";
-import codes from "../src/codes";
+import mockMsp from "../mockMsp";
+import { writeMixerConfig } from "../../src";
+import codes from "../../src/codes";
 
 describe("writeMixerConfig", () => {
   it("should write the mixer config for a v1.38.0 device", async () => {
