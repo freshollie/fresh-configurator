@@ -31,9 +31,7 @@ const resolvers: Resolvers = {
     reversedDirection: (_, __, { api, port }) =>
       api.readMixerConfig(port).then((config) => config.reversedMotors),
     digitalIdlePercent: (_, __, { api, port }) =>
-      api
-        .readAdvancedPidConfig(port)
-        .then((config) => config.digitalIdlePercent),
+      api.readAdvancedConfig(port).then((config) => config.digitalIdlePercent),
   },
   Mutation: {
     deviceSetMotorsDirection: async (
@@ -51,10 +49,9 @@ const resolvers: Resolvers = {
       { connectionId, idlePercentage },
       { api, connections }
     ) => {
-      await api.writePartialAdvancedPidConfig(
-        connections.getPort(connectionId),
-        { digitalIdlePercent: idlePercentage }
-      );
+      await api.writePartialAdvancedConfig(connections.getPort(connectionId), {
+        digitalIdlePercent: idlePercentage,
+      });
       return null;
     },
   },

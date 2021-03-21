@@ -1,6 +1,6 @@
-import mockMsp from "./mockMsp";
-import { writePartialMixerConfig } from "../src";
-import codes from "../src/codes";
+import mockMsp from "../mockMsp";
+import { writePartialMixerConfig } from "../../src";
+import codes from "../../src/codes";
 
 describe("writePartialMixerConfig", () => {
   it("should use the existing mixer config to write the motor direction as reversed for a v1.38.0 device", async () => {

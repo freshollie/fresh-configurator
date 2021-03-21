@@ -16,7 +16,7 @@ describe("device.motors", () => {
       mixer: 2,
       reversedMotors: true,
     });
-    mockApi.readAdvancedPidConfig.mockResolvedValue({
+    mockApi.readAdvancedConfig.mockResolvedValue({
       digitalIdlePercent: 5.5,
     } as any);
 
@@ -47,9 +47,7 @@ describe("device.motors", () => {
       digitalIdlePercent: 5.5,
     });
     expect(mockApi.readMixerConfig).toHaveBeenCalledWith("/dev/something");
-    expect(mockApi.readAdvancedPidConfig).toHaveBeenCalledWith(
-      "/dev/something"
-    );
+    expect(mockApi.readAdvancedConfig).toHaveBeenCalledWith("/dev/something");
   });
 
   describe("setDeviceMotorsDirection", () => {
@@ -86,7 +84,7 @@ describe("device.motors", () => {
 
   describe("deviceSetDigitalIdleSpeed", () => {
     it("should write the digital idle percentage to the baord", async () => {
-      mockApi.writePartialAdvancedPidConfig.mockResolvedValue();
+      mockApi.writePartialAdvancedConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
       const { mutate } = createTestClient(apolloServer);
@@ -110,7 +108,7 @@ describe("device.motors", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writePartialAdvancedPidConfig).toHaveBeenCalledWith(
+      expect(mockApi.writePartialAdvancedConfig).toHaveBeenCalledWith(
         "/dev/something",
         {
           digitalIdlePercent: 7.5,

@@ -31,7 +31,7 @@ describe("device.pid", () => {
         debugMode: 0,
         debugModeCount: 0,
       };
-      mockApi.readAdvancedPidConfig.mockResolvedValue(advancedConfig);
+      mockApi.readAdvancedConfig.mockResolvedValue(advancedConfig);
       add("/dev/something", "someconnectionid");
 
       const { query } = createTestClient(apolloServer);
@@ -66,9 +66,7 @@ describe("device.pid", () => {
         motorPwmRate: advancedConfig.motorPwmRate,
         pidProcessDenom: advancedConfig.pidProcessDenom,
       });
-      expect(mockApi.readAdvancedPidConfig).toHaveBeenCalledWith(
-        "/dev/something"
-      );
+      expect(mockApi.readAdvancedConfig).toHaveBeenCalledWith("/dev/something");
     });
   });
 
@@ -77,7 +75,7 @@ describe("device.pid", () => {
       add("/dev/somedevice", "abcd");
 
       const { mutate } = createTestClient(apolloServer);
-      mockApi.writePartialAdvancedPidConfig.mockResolvedValue(undefined);
+      mockApi.writePartialAdvancedConfig.mockResolvedValue(undefined);
 
       const { errors } = await mutate({
         mutation: gql`
@@ -102,7 +100,7 @@ describe("device.pid", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(mockApi.writePartialAdvancedPidConfig).toHaveBeenCalledWith(
+      expect(mockApi.writePartialAdvancedConfig).toHaveBeenCalledWith(
         "/dev/somedevice",
         {
           fastPwmProtocol: 9000,
