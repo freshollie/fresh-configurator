@@ -37,7 +37,7 @@ export const readCurrentMeters = async (
       mAhDrawn: data.readU16(), // mAh
       amperage: data.readU16() / 1000, // A
     }),
-    data.byteLength / 2
+    data.byteLength / 5
   );
 };
 
