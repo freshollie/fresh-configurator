@@ -10,6 +10,9 @@ import {
   PidConfig,
 } from "./types";
 
+export type { AdvancedPidConfig, FilterConfig, PidConfig };
+export { AntiGravityModes, FilterTypes };
+
 export const readFilterConfig = async (port: string): Promise<FilterConfig> => {
   const api = apiVersion(port);
   const data = await execute(port, { code: codes.MSP_FILTER_CONFIG });

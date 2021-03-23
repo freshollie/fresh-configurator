@@ -4,6 +4,8 @@ import codes from "../codes";
 import { partialWriteFunc } from "../utils";
 import { MixerConfig, MotorConfig } from "./types";
 
+export type { MixerConfig, MotorConfig } from "./types";
+
 export const readMotorConfig = async (port: string): Promise<MotorConfig> => {
   const api = apiVersion(port);
   const data = await execute(port, { code: codes.MSP_MOTOR_CONFIG });
