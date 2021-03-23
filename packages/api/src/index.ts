@@ -77,11 +77,8 @@ import { huffmanDecodeBuffer } from "./huffman";
 
 export * from "./osd";
 export * from "./power";
-export * from "./power/types";
 export * from "./pid";
-export * from "./pid/types";
 export * from "./motors";
-export * from "./motors/types";
 
 export * from "./types";
 export {

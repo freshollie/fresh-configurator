@@ -12,7 +12,26 @@ import {
   MeterIndentiers,
   VoltageMeterConfig,
   VoltageMeters,
+  BatteryCurrentMeterSources,
+  BatteryVoltageMeterSources,
 } from "./types";
+
+export type {
+  BatteryConfig,
+  BatteryState,
+  CurrentMeterConfig,
+  CurrentMeters,
+  LegacyCurrentMeterConfig,
+  LegacyVoltageMeterConfig,
+  VoltageMeterConfig,
+  VoltageMeters,
+};
+
+export {
+  MeterIndentiers,
+  BatteryCurrentMeterSources,
+  BatteryVoltageMeterSources,
+};
 
 export const readVoltageMeters = async (
   port: string
