@@ -3,11 +3,11 @@ import { Sensors } from "@betaflight/api";
 import React from "react";
 import { gql } from "../src/gql/apollo";
 import { resolvers } from "../src/gql/client";
-import DisabledSensorsManager from "../src/managers/DisabledSensorsManager";
+import DisabledSensorManager from "../src/managers/DisabledSensorManager";
 
 export default {
-  title: "Managers/Disabled Sensors",
-  component: DisabledSensorsManager,
+  title: "Managers/Disabled Sensor",
+  component: DisabledSensorManager,
 };
 
 const disabledSensorsMock = (disabled: Sensors[]): MockedResponse => ({
@@ -50,7 +50,7 @@ export const AccelerometerEnabled: React.FC = () => (
       connection: "abc",
     })}
   >
-    <DisabledSensorsManager />
+    <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
   </MockedProvider>
 );
 
@@ -61,6 +61,6 @@ export const AccelerometerDisabled: React.FC = () => (
       connection: "abc",
     })}
   >
-    <DisabledSensorsManager />
+    <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
   </MockedProvider>
 );

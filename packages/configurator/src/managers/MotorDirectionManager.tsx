@@ -1,6 +1,7 @@
 import React from "react";
+import { OptionButtons } from "bumbag";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const MotorDirection = gql`
   query MotorDirection($connection: ID!) {
@@ -18,15 +19,14 @@ const MotorDirection = gql`
 >;
 
 const MotorDirectionManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(MotorDirection, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
-    skip: !connection,
   });
 
-  const [setDirection, { loading: setting }] = useMutation(
+  const [setDirection] = useMutation(
     gql`
       mutation SetMotorsDirection($connection: ID!, $reversed: Boolean!) {
         deviceSetMotorsDirection(connectionId: $connection, reversed: $reversed)
@@ -50,31 +50,25 @@ const MotorDirectionManager: React.FC = () => {
   const reversed = data?.connection.device.motors.reversedDirection ?? false;
 
   return (
-    <form onChange={(e) => e.target}>
-      {(["Normal", "Reverse"] as const).map((name) => (
-        <label htmlFor={name}>
-          <input
-            type="radio"
-            value={name}
-            key={name}
-            disabled={setting || loading}
-            checked={
-              (name === "Normal" && !reversed) ||
-              (name === "Reverse" && reversed)
-            }
-            onChange={(e) => {
-              setDirection({
-                variables: {
-                  connection: connection ?? "",
-                  reversed: e.target.value === "Reverse",
-                },
-              });
-            }}
-          />
-          {name}
-        </label>
-      ))}
-    </form>
+    <OptionButtons
+      value={reversed.toString()}
+      disabled={loading}
+      type="radio"
+      onChange={
+        ((_: string[], value: string) => {
+          setDirection({
+            variables: {
+              connection,
+              reversed: value === "true",
+            },
+          });
+        }) as never
+      }
+      options={[
+        { label: "Normal", value: "false" },
+        { label: "Reverse", value: "true" },
+      ]}
+    />
   );
 };
 

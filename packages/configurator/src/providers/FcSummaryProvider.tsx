@@ -1,8 +1,8 @@
 import React from "react";
 import { DisarmFlags } from "@betaflight/api";
-import Table from "../components/Table";
-import useConnectionState from "../hooks/useConnectionState";
+import { Table, Tag, Set } from "bumbag";
 import { gql, useQuery } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 const ARM_SWITCH_KEY = DisarmFlags[DisarmFlags.ARM_SWITCH];
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data } = useQuery(
     gql`
       query FcSummary($connection: ID!) {
@@ -39,10 +39,9 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       pollInterval: 1000 / refreshRate,
-      skip: !connection,
     }
   );
 
@@ -60,36 +59,48 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
       ) ?? [];
 
   return (
-    <Table>
-      <tbody>
-        <tr>
-          <td>Arming Disable Flags:</td>
-          <td>{flagNames.join(" ")}</td>
-        </tr>
-        <tr>
-          <td>Battery voltage:</td>
-          <td>{data?.connection.device.power.voltage ?? ""} V</td>
-        </tr>
-        <tr>
-          <td>Capacity drawn:</td>
-          <td>{data?.connection.device.power.mahDrawn ?? ""} mAh</td>
-        </tr>
-        <tr>
-          <td>Current draw:</td>
-          <td>
+    <Table isStriped>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>Arming Disable Flags:</Table.Cell>
+          <Table.Cell>
+            <Set>
+              {flagNames.map((flag) => (
+                <Tag variant="outlined">{flag}</Tag>
+              ))}
+            </Set>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Battery voltage:</Table.Cell>
+          <Table.Cell>
+            {data?.connection.device.power.voltage ?? ""} V
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Capacity drawn:</Table.Cell>
+          <Table.Cell>
+            {data?.connection.device.power.mahDrawn ?? ""} mAh
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Current draw:</Table.Cell>
+          <Table.Cell>
             {data
               ? (
                   Math.round(data.connection.device.power.amperage * 100) / 100
                 ).toFixed(2)
               : "0.00"}{" "}
             A
-          </td>
-        </tr>
-        <tr>
-          <td>RSSI:</td>
-          <td>{data?.connection.device.rc.rssi.value ?? ""}%</td>
-        </tr>
-      </tbody>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>RSSI:</Table.Cell>
+          <Table.Cell>
+            {data?.connection.device.rc.rssi.value ?? ""}%
+          </Table.Cell>
+        </Table.Row>
+      </Table.Body>
     </Table>
   );
 };

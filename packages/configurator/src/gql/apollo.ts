@@ -43,7 +43,7 @@ export function useQuery<TData = any, TVariables = OperationVariables>(
   // Use the original apollo implementation to show the previous data
   // when loading new data from a query change
   // https://github.com/apollographql/apollo-client/issues/7038
-  result.data = result.data ?? result.previousData;
+  result.data = options?.skip ? undefined : result.data ?? result.previousData;
 
   const { startPolling, stopPolling } = result;
   const { pollInterval, skip } = options ?? {};

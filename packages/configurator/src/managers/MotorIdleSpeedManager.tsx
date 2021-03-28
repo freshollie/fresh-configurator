@@ -1,35 +1,8 @@
 import React from "react";
-import styled from "../theme";
-import Range from "../components/Range";
+import { OptionButtons } from "bumbag";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
-
-const Indicators = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  & > :first-child {
-    transform: translateX(-50%);
-  }
-
-  & > :last-child {
-    transform: translateX(50%);
-  }
-`;
-
-const RANGE_TO_PERCENTAGE: Record<number, number> = {
-  0: 4,
-  1: 5,
-  2: 7,
-};
-
-const PERCENTAGE_TO_RANGE: Record<number, number> = {
-  4: 0,
-  5: 1,
-  7: 2,
-};
+import useConnection from "../hooks/useConnection";
 
 const IdleSpeedConfig = gql`
   query MotorDigitalIdleSpeed($connection: ID!) {
@@ -47,16 +20,16 @@ const IdleSpeedConfig = gql`
 >;
 
 const MotorIdleSpeedManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const log = useLogger();
   const { data, loading } = useQuery(IdleSpeedConfig, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
     skip: !connection,
   });
 
-  const [setConnection, { loading: setting }] = useMutation(
+  const [setConnection] = useMutation(
     gql`
       mutation SetMotorDigitalIdleSpeed(
         $connection: ID!
@@ -93,37 +66,31 @@ const MotorIdleSpeedManager: React.FC = () => {
   );
 
   return (
-    <div>
-      <Range
-        value={
-          PERCENTAGE_TO_RANGE[
-            data?.connection.device.motors.digitalIdlePercent ?? 0
-          ] ?? 4
-        }
-        step={1}
-        min={0}
-        max={2}
-        disabled={setting || loading}
-        onChange={async (e) => {
+    <OptionButtons
+      value={(
+        data?.connection.device.motors.digitalIdlePercent ?? 0
+      ).toString()}
+      disabled={loading}
+      type="radio"
+      options={[
+        { label: "Low", value: "4" },
+        { label: "Medium", value: "5" },
+        { label: "High", value: "7" },
+      ]}
+      onChange={
+        ((_: string[], value: string) => {
           if (connection) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const newValue = RANGE_TO_PERCENTAGE[parseInt(e.target.value, 10)]!;
-            log(`Setting motor idle to <b>${newValue}%</b>`);
+            log(`Setting motor idle to <b>${value}%</b>`);
             setConnection({
               variables: {
                 connection,
-                idlePercentage: newValue,
+                idlePercentage: Number(value),
               },
             });
           }
-        }}
-      />
-      <Indicators>
-        <div>Low</div>
-        <div>Mid</div>
-        <div>High</div>
-      </Indicators>
-    </div>
+        }) as never
+      }
+    />
   );
 };
 

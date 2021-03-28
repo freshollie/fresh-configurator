@@ -5,9 +5,9 @@ import {
   McuTypes,
 } from "@betaflight/api";
 import React from "react";
-import useConnectionState from "../hooks/useConnectionState";
-import Button from "../components/Button";
+import { Box, Text, Button, Alert } from "bumbag";
 import { useMutation, useQuery, gql } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 type McuGroupName = keyof typeof MCU_GROUPS;
 const MCU_GROUP_NAMES = Object.keys(MCU_GROUPS) as McuGroupName[];
@@ -82,12 +82,11 @@ const PidProtocolsAndProcessor = gql`
 >;
 
 const CpuDefaultsManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading, error } = useQuery(PidProtocolsAndProcessor, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
-    skip: !connection,
   });
 
   const [setProtocols, { loading: saving }] = useMutation(
@@ -130,55 +129,58 @@ const CpuDefaultsManager: React.FC = () => {
     isEqual(recommenedProtocols.F7, data.connection.device.pid.protocols);
 
   return (
-    <div>
-      {loading && <span>Retrieving CPU data</span>}
-      {error && <span>Error loading CPU data</span>}
+    <Box>
+      {loading && <Text>Retrieving CPU data</Text>}
+      {error && <Text>Error loading CPU data</Text>}
       {expectedConfig &&
         data &&
         !isEqual(expectedConfig, data.connection.device.pid.protocols) && (
-          <div>
-            <div>
+          <Alert type="warning" variant="bordered">
+            <Text>
               We have detected your CPU as <b>{processorType}</b> and can apply
               some settings for best performance
-            </div>
-            <Button
-              disabled={saving}
-              onClick={() => {
-                setProtocols({
-                  variables: {
-                    connection: connection ?? "",
-                    protocols: expectedConfig,
-                  },
-                });
-              }}
-            >
-              Apply
-            </Button>
-          </div>
+            </Text>
+            <Box>
+              <Button
+                size="small"
+                disabled={saving}
+                onClick={() => {
+                  setProtocols({
+                    variables: {
+                      connection,
+                      protocols: expectedConfig,
+                    },
+                  });
+                }}
+              >
+                Apply
+              </Button>
+            </Box>
+          </Alert>
         )}
       {expectedConfig &&
         data &&
         isEqual(expectedConfig, data.connection.device.pid.protocols) && (
-          <div>
+          <Text>
             Recommended settings already applied for your CPU (
             <b>{processorType}</b>)
-          </div>
+          </Text>
         )}
       {data && !expectedConfig && processorType && (
-        <div>
+        <Text>
           Your detected CPU type (<b>{processorType}</b>) is unsupported.
           However, you can still apply settings based on the CPU types below
-        </div>
+        </Text>
       )}
       {data && !processorType && <div>Could not detect processor type</div>}
       {!expectedConfig && !loading && (
-        <>
+        <Box>
           <Button
             disabled={saving || f7Applied}
             onClick={() => {
               setProtocols({
                 variables: {
-                  connection: connection ?? "",
+                  connection,
                   protocols: recommenedProtocols.F7,
                 },
               });
@@ -191,7 +193,7 @@ const CpuDefaultsManager: React.FC = () => {
             onClick={() => {
               setProtocols({
                 variables: {
-                  connection: connection ?? "",
+                  connection,
                   protocols: recommenedProtocols.F4,
                 },
               });
@@ -199,9 +201,9 @@ const CpuDefaultsManager: React.FC = () => {
           >
             {!f4Applied ? "Apply F4 settings" : "F4 settings applied"}
           </Button>
-        </>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

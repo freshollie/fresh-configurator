@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Info, ResetButton } from "./ModelView.styles";
+import { Button, Columns, Text, Box, Level } from "bumbag";
 import Model, { ModelTypes } from "../Model";
 import Paper from "../Paper";
 
@@ -12,29 +12,45 @@ const ModelView: React.FC<{
 }) => {
   const [yawOffset, setYawOffset] = useState(0);
   return (
-    <Container>
+    <Box position="relative" height="100%">
       <Paper>
-        <Info>
-          <div>
-            <div>Heading:</div>
-            <div>Pitch:</div>
-            <div>Roll:</div>
-          </div>
-          <div>
-            <div>{yaw} deg</div>
-            <div>{pitch} deg</div>
-            <div>{roll} deg</div>
-          </div>
-        </Info>
-        <ResetButton onClick={() => setYawOffset(-yaw)}>
-          Reset Z axis, offset: {yawOffset} deg
-        </ResetButton>
+        <Level width="100%" position="absolute" padding="minor-2" zIndex="10">
+          <Columns fontSize="100">
+            <Columns.Column>
+              <Box>
+                <Text>Heading:</Text>
+              </Box>
+              <Box>
+                <Text>Pitch:</Text>
+              </Box>
+              <Box>
+                <Text>Roll:</Text>
+              </Box>
+            </Columns.Column>
+            <Columns.Column>
+              <Box>
+                <Text>{yaw} deg</Text>
+              </Box>
+              <Box>
+                <Text>{pitch} deg</Text>
+              </Box>
+              <Box>
+                <Text>{roll} deg</Text>
+              </Box>
+            </Columns.Column>
+          </Columns>
+          <Box>
+            <Button onClick={() => setYawOffset(-yaw)} size="small">
+              Reset Z axis, offset: {yawOffset} deg
+            </Button>
+          </Box>
+        </Level>
         <Model
           name={modelType}
           attitude={{ roll, pitch, yaw: yaw + yawOffset }}
         />
       </Paper>
-    </Container>
+    </Box>
   );
 };
 
