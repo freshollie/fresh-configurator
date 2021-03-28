@@ -350,7 +350,8 @@ export const startTicks = (): void => {
 const delay = (ms?: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-export const ports = (): Promise<string[]> => delay(10).then(() => mockPorts);
+export const ports: typeof api.ports = () =>
+  delay(10).then(() => mockPorts.map((port) => ({ path: port })));
 export const isOpen: typeof api.isOpen = (port) => mockPorts.includes(port);
 export const close: typeof api.close = (port) =>
   delay(10).then(() => undefined);
