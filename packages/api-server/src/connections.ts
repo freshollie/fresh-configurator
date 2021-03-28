@@ -3,8 +3,16 @@ import { PubSub, ApolloError } from "apollo-server-express";
 const changeEvents = new PubSub();
 const reconnectingEvents = new PubSub();
 
-let connectionsMap: Record<string, string | undefined> = {};
-let connectingAttempts: Record<string, Promise<void> | undefined> = {};
+let connectionsMap: Record<string, string> = {};
+let connectingAttempts: Record<string, Promise<void>> = {};
+
+export const forPort = (port: string): string | undefined =>
+  Object.entries(connectionsMap).find(
+    ([, connection]) => port === connection
+  )?.[0];
+
+export const isConnecting = (port: string): boolean =>
+  !!connectingAttempts[port];
 
 export const getPort = (connectionId: string): string => {
   const port = connectionsMap[connectionId];
@@ -33,7 +41,7 @@ export const connectLock = async (
 
   return connectPromise.finally(() => {
     if (connectingAttempts[port] === connectPromise) {
-      connectingAttempts[port] = undefined;
+      delete connectingAttempts[port];
     }
   });
 };
@@ -44,7 +52,7 @@ export const add = (port: string, connnectionId: string): void => {
 
 export const close = (connectionId: string): void => {
   changeEvents.publish(connectionId, undefined);
-  connectionsMap[connectionId] = undefined;
+  delete connectionsMap[connectionId];
 };
 
 export const setReconnecting = (
@@ -55,9 +63,12 @@ export const setReconnecting = (
 };
 
 export const change = (connectionId: string, newConnectionId: string): void => {
-  connectionsMap[newConnectionId] = connectionsMap[connectionId];
-  connectionsMap[connectionId] = undefined;
-  changeEvents.publish(connectionId, newConnectionId);
+  const port = connectionsMap[connectionId];
+  if (port) {
+    connectionsMap[newConnectionId] = port;
+    delete connectionsMap[connectionId];
+    changeEvents.publish(connectionId, newConnectionId);
+  }
 };
 
 export const closeConnections = (port: string): void => {

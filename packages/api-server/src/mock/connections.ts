@@ -5,6 +5,11 @@ const changeEvents = new PubSub();
 const reconnectEvents = new PubSub();
 const connectionsMap: Record<string, string | undefined> = {};
 
+export const forPort = (port: string): string | undefined =>
+  Object.entries(connectionsMap).find(
+    ([, connection]) => connection === port
+  )?.[0];
+export const isConnecting = (port: string): boolean => false;
 export const getPort = (connectionId: string): string => {
   const port = connectionsMap[connectionId];
 

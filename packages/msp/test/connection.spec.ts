@@ -213,7 +213,7 @@ describe("close", () => {
 
 describe("ports", () => {
   it("should list the available ports", async () => {
-    expect(await ports()).toEqual(mockPorts);
+    expect((await ports()).map(({ path }) => path)).toEqual(mockPorts);
   });
 });
 

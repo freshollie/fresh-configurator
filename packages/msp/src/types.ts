@@ -45,3 +45,13 @@ export type MspCommand = {
   timeout?: number;
   match?: (data: MspDataView) => boolean;
 };
+
+export type PortInfo = {
+  path: string;
+  manufacturer?: string;
+  serialNumber?: string;
+  pnpId?: string;
+  locationId?: string;
+  productId?: string;
+  vendorId?: string;
+};

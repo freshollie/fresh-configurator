@@ -19,6 +19,7 @@ import {
   ConnectionOptions,
   OpenConnectionFunction,
   OnCloseCallback,
+  PortInfo,
 } from "./types";
 
 // Import bindings when we actually need them, so that libraries
@@ -132,12 +133,12 @@ export const execute = async (
   );
 };
 
-export const ports = async (): Promise<string[]> => {
+export const ports = async (): Promise<PortInfo[]> => {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!SerialPort.Binding) {
     await initialiseBindings();
   }
-  return SerialPort.list().then((data) => data.map(({ path }) => path));
+  return SerialPort.list();
 };
 
 /**
@@ -248,7 +249,7 @@ export const open: OpenConnectionFunction = async (
   // is removed
   const disconnectMonitor = setInterval(async () => {
     const list = await ports();
-    if (!list.includes(port) && serial.isOpen) {
+    if (!list.find(({ path }) => port === path) && serial.isOpen) {
       close(port);
     }
   }, 250);
