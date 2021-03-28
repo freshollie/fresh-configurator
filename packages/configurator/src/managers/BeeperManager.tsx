@@ -1,8 +1,8 @@
 import React from "react";
 import { Beepers } from "@betaflight/api";
+import { Switch } from "bumbag";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
-import Switch from "../components/Switch";
+import useConnection from "../hooks/useConnection";
 
 const REQUIRED_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];
 
@@ -25,10 +25,10 @@ const BeeperConfig = gql`
 >;
 
 const BeeperManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(BeeperConfig, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
     skip: !connection,
   });
@@ -66,33 +66,28 @@ const BeeperManager: React.FC = () => {
     );
 
   return (
-    <div>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label htmlFor="motor-beeper-switch">
-        Motor beeper
-        <Switch
-          id="motor-beeper-switch"
-          checked={active}
-          disabled={loading || !data || setting}
-          onChange={(checked) => {
-            setBeeperConfig({
-              variables: {
-                connection: connection ?? "",
-                config: checked
-                  ? {
-                      tone: 1,
-                      conditions: REQUIRED_CONDITIONS,
-                    }
-                  : {
-                      tone: 0,
-                      conditions: [],
-                    },
-              },
-            });
-          }}
-        />
-      </label>
-    </div>
+    <Switch
+      id="motor-beeper-switch"
+      checked={active}
+      label={active ? "On" : "Off"}
+      disabled={loading || !data || setting}
+      onChange={(e) =>
+        setBeeperConfig({
+          variables: {
+            connection,
+            config: ((e.target as unknown) as { checked: boolean }).checked
+              ? {
+                  tone: 1,
+                  conditions: REQUIRED_CONDITIONS,
+                }
+              : {
+                  tone: 0,
+                  conditions: [],
+                },
+          },
+        })
+      }
+    />
   );
 };
 

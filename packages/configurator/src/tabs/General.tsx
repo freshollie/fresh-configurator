@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { Sensors } from "@betaflight/api";
 import Widget from "../components/Widget";
 import BeeperManager from "../managers/BeeperManager";
 import BoardAlignmentManager from "../managers/BoardAlignmentManager";
 import CpuDefaultsManager from "../managers/CpuDefaultsManager";
 import MotorDirectionManager from "../managers/MotorDirectionManager";
 import MotorIdleSpeedManager from "../managers/MotorIdleSpeedManager";
-import DisabledSensorsManager from "../managers/DisabledSensorsManager";
+import DisabledSensorManager from "../managers/DisabledSensorManager";
 import Title from "../components/Title";
 
 const Layout = styled.div`
@@ -55,7 +56,7 @@ const General: React.FC = () => (
         <Widget>
           <header>Sensors</header>
           <main>
-            <DisabledSensorsManager />
+            <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
           </main>
         </Widget>
       </div>

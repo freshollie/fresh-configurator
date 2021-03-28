@@ -58,7 +58,10 @@
     "@apollo/client": "^3.3.11",
     "@betaflight/api": "workspace:^0.3.0",
     "@betaflight/api-server": "workspace:^0.4.0",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@graphql-typed-document-node/core": "^3.1.0",
+    "@reach/router": "^1.3.4",
+    "bumbag": "^1.11.6",
     "date-fns": "^2.11.0",
     "graphql": "*",
     "graphql-ws": "^3.2.0",
@@ -75,7 +78,8 @@
     "serialize-error": "^8.0.1",
     "source-map-support": "^0.5.19",
     "styled-components": "^5.0.1",
-    "three": "^0.124.0"
+    "three": "^0.124.0",
+    "wouter": "^2.7.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -94,6 +98,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jest": "*",
     "@types/puppeteer": "^2.0.1",
+    "@types/reach__router": "^1.3.7",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-is": "^16.7.1",

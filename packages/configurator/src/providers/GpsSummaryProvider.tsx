@@ -1,16 +1,15 @@
 import React from "react";
 import { Sensors } from "@betaflight/api";
-import Status from "../components/Status";
-import Table from "../components/Table";
-import useConnectionState from "../hooks/useConnectionState";
+import { Table, Tag } from "bumbag";
 import { gql, useQuery } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 type Props = {
   refreshRate: number;
 };
 
 const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
 
   const { data: sensorsData } = useQuery(
     gql`
@@ -29,9 +28,8 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
     }
   );
   const sensors = sensorsData?.connection.device.sensors.available ?? [];
@@ -56,39 +54,41 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !sensors.includes(Sensors.GPS) || !connection,
+      skip: !sensors.includes(Sensors.GPS),
       pollInterval: 1000 / refreshRate,
     }
   );
 
   return (
-    <Table>
-      <tbody>
-        <tr>
-          <td>3D Fix:</td>
-          <td>
+    <Table isStriped>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>3D Fix:</Table.Cell>
+          <Table.Cell>
             {data && (
-              <Status positive={data.connection.device.gps.fix}>
+              <Tag
+                palette={data.connection.device.gps.fix ? "success" : "danger"}
+              >
                 {data.connection.device.gps.fix ? "True" : "False"}
-              </Status>
+              </Tag>
             )}
-          </td>
-        </tr>
-        <tr>
-          <td>Sats:</td>
-          <td>{data?.connection.device.gps.numSat}</td>
-        </tr>
-        <tr>
-          <td>Latitude:</td>
-          <td>{data?.connection.device.gps.lat}</td>
-        </tr>
-        <tr>
-          <td>Longitude:</td>
-          <td>{data?.connection.device.gps.lon}</td>
-        </tr>
-      </tbody>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Sats:</Table.Cell>
+          <Table.Cell>{data?.connection.device.gps.numSat}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Latitude:</Table.Cell>
+          <Table.Cell>{data?.connection.device.gps.lat}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Longitude:</Table.Cell>
+          <Table.Cell>{data?.connection.device.gps.lon}</Table.Cell>
+        </Table.Row>
+      </Table.Body>
     </Table>
   );
 };

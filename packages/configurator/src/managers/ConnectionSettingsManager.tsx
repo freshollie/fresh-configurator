@@ -40,7 +40,9 @@ const ConnectionSettingsManager: React.FC = () => {
   const { data: portsData, loading: loadingPorts } = useQuery(
     gql`
       query AvailablePorts {
-        ports
+        ports {
+          id
+        }
       }
     ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
       import("./__generated__/ConnectionSettingsManager").AvailablePortsQuery,
@@ -61,7 +63,7 @@ const ConnectionSettingsManager: React.FC = () => {
     if (port === null && !loadingPorts) {
       updateSettings({
         variables: {
-          port: portsData?.ports[0] ?? "/dev/rfcomm0",
+          port: portsData?.ports[0]?.id ?? "/dev/rfcomm0",
         },
       });
     }
@@ -70,7 +72,7 @@ const ConnectionSettingsManager: React.FC = () => {
   // Only show the connection selector if we are not connected
   return !connected ? (
     <ConnectionSelector
-      ports={portsData?.ports ?? undefined}
+      ports={portsData?.ports.map(({ id }) => id) ?? undefined}
       selectedPort={port ?? undefined}
       selectedBaud={baudRate}
       disabled={connecting}

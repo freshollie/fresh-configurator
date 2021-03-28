@@ -1,64 +1,62 @@
-import React from "react";
-import SensorsListProvider from "./providers/SensorListProvider";
-import HeaderBar from "./components/HeaderBar";
+import React, { useEffect, useState } from "react";
+import { Redirect, Route, Router, Switch } from "wouter";
+import ConnectionProvider from "./context/ConnectionProvider";
+import General from "./pages/configuration/General";
+import Overview from "./pages/configuration/Overview";
+import Home from "./pages/Home";
 
-import ConnectionSettingsManager from "./managers/ConnectionSettingsManager";
-import ConnectionManager from "./managers/ConnectionManager";
-import NavigationManager from "./managers/NavigationManager";
-import { TabRouter } from "./routing";
+// returns the current hash location in a normalized form
+// (excluding the leading '#' symbol)
+const currentLocation = (): string =>
+  window.location.hash.replace(/^#/, "") || "/";
 
-import FcStatusProvider from "./providers/FcStatusProvider";
-import LogsProvider from "./providers/LogsProvider";
-import MainLayout from "./layouts/MainLayout";
+const navigate = (to: string): string => {
+  console.log(to);
+  window.location.hash = to;
+  return window.location.hash;
+};
 
-import Setup from "./tabs/Setup";
-import Landing from "./tabs/Landing";
-import Receiver from "./tabs/Receiver";
-import General from "./tabs/General";
-import Blackbox from "./tabs/Blackbox";
+const useHashLocation = (): [string, typeof navigate] => {
+  const [loc, setLoc] = useState(currentLocation());
+
+  useEffect(() => {
+    // this function is called whenever the hash changes
+    const handler = (): void => setLoc(currentLocation());
+
+    // subscribe to hash changes
+    window.addEventListener("hashchange", handler);
+    return () => window.removeEventListener("hashchange", handler);
+  }, []);
+
+  return [loc, navigate];
+};
 
 const App: React.FC = () => (
-  <MainLayout>
-    <header>
-      <HeaderBar>
-        <div className="tools">
-          <SensorsListProvider />
-          <ConnectionSettingsManager />
-          <ConnectionManager />
-        </div>
-      </HeaderBar>
-      <LogsProvider />
-    </header>
-    <main>
-      <nav>
-        <NavigationManager />
-      </nav>
-      <div className="tab-content">
-        <TabRouter>
-          <div id="general">
-            <General />
-          </div>
-          <div id="landing">
-            <Landing />
-          </div>
-          <div id="setup">
-            <Setup />
-          </div>
-          <div id="receiver">
-            <Receiver />
-          </div>
-          <div id="blackbox">
-            <Blackbox />
-          </div>
-        </TabRouter>
-      </div>
-    </main>
-    <footer>
-      <div>
-        <FcStatusProvider refreshRate={10} />
-      </div>
-    </footer>
-  </MainLayout>
+  <Router hook={useHashLocation}>
+    <Switch>
+      <Route path="/">
+        <Home />
+      </Route>
+      <Route path="/connections/:connectionId*">
+        <ConnectionProvider>
+          <Switch>
+            <Route path="/connections/:connectionId/">
+              <Overview />
+            </Route>
+            <Route path="/connections/:connectionId/general">
+              <General />
+            </Route>
+            <Route>
+              <Redirect to="/" />
+            </Route>
+          </Switch>
+        </ConnectionProvider>
+      </Route>
+      <Route>
+        <Redirect to="/" />
+      </Route>
+    </Switch>
+  </Router>
 );
 
 export default App;

@@ -3,6 +3,7 @@
  * of all stories
  */
 import React from "react";
+import { Provider as BumbagProvider } from "bumbag";
 import { ThemeProvider } from "../src/theme";
 
 declare global {
@@ -148,7 +149,13 @@ const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
     disableAnimations();
   }
 
-  return <ThemeProvider theme={{ dark }}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={{ dark }}>
+      <BumbagProvider colorMode={dark ? "dark" : "light"}>
+        {children}
+      </BumbagProvider>
+    </ThemeProvider>
+  );
 };
 
 export default AutoTheme;

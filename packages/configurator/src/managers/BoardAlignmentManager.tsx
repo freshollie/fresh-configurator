@@ -1,7 +1,8 @@
 import React from "react";
+import { Box } from "bumbag";
 import BoardAligner from "../components/BoardAligner";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const BoadAlignment = gql`
   query DeviceBoardAlignment($connection: ID!) {
@@ -21,12 +22,11 @@ const BoadAlignment = gql`
 >;
 
 const BoardAlignmentManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(BoadAlignment, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
-    skip: !connection,
   });
 
   const [setAlignment] = useMutation(
@@ -57,7 +57,7 @@ const BoardAlignmentManager: React.FC = () => {
   );
 
   return (
-    <div style={{ opacity: loading ? 0.5 : 1 }}>
+    <Box opacity={loading ? 0.5 : 1}>
       <BoardAligner
         alignment={
           data?.connection.device.alignment ?? { roll: 0, pitch: 0, yaw: 0 }
@@ -65,13 +65,13 @@ const BoardAlignmentManager: React.FC = () => {
         onChange={(newAlignment) =>
           setAlignment({
             variables: {
-              connection: connection ?? "",
+              connection,
               alignment: newAlignment,
             },
           })
         }
       />
-    </div>
+    </Box>
   );
 };
 
