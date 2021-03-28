@@ -4,17 +4,19 @@ function* getNodes(context, node) {
   const queue = [node];
   while (queue.length) {
     const currentNode = queue.shift();
-    yield currentNode;
-    const visitorKeys = allVisitorKeys[currentNode.type];
-    if (!visitorKeys) continue;
-    for (const visitorKey of visitorKeys) {
-      const child = currentNode[visitorKey];
-      if (!child) {
-        continue;
-      } else if (Array.isArray(child)) {
-        queue.push(...child);
-      } else {
-        queue.push(child);
+    if (currentNode) {
+      yield currentNode;
+      const visitorKeys = allVisitorKeys[currentNode.type];
+      if (!visitorKeys) continue;
+      for (const visitorKey of visitorKeys) {
+        const child = currentNode[visitorKey];
+        if (!child) {
+          continue;
+        } else if (Array.isArray(child)) {
+          queue.push(...child);
+        } else {
+          queue.push(child);
+        }
       }
     }
   }
