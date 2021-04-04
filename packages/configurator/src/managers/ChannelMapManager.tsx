@@ -1,6 +1,7 @@
+import { Select } from "bumbag";
 import React from "react";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const ChannelMap = gql`
   query ChannelMap($connection: ID!) {
@@ -20,12 +21,11 @@ const ChannelMap = gql`
 >;
 
 const ChannelMapManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading, error } = useQuery(ChannelMap, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
-    skip: !connection,
   });
 
   const [setChannelMap, { loading: setting }] = useMutation(
@@ -53,29 +53,30 @@ const ChannelMapManager: React.FC = () => {
   const currentMap = data?.connection.device.rc.receiver.channelMap ?? [];
 
   return (
-    <div>
-      <label htmlFor="channel-map-selector">
-        Channel Map{" "}
-        <select
-          id="channel-map-selector"
-          disabled={loading || setting || !!error}
-          value={currentMap.join("")}
-          onChange={(e) => {
-            console.log(e.target.value.split(""));
-            setChannelMap({
-              variables: {
-                connection: connection ?? "",
-                map: e.target.value.split(""),
-              },
-            });
-          }}
-        >
-          <option disabled>Select channel map</option>
-          <option value="AETR1234">FrSky / Futaba / Hitec</option>
-          <option value="TAER1234">Spektrum / Graupner / JR</option>
-        </select>
-      </label>
-    </div>
+    <Select
+      disabled={loading || setting || !!error}
+      value={currentMap.join("")}
+      onChange={(e) => {
+        setChannelMap({
+          variables: {
+            connection,
+            map: ((e.target as unknown) as { value: string }).value.split(""),
+          },
+        });
+      }}
+      options={[
+        {
+          value: "",
+          disabled: true,
+          label: "Select channel map",
+        },
+        {
+          value: "AETR1234",
+          label: "FrSky / Futaba / Hitec",
+        },
+        { value: "TAER1234", label: "Spektrum / Graupner / JR" },
+      ]}
+    />
   );
 };
 

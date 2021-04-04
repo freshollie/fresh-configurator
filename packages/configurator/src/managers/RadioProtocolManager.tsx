@@ -4,16 +4,17 @@ import {
   SerialPortFunctions,
   SerialRxProviders,
 } from "@betaflight/api";
+import { Select } from "bumbag";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const PROVIDERS = [
   {
-    name: "FrSky",
+    label: "FrSky",
     value: SerialRxProviders.SBUS,
   },
-  { name: "FlySky", value: SerialRxProviders.IBUS },
-  { name: "CrossFire", value: SerialRxProviders.CRSF },
+  { label: "FlySky", value: SerialRxProviders.IBUS },
+  { label: "CrossFire", value: SerialRxProviders.CRSF },
 ];
 
 const DataQuery = gql`
@@ -37,7 +38,7 @@ const DataQuery = gql`
 >;
 
 const RadioProtocolManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data: serialPortsData } = useQuery(
     gql`
       query SerialPortFunctions($connection: ID!) {
@@ -58,14 +59,14 @@ const RadioProtocolManager: React.FC = () => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       skip: !connection,
     }
   );
   const { data, loading } = useQuery(DataQuery, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
     skip: !connection,
   });
@@ -112,39 +113,34 @@ const RadioProtocolManager: React.FC = () => {
     data?.connection.device.rc.smoothing.type ===
     RcSmoothingTypes.INTERPOLATION;
 
-  return hasSerialPortSet ? (
-    <div>
-      <label htmlFor="receiver-type-selector">
-        Radio Protocol
-        <select
-          disabled={loading || setting}
-          // Make out that the protocol needs to be set if
-          // the smoothing is not set
-          value={smoothingSet ? selectedProtocol : -1}
-          id="receiver-type-selector"
-          onChange={(e) => {
-            const serialProvider = Number(e.target.value);
-            setReceiverConfig({
-              variables: {
-                connection: connection ?? "",
-                serialProvider,
-                smoothingType: RcSmoothingTypes.INTERPOLATION,
-              },
-            });
-          }}
-        >
-          <option value={-1} disabled>
-            Select protocol
-          </option>
-          {PROVIDERS.map(({ name, value }) => (
-            <option key={value} value={value}>
-              {name}
-            </option>
-          ))}
-        </select>
-      </label>
-    </div>
-  ) : null;
+  return (
+    <Select
+      disabled={loading || setting || !hasSerialPortSet}
+      // Make out that the protocol needs to be set if
+      // the smoothing is not set
+      value={smoothingSet ? selectedProtocol : -1}
+      onChange={(e) => {
+        const serialProvider = Number(
+          ((e.target as unknown) as { value: string }).value
+        );
+        setReceiverConfig({
+          variables: {
+            connection,
+            serialProvider,
+            smoothingType: RcSmoothingTypes.INTERPOLATION,
+          },
+        });
+      }}
+      options={[
+        {
+          label: "Select protocol",
+          value: "-1",
+          disabled: true,
+        },
+        ...PROVIDERS,
+      ]}
+    />
+  );
 };
 
 export default RadioProtocolManager;

@@ -1,9 +1,10 @@
+import { Select } from "bumbag";
 import React from "react";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const RssiChannelManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(
     gql`
       query RssiChannelAndChannels($connection: ID!) {
@@ -26,7 +27,6 @@ const RssiChannelManager: React.FC = () => {
       variables: {
         connection,
       },
-      skip: !connection,
     }
   );
 
@@ -68,37 +68,27 @@ const RssiChannelManager: React.FC = () => {
   );
 
   return (
-    <div>
-      <label htmlFor="rssi-channel-selector">
-        RSSI Channel{" "}
-        <select
-          value={data?.connection.device.rc.rssi.channel ?? 0}
-          disabled={loading || setting}
-          onChange={(e) => {
-            const channel = Number(e.target.value);
-            setRssiChannel({
-              variables: {
-                connection: connection ?? "",
-                channel,
-              },
-            });
-          }}
-        >
-          <option value={0}>Disabled</option>
-          {
-            // Don't include roll pitch yaw throttle
-            new Array(data ? data.connection.device.rc.channels.length - 4 : 0)
-              .fill(0)
-              .map((_, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <option key={i} value={i + 1}>
-                  AUX{i + 1}
-                </option>
-              ))
-          }
-        </select>
-      </label>
-    </div>
+    <Select
+      value={data?.connection.device.rc.rssi.channel ?? 0}
+      disabled={loading || setting}
+      onChange={(e) => {
+        const channel = Number(
+          ((e.target as unknown) as { value: string }).value
+        );
+        setRssiChannel({
+          variables: {
+            connection,
+            channel,
+          },
+        });
+      }}
+      options={[
+        { label: "Disabled", value: 0 },
+        ...new Array(data ? data.connection.device.rc.channels.length - 4 : 0)
+          .fill(0)
+          .map((_, i) => ({ label: `AUX${i}`, value: i + 1 })),
+      ]}
+    />
   );
 };
 

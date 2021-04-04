@@ -1,8 +1,4 @@
-import {
-  faChevronRight,
-  faScrewdriver,
-  faWrench,
-} from "@fortawesome/free-solid-svg-icons";
+import { faScrewdriver, faWrench } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Card,
@@ -11,10 +7,8 @@ import {
   Columns,
   Icon,
   Set,
-  Breadcrumb,
   Button,
   Flex,
-  useColorMode,
 } from "bumbag";
 import React from "react";
 import { Link as RouterLink } from "wouter";
@@ -24,16 +18,15 @@ import FcSummaryProvider from "../../providers/FcSummaryProvider";
 import GpsSummaryProvider from "../../providers/GpsSummaryProvider";
 import ModelViewProvider from "../../providers/ModelViewProvider";
 import SensorsListProvider from "../../providers/SensorListProvider";
+import ConfigurationTopBar from "./components/ConfigurationTopBar";
 
 const Overview: React.FC = () => {
   const connection = useConnection();
-  const { colorMode } = useColorMode();
 
   const { data } = useQuery(
     gql`
       query DeviceData($connection: ID!) {
         connection(connectionId: $connection) {
-          port
           device {
             name
             info {
@@ -58,38 +51,7 @@ const Overview: React.FC = () => {
 
   return (
     <Box>
-      <Box
-        position="sticky"
-        top="0px"
-        padding="major-2"
-        zIndex="999"
-        backgroundColor="default"
-        border={colorMode !== "dark" ? "default" : "none"}
-        borderTop="none"
-        borderRight="none"
-        borderLeft="none"
-      >
-        <Breadcrumb
-          separator={
-            <Icon
-              icon={faChevronRight}
-              type="font-awesome"
-              color="gray100"
-              fontSize="150"
-            />
-          }
-        >
-          <Breadcrumb.Item>
-            <RouterLink to="/">
-              <Breadcrumb.Link charSet="">Home</Breadcrumb.Link>
-            </RouterLink>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <Breadcrumb.Link charSet="" isCurrent>
-              {data?.connection.port}
-            </Breadcrumb.Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
+      <ConfigurationTopBar>
         <Flex>
           <Box margin="major-5">
             <Heading>{data?.connection.device.name}</Heading>
@@ -117,7 +79,7 @@ const Overview: React.FC = () => {
                   </Box>
                 </Button>
               </RouterLink>
-              <RouterLink to="receiver">
+              <RouterLink to={`/connections/${connection}/radio`}>
                 <Button>
                   <Box>
                     <Box alignX="center" padding="minor-1">
@@ -145,7 +107,7 @@ const Overview: React.FC = () => {
                   </Box>
                 </Button>
               </RouterLink>
-              <RouterLink to="blackbox">
+              <RouterLink to={`/connections/${connection}/blackbox`}>
                 <Button>
                   <Box>
                     <Box alignX="center" padding="minor-1">
@@ -160,7 +122,7 @@ const Overview: React.FC = () => {
             </Set>
           </Box>
         </Flex>
-      </Box>
+      </ConfigurationTopBar>
       <Box margin="major-1">
         <Columns>
           <Columns.Column spread={4}>
