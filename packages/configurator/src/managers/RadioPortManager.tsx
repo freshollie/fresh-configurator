@@ -4,8 +4,9 @@ import {
   SerialPortIdentifiers,
 } from "@betaflight/api";
 import React from "react";
+import { Select } from "bumbag";
 import { useMutation, useQuery, gql } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const RX_FEATURES = [
   Features.RX_MSP,
@@ -67,12 +68,11 @@ const DataQuery = gql`
 >;
 
 const RadioPortManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(DataQuery, {
     variables: {
-      connection: connection ?? "",
+      connection,
     },
-    skip: !connection,
   });
 
   const [setFunctionsAndFeatures, { loading: setting }] = useMutation(
@@ -113,70 +113,52 @@ const RadioPortManager: React.FC = () => {
   )?.id;
 
   return (
-    <div>
-      <label htmlFor="radio-port">
-        Flight Controller Receiver Port
-        <select
-          id="radio-port"
-          disabled={!data || loading || setting}
-          // We can assume that RX_MODE is set to one of these, if not, just show PPM
-          value={featureToId(features) ?? currentPort ?? 100}
-          onChange={(e) => {
-            const id = Number(e.target.value);
-            const enabledFeature = idToFeature(id);
-            setFunctionsAndFeatures({
-              variables: {
-                portFunctions: portFunctions.map(
-                  ({ id: portId, functions }) => ({
-                    id: portId,
-                    functions: functions
-                      .filter((fun) => {
-                        // remove the serial function from all ports
-                        if (fun === SerialPortFunctions.RX_SERIAL) {
-                          return false;
-                        }
-                        // and if this the port to be set, remove any function
-                        // which is note related to telemetry
-                        return !SERIAL_TELEMENTRY.includes(fun)
-                          ? portId !== id
-                          : true;
-                      })
-                      .concat(
-                        portId === id ? [SerialPortFunctions.RX_SERIAL] : []
-                      ),
-                  })
-                ),
-                // remove any existing rx features, add add the one required for the
-                features: features
-                  .filter((feature) => !RX_FEATURES.includes(feature))
-                  .concat(enabledFeature ? [enabledFeature] : []),
-                connection: connection ?? "",
-              },
-            });
-          }}
-        >
-          {portFunctions.map(({ id, functions }) => (
-            <option
-              // Obviously not possible to set the receiver port to the current MSP port
-              disabled={functions.includes(SerialPortFunctions.MSP)}
-              value={id}
-              key={id}
-            >
-              {`${SerialPortIdentifiers[id]}${
-                functions.includes(SerialPortFunctions.MSP)
-                  ? " (Communication port)"
-                  : ""
-              }`}
-            </option>
-          ))}
-          {RX_MODE_VALUES.map(({ id, name }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-      </label>
-    </div>
+    <Select
+      disabled={!data || loading || setting}
+      // We can assume that RX_MODE is set to one of these, if not, just show PPM
+      value={featureToId(features) ?? currentPort ?? 100}
+      onChange={(e) => {
+        const id = Number(((e.target as unknown) as { value: string }).value);
+        const enabledFeature = idToFeature(id);
+        setFunctionsAndFeatures({
+          variables: {
+            portFunctions: portFunctions.map(({ id: portId, functions }) => ({
+              id: portId,
+              functions: functions
+                .filter((fun) => {
+                  // remove the serial function from all ports
+                  if (fun === SerialPortFunctions.RX_SERIAL) {
+                    return false;
+                  }
+                  // and if this the port to be set, remove any function
+                  // which is note related to telemetry
+                  return !SERIAL_TELEMENTRY.includes(fun)
+                    ? portId !== id
+                    : true;
+                })
+                .concat(portId === id ? [SerialPortFunctions.RX_SERIAL] : []),
+            })),
+            // remove any existing rx features, add add the one required for the
+            features: features
+              .filter((feature) => !RX_FEATURES.includes(feature))
+              .concat(enabledFeature ? [enabledFeature] : []),
+            connection,
+          },
+        });
+      }}
+      options={[
+        ...portFunctions.map(({ id, functions }) => ({
+          label: `${SerialPortIdentifiers[id]}${
+            functions.includes(SerialPortFunctions.MSP)
+              ? " (Communication port)"
+              : ""
+          }`,
+          value: id,
+          disabled: functions.includes(SerialPortFunctions.MSP),
+        })),
+        ...RX_MODE_VALUES.map(({ id, name }) => ({ label: name, value: id })),
+      ]}
+    />
   );
 };
 

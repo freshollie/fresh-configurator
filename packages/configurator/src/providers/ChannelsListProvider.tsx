@@ -1,12 +1,12 @@
 import React from "react";
 import ChannelsList from "../components/ChannelsList";
-import useConnectionState from "../hooks/useConnectionState";
 import { gql, useQuery } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 const ChannelsListProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(
     gql`
       query RcChannels($connection: ID!) {
@@ -24,9 +24,8 @@ const ChannelsListProvider: React.FC<{ refreshRate: number }> = ({
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
       pollInterval: 1000 / refreshRate,
     }
   );

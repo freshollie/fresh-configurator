@@ -1,8 +1,8 @@
 import { Modes } from "@betaflight/api";
+import { Select, OptionButtons, Box, Table, Text, Badge } from "bumbag";
 import React from "react";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
-import styled from "../theme";
+import useConnection from "../hooks/useConnection";
 
 type Range = {
   start: number;
@@ -22,49 +22,53 @@ const RANGE_NAMES: Record<number, string> = {
 
 const MODES = [
   {
-    text: "Arm",
-    value: Modes.ARM,
+    label: "Arm",
+    id: Modes.ARM,
   },
   {
-    text: "Angle mode",
-    value: Modes.ANGLE,
+    label: "Angle mode",
+    id: Modes.ANGLE,
   },
   {
-    text: "Horizon mode",
-    value: Modes.HORIZON,
+    label: "Horizon mode",
+    id: Modes.HORIZON,
   },
   {
-    text: "Beeper",
-    value: Modes.BEEPER_ON,
+    label: "Beeper",
+    id: Modes.BEEPER_ON,
   },
   {
-    text: "Blackbox Log",
-    value: Modes.BLACKBOX,
+    label: "Blackbox Log",
+    id: Modes.BLACKBOX,
   },
   {
-    text: "Turtle mode",
-    value: Modes.FLIP_OVER_AFTER_CRASH,
+    label: "Turtle mode",
+    id: Modes.FLIP_OVER_AFTER_CRASH,
   },
   {
-    text: "GPS Rescue",
-    value: Modes.GPS_RESCUE,
+    label: "GPS Rescue",
+    id: Modes.GPS_RESCUE,
   },
 ];
 
 const numAuxChannels = (numChannels: number): number =>
   numChannels > 4 ? numChannels - 4 : 0;
 
-const rangeToIndex = (range: Range): number | undefined =>
+const rangeToValue = (range: Range): string | undefined =>
   RANGES.findIndex(
     ({ start, end }) => range.start === start && range.end === end
-  );
+  ).toString();
 
 const isInRange = (value: number, range: Range): boolean =>
   value > range.start && value < range.end;
 
-const SwitchManager: React.FC<{ slotId: number }> = ({ slotId }) => {
-  const { connection } = useConnectionState();
-  const { data, loading } = useQuery(
+const SwitchManager: React.FC<{
+  slotId?: number;
+  mode: Modes;
+  numChannels: number;
+}> = ({ slotId, numChannels, mode }) => {
+  const connection = useConnection();
+  const { data } = useQuery(
     gql`
       query ModeSlotAndChannels($connection: ID!, $slotId: Int!) {
         connection(connectionId: $connection) {
@@ -77,11 +81,7 @@ const SwitchManager: React.FC<{ slotId: number }> = ({ slotId }) => {
                   end
                 }
                 auxChannel
-                modeId
               }
-            }
-            rc {
-              channels
             }
           }
         }
@@ -92,10 +92,10 @@ const SwitchManager: React.FC<{ slotId: number }> = ({ slotId }) => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
         slotId,
       },
-      skip: !connection,
+      skip: slotId === undefined,
     }
   );
 
@@ -152,123 +152,137 @@ const SwitchManager: React.FC<{ slotId: number }> = ({ slotId }) => {
   );
 
   const slotData = data?.connection.device.modes.slot;
+  const slotDisabled =
+    data?.connection.device.modes.slot?.range.start ===
+    data?.connection.device.modes.slot?.range.end;
 
   return (
-    <span>
-      <select
-        disabled={loading || setting}
-        value={data?.connection.device.modes.slot?.modeId}
-        onChange={(e) => {
-          if (!slotData) {
-            return;
+    <>
+      <Table.Cell>
+        <Select
+          size="small"
+          disabled={!slotData || setting || slotId === undefined}
+          value={
+            !slotDisabled
+              ? data?.connection.device.modes.slot?.auxChannel
+              : "-1"
           }
-          setSlotConfig({
-            variables: {
-              connection: connection ?? "",
-              slotId,
-              config: {
-                modeId: Number(e.target.value),
-                auxChannel: slotData.auxChannel,
-                range: {
+          onChange={(e) => {
+            if (!slotData || slotId === undefined) {
+              return;
+            }
+            const value = Number(
+              ((e.target as unknown) as { value: string }).value
+            );
+
+            // If the slot was previously disabled, then when the aux channel is set
+            // the initial value should be mid
+            const slotRangeValue = slotDisabled
+              ? MID
+              : {
                   start: slotData.range.start,
                   end: slotData.range.end,
+                };
+
+            setSlotConfig({
+              variables: {
+                connection,
+                slotId,
+                config: {
+                  modeId: mode,
+                  auxChannel: value === -1 ? 0 : value,
+                  range:
+                    // if set to disabled, then range has to be set to the same for start and end
+                    value === -1 ? { start: 900, end: 900 } : slotRangeValue,
                 },
               },
+            });
+          }}
+          options={[
+            {
+              label: "Disabled",
+              value: "-1",
             },
-          });
-        }}
-      >
-        <option hidden>Select mode</option>
-        {MODES.map(({ text, value }) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <option key={value} value={value}>
-            {text}
-          </option>
-        ))}
-      </select>
-      when
-      <select
-        disabled={loading || setting}
-        value={rangeToIndex(
-          data?.connection.device.modes.slot?.range ?? { start: 0, end: 0 }
-        )}
-        onChange={(e) => {
-          if (!slotData) {
-            return;
+            ...new Array(numAuxChannels(numChannels))
+              .fill(1)
+              .map((_, auxChannel) => ({
+                label: `AUX${auxChannel + 1}`,
+                value: auxChannel.toString(),
+              })),
+          ]}
+        />
+      </Table.Cell>
+      <Table.Cell>
+        <OptionButtons
+          type="checkbox"
+          size="small"
+          disabled={!slotData || slotDisabled}
+          value={rangeToValue(
+            data?.connection.device.modes.slot?.range ?? { start: 0, end: 0 }
+          )}
+          onChange={
+            ((_: string[], value: string) => {
+              if (!slotData || slotId === undefined) {
+                return;
+              }
+              setSlotConfig({
+                variables: {
+                  connection,
+                  slotId,
+                  config: {
+                    modeId: mode,
+                    auxChannel: slotData.auxChannel,
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    range: RANGES[Number(value)]!,
+                  },
+                },
+              });
+            }) as never
           }
-          setSlotConfig({
-            variables: {
-              connection: connection ?? "",
-              slotId,
-              config: {
-                modeId: slotData.modeId,
-                auxChannel: slotData.auxChannel,
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                range: RANGES[Number(e.target.value)]!,
-              },
-            },
-          });
-        }}
-      >
-        <option hidden>Select position</option>
-        {RANGES.map((_, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <option key={i} value={i}>
-            {RANGE_NAMES[i]}
-          </option>
-        ))}
-      </select>
-    </span>
+          options={[
+            ...RANGES.map((_, i) => ({
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              label: RANGE_NAMES[i]!,
+              value: i.toString(),
+            })),
+          ]}
+        />
+      </Table.Cell>
+    </>
   );
 };
 
-const RemoveRowButton = styled.span`
-  display: none;
-  cursor: pointer;
-  padding: 10px;
-  font-weight: bold;
-`;
-
-const SlotWrapper = styled.div<{ highlighted: boolean }>`
-  background-color: ${({ highlighted }) =>
-    highlighted ? "yellow" : "initial"};
-  &:hover {
-    ${RemoveRowButton} {
-      display: initial;
-    }
-  }
-`;
-
-const ModeSlots = gql`
-  query ModeSlots($connection: ID!) {
-    connection(connectionId: $connection) {
-      device {
-        modes {
-          slots {
-            id
-            auxChannel
-            range {
-              start
-              end
+const SwitchesManager: React.FC = () => {
+  const connection = useConnection();
+  const { data } = useQuery(
+    gql`
+      query ModeSlots($connection: ID!) {
+        connection(connectionId: $connection) {
+          device {
+            modes {
+              slots {
+                id
+                auxChannel
+                modeId
+                range {
+                  start
+                  end
+                }
+              }
             }
           }
         }
       }
+    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
+      import("./__generated__/SwitchesManager").ModeSlotsQuery,
+      import("./__generated__/SwitchesManager").ModeSlotsQueryVariables
+    >,
+    {
+      variables: {
+        connection,
+      },
     }
-  }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/SwitchesManager").ModeSlotsQuery,
-  import("./__generated__/SwitchesManager").ModeSlotsQueryVariables
->;
-
-const SwitchesManager: React.FC = () => {
-  const { connection } = useConnectionState();
-  const { data, loading } = useQuery(ModeSlots, {
-    variables: {
-      connection: connection ?? "",
-    },
-    skip: !connection,
-  });
+  );
 
   const slots = data?.connection.device.modes.slots ?? [];
   const activeSlots = slots.filter(
@@ -277,9 +291,8 @@ const SwitchesManager: React.FC = () => {
   const firstInactiveSlot = slots.find(
     (slot) => slot.range.start === slot.range.end
   );
-  const maxSlots = slots.length;
 
-  const { data: channelData, loading: loadingChannels } = useQuery(
+  const { data: channelData } = useQuery(
     gql`
       query RcChannels($connection: ID!) {
         connection(connectionId: $connection) {
@@ -296,153 +309,60 @@ const SwitchesManager: React.FC = () => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
       pollInterval: activeSlots.length > 0 ? 100 : 0,
-    }
-  );
-
-  const [activateSlot, { loading: activatingSlot }] = useMutation(
-    gql`
-      mutation ActivateModeSlot(
-        $connection: ID!
-        $slotId: Int!
-        $auxChannel: Int!
-      ) {
-        deviceSetModeSlotConfig(
-          connectionId: $connection
-          slotId: $slotId
-          config: {
-            auxChannel: $auxChannel
-            modeId: 0
-            range: { start: 900, end: 1300 }
-          }
-        )
-      }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").ActivateModeSlotMutation,
-      import("./__generated__/SwitchesManager").ActivateModeSlotMutationVariables
-    >,
-    {
-      awaitRefetchQueries: true,
-      refetchQueries: [
-        {
-          query: ModeSlots,
-          variables: {
-            connection,
-          },
-        },
-      ],
-    }
-  );
-
-  const [deactivateModeSlot] = useMutation(
-    gql`
-      mutation DeactivateModeSwitch($connection: ID!, $slotId: Int!) {
-        deviceSetModeSlotConfig(
-          connectionId: $connection
-          slotId: $slotId
-          config: { auxChannel: 0, modeId: 0, range: { start: 900, end: 900 } }
-        )
-      }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").DeactivateModeSwitchMutation,
-      import("./__generated__/SwitchesManager").DeactivateModeSwitchMutationVariables
-    >,
-    {
-      awaitRefetchQueries: true,
-      refetchQueries: [
-        {
-          query: ModeSlots,
-          variables: {
-            connection,
-          },
-        },
-      ],
     }
   );
 
   const numChannels = channelData?.connection.device.rc.channels.length ?? 0;
 
   return (
-    <div>
-      <div>New switch</div>
-      <select
-        value={-1}
-        disabled={
-          activatingSlot || loadingChannels || activeSlots.length === maxSlots
-        }
-        onChange={(e) => {
-          if (!firstInactiveSlot) {
-            return;
-          }
-          activateSlot({
-            variables: {
-              connection: connection ?? "",
-              auxChannel: Number(e.target.value),
-              slotId: firstInactiveSlot.id,
-            },
-          });
-        }}
-      >
-        <option value={-1} hidden>
-          Select aux channel
-        </option>
-        {new Array(numAuxChannels(numChannels)).fill(1).map((_, auxChannel) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <option key={auxChannel} value={auxChannel}>
-            AUX{auxChannel + 1}
-          </option>
-        ))}
-      </select>
+    <Box>
+      <Table variant="minimal">
+        {MODES.map((mode) => {
+          const slotsForMode = activeSlots.filter(
+            (slot) => slot.modeId === mode.id
+          );
 
-      {loading && <div>Loading mode switches</div>}
-      {new Array(numAuxChannels(numChannels)).fill(0).map((_, channel) => {
-        const channelSlots = activeSlots.filter(
-          ({ auxChannel }) => auxChannel === channel
-        );
-        return (
-          channelSlots.length > 0 && (
+          return (slotsForMode.length > 0
+            ? slotsForMode
+            : [firstInactiveSlot]
+          ).map((slot, i) => (
             // eslint-disable-next-line react/no-array-index-key
-            <div key={channel}>
-              <h4>AUX{channel + 1}</h4>
-              {channelSlots.map((slot) => (
-                <SlotWrapper
-                  key={slot.id}
-                  highlighted={
-                    !!(
-                      channelData &&
-                      isInRange(
-                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        channelData.connection.device.rc.channels[
-                          slot.auxChannel + 4
-                        ]!,
-                        slot.range
-                      )
-                    )
-                  }
-                >
-                  <SwitchManager slotId={slot.id} />
-                  <RemoveRowButton
-                    onClick={() => {
-                      deactivateModeSlot({
-                        variables: {
-                          connection: connection ?? "",
-                          slotId: slot.id,
-                        },
-                      });
-                    }}
-                  >
-                    x
-                  </RemoveRowButton>
-                </SlotWrapper>
-              ))}
-            </div>
-          )
-        );
-      })}
-    </div>
+            <Table.Row key={`${mode.id} + ${i}`}>
+              <Table.Cell>
+                <Text>
+                  <b>{mode.label}</b>
+                  {slot &&
+                    channelData &&
+                    isInRange(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      channelData.connection.device.rc.channels[
+                        slot.auxChannel + 4
+                      ]!,
+                      slot.range
+                    ) && (
+                      <Badge
+                        size="small"
+                        isAttached
+                        backgroundColor="warning"
+                      />
+                    )}
+                </Text>
+              </Table.Cell>
+              <Table.Cell>
+                <SwitchManager
+                  slotId={slot?.id}
+                  numChannels={numChannels}
+                  mode={mode.id}
+                />
+              </Table.Cell>
+            </Table.Row>
+          ));
+        }).flat()}
+      </Table>
+    </Box>
   );
 };
 

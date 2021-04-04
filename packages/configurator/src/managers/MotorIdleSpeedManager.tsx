@@ -64,10 +64,9 @@ const MotorIdleSpeedManager: React.FC = () => {
       awaitRefetchQueries: true,
     }
   );
-
   return (
     <OptionButtons
-      value={(
+      value={Math.floor(
         data?.connection.device.motors.digitalIdlePercent ?? 0
       ).toString()}
       disabled={loading}

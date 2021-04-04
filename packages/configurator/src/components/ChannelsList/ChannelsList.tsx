@@ -1,27 +1,9 @@
 import React from "react";
-import Meter from "../Meter";
-import { Wrapper, Name } from "./ChannelsList.styles";
+import { Box, Level, ProgressBar, Palette, Text, styled } from "bumbag";
 
 const CHANNEL_MIN = 800;
 const CHANNEL_MAX = 2200;
-const CHANNEL_COLORS = [
-  "#f1453d",
-  "#673fb4",
-  "#2b98f0",
-  "#1fbcd2",
-  "#159588",
-  "#50ae55",
-  "#cdda49",
-  "#fdc02f",
-  "#fc5830",
-  "#785549",
-  "#9e9e9e",
-  "#617d8a",
-  "#cf267d",
-  "#7a1464",
-  "#3a7a14",
-  "#14407a",
-];
+const CHANNEL_COLORS: Palette[] = ["success", "warning", "danger", "secondary"];
 
 const CHANNEL_NAMES = ["Roll [A]", "Pitch [E]", "Yaw [R]", "Throttle [T]"];
 
@@ -30,30 +12,35 @@ export type ChannelsListProps = {
   disabled?: boolean;
 };
 
-const ChannelsList: React.FC<ChannelsListProps> = ({ channels, disabled }) => {
-  const getChannelName = (number: number): string =>
-    CHANNEL_NAMES[number] ?? `AUX ${number - CHANNEL_NAMES.length + 1}`;
+const NoAnimProgressBar = styled(ProgressBar)`
+  * {
+    transition: none !important;
+  }
+`;
 
-  return (
-    <Wrapper>
-      <div>
-        {channels.map((_, number) => (
-          <Name key={getChannelName(number)}>{getChannelName(number)}</Name>
-        ))}
-      </div>
-      <div className="meters">
-        {channels.map((value, number) => (
-          <Meter
-            key={getChannelName(number)}
-            max={CHANNEL_MAX}
-            min={CHANNEL_MIN}
-            value={value}
-            color={disabled ? "grey" : CHANNEL_COLORS[number] ?? "green"}
+const getChannelName = (number: number): string =>
+  CHANNEL_NAMES[number] ?? `AUX ${number - CHANNEL_NAMES.length + 1}`;
+
+const ChannelsList: React.FC<ChannelsListProps> = ({ channels, disabled }) => (
+  <Box>
+    {channels
+      .map((value, number) => [getChannelName(number), value] as const)
+      .map(([name, value], channel) => (
+        <Box key={name}>
+          <Level>
+            <Text>{name}</Text>
+            <Text>{value}</Text>
+          </Level>
+          <NoAnimProgressBar
+            key={name}
+            maxValue={CHANNEL_MAX - CHANNEL_MIN}
+            value={value - CHANNEL_MIN}
+            disabled={disabled}
+            color={CHANNEL_COLORS[channel]}
           />
-        ))}
-      </div>
-    </Wrapper>
-  );
-};
+        </Box>
+      ))}
+  </Box>
+);
 
 export default ChannelsList;

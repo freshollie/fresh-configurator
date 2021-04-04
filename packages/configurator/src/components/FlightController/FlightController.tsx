@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import { Image } from "bumbag";
 import image from "./image.png";
 
 type Orientation = number;
@@ -11,32 +11,29 @@ type Props = {
   side: Side;
 };
 
-const FCImage = styled.img<Props>`
-  user-select: none;
-  transform: rotate(
-      ${({ orientation, side }) => orientation * (side === "top" ? 1 : -1)}deg
-    )
-    scaleX(${({ side }) => (side === "top" ? 1 : -1)});
-  ${({ size }) =>
-    size === "small" &&
-    css`
-      width: 100px;
-    `}
-  ${({ size }) =>
-    size === "medium" &&
-    css`
-      width: 200px;
-    `}
-    ${({ size }) =>
-    size === "large" &&
-    css`
-      width: 450px;
-    `}
-  opacity: ${({ side }) => (side === "bottom" ? 0.5 : 1)}
-`;
+// eslint-disable-next-line consistent-return
+const toWidth = (size: Size): string => {
+  switch (size) {
+    case "small":
+      return "100px";
+    case "medium":
+      return "200px";
+    case "large":
+      return "450px";
+  }
+};
 
 const FlightController: React.FC<Props> = ({ orientation, size, side }) => (
-  <FCImage orientation={orientation} size={size} side={side} src={image} />
+  <Image
+    loading="false"
+    referrerPolicy=""
+    src={image}
+    transform={`rotate(
+      ${orientation * (side === "top" ? 1 : -1)}deg
+    ) scaleX(${side === "top" ? 1 : -1})`}
+    width={toWidth(size)}
+    opacity={side === "bottom" ? "0.5" : "1"}
+  />
 );
 
 export default FlightController;

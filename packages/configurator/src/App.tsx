@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, Route, Router, Switch } from "wouter";
 import ConnectionProvider from "./context/ConnectionProvider";
+import Blackbox from "./pages/configuration/Blackbox";
 import General from "./pages/configuration/General";
 import Overview from "./pages/configuration/Overview";
+import Radio from "./pages/configuration/Radio";
 import Home from "./pages/Home";
 
 // returns the current hash location in a normalized form
@@ -45,6 +47,12 @@ const App: React.FC = () => (
             </Route>
             <Route path="/connections/:connectionId/general">
               <General />
+            </Route>
+            <Route path="/connections/:connectionId/radio">
+              <Radio />
+            </Route>
+            <Route path="/connections/:connectionId/blackbox">
+              <Blackbox />
             </Route>
             <Route>
               <Redirect to="/" />
