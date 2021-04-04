@@ -162,7 +162,7 @@ export const readAnalogValues = async (port: string): Promise<AnalogValues> => {
   const values = {
     voltage: data.readU8() / 10.0,
     mahDrawn: data.readU16(),
-    rssi: data.readU16(), // 0-1023
+    rssi: Math.round((data.readU16() / 1023) * 100),
     amperage: data.read16() / 100, // A
   };
 
