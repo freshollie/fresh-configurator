@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import { apiVersion, open, ports, readSerialConfig } from "./src";
+import { apiVersion, open, ports, readModeRangeSlots } from "./src";
 
 (async () => {
   console.log(await ports());
   const port = (await ports())[1]!.path;
   await open(port);
   console.log(apiVersion(port));
-  console.log(await readSerialConfig(port));
+  console.log(await readModeRangeSlots(port));
 })();

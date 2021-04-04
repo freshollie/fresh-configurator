@@ -1,6 +1,6 @@
-import { Modes, writeModeRangeSlot } from "../src";
-import codes from "../src/codes";
-import mockMsp from "./mockMsp";
+import { Modes, writeModeRangeSlot } from "../../src";
+import codes from "../../src/codes";
+import mockMsp from "../mockMsp";
 
 describe("writeModeRangeSlot", () => {
   it("should write the mode range slot without extra information", async () => {
