@@ -1,10 +1,11 @@
 import { BlackboxDevices, blackboxDevices } from "@betaflight/api";
+import { Select } from "bumbag";
 import React from "react";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const BlackboxDeviceManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(
     gql`
       query BlackboxDeviceAndVersion($connection: ID!) {
@@ -27,7 +28,6 @@ const BlackboxDeviceManager: React.FC = () => {
       variables: {
         connection,
       },
-      skip: !connection,
     }
   );
 
@@ -74,7 +74,7 @@ const BlackboxDeviceManager: React.FC = () => {
   const devices = blackboxDevices(data?.connection.apiVersion ?? "0.0.0");
 
   return (
-    <select
+    <Select
       disabled={loading || setting}
       value={data?.connection.device.blackbox.config.device ?? -1}
       onChange={(e) => {
@@ -84,17 +84,16 @@ const BlackboxDeviceManager: React.FC = () => {
         setBlackBoxDevice({
           variables: {
             connection,
-            device: Number(e.target.value),
+            device: Number(((e.target as unknown) as { value: string }).value),
           },
         });
       }}
-    >
-      {devices.map((device) => (
-        <option key={device} value={device}>
-          {BlackboxDevices[device]}
-        </option>
-      ))}
-    </select>
+      options={devices.map((device) => ({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        label: BlackboxDevices[device]!,
+        value: device,
+      }))}
+    />
   );
 };
 

@@ -38,8 +38,7 @@ const startBackend = async (): Promise<void> => {
   });
   createIpcExecutor({ link, ipc: ipcMain, persistedQueries });
 
-  if (mocked) {
-    console.log("start ticks");
+  if (mocked && PRODUCTION) {
     backend.startMockTicks();
   }
 

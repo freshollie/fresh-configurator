@@ -6,6 +6,7 @@ import General from "./pages/configuration/General";
 import Overview from "./pages/configuration/Overview";
 import Radio from "./pages/configuration/Radio";
 import Home from "./pages/Home";
+import BlackboxFlashDownloadProvider from "./providers/BlackboxFlashDownloadProvider";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
@@ -58,6 +59,7 @@ const App: React.FC = () => (
               <Redirect to="/" />
             </Route>
           </Switch>
+          <BlackboxFlashDownloadProvider />
         </ConnectionProvider>
       </Route>
       <Route>

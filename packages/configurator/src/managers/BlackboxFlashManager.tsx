@@ -1,16 +1,13 @@
 import React from "react";
-import Button from "../components/Button";
-import Meter from "../components/Meter";
-import Table from "../components/Table";
+import { Button, Set } from "bumbag";
+import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { gql, useMutation, useQuery } from "../gql/apollo";
-import { artifactsAddress } from "../gql/client";
 import { JobType } from "../gql/__generated__/schema";
-import useConnectionState from "../hooks/useConnectionState";
 import useJobs from "../hooks/useJobs";
-import useRate from "../hooks/useRate";
+import useConnection from "../hooks/useConnection";
 
 const BlackboxFlashManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data, loading } = useQuery(
     gql`
       query FlashData($connection: ID!) {
@@ -36,7 +33,6 @@ const BlackboxFlashManager: React.FC = () => {
       variables: {
         connection,
       },
-      skip: !connection,
       pollInterval: 500,
     }
   );
@@ -53,7 +49,7 @@ const BlackboxFlashManager: React.FC = () => {
     {
       awaitRefetchQueries: true,
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       refetchQueries: [
         {
@@ -100,51 +96,27 @@ const BlackboxFlashManager: React.FC = () => {
     }
   );
 
-  const [cancelJob, { loading: cancelling }] = useMutation(
-    gql`
-      mutation CancelJob($jobId: ID!) {
-        cancelJob(jobId: $jobId)
-      }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashManager").CancelJobMutation,
-      import("./__generated__/BlackboxFlashManager").CancelJobMutationVariables
-    >
-  );
+  const flashSupported = !!data?.connection.device.blackbox.flash.supported;
 
   const { jobs } = useJobs({ ofType: JobType.Offload });
 
   const erasing =
     !loading &&
-    (sendingEraseCommand || !data?.connection.device.blackbox.flash.ready);
+    (sendingEraseCommand ||
+      (flashSupported && !data?.connection.device.blackbox.flash.ready));
 
   const downloadJob = jobs.find(
     ({ completed, connectionId }) => !completed && connectionId === connection
   );
 
-  const downloaded = jobs
-    .filter(
-      ({ completed, cancelled, error, connectionId, artifact }) =>
-        completed &&
-        !cancelled &&
-        !error &&
-        connectionId === connection &&
-        artifact
-    )
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-
-  const rate = useRate(downloadJob?.progress ?? 0);
-
-  return (
-    <div>
+  return flashSupported ? (
+    <Set>
       <Button
-        disabled={erasing || loading || !!downloadJob}
-        onClick={() => {
-          eraseFlash();
+        size="small"
+        iconBeforeProps={{
+          type: "font-awesome",
         }}
-      >
-        {!erasing ? "Erase" : "Erasing..."}
-      </Button>
-      <Button
+        iconBefore={faDownload}
         disabled={
           erasing ||
           loading ||
@@ -155,54 +127,24 @@ const BlackboxFlashManager: React.FC = () => {
           createOffloadJob();
         }}
       >
-        Download flash (
-        {data
-          ? Math.round(data.connection.device.blackbox.flash.usedSize / 1024)
-          : "-"}
-        KB)
+        Download
       </Button>
-      {downloadJob && data && (
-        <>
-          <div>Downloading flash</div>
-          <Meter
-            color="red"
-            value={Math.round(downloadJob.progress / 1024)}
-            min={0}
-            max={Math.round(
-              data.connection.device.blackbox.flash.usedSize / 1024
-            )}
-          />
-          <div>{(rate / 1024).toFixed(2)}KB/s</div>
-          <Button
-            disabled={cancelling}
-            onClick={() => {
-              cancelJob({
-                variables: {
-                  jobId: downloadJob.id,
-                },
-              });
-            }}
-          >
-            Cancel
-          </Button>
-        </>
-      )}
-      {downloaded.length > 1 && (
-        <Table>
-          {downloaded.map(({ artifact }) => (
-            <tr>
-              <td>{artifact}</td>
-              <td>
-                <a href={`${artifactsAddress}/${artifact}`} download>
-                  Save
-                </a>
-              </td>
-            </tr>
-          ))}
-        </Table>
-      )}
-    </div>
-  );
+      <Button
+        color="danger"
+        size="small"
+        iconBeforeProps={{
+          type: "font-awesome",
+        }}
+        iconBefore={faTrash}
+        disabled={erasing || loading || !!downloadJob}
+        onClick={() => {
+          eraseFlash();
+        }}
+      >
+        {!erasing ? "Erase" : "Erasing..."}
+      </Button>
+    </Set>
+  ) : null;
 };
 
 export default BlackboxFlashManager;

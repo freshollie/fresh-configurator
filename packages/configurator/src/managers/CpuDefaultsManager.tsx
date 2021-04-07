@@ -143,7 +143,7 @@ const CpuDefaultsManager: React.FC = () => {
             <Box>
               <Button
                 size="small"
-                disabled={saving}
+                isLoading={saving}
                 onClick={() => {
                   setProtocols({
                     variables: {
