@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
+import { Select } from "bumbag";
 import React from "react";
 import semver from "semver";
 import { gql, useQuery, useMutation } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const gcd = (a: number, b: number): number => {
   if (b === 0) return a;
@@ -11,7 +11,7 @@ const gcd = (a: number, b: number): number => {
 };
 
 const BlackboxSampleRateManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data } = useQuery(
     gql`
       query BlackboxSampleRatesAndPids($connection: ID!) {
@@ -94,7 +94,9 @@ const BlackboxSampleRateManager: React.FC = () => {
   );
 
   if (!data) {
-    return <select disabled />;
+    return (
+      <Select disabled value="0" options={[{ label: " - ", value: "0" }]} />
+    );
   }
 
   const { apiVersion, device } = data.connection;
@@ -117,7 +119,7 @@ const BlackboxSampleRateManager: React.FC = () => {
 
   if (semver.gte(apiVersion, "1.36.0") && semver.lt(apiVersion, "1.44.0")) {
     return (
-      <select
+      <Select
         disabled={setting}
         value={device.blackbox.config.pDenom}
         onChange={(e) => {
@@ -125,7 +127,9 @@ const BlackboxSampleRateManager: React.FC = () => {
             return;
           }
 
-          const newDenom = Number(e.target.value);
+          const newDenom = Number(
+            ((e.target as unknown) as { value: string }).value
+          );
           setBlackboxConfig({
             variables: {
               connection,
@@ -135,31 +139,24 @@ const BlackboxSampleRateManager: React.FC = () => {
             },
           });
         }}
-      >
-        {[
-          { text: "Disabled", hz: 0, pDenom: 0 },
-          { text: "500 Hz", hz: 500, pDenom: 16 },
-          { text: "1 kHz", hz: 1000, pDenom: 32 },
-          { text: "1.5 kHz", hz: 1500, pDenom: 48 },
-          { text: "2 kHz", hz: 2000, pDenom: 64 },
-          { text: "4 kHz", hz: 4000, pDenom: 128 },
-          { text: "8 kHz", hz: 8000, pDenom: 256 },
-          { text: "16 kHz", hz: 16000, pDenom: 512 },
-          { text: "32 kHz", hz: 32000, pDenom: 1024 },
-        ]
-          .filter(({ hz }) => pidRate >= hz || hz === 0)
-          .map(({ text, pDenom }) => (
-            <option key={pDenom} value={pDenom}>
-              {text}
-            </option>
-          ))}
-      </select>
+        options={[
+          { label: "Disabled", hz: 0, value: 0 },
+          { label: "500 Hz", hz: 500, value: 16 },
+          { label: "1 kHz", hz: 1000, value: 32 },
+          { label: "1.5 kHz", hz: 1500, value: 48 },
+          { label: "2 kHz", hz: 2000, value: 64 },
+          { label: "4 kHz", hz: 4000, value: 128 },
+          { label: "8 kHz", hz: 8000, value: 256 },
+          { label: "16 kHz", hz: 16000, value: 512 },
+          { label: "32 kHz", hz: 32000, value: 1024 },
+        ].filter(({ hz }) => pidRate >= hz || hz === 0)}
+      />
     );
   }
 
   const legacy = semver.lt(apiVersion, "1.44.0");
   return (
-    <select
+    <Select
       value={device.blackbox.config.sampleRate}
       disabled={setting}
       onChange={(e) => {
@@ -167,7 +164,9 @@ const BlackboxSampleRateManager: React.FC = () => {
           return;
         }
 
-        const position = Number(e.target.value);
+        const position = Number(
+          ((e.target as unknown) as { value: string }).value
+        );
         if (legacy) {
           setBlackboxConfig({
             variables: {
@@ -188,8 +187,7 @@ const BlackboxSampleRateManager: React.FC = () => {
           });
         }
       }}
-    >
-      {new Array(legacy ? 10 : 5)
+      options={new Array(legacy ? 10 : 5)
         .fill(1)
         .map((_, i) => {
           const denom = 2 ** i;
@@ -207,13 +205,11 @@ const BlackboxSampleRateManager: React.FC = () => {
                 denom,
               };
         })
-        .map(({ freq, unit, denom }, i) => (
-          <option key={freq} value={i}>
-            1/{denom} ({freq}
-            {unit})
-          </option>
-        ))}
-    </select>
+        .map(({ freq, unit, denom }, i) => ({
+          value: i,
+          label: `1/${denom} (${freq}${unit})`,
+        }))}
+    />
   );
 };
 
