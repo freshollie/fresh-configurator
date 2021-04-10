@@ -1,6 +1,6 @@
 const WebpackBar = require("webpackbar");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const { ignoreWarnings } = require("./shared");
 const tsconfig = require("../tsconfig.json");
 
@@ -68,7 +68,6 @@ module.exports = (_, { mode }) => ({
   },
 
   plugins: [
-    new ESBuildPlugin(),
     new WebpackBar({
       name: "main",
       color: "yellow",

@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const WebpackBar = require("webpackbar");
 const { spawn } = require("child_process");
 const tsconfig = require("../tsconfig.json");
@@ -83,7 +83,6 @@ module.exports = (_, { mode }) => ({
     usedExports: true,
   },
   plugins: [
-    new ESBuildPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
