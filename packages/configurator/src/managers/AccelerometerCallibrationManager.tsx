@@ -1,11 +1,11 @@
 import React from "react";
 import { Button } from "bumbag";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 import useLogger from "../hooks/useLogger";
 import { gql, useMutation } from "../gql/apollo";
 
 const AccelerometerCallibrationManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const log = useLogger();
   const [calibrate, { loading }] = useMutation(
     gql`
@@ -18,7 +18,7 @@ const AccelerometerCallibrationManager: React.FC = () => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       onCompleted: () => {
         log(
