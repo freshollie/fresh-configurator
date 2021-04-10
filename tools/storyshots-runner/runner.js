@@ -54,8 +54,11 @@ const writeSnapshot = (image, snapshotPath) =>
     });
   });
 
+const snapshotFileName = ({ id, dark }) =>
+  `${dark ? "dark" : "light"}-${id}.png`;
+
 const snapshotPath = (snapshotDir, { id, dark }) =>
-  path.join(snapshotDir, `${dark ? "dark" : "light"}-${id}.png`);
+  path.join(snapshotDir, snapshotFileName({ id, dark }));
 
 // eslint-disable-next-line import/prefer-default-export
 const run = async ({
@@ -228,6 +231,7 @@ const run = async ({
         await writeSnapshot(newScreenshot, newPath);
         return {
           story: task,
+          path: newPath,
           failed: false,
           message: `New snapshot written to ${newPath}`,
         };
@@ -267,7 +271,29 @@ const run = async ({
     results.forEach(({ story, failed, message }) =>
       console.log(`${story.id}: ${failed ? "failed" : "passed"} - ${message}`)
     );
-    if (results.some((result) => result.failed)) {
+
+    const currentSnapshots = results.map(({ story }) =>
+      snapshotFileName(story)
+    );
+    const existingSnapshots = await fs.promises.readdir(snapshotsDirectory);
+    const removed = existingSnapshots.filter(
+      (existingSnapshot) =>
+        existingSnapshot.endsWith(".png") &&
+        !currentSnapshots.includes(existingSnapshot)
+    );
+
+    await removed.map(async (removedSnapshot) => {
+      console.log(`Clearing snapshot for removed story: ${removedSnapshot}`);
+      if (!CI) {
+        await fs.promises.unlink(
+          path.join(snapshotsDirectory, removedSnapshot)
+        );
+      } else {
+        console.log("Not removing snapshot when running in CI");
+      }
+    });
+
+    if (results.some((result) => result.failed) || (CI && removed.length > 0)) {
       exitCode = 1;
     }
   } finally {
