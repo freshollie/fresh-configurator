@@ -27,6 +27,8 @@ import {
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
 
+import * as connections from "../connections";
+
 export * from "@betaflight/api";
 
 const badPort = "/dev/somebadport";
@@ -44,7 +46,7 @@ const ids = Object.fromEntries(mockPorts.map((port) => [port, v4()]));
 
 const badBaudrate = 38400;
 
-const mockDevice = {
+let mockDevice = {
   name: "mock-device",
   variant: "BTFL",
   attitude: {
@@ -300,6 +302,269 @@ const mockDevice = {
   },
 };
 
+const reset = () => {
+  mockDevice = {
+    name: "mock-device",
+    variant: "BTFL",
+    attitude: {
+      roll: 0,
+      pitch: 0,
+      yaw: 0,
+    },
+    alignment: {
+      roll: 0,
+      pitch: 0,
+      yaw: 0,
+    },
+    gps: {
+      fix: false,
+      numSat: 5,
+      lat: -1,
+      lon: -1,
+      alt: -1,
+      speed: -1,
+      groundCourse: -1,
+    },
+    status: {
+      armingDisabledFlags: [] as DisarmFlags[],
+      cycleTime: 0,
+      i2cError: 0,
+      sensors: [
+        Sensors.ACCELEROMETER,
+        Sensors.GYRO,
+        Sensors.GPS,
+        Sensors.SONAR,
+      ],
+      mode: 0,
+      profile: 0,
+      cpuload: 0,
+      numProfiles: 1,
+      rateProfile: 1,
+    },
+    analogValues: {
+      voltage: 0,
+      mahDrawn: 0,
+      rssi: 0,
+      amperage: 0,
+    },
+    channels: new Array(16).fill(0),
+    serial: {
+      ports: [
+        {
+          id: 0,
+          functions: [SerialPortFunctions.MSP],
+          mspBaudRate: 115200,
+          gpsBaudRate: -1,
+          telemetryBaudRate: -1,
+          blackboxBaudRate: -1,
+        },
+        {
+          id: 1,
+          functions: [SerialPortFunctions.GPS],
+          mspBaudRate: -1,
+          gpsBaudRate: 115200,
+          telemetryBaudRate: -1,
+          blackboxBaudRate: -1,
+        },
+        {
+          id: 2,
+          functions: [SerialPortFunctions.RX_SERIAL],
+          mspBaudRate: -1,
+          gpsBaudRate: -1,
+          telemetryBaudRate: -1,
+          blackboxBaudRate: -1,
+        },
+      ],
+    },
+    advancedConfig: {
+      gyroSyncDenom: 3,
+      pidProcessDenom: 2,
+      useUnsyncedPwm: false,
+      fastPwmProtocol: 1,
+      gyroToUse: 0,
+      motorPwmRate: 480,
+      digitalIdlePercent: 4.5,
+      gyroUse32kHz: false,
+      motorPwmInversion: 0,
+      gyroHighFsr: 0,
+      gyroMovementCalibThreshold: 0,
+      gyroCalibDuration: 0,
+      gyroOffsetYaw: 0,
+      gyroCheckOverflow: 0,
+      debugMode: 0,
+      debugModeCount: 0,
+    },
+    boardInfo: {
+      boardIdentifier: "S411",
+      boardName: "CRAZYBEEF4FS",
+      boardType: 2,
+      boardVersion: 0,
+      configurationState: 2,
+      manufacturerId: "HAMO",
+      mcuTypeId: 4,
+      sampleRateHz: undefined,
+      signature: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ],
+      targetCapabilities: 55,
+      targetName: "STM32F411",
+    },
+    mixerConfig: {
+      mixer: 3,
+      reversedMotors: false,
+    },
+    beeper: {
+      conditions: [] as Beepers[],
+      dshot: {
+        tone: 0,
+        conditions: [Beepers.RX_LOST] as (Beepers.RX_LOST | Beepers.RX_SET)[],
+      },
+    },
+    disabledSensors: [Sensors.MAGNETOMETER],
+    rxConfig: {
+      airModeActivateThreshold: 1320,
+      fpvCamAngleDegrees: 0,
+      interpolation: RcInterpolations.MANUAL,
+      interpolationInterval: 19,
+      rcSmoothing: {
+        autoSmoothness: 0,
+        channels: 2,
+        derivativeCutoff: 0,
+        derivativeType: RcSmoothingDerivativeTypes.BIQUAD,
+        inputCutoff: 0,
+        inputType: RcSmoothingInputTypes.BIQUAD,
+        type: RcSmoothingTypes.INTERPOLATION,
+      },
+      rxMaxUsec: 2115,
+      rxMinUsec: 885,
+      spi: {
+        id: 0,
+        protocol: SpiRxProtocols.NRF24_V202_250K,
+        rfChannelCount: 0,
+      },
+      serialProvider: SerialRxProviders.SPEKTRUM1024,
+      spektrumSatBind: 0,
+      stick: {
+        center: 1500,
+        max: 1900,
+        min: 1050,
+      },
+      usbCdcHidType: 0,
+    },
+    features: [Features.RX_SERIAL, Features.OSD, Features.SOFTSERIAL],
+    rcTuning: {
+      dynamicThrottleBreakpoint: 1500,
+      dynamicThrottlePid: 0.05,
+      pitchRate: 0.05,
+      pitchRateLimit: 1500,
+      rcExpo: 0.05,
+      rcPitchExpo: 0.06,
+      rcPitchRate: 1.39,
+      rcRate: 2.2,
+      rcYawExpo: 2.2,
+      rcYawRate: 0.05,
+      rollPitchRate: 0,
+      rollRate: 2.2,
+      rollRateLimit: 1500,
+      throttleExpo: 0.03,
+      throttleLimitPercent: 5,
+      throttleLimitType: 220,
+      throttleMid: 1.17,
+      yawRate: 2.2,
+      yawRateLimit: 1500,
+    },
+    rcDeadband: {
+      deadband: 0,
+      yawDeadband: 0,
+      altHoldDeadhand: 0,
+      deadband3dThrottle: 0,
+    },
+    rxMap: ["A", "E", "T", "R", "1", "2", "3", "4"] as ChannelMap,
+    rssi: {
+      channel: 0,
+    },
+    modeRangeSlots: [
+      { modeId: 0, auxChannel: 3, range: { start: 1300, end: 1700 } },
+      { modeId: 0, auxChannel: 3, range: { start: 1300, end: 900 } },
+      {
+        modeId: Modes.ANGLE,
+        auxChannel: 5,
+        range: { start: 950, end: 1350 },
+      },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+      { modeId: 0, auxChannel: 0, range: { start: 900, end: 900 } },
+    ],
+    blackboxConfig: {
+      supported: true,
+      device: BlackboxDevices.FLASH,
+      rateNum: 1,
+      rateDenom: 1,
+      pDenom: 32,
+      sampleRate: 0,
+    },
+    blackboxDataFlashSummary: {
+      ready: true,
+      supported: true,
+      sectors: 128,
+      totalSize: 8388608,
+      usedSize: 2561024,
+    },
+    blackboxSdCardSummary: {
+      supported: true,
+      state: SdCardStates.NOT_PRESENT,
+      filesystemLastError: 0,
+      freeSizeKB: 167772160,
+      totalSizeKB: 335545600,
+    },
+  };
+};
+
 const tickAttitude = (): void => {
   const newValue = (mockDevice.attitude.roll + 1) % 360;
   mockDevice.attitude.roll = newValue;
@@ -352,7 +617,7 @@ const delay = (ms?: number): Promise<void> =>
 
 export const ports: typeof api.ports = () =>
   delay(10).then(() => mockPorts.map((port) => ({ path: port })));
-export const isOpen: typeof api.isOpen = (port) => mockPorts.includes(port);
+export const isOpen: typeof api.isOpen = (port) => !!connections.forPort(port);
 export const close: typeof api.close = (port) =>
   delay(10).then(() => undefined);
 
@@ -596,3 +861,6 @@ export const readName: typeof api.readName = (port) =>
 
 export const readFcVariant: typeof api.readFcVariant = (port) =>
   delay(5).then(() => mockDevice.variant);
+
+export const resetConfig: typeof api.resetConfig = (port) =>
+  delay(1500).then(() => reset());
