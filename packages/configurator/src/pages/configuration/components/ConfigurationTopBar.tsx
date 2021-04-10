@@ -1,6 +1,6 @@
 import { Box, Breadcrumb, Icon, useColorMode } from "bumbag";
 import { Link as RouterLink } from "wouter";
-import React from "react";
+import React, { useEffect } from "react";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { gql, useQuery } from "../../../gql/apollo";
 import useConnection from "../../../hooks/useConnection";
@@ -12,7 +12,7 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
   const connection = useConnection();
   const { colorMode } = useColorMode();
 
-  const { data } = useQuery(
+  const { data, refetch } = useQuery(
     gql`
       query PortConnections {
         ports {
@@ -25,6 +25,11 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
       import("./__generated__/ConfigurationTopBar").PortConnectionsQueryVariables
     >
   );
+
+  // Refetch the list of ports if the connection id changes
+  useEffect(() => {
+    refetch();
+  }, [connection, refetch]);
 
   const port = data?.ports.find((p) => p.connectionId === connection)?.id;
 
