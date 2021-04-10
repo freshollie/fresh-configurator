@@ -14,6 +14,7 @@ import React from "react";
 import { Link as RouterLink } from "wouter";
 import { gql, useQuery } from "../../gql/apollo";
 import useConnection from "../../hooks/useConnection";
+import ResetManager from "../../managers/ResetManager";
 import FcSummaryProvider from "../../providers/FcSummaryProvider";
 import GpsSummaryProvider from "../../providers/GpsSummaryProvider";
 import ModelViewProvider from "../../providers/ModelViewProvider";
@@ -53,15 +54,20 @@ const Overview: React.FC = () => {
     <Box>
       <ConfigurationTopBar>
         <Flex>
-          <Box margin="major-5">
-            <Heading>{data?.connection.device.name}</Heading>
+          <Box margin="major-5" minWidth="7">
+            <Heading textOverflow="ellipsis" maxWidth="400px">
+              {data?.connection.device.name}
+            </Heading>
             <SensorsListProvider />
             <Text margin="minor-1">
               {data?.connection.device.info.boardName} -{" "}
               {data?.connection.device.info.targetName}
             </Text>
           </Box>
-          <Box alignY="bottom">
+          <Box alignY="bottom" flexGrow="1">
+            <Box alignX="right">
+              <ResetManager />
+            </Box>
             <Set>
               <RouterLink to={`/connections/${connection}/general`}>
                 <Button>
