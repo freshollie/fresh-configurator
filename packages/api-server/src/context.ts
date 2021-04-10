@@ -2,7 +2,6 @@ import * as api from "@betaflight/api";
 import * as mockedApi from "./mock/api";
 import * as connections from "./connections";
 import * as jobs from "./jobs";
-import * as mockedConnections from "./mock/connections";
 
 export type Context = {
   api: typeof api;
@@ -14,7 +13,7 @@ export type Context = {
 
 export const mockedContext = (): Context => ({
   api: mockedApi,
-  connections: mockedConnections,
+  connections,
   jobs,
   port: "",
   artifactsDir: `${__dirname}/artifacts`,
