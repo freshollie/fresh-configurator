@@ -231,7 +231,10 @@ const Home: React.FC = () => {
     ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
       import("./__generated__/Home").PortsQuery,
       import("./__generated__/Home").PortsQueryVariables
-    >
+    >,
+    {
+      pollInterval: 1000,
+    }
   );
 
   const ports = data?.ports ?? [];
