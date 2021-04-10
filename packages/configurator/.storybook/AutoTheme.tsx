@@ -2,9 +2,8 @@
  * This module allows us to visually test both dark and light versions
  * of all stories
  */
-import React from "react";
-import { Provider as BumbagProvider } from "bumbag";
-import { ThemeProvider } from "../src/theme";
+import React, { useEffect } from "react";
+import { Provider as BumbagProvider, useColorMode, Box } from "bumbag";
 
 declare global {
   // eslint-disable-next-line functional/prefer-type-literal
@@ -141,6 +140,7 @@ const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
   theme,
   children,
 }) => {
+  const { setColorMode } = useColorMode();
   // eslint-disable-next-line no-underscore-dangle
   const snapshot = window.__snapshot__;
   // eslint-disable-next-line no-underscore-dangle
@@ -149,13 +149,36 @@ const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
     disableAnimations();
   }
 
-  return (
-    <ThemeProvider theme={{ dark }}>
-      <BumbagProvider colorMode={dark ? "dark" : "light"}>
-        {children}
-      </BumbagProvider>
-    </ThemeProvider>
-  );
+  useEffect(() => {
+    // Fix some weirdness with changing themes
+    document.body.classList.remove("bb-mode-dark");
+    document.body.classList.remove("bb-mode-default");
+    setColorMode(dark ? "dark" : "default");
+  }, [dark, setColorMode]);
+
+  return <>{children}</>;
 };
 
-export default AutoTheme;
+const withProvider = <P extends { dark: boolean }>(
+  Component: React.FC<P>
+): React.FC<P> => (p) => (
+  <BumbagProvider
+    theme={{
+      modes: {
+        enableLocalStorage: false,
+      },
+    }}
+  >
+    <Box
+      // eslint-disable-next-line no-underscore-dangle
+      height={window.__snapshot__ ? "100vh" : "calc(100vh - 32px)"}
+    >
+      <Component
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...p}
+      />
+    </Box>
+  </BumbagProvider>
+);
+
+export default withProvider(AutoTheme);

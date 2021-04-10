@@ -7,11 +7,12 @@ addons.setConfig({
   theme: create({
     base: "dark",
 
-    colorPrimary: "#ffbb00",
-    colorSecondary: "#3d3f3e",
+    colorPrimary: "#574feb",
+    colorSecondary: "#9e46d8",
     barSelectedColor: "#ffbb00",
 
-    fontBase: '"Open Sans", "Segoe UI", Tahoma, sans-serif',
+    fontBase:
+      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
     fontCode: "monospace",
 
     textColor: "white",
