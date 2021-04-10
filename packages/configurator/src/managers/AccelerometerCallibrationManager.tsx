@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../components/Button";
+import { Button } from "bumbag";
 import useConnectionState from "../hooks/useConnectionState";
 import useLogger from "../hooks/useLogger";
 import { gql, useMutation } from "../gql/apollo";

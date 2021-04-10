@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Beepers } from "@betaflight/api";
 import React from "react";
-import { resolvers } from "../src/gql/client";
+import { ConnectionContext } from "../src/context/ConnectionProvider";
 import BeeperManager from "../src/managers/BeeperManager";
 
 export default {
@@ -18,8 +18,8 @@ const dshotBeeperConfigMock = (enabled: boolean): MockedResponse => ({
           device {
             beeper {
               dshot {
-                tone
                 conditions
+                tone
               }
             }
           }
@@ -55,23 +55,17 @@ const dshotBeeperConfigMock = (enabled: boolean): MockedResponse => ({
 });
 
 export const Off: React.FC = () => (
-  <MockedProvider
-    mocks={[dshotBeeperConfigMock(false)]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <BeeperManager />
+  <MockedProvider mocks={[dshotBeeperConfigMock(false)]}>
+    <ConnectionContext.Provider value="abc">
+      <BeeperManager />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );
 
 export const On: React.FC = () => (
-  <MockedProvider
-    mocks={[dshotBeeperConfigMock(true)]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <BeeperManager />
+  <MockedProvider mocks={[dshotBeeperConfigMock(true)]}>
+    <ConnectionContext.Provider value="abc">
+      <BeeperManager />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );

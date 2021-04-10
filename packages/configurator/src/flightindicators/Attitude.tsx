@@ -1,4 +1,5 @@
 import React from "react";
+import { Box } from "bumbag";
 import withBase from "./hoc/withBase";
 import {
   HorizonBack,
@@ -17,12 +18,12 @@ export default withBase<{
   pitch: number;
 }>(({ roll, pitch }) => (
   <>
-    <div style={{ transform: `rotate(${roll}deg)` }}>
+    <Box transform={`rotate(${roll}deg)`}>
       <HorizonBack />
       <HorizonBall style={{ top: `${boundedPitch(pitch) * 0.7}%` }} />
 
       <HorizonCircle />
-    </div>
+    </Box>
     <HorizonMechanics />
   </>
 ));

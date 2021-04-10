@@ -1,7 +1,7 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import React from "react";
+import { ConnectionContext } from "../src/context/ConnectionProvider";
 import { gql } from "../src/gql/apollo";
-import { resolvers } from "../src/gql/client";
 import MotorIdleSpeedManager from "../src/managers/MotorIdleSpeedManager";
 
 export default {
@@ -12,7 +12,7 @@ export default {
 const motorIdleMock = (percent: number): MockedResponse => ({
   request: {
     query: gql`
-      query MotorDigitleIdleSpeed($connection: ID!) {
+      query MotorDigitalIdleSpeed($connection: ID!) {
         connection(connectionId: $connection) {
           device {
             motors {
@@ -22,8 +22,8 @@ const motorIdleMock = (percent: number): MockedResponse => ({
         }
       }
     ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitleIdleSpeedQuery,
-      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitleIdleSpeedQueryVariables
+      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitalIdleSpeedQuery,
+      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitalIdleSpeedQueryVariables
     >,
     variables: {
       connection: "abc",
@@ -43,34 +43,25 @@ const motorIdleMock = (percent: number): MockedResponse => ({
 });
 
 export const Low: React.FC = () => (
-  <MockedProvider
-    mocks={[motorIdleMock(4)]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <MotorIdleSpeedManager />
+  <MockedProvider mocks={[motorIdleMock(4)]}>
+    <ConnectionContext.Provider value="abc">
+      <MotorIdleSpeedManager />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );
 
 export const Mid: React.FC = () => (
-  <MockedProvider
-    mocks={[motorIdleMock(5)]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <MotorIdleSpeedManager />
+  <MockedProvider mocks={[motorIdleMock(5)]}>
+    <ConnectionContext.Provider value="abc">
+      <MotorIdleSpeedManager />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );
 
 export const High: React.FC = () => (
-  <MockedProvider
-    mocks={[motorIdleMock(7)]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <MotorIdleSpeedManager />
+  <MockedProvider mocks={[motorIdleMock(7)]}>
+    <ConnectionContext.Provider value="abc">
+      <MotorIdleSpeedManager />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );

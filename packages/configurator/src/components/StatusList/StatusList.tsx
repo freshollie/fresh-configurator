@@ -1,4 +1,4 @@
-import styled from "../../theme";
+import { styled } from "bumbag";
 
 export default styled.ul`
   display: flex;
@@ -13,7 +13,7 @@ export default styled.ul`
   > li {
     display: block;
     border-right: 1px solid
-      ${({ theme }) => (theme.dark ? "#9c9c9c" : "#7d7d79")};
+      ${({ color }) => (color === "dark" ? "#9c9c9c" : "#7d7d79")};
     padding-right: 10px;
     margin-right: 10px;
   }

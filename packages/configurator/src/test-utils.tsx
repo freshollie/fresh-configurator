@@ -1,9 +1,23 @@
 import React from "react";
 import { render as renderFunction, RenderResult } from "@testing-library/react";
-import { ThemeProvider } from "./theme";
+import { Provider } from "bumbag";
+
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
 
 const AllTheProviders: React.FC = ({ children }) => (
-  <ThemeProvider>{children}</ThemeProvider>
+  <Provider>{children}</Provider>
 );
 
 const customRender = (
