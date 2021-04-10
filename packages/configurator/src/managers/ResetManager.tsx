@@ -1,13 +1,14 @@
-import React from "react";
-import { gql, useApolloClient, useMutation } from "../gql/apollo";
-import Confirmation from "../components/Confirmation";
-import Button from "../components/Button";
-import useConnectionState from "../hooks/useConnectionState";
+import React, { useState } from "react";
+import { Button, Modal, Dialog, Alert } from "bumbag";
+import { ApolloError, gql, useApolloClient, useMutation } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
+import useConnection from "../hooks/useConnection";
 
 const ResetManager: React.FC = () => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const client = useApolloClient();
+  const [error, setError] = useState<ApolloError | undefined>();
+  const modal = Modal.useState({ animated: true });
   const log = useLogger();
 
   const [reset, { loading }] = useMutation(
@@ -21,30 +22,62 @@ const ResetManager: React.FC = () => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       onCompleted: async () => {
+        // make the client refetch all of these
+        client.cache.evict({
+          fieldName: "connection",
+          args: {
+            connection,
+          },
+        });
         await client.reFetchObservableQueries();
         log(`Settings restored to <b>default</b>`);
+        modal.hide();
       },
-      onError: () => {
+      onError: (e) => {
         log(`Error resetting flight controller`);
+        setError(e);
       },
     }
   );
   return (
-    <Confirmation
-      confirmText="Reset"
-      cancelText="Cancel"
-      message="WARNING: Are you sure you want to reset ALL settings to default?"
-      title="Confirm"
-    >
-      {(confirm) => (
-        <Button disabled={loading} onClick={() => confirm(reset)}>
-          Reset Settings
-        </Button>
-      )}
-    </Confirmation>
+    <>
+      <Dialog.Modal
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...modal}
+        fade
+        slide
+        baseId="reset-confirmation"
+        showActionButtons
+        title="Reset device"
+        type="danger"
+        actionButtonsProps={{
+          submitText: "Reset",
+          isLoading: loading,
+          onClickSubmit: reset,
+          onClickCancel: () => {
+            modal.hide();
+          },
+        }}
+      >
+        {error && (
+          <Alert variant="tint" type="warning">
+            {error.message}
+          </Alert>
+        )}
+        Are you sure you want to reset ALL settings to default?
+      </Dialog.Modal>
+      <Button
+        onClick={() => {
+          modal.show();
+          setError(undefined);
+        }}
+      >
+        Reset Settings
+      </Button>
+    </>
   );
 };
 
