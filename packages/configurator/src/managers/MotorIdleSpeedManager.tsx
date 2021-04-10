@@ -26,7 +26,6 @@ const MotorIdleSpeedManager: React.FC = () => {
     variables: {
       connection,
     },
-    skip: !connection,
   });
 
   const [setConnection] = useMutation(

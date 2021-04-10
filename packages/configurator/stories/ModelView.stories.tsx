@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "../src/theme";
+import { Box } from "bumbag";
 import ModelView from "../src/components/ModelView";
 import { ModelTypes } from "../src/components/Model";
 import requestInterval from "./helpers/request-interval";
@@ -8,10 +8,6 @@ export default {
   component: ModelView,
   title: "Components/ModelView",
 };
-
-const Container = styled.div`
-  height: 310px;
-`;
 
 const useRollingAttitude = (): {
   roll: number;
@@ -33,19 +29,19 @@ const MovingModel = ({ modelType }: { modelType: ModelTypes }): JSX.Element => (
 );
 
 export const QuadX = (): JSX.Element => (
-  <Container>
+  <Box height="300px">
     <MovingModel modelType="quadx" />
-  </Container>
+  </Box>
 );
 
 export const Tricopter = (): JSX.Element => (
-  <Container>
+  <Box height="300px">
     <MovingModel modelType="tricopter" />
-  </Container>
+  </Box>
 );
 
 export const HexX = (): JSX.Element => (
-  <Container>
+  <Box height="300px">
     <MovingModel modelType="hexx" />
-  </Container>
+  </Box>
 );

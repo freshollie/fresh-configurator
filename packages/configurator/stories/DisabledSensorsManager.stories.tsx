@@ -1,8 +1,8 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Sensors } from "@betaflight/api";
 import React from "react";
+import { ConnectionContext } from "../src/context/ConnectionProvider";
 import { gql } from "../src/gql/apollo";
-import { resolvers } from "../src/gql/client";
 import DisabledSensorManager from "../src/managers/DisabledSensorManager";
 
 export default {
@@ -44,23 +44,17 @@ const disabledSensorsMock = (disabled: Sensors[]): MockedResponse => ({
 });
 
 export const AccelerometerEnabled: React.FC = () => (
-  <MockedProvider
-    mocks={[disabledSensorsMock([])]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
+  <MockedProvider mocks={[disabledSensorsMock([])]}>
+    <ConnectionContext.Provider value="abc">
+      <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );
 
 export const AccelerometerDisabled: React.FC = () => (
-  <MockedProvider
-    mocks={[disabledSensorsMock([Sensors.ACCELEROMETER])]}
-    resolvers={resolvers({
-      connection: "abc",
-    })}
-  >
-    <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
+  <MockedProvider mocks={[disabledSensorsMock([Sensors.ACCELEROMETER])]}>
+    <ConnectionContext.Provider value="abc">
+      <DisabledSensorManager sensor={Sensors.ACCELEROMETER} />
+    </ConnectionContext.Provider>
   </MockedProvider>
 );

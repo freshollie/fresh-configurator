@@ -28,14 +28,14 @@ const ModelView: React.FC<{
               </Box>
             </Columns.Column>
             <Columns.Column>
-              <Box>
-                <Text>{yaw} deg</Text>
+              <Box width="100%">
+                <Text textAlign="right">{yaw} deg</Text>
               </Box>
-              <Box>
-                <Text>{pitch} deg</Text>
+              <Box width="100%">
+                <Text textAlign="right">{pitch} deg</Text>
               </Box>
-              <Box>
-                <Text>{roll} deg</Text>
+              <Box width="100%">
+                <Text textAlign="right">{roll} deg</Text>
               </Box>
             </Columns.Column>
           </Columns>

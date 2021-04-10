@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
-import styled, { css } from "styled-components";
+import { styled, css, Box } from "bumbag";
 import { FiBox, FiCircle } from "../assets";
 
-const InstrumentContainer = styled.div<{ size?: number }>`
+const InstrumentContainer = styled(Box)<{ size?: number }>`
   ${({ size = 250 }) => css`
     width: ${size}px;
     height: ${size}px;

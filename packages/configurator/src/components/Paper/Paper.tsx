@@ -1,4 +1,4 @@
-import { styled, Flex, palette, css } from "bumbag";
+import { styled, Flex, css, palette } from "bumbag";
 
 export default styled(Flex)`
   width: 100%;

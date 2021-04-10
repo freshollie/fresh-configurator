@@ -1,4 +1,4 @@
-import styled, { css } from "../theme";
+import { styled, css } from "bumbag";
 import LogoIcon1 from "./assets/light-wide-1.svg";
 import LogoIcon2 from "./assets/light-wide-2.svg";
 import LogoWhite from "./assets/cf-logo.svg";
@@ -28,8 +28,8 @@ export const LandingLogo = styled(LogoWhite)`
   .st2 {
     fill: #3a3a3a;
   }
-  ${({ theme }) =>
-    !theme.dark &&
+  ${({ color }) =>
+    color !== "dark" &&
     css`
       path {
         stroke-opacity: 0 !important;
