@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`baudRate should throw an error if the port is not open 1`] = `"Port is not open"`;
+
 exports[`close should cancel all pending executions 1`] = `[Error: Connection closed]`;
 
 exports[`close should cancel all pending executions 2`] = `[Error: Connection closed]`;

@@ -33,12 +33,13 @@ describe("connections", () => {
             connect(port: $port, baudRate: $baudRate) {
               id
               apiVersion
+              baudRate
             }
           }
         `,
         variables: {
           port: "/dev/someport",
-          baudRate: 99922,
+          baudRate: 123456,
         },
       });
 
@@ -46,11 +47,12 @@ describe("connections", () => {
       expect(data?.connect).toEqual({
         id: expect.any(String),
         apiVersion: "1.32.0",
+        baudRate: 123456,
       });
       expect(mockApi.open).toHaveBeenCalledWith(
         "/dev/someport",
         {
-          baudRate: 99922,
+          baudRate: 123456,
         },
         expect.anything()
       );
@@ -321,6 +323,31 @@ describe("connections", () => {
       expect(mockApi.open).toHaveBeenCalledTimes(2);
       await flushPromises();
       expect(isOpen(data?.connect.id)).toBeFalsy();
+    });
+  });
+
+  describe("connection", () => {
+    it("should return baudRate of the connection", async () => {
+      const { query } = createTestClient(apolloServer);
+
+      add("/dev/port", "abcd");
+      mockApi.baudRate.mockReturnValue(1234);
+
+      const { data, errors } = await query({
+        query: gql`
+          query Connection($connection: ID!) {
+            connection(connectionId: $connection) {
+              baudRate
+            }
+          }
+        `,
+        variables: {
+          connection: "abcd",
+        },
+      });
+      expect(errors).toBeFalsy();
+      expect(data.connection.baudRate).toEqual(1234);
+      expect(mockApi.baudRate).toHaveBeenCalledWith("/dev/port");
     });
   });
 

@@ -296,6 +296,14 @@ export const packetErrors = (port: string): number =>
 export const apiVersion = (port: string): string =>
   connectionsMap[port]?.mspInfo.apiVersion ?? "0.0.0";
 
+export const baudRate = (port: string): number => {
+  const connection = connectionsMap[port];
+  if (!connection) {
+    throw new Error("Port is not open");
+  }
+  return connection.serial.baudRate;
+};
+
 /**
  * Private, used for testing
  */

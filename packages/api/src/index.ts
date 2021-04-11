@@ -86,6 +86,7 @@ export {
   bytesWritten,
   packetErrors,
   ports,
+  baudRate,
 } from "@betaflight/msp";
 export {
   escProtocols,

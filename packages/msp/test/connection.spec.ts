@@ -2,7 +2,7 @@ import MockBinding from "@serialport/binding-mock";
 import binding from "@serialport/bindings";
 import SerialPort from "@serialport/stream";
 import flushPromises from "flush-promises";
-import { raw, reset, execute, apiVersion } from "../src/connection";
+import { raw, reset } from "../src/connection";
 import {
   open,
   connections,
@@ -12,6 +12,9 @@ import {
   bytesRead,
   bytesWritten,
   packetErrors,
+  baudRate,
+  apiVersion,
+  execute,
 } from "../src";
 
 import { encodeMessageV1, encodeMessageV2 } from "../src/encoders";
@@ -482,5 +485,16 @@ describe("apiVersion", () => {
 
   it("should respond with 0.0.0 when port is not open", () => {
     expect(apiVersion("/dev/something")).toEqual("0.0.0");
+  });
+});
+
+describe("baudRate", () => {
+  it("should return the baudRate of the connection", async () => {
+    await open("/dev/somethingelse", { baudRate: 38400 });
+    expect(baudRate("/dev/somethingelse")).toEqual(38400);
+  });
+
+  it("should throw an error if the port is not open", () => {
+    expect(() => baudRate("/dev/anotherdevice")).toThrowErrorMatchingSnapshot();
   });
 });
