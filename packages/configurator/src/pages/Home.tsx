@@ -176,6 +176,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
           <Button
             size="small"
             color="secondary"
+            data-testid="connect-button"
             disabled={details.connecting || connecting}
             isLoading={details.connecting || connecting}
             onClick={() => {
@@ -200,6 +201,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
         {details.connectionId && (
           <Button
             size="small"
+            data-testid="configure-button"
             disabled={badVersion}
             onClick={() => {
               setLocation(`/connections/${details.connectionId}/`);

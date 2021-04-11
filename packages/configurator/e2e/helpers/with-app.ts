@@ -50,7 +50,7 @@ export default async (): Promise<Application> => {
     app = new Application({
       env: {
         E2E: "true",
-        HEADLESS: "true",
+        HEADLESS: PRODUCTION ? "true" : "false",
       },
       path: PRODUCTION ? binaryPath() : ((electronPath as unknown) as string),
       args: PRODUCTION
