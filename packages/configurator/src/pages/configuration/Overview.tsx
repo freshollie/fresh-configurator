@@ -55,7 +55,11 @@ const Overview: React.FC = () => {
       <ConfigurationTopBar>
         <Flex>
           <Box margin="major-5" minWidth="7">
-            <Heading textOverflow="ellipsis" maxWidth="400px">
+            <Heading
+              textOverflow="ellipsis"
+              maxWidth="400px"
+              data-testid="device-name"
+            >
               {data?.connection.device.name}
             </Heading>
             <SensorsListProvider />
