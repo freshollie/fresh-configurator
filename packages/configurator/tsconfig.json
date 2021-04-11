@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "target": "ES2019",
-    "types": [
-      "jest"
-    ]
+    "types": ["jest"]
   },
   "include": [
     "src/**/*.tsx",
