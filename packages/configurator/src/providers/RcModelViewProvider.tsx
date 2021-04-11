@@ -2,13 +2,13 @@ import React from "react";
 import semver from "semver";
 import Model from "../components/Model";
 import useSimulatedAttitude from "../hooks/useSimulatedAttitude";
-import useConnectionState from "../hooks/useConnectionState";
 import { gql, useQuery } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data } = useQuery(
     gql`
       query RcModelViewData($connection: ID!) {
@@ -51,9 +51,8 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
     }
   );
 
@@ -76,9 +75,8 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
       pollInterval: 1000 / refreshRate,
     }
   );
