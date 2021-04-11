@@ -1,27 +1,13 @@
 import React from "react";
 import useUtilisation from "../hooks/useUtilisation";
-import useConnectionState from "../hooks/useConnectionState";
 import StatusList from "../components/StatusList";
 import { useQuery, gql } from "../gql/apollo";
+import useConnection from "../hooks/useConnection";
 
 const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
   refreshRate,
 }) => {
-  const { data: connectionSettingsData } = useQuery(
-    gql`
-      query ConnectionSettings {
-        configurator @client {
-          port
-          baudRate
-        }
-      }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/FcStatusProvider").ConnectionSettingsQuery,
-      import("./__generated__/FcStatusProvider").ConnectionSettingsQueryVariables
-    >
-  );
-  const baudRate = connectionSettingsData?.configurator.baudRate;
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data: deviceStatus } = useQuery(
     gql`
       query Status($connection: ID!) {
@@ -41,10 +27,9 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       pollInterval: 1000 / refreshRate,
-      skip: !connection,
     }
   );
 
@@ -55,6 +40,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     gql`
       query ConnectionStats($connection: ID!) {
         connection(connectionId: $connection) {
+          baudRate
           bytesWritten
           bytesRead
           packetErrors
@@ -66,9 +52,8 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
       pollInterval: 250,
     }
   );
@@ -77,16 +62,18 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     bytesRead,
     bytesWritten,
     packetErrors,
+    baudRate,
   } = connectionStatsData?.connection ?? {
     bytesRead: 0,
     bytesWritten: 0,
     packetErrors: 0,
+    baudRate: 0,
   };
 
   // Read the sent and received bytes every second in order to
   // determine the port usage compared to the baudRate
-  const readUsage = useUtilisation(bytesRead * 8, baudRate ?? 0);
-  const writeUsage = useUtilisation(bytesWritten * 8, baudRate ?? 0);
+  const readUsage = useUtilisation(bytesRead * 8, baudRate);
+  const writeUsage = useUtilisation(bytesWritten * 8, baudRate);
 
   return (
     <StatusList>
