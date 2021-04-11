@@ -2,9 +2,8 @@
 
 exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 1`] = `
 <button
-  class="css-1k04dns css-63it0p css-jwhr8m bb-Box bb-Button"
+  class="css-118n93f css-63it0p css-jwhr8m bb-Box bb-Button"
   data-testid="calibrate-acc-button"
-  style=""
   type="button"
 >
   Calibrate Accelerometer
@@ -14,7 +13,7 @@ exports[`AccelerometerCallibrationManager should callibrate the device accelerom
 exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 2`] = `
 <button
   aria-disabled="true"
-  class="css-kkyqvo css-63it0p css-jwhr8m bb-Box bb-Button"
+  class="css-47if3e css-63it0p css-jwhr8m bb-Box bb-Button"
   data-testid="calibrate-acc-button"
   disabled=""
   style="pointer-events: none;"
@@ -26,7 +25,7 @@ exports[`AccelerometerCallibrationManager should callibrate the device accelerom
 
 exports[`AccelerometerCallibrationManager should callibrate the device accelerometer when button is clicked 3`] = `
 <button
-  class="css-1k04dns css-63it0p css-jwhr8m bb-Box bb-Button"
+  class="css-118n93f css-63it0p css-jwhr8m bb-Box bb-Button"
   data-testid="calibrate-acc-button"
   style=""
   type="button"

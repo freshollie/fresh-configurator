@@ -4,23 +4,9 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { render, fireEvent, waitFor } from "../test-utils";
 import AccelerometerCallibrationManager from "./AccelerometerCallibrationManager";
 import { gql } from "../gql/apollo";
+import { ConnectionContext } from "../context/ConnectionProvider";
 
 const mockConnectionId = "someconnectionid";
-
-const log = jest.fn();
-
-const clientResolvers = {
-  Query: {
-    configurator: () => ({
-      connection: mockConnectionId,
-      connecting: false,
-      __typename: "Configurator",
-    }),
-  },
-  Mutation: {
-    log,
-  },
-};
 
 const mockCallibrateMutation = (
   connection: string,
@@ -56,10 +42,11 @@ describe("AccelerometerCallibrationManager", () => {
     const callibrate = jest.fn();
     const { getByTestId } = render(
       <MockedProvider
-        resolvers={clientResolvers}
         mocks={[mockCallibrateMutation(mockConnectionId, callibrate)]}
       >
-        <AccelerometerCallibrationManager />
+        <ConnectionContext.Provider value={mockConnectionId}>
+          <AccelerometerCallibrationManager />
+        </ConnectionContext.Provider>
       </MockedProvider>
     );
 
