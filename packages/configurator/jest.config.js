@@ -15,5 +15,8 @@ module.exports = {
       "identity-obj-proxy",
     ...config.moduleNameMapper,
   },
+  snapshotSerializers: [
+    "@emotion/jest/serializer" /* if needed other snapshotSerializers should go here */,
+  ],
   testEnvironment: "jest-environment-jsdom",
 };

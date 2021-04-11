@@ -2,8 +2,40 @@
 
 exports[`Airspeed should render correctly 1`] = `
 <DocumentFragment>
-  <div
-    class="css-63it0p css-jwhr8m css-vam97m bb-Box"
+  .emotion-0 {
+  margin: unset;
+  padding: unset;
+  border: unset;
+  background: unset;
+  font: unset;
+  font-family: inherit;
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+.emotion-0:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.emotion-2 {
+  width: 250px;
+  height: 250px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.emotion-2 div,
+.emotion-2 svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div
+    class="emotion-0 emotion-1 emotion-2 bb-Box"
   >
     <svg
       data-asset="SpeedMechanics"
