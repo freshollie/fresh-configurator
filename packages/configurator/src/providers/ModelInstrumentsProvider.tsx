@@ -2,14 +2,14 @@ import React from "react";
 import Attitude from "../flightindicators/Attitude";
 import Heading from "../flightindicators/Heading";
 import { gql, useQuery } from "../gql/apollo";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 type Props = {
   refreshRate: number;
 };
 
 const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
-  const { connection } = useConnectionState();
+  const connection = useConnection();
   const { data: deviceData } = useQuery(
     gql`
       query Attitude($connection: ID!) {
@@ -29,9 +29,8 @@ const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
-      skip: !connection,
       pollInterval: 1000 / refreshRate,
     }
   );
