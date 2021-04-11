@@ -2637,6 +2637,7 @@ __metadata:
     source-map-support: ^0.5.19
     spectron: ^13.0.0
     storybook-addon-turbo-build: ^1.0.0-beta.0
+    storybook-dark-mode: ^1.0.7
     themeprovider-storybook: ^1.7.1
     three: ^0.124.0
     ts-jest: "*"
@@ -14897,17 +14898,17 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
+"fast-deep-equal@npm:^3.0.0, fast-deep-equal@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "fast-deep-equal@npm:3.1.3"
+  checksum: 451526766b219503131d11e823eaadd1533080b0be4860e316670b039dcaf31cd1007c2fe036a9b922abba7c040dfad5e942ed79d21f2ff849e50049f36e0fb7
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1":
   version: 3.1.1
   resolution: "fast-deep-equal@npm:3.1.1"
   checksum: 38fe57c5ea7dbb42cf84f5d94166358b930beb49345619205ff16c4a0c896f8679a444f0fbd0f352a633f2ea800673173e2a150d81d3d85933d714d24498c688
-  languageName: node
-  linkType: hard
-
-"fast-deep-equal@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "fast-deep-equal@npm:3.1.3"
-  checksum: 451526766b219503131d11e823eaadd1533080b0be4860e316670b039dcaf31cd1007c2fe036a9b922abba7c040dfad5e942ed79d21f2ff849e50049f36e0fb7
   languageName: node
   linkType: hard
 
@@ -26782,6 +26783,22 @@ resolve@^1.18.1:
   dependencies:
     esbuild-loader: ^2.9.1
   checksum: 9113f73cc9892736aa7ecd990f18a854d1abe72364f25799e4fd9f8fab02ccd5de23d92ae4d7ea37e3eb6b50f1986b04cafa4c9ee9ddffa106a7e9bd00da45ce
+  languageName: node
+  linkType: hard
+
+"storybook-dark-mode@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "storybook-dark-mode@npm:1.0.7"
+  dependencies:
+    fast-deep-equal: ^3.0.0
+    memoizerific: ^1.11.3
+  peerDependencies:
+    "@storybook/addons": ">= 6.x"
+    "@storybook/api": ">= 6.x"
+    "@storybook/components": ">= 6.x"
+    "@storybook/core-events": ">= 6.x"
+    "@storybook/theming": ">= 6.x"
+  checksum: a432b9a0819b2adf412ae5bc94c5f6969c87a1e37c4a887d1ffa447cb08c2d31989786201be44f152242458942b2a8f5910f614865eb254ad74899c0f846f0b2
   languageName: node
   linkType: hard
 
