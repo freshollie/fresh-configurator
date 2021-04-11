@@ -202,7 +202,7 @@ const run = async ({
         const pixels = width * height;
         const percentage = (difference / pixels) * 100;
 
-        if (percentage > 0.5) {
+        if (percentage > 1) {
           if (!update) {
             const diffSnap = snapshotPath(diffDirectory, task);
             await ensureDir(diffDirectory);
@@ -210,7 +210,7 @@ const run = async ({
             return {
               story: task,
               failed: true,
-              message: `${difference} pixels difference detected between snapshots, see ${diffSnap} for more details`,
+              message: `${difference} pixels (${percentage}%) difference detected between snapshots, see ${diffSnap} for more details`,
             };
           }
           shouldWrite = true;
