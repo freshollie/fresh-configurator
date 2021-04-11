@@ -11,15 +11,16 @@ export type Context = {
   artifactsDir: string;
 };
 
-export const mockedContext = (): Context => ({
+type Options = { artifactsDir: string };
+export const mockedContext = ({ artifactsDir }: Options) => (): Context => ({
   api: mockedApi,
   connections,
   jobs,
   port: "",
-  artifactsDir: `${__dirname}/artifacts`,
+  artifactsDir,
 });
 
-export default ({ artifactsDir }: { artifactsDir: string }) => (): Context => ({
+export default ({ artifactsDir }: Options) => (): Context => ({
   api,
   connections,
   port: "",
