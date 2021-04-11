@@ -60,7 +60,7 @@ export const createServer = ({
   app.use("/job-artifacts", express.static(artifactsDirectory));
 
   const contextGenerator = mocked
-    ? mockedContext
+    ? mockedContext({ artifactsDir: artifactsDirectory })
     : context({ artifactsDir: artifactsDirectory });
 
   const apolloServer = new ApolloServer({

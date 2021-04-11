@@ -15,9 +15,9 @@ let mainWindow: BrowserWindow | undefined;
 const E2E = process.env.E2E === "true";
 const PRODUCTION = process.env.NODE_ENV === "production";
 
-const artifactsDirectory = `${app.getPath(
-  "temp"
-)}/artifacts-${new Date().getTime()}`;
+const artifactsDirectory = PRODUCTION
+  ? `${app.getPath("temp")}/artifacts-${new Date().getTime()}`
+  : `${__dirname}/artifacts`;
 
 const startBackend = async (): Promise<void> => {
   await fs.promises.mkdir(artifactsDirectory);
