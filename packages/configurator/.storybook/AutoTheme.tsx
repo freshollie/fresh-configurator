@@ -159,9 +159,7 @@ const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
   return <>{children}</>;
 };
 
-const withProvider = <P extends { dark: boolean }>(
-  Component: React.FC<P>
-): React.FC<P> => (p) => (
+const withProvider = <P,>(Component: React.FC<P>): React.FC<P> => (p) => (
   <BumbagProvider
     theme={{
       modes: {
