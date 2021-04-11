@@ -5,8 +5,13 @@ import path from "path";
 import url from "url";
 import fs from "fs";
 import { createServer } from "@betaflight/api-server";
+import unhandled from "electron-unhandled";
 import persistedQueries from "../gql/__generated__/persisted-queries-server.json";
 import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
+
+unhandled({
+  showDialog: true,
+});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,11 +21,13 @@ const E2E = process.env.E2E === "true";
 const PRODUCTION = process.env.NODE_ENV === "production";
 
 const artifactsDirectory = PRODUCTION
-  ? `${app.getPath("temp")}/artifacts-${new Date().getTime()}`
-  : `${__dirname}/artifacts`;
+  ? path.join(app.getPath("temp"), `artifacts-${new Date().getTime()}`)
+  : path.join(__dirname, "artifacts");
 
 const startBackend = async (): Promise<void> => {
-  await fs.promises.mkdir(artifactsDirectory);
+  if (PRODUCTION) {
+    await fs.promises.mkdir(artifactsDirectory);
+  }
 
   const mocked = process.env.MOCKED === "true" || E2E;
   if (mocked) {
@@ -70,6 +77,7 @@ const createWindow = (): void => {
       // Need these enabled when e2e is running
       nodeIntegration: E2E,
       enableRemoteModule: E2E,
+      contextIsolation: false,
       preload: `${__dirname}/preload.js`,
     },
   });
