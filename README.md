@@ -1,6 +1,6 @@
 # Fresh configurator
 
-> A re-write of the Betaflight configurator
+> A re-written simplication of the Betaflight configurator
 
 [![Pipeline status](https://github.com/freshollie/fresh-configurator/workflows/pipeline/badge.svg)](https://github.com/freshollie/fresh-configurator/actions)
 [![Coverage](https://codecov.io/gh/freshollie/fresh-configurator/branch/master/graph/badge.svg?token=JOAYJP148K)](https://codecov.io/gh/freshollie/fresh-configurator)
@@ -8,7 +8,8 @@
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://betaflight-storybook.netlify.app)
 
 <p align="center">
-  <img width="700" src="./docs/progress.png">
+  <img width="600" src="./docs/progress.png">
+  <img width="600" src="./docs/progress-dark.png">
 </p>
 
 ## What is this?
@@ -23,19 +24,18 @@ exist today.
 The aim of this rewrite is to show how the software could be vastly improved
 and simplified, and that by doing so attract more contribution to the software.
 
-It would also allow for easier refactoring and redesigning of the UI.
-
 [Try it out!](https://betaflight-configurator.netlify.app?backend=wss://betaflight-mock-api.herokuapp.com)
 
 ## What's happening right now?
 
 At the moment functionality is very minimal, and lots is changing all the time.
 
-- The MultiWii protocol sourcecode has been ported into Typescript, and utilises promises. It's available in the [@betaflight/msp](packages/msp) package.
+- The MultiWii protocol sourcecode has been ported into TypeScript, and utilises promises. It's available in the [@betaflight/msp](packages/msp) package.
 - [Tests have been written](packages/msp/test) for all of `@betaflight/msp`
-- The Betaflight API has been ported into [`@betaflight/api`](packages/api), and has some tests
-- The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written
-- [Storybook](https://freshollie.github.io/fresh-configurator) is utlised to develop components
+- The Betaflight API has been ported into [`@betaflight/api`](packages/api), and has high test coverage
+- The API exists as [graphql schema](https://betaflight-mock-api.herokuapp.com) within [`@betaflight/api-server`](packages/api-server)
+- The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written in [`@betaflight/configurator`](packages/configurator)
+- [Storybook](https://betaflight-storybook.netlify.app) is utlised to develop components
 
 ## What's the plan?
 
@@ -95,6 +95,13 @@ Tests can be run across the entire codebase at once
 
 ```
 $ yarn test
+```
+
+End To End tests can be executed against the built application to verify that the UI
+functions as expected
+
+```
+$ yarn e2e:production
 ```
 
 ## Architecture
@@ -163,11 +170,11 @@ Querying the device is as simple as describing the data you want to retreive:
 ...
 
 import { useQuery } from "@apollo/client";
-import useConnectionState from "../hooks/useConnectionState";
+import useConnection from "../hooks/useConnection";
 
 const FcStatusProvider: React.FC = () => {
-  const { connection } = useConnectionState();
-  const { data: deviceStatus } = useQuery(
+  const { connection } = useConnection();
+  const connection = useQuery(
     gql`
       query Status($connection: ID!) {
         connection(connectionId: $connection) {
@@ -186,19 +193,16 @@ const FcStatusProvider: React.FC = () => {
     >,
     {
       variables: {
-        connection: connection ?? "",
+        connection,
       },
       // Fetch this data every 100ms
-      pollInterval: 100,
-      // Don't execute this query if there is no connection
-      skip: !connection,
+      pollInterval: 100
     }
   );
 
   ...
 
   // display all 0 values while the device status is loading
-  // or has not been queried
   return (
     <StatusList>
       ...
