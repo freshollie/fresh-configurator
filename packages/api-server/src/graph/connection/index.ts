@@ -27,6 +27,7 @@ const typeDefs = gql`
   type Connection {
     id: ID!
     port: String!
+    baudRate: Int!
     apiVersion: String!
     bytesRead: Int!
     bytesWritten: Int!
@@ -144,6 +145,7 @@ const resolvers: Resolvers = {
       return {
         id: connectionId,
         port,
+        baudRate,
         apiVersion: "0.0.0",
         bytesRead: 0,
         bytesWritten: 0,
@@ -168,6 +170,7 @@ const resolvers: Resolvers = {
       return {
         id: connectionId,
         port,
+        baudRate: 0,
         apiVersion: "0.0.0",
         bytesRead: 0,
         bytesWritten: 0,
@@ -181,6 +184,8 @@ const resolvers: Resolvers = {
     bytesRead: ({ port }, _, { api }) => api.bytesRead(port),
     bytesWritten: ({ port }, _, { api }) => api.bytesWritten(port),
     packetErrors: ({ port }, _, { api }) => api.packetErrors(port),
+    baudRate: ({ port, baudRate }, _, { api }) =>
+      baudRate > 0 ? baudRate : api.baudRate(port),
   },
 };
 
