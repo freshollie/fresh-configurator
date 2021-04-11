@@ -6,6 +6,7 @@ import React, { useEffect } from "react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useDarkMode } from "storybook-dark-mode";
 import { Provider as BumbagProvider, useColorMode, Box } from "bumbag";
+import theme from "../src/theme";
 
 declare global {
   // eslint-disable-next-line functional/prefer-type-literal
@@ -165,6 +166,7 @@ const withProvider = <P,>(Component: React.FC<P>): React.FC<P> => (p) => (
       modes: {
         enableLocalStorage: false,
       },
+      ...theme,
     }}
   >
     <Box

@@ -1,6 +1,7 @@
 import React from "react";
 import { render as renderFunction, RenderResult } from "@testing-library/react";
 import { Provider } from "bumbag";
+import theme from "./theme";
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -17,7 +18,7 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 const AllTheProviders: React.FC = ({ children }) => (
-  <Provider>{children}</Provider>
+  <Provider theme={theme}>{children}</Provider>
 );
 
 const customRender = (

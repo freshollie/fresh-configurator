@@ -1,16 +1,33 @@
 import React from "react";
 import { Sensors } from "@betaflight/api";
-import { Icon, Tag, Set, Text, Box } from "bumbag";
+import { Icon, Tag, Set, Text } from "bumbag";
+import {
+  faAtom,
+  faCompass,
+  faSatellite,
+  faThermometerHalf,
+  faWifi,
+} from "@fortawesome/free-solid-svg-icons";
 import { gql, useQuery } from "../gql/apollo";
 import useConnection from "../hooks/useConnection";
 
 const SENSOR_ELEMENTS = {
-  [Sensors.GYRO]: [<Icon icon="gyro-sensor" />, "Gyro"],
-  [Sensors.ACCELEROMETER]: [<Icon icon="acc-sensor" />, "Accel"],
-  [Sensors.MAGNETOMETER]: [<Icon icon="mag-sensor" />, "Mag"],
-  [Sensors.BAROMETER]: [<Icon icon="bar-sensor" />, "Baro"],
-  [Sensors.GPS]: [<Icon icon="gps-sensor" />, "GPS"],
-  [Sensors.SONAR]: [<Icon icon="sonar-sensor" />, "Sonar"],
+  [Sensors.GYRO]: [{ icon: faAtom, type: "font-awesome" }, "Gyro"],
+  [Sensors.ACCELEROMETER]: [{ icon: "acc-sensor" }, "Accel"],
+  [Sensors.MAGNETOMETER]: [{ icon: faCompass, type: "font-awesome" }, "Mag"],
+  [Sensors.BAROMETER]: [
+    { icon: faThermometerHalf, type: "font-awesome" },
+    "Baro",
+  ],
+  [Sensors.GPS]: [{ icon: faSatellite, type: "font-awesome" }, "GPS"],
+  [Sensors.SONAR]: [
+    {
+      icon: faWifi,
+      transform: "rotate(180deg)",
+      type: "font-awesome",
+    },
+    "Sonar",
+  ],
 } as const;
 
 const SENSORS_ORDER = [
@@ -55,18 +72,25 @@ const SensorsListProvider: React.FC = () => {
     <Set>
       {SENSORS_ORDER.map((sensor) => (
         <Tag key={sensor} variant="default">
-          {SENSOR_ELEMENTS[sensor][0]}
-          <Text margin="minor-1">{SENSOR_ELEMENTS[sensor][1]}</Text>
-          <Box
-            width="7px"
-            height="7px"
-            backgroundColor={
+          <Icon
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...SENSOR_ELEMENTS[sensor][0]}
+            color={
               data.connection.device.sensors.available.includes(sensor)
-                ? "success"
-                : "danger"
+                ? undefined
+                : "gray"
             }
-            borderRadius="10px"
           />
+          <Text
+            margin="minor-1"
+            color={
+              data.connection.device.sensors.available.includes(sensor)
+                ? undefined
+                : "gray"
+            }
+          >
+            {SENSOR_ELEMENTS[sensor][1]}
+          </Text>
         </Tag>
       ))}
     </Set>
