@@ -1,5 +1,3 @@
-import "themeprovider-storybook/register";
-
 import { create } from "@storybook/theming";
 import { addons } from "@storybook/addons";
 

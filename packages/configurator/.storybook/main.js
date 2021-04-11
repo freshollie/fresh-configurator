@@ -36,6 +36,7 @@ module.exports = {
         optimizationLevel: 2,
       },
     },
+    "storybook-dark-mode",
   ],
   typescript: {
     check: true,

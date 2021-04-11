@@ -3,6 +3,8 @@
  * of all stories
  */
 import React, { useEffect } from "react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useDarkMode } from "storybook-dark-mode";
 import { Provider as BumbagProvider, useColorMode, Box } from "bumbag";
 
 declare global {
@@ -136,15 +138,13 @@ const disableAnimations = (): void => {
   };
 };
 
-const AutoTheme: React.FC<{ theme: { dark: boolean } }> = ({
-  theme,
-  children,
-}) => {
+const AutoTheme: React.FC = ({ children }) => {
   const { setColorMode } = useColorMode();
+  const storybookDark = useDarkMode();
   // eslint-disable-next-line no-underscore-dangle
   const snapshot = window.__snapshot__;
   // eslint-disable-next-line no-underscore-dangle
-  const dark = snapshot ? window.__dark__ : theme.dark;
+  const dark = snapshot ? window.__dark__ : storybookDark;
   if (!window.snaps.animationsDisabled && snapshot) {
     disableAnimations();
   }
