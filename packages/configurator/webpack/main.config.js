@@ -14,15 +14,6 @@ module.exports = (_, { mode }) => ({
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
   },
-  // externals: [
-  //   // Don't try to pack referenced .node files
-  //   ({ request }, callback) => {
-  //     if (/\.node$/.test(request)) {
-  //       return callback(null, `commonjs ${request}`);
-  //     }
-  //     return callback();
-  //   },
-  // ],
   ignoreWarnings: ignoreWarnings(mode),
   node: {
     __filename: false,
