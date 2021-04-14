@@ -2,6 +2,7 @@ import { styled, css } from "bumbag";
 import LogoIcon1 from "./assets/light-wide-1.svg";
 import LogoIcon2 from "./assets/light-wide-2.svg";
 import LogoWhite from "./assets/cf-logo.svg";
+import supafly from "./assets/supafly.png";
 
 export const Logo1 = styled(LogoIcon1)`
   .st0 {
@@ -36,3 +37,5 @@ export const LandingLogo = styled(LogoWhite)`
       }
     `}
 `;
+
+export const SupaflyLogo = supafly;

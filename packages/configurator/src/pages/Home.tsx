@@ -6,14 +6,18 @@ import {
   List,
   Button,
   Level,
-  TopNav,
   Alert,
+  Image,
+  Flex,
+  Link,
   useColorMode,
+  Icon,
 } from "bumbag";
 import React, { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { useLocation, Link as RouterLink } from "wouter";
 import semver from "semver";
-import { LandingLogo } from "../logos";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { SupaflyLogo } from "../logos";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
 import config from "../config";
@@ -139,7 +143,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
     config.apiVersionAccepted
   );
   return (
-    <Card borderRadius="1" width="400px">
+    <Card borderRadius="5" width="400px" variant="bordered">
       <Heading use="h4">{details.id}</Heading>
       {error && !connecting && (
         <Alert
@@ -215,8 +219,19 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
   );
 };
 
-const Home: React.FC = () => {
+const ThemeSelector: React.FC = () => {
   const { colorMode, setColorMode } = useColorMode();
+  return (
+    <Button
+      variant="ghost"
+      onClick={() => setColorMode(colorMode === "dark" ? "light" : "dark")}
+    >
+      <Icon icon={colorMode === "dark" ? faSun : faMoon} type="font-awesome" />
+    </Button>
+  );
+};
+
+const Home: React.FC = () => {
   const { data } = useQuery(
     gql`
       query Ports {
@@ -242,41 +257,68 @@ const Home: React.FC = () => {
   const ports = data?.ports ?? [];
   return (
     <Box>
-      <TopNav borderBottom="default" height="100px" selectedId="home">
-        <TopNav.Section>
-          <TopNav.Item>
-            <Box width="300px" alignY="center">
-              <LandingLogo />
-            </Box>
-          </TopNav.Item>
-          <Link to="/">
-            <TopNav.Item navId="home">Home</TopNav.Item>
-          </Link>
-          <Link to="/help">
-            <TopNav.Item navId="help">Help</TopNav.Item>
-          </Link>
-          <Link to="/flash">
-            <TopNav.Item navId="flash">Flash</TopNav.Item>
-          </Link>
-          <Button
-            onClick={() =>
-              setColorMode(colorMode === "dark" ? "default" : "dark")
-            }
+      <Flex>
+        <Box
+          flexGrow="1"
+          height="100vh"
+          backgroundColor="warning400"
+          position="sticky"
+          top="0"
+        >
+          <Flex
+            flexWrap="wrap"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            position="relative"
           >
-            {colorMode === "dark" ? "Light" : "Dark"}
-          </Button>
-        </TopNav.Section>
-      </TopNav>
-      <Set
-        alignY="center"
-        alignX="center"
-        orientation="vertical"
-        padding="major-6"
-      >
-        {ports.map((port) => (
-          <Device key={port.id} details={port} />
-        ))}
-      </Set>
+            <Box borderRight="default" padding="major-5" position="relative">
+              <Image
+                loading={false}
+                referrerPolicy=""
+                src={SupaflyLogo}
+                minWidth="400px"
+                width="100%"
+                maxWidth="800px"
+              />
+            </Box>
+            <Box paddingBottom="major-5">
+              <Set spacing="major-5">
+                <RouterLink to="/flash">
+                  <Link charSet="" fontSize="400" color="black" href="/flash">
+                    Flashing
+                  </Link>
+                </RouterLink>
+                <RouterLink to="/help">
+                  <Link charSet="" fontSize="400" color="black" href="/help">
+                    Help
+                  </Link>
+                </RouterLink>
+              </Set>
+            </Box>
+            <Box padding="minor-1" position="absolute" right="0" bottom="0">
+              <ThemeSelector />
+            </Box>
+          </Flex>
+        </Box>
+
+        <Box
+          maxWidth="800px"
+          width="100%"
+          height="100%"
+          minHeight="100vh"
+          alignY="center"
+          alignX="center"
+          padding="major-5"
+        >
+          <Set orientation="vertical" spacing="major-3">
+            {ports.map((port) => (
+              <Device key={port.id} details={port} />
+            ))}
+          </Set>
+        </Box>
+      </Flex>
     </Box>
   );
 };

@@ -1,9 +1,10 @@
-import { Box, Breadcrumb, Icon, useColorMode } from "bumbag";
+import { Box, Breadcrumb, Icon, useColorMode, Image, Set } from "bumbag";
 import { Link as RouterLink } from "wouter";
 import React, { useEffect } from "react";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { gql, useQuery } from "../../../gql/apollo";
 import useConnection from "../../../hooks/useConnection";
+import { SupaflyLogo } from "../../../logos";
 
 const ConfigurationTopBar: React.FC<{ page?: string }> = ({
   page,
@@ -36,30 +37,31 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
   const items = [
     <Breadcrumb.Item>
       <RouterLink to="/">
-        <Breadcrumb.Link charSet="">Home</Breadcrumb.Link>
+        <Breadcrumb.Link color="black" charSet="">
+          Home
+        </Breadcrumb.Link>
       </RouterLink>
     </Breadcrumb.Item>,
     <Breadcrumb.Item>
       <RouterLink to={`/connections/${connection}/`}>
-        <Breadcrumb.Link charSet="" isCurrent={!page}>
+        <Breadcrumb.Link color="black" charSet="" isCurrent={!page}>
           {port}
         </Breadcrumb.Link>
       </RouterLink>
     </Breadcrumb.Item>,
     page && (
       <Breadcrumb.Item>
-        <Breadcrumb.Link charSet="" isCurrent>
+        <Breadcrumb.Link color="black" charSet="" isCurrent>
           {page}
         </Breadcrumb.Link>
       </Breadcrumb.Item>
     ),
-  ].filter((elem) => !!elem);
+  ].filter(Boolean);
 
   return (
     <Box
       position="sticky"
       top="0px"
-      padding="major-2"
       zIndex="999"
       backgroundColor="default"
       border={colorMode !== "dark" ? "default" : "none"}
@@ -67,19 +69,29 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
       borderRight="none"
       borderLeft="none"
     >
-      <Breadcrumb
-        separator={
-          <Icon
-            icon={faChevronRight}
-            type="font-awesome"
-            color="gray100"
-            fontSize="150"
+      <Box backgroundColor="warning" padding="major-1">
+        <Set orientation="horizontal">
+          <Image
+            loading={false}
+            referrerPolicy=""
+            src={SupaflyLogo}
+            height="30px"
           />
-        }
-      >
-        {items}
-      </Breadcrumb>
-      {children}
+          <Breadcrumb
+            separator={
+              <Icon
+                icon={faChevronRight}
+                type="font-awesome"
+                color="black"
+                fontSize="150"
+              />
+            }
+          >
+            {items}
+          </Breadcrumb>
+        </Set>
+      </Box>
+      {children && <Box padding="major-2">{children}</Box>}
     </Box>
   );
 };
