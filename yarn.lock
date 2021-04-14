@@ -2467,15 +2467,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@betaflight-tools/bindings-loader@^0.1.0, @betaflight-tools/bindings-loader@workspace:tools/bindings-loader":
-  version: 0.0.0-use.local
-  resolution: "@betaflight-tools/bindings-loader@workspace:tools/bindings-loader"
-  dependencies:
-    loader-utils: ^1.1.0
-    webpack-sources: ^1.3.0
-  languageName: unknown
-  linkType: soft
-
 "@betaflight-tools/demo-api-server@workspace:tools/demo-api-server":
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/demo-api-server@workspace:tools/demo-api-server"
@@ -2574,7 +2565,6 @@ __metadata:
     "@babel/core": ^7.12.10
     "@babel/preset-env": ^7.12.11
     "@babel/preset-react": ^7.12.10
-    "@betaflight-tools/bindings-loader": ^0.1.0
     "@betaflight-tools/storyshots-runner": ^0.1.0
     "@betaflight/api": "workspace:^0.3.0"
     "@betaflight/api-server": "workspace:^0.4.0"
@@ -2619,7 +2609,8 @@ __metadata:
     iterall: ^1.3.0
     jest-date-mock: ^1.0.8
     markdown-to-jsx: ^7.1.1
-    node-loader: ^0.6.0
+    native-ext-loader: ^2.3.0
+    node-bindings-loader: ^1.3.0
     puppeteer: ^5.5.0
     react: ^16.12.0
     react-docgen-typescript-loader: ^3.6.0
@@ -21392,6 +21383,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"native-ext-loader@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "native-ext-loader@npm:2.3.0"
+  checksum: 4832448fa2e93891dd9047f424294d66bae4cb6115757ed89374c04ff1220d9c0addc61fac198fe6fa27c36d953da09ca7752480cddd7fa85dc626a21e5cace6
+  languageName: node
+  linkType: hard
+
 "native-url@npm:^0.2.6":
   version: 0.2.6
   resolution: "native-url@npm:0.2.6"
@@ -21507,6 +21505,15 @@ fsevents@~2.3.1:
   dependencies:
     node-gyp: latest
   checksum: 6796f58946713c647bccdfdb6ceb42dccb980170e9ce3ca3a65cca659a417d79210999fd297963656371c616c7b75b74bbdefae36257ae84c28927fb7ae037d4
+  languageName: node
+  linkType: hard
+
+"node-bindings-loader@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "node-bindings-loader@npm:1.3.0"
+  dependencies:
+    webpack-sources: ^1.4.3
+  checksum: 8edc21383d41a10c6f41b88cba8bea6737bc0e4800c5037c2a2973622e230c802f00e144bc5b6507ab2017680a13a67b596387697217c861a952641707433444
   languageName: node
   linkType: hard
 
@@ -21648,13 +21655,6 @@ fsevents@~2.3.1:
     util: ^0.11.0
     vm-browserify: ^1.0.1
   checksum: 8da918a5ef93c0bfed8df90bb9d6b12ae08836963aa0b22927eedf6d3eab6e60feb9eae2d394f1eb6d5f0fdd985fb2858b698a3347606b90dfdd5047b5ea6042
-  languageName: node
-  linkType: hard
-
-"node-loader@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "node-loader@npm:0.6.0"
-  checksum: e9c81694cd830c99bb75b535709d45862e0bf6b0dca671846cd59d320396e7b9b5fba1ac55051349e97519d67865482a835f58418bcf0d47d9bf132354b35375
   languageName: node
   linkType: hard
 
@@ -29450,7 +29450,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"webpack-sources@npm:^1.3.0, webpack-sources@npm:^1.4.0, webpack-sources@npm:^1.4.1, webpack-sources@npm:^1.4.3":
+"webpack-sources@npm:^1.4.0, webpack-sources@npm:^1.4.1, webpack-sources@npm:^1.4.3":
   version: 1.4.3
   resolution: "webpack-sources@npm:1.4.3"
   dependencies:
