@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   Set,
   Heading,
   List,
@@ -16,7 +15,7 @@ import {
 import React, { useState } from "react";
 import { useLocation, Link as RouterLink } from "wouter";
 import semver from "semver";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { SupaflyLogo } from "../logos";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
@@ -39,6 +38,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
   const log = useLogger();
   const [, setLocation] = useLocation();
   const [connecting, setConnecting] = useState(false);
+  const { colorMode } = useColorMode();
 
   const [disconnectMutation] = useMutation(
     gql`
@@ -143,79 +143,105 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
     config.apiVersionAccepted
   );
   return (
-    <Card borderRadius="5" width="400px" variant="bordered">
-      <Heading use="h4">{details.id}</Heading>
-      {error && !connecting && (
-        <Alert
-          variant="tint"
-          type="warning"
-          title="Could not establish connection"
-        >
-          {error.message}
-        </Alert>
-      )}
-      {apiVersion && badVersion && (
-        <Alert variant="tint" type="danger" title="Unsupported device">
-          Device API version is too old
-        </Alert>
-      )}
-      <List padding="major-1">
-        {details.vendorId && details.productId && (
-          <List.Item>
-            {details.vendorId}:{details.productId}
-          </List.Item>
-        )}
-        {details.serialNumber && <List.Item>{details.serialNumber}</List.Item>}
-        {apiVersion && (
-          <List.Item color={badVersion ? "danger" : undefined}>
-            {apiVersion}
-          </List.Item>
-        )}
-        {data?.connection && (
-          <List.Item>{data.connection.device.name}</List.Item>
-        )}
-      </List>
-      <Level>
-        {!details.connectionId && (
-          <Button
-            size="small"
-            color="secondary"
-            data-testid="connect-button"
-            disabled={details.connecting || connecting}
-            isLoading={details.connecting || connecting}
-            onClick={() => {
-              setConnecting(true);
-              connect();
-            }}
-          >
-            Connect
-          </Button>
-        )}
-        {details.connectionId && (
-          <Button
-            size="small"
-            color="danger"
-            onClick={() => {
-              disconnect();
-            }}
-          >
-            Disconnect
-          </Button>
-        )}
-        {details.connectionId && (
-          <Button
-            size="small"
-            data-testid="configure-button"
-            disabled={badVersion}
-            onClick={() => {
-              setLocation(`/connections/${details.connectionId}/`);
-            }}
-          >
-            Configure
-          </Button>
-        )}
+    <Box
+      width="100%"
+      userSelect="none"
+      padding="major-5"
+      role="group"
+      _hover={{ backgroundColor: colorMode === "dark" ? "default" : "gray100" }}
+    >
+      <Level minHeight="100px">
+        <Box width="100%">
+          <Heading use="h4">{details.id}</Heading>
+          {error && !connecting && (
+            <Alert
+              width="100%"
+              variant="tint"
+              type="warning"
+              title="Could not establish connection"
+            >
+              {error.message}
+            </Alert>
+          )}
+          {apiVersion && badVersion && (
+            <Alert variant="tint" type="danger" title="Unsupported device">
+              Device API version is too old
+            </Alert>
+          )}
+          <List padding="major-1">
+            {details.vendorId && details.productId && (
+              <List.Item>
+                {details.vendorId}:{details.productId}
+              </List.Item>
+            )}
+            {details.serialNumber && (
+              <List.Item>{details.serialNumber}</List.Item>
+            )}
+            {apiVersion && (
+              <List.Item color={badVersion ? "danger" : undefined}>
+                {apiVersion}
+              </List.Item>
+            )}
+            {data?.connection && (
+              <List.Item>{data.connection.device.name}</List.Item>
+            )}
+          </List>
+        </Box>
+        <Box width="150px" minHeight="inherit" alignX="center" alignY="center">
+          <Set orientation="vertical">
+            {!details.connectionId && (
+              <Button
+                visibility={
+                  details.connecting || connecting ? undefined : "hidden"
+                }
+                _groupHover={{ visibility: "visible" }}
+                size="small"
+                palette="success"
+                color="white"
+                data-testid="connect-button"
+                disabled={details.connecting || connecting}
+                isLoading={details.connecting || connecting}
+                onClick={() => {
+                  setConnecting(true);
+                  connect();
+                }}
+              >
+                Connect
+              </Button>
+            )}
+            {details.connectionId && (
+              <Button
+                visibility="hidden"
+                _groupHover={{ visibility: "visible" }}
+                size="small"
+                palette="danger"
+                onClick={() => {
+                  disconnect();
+                }}
+              >
+                Disconnect
+              </Button>
+            )}
+            {details.connectionId && (
+              <Button
+                visibility="hidden"
+                _groupHover={{ visibility: "visible" }}
+                size="small"
+                data-testid="configure-button"
+                disabled={badVersion}
+                onClick={() => {
+                  setLocation(`/connections/${details.connectionId}/`);
+                }}
+                iconAfter={faCog}
+                iconAfterProps={{ type: "font-awesome" }}
+              >
+                Configure
+              </Button>
+            )}
+          </Set>
+        </Box>
       </Level>
-    </Card>
+    </Box>
   );
 };
 
@@ -303,16 +329,8 @@ const Home: React.FC = () => {
           </Flex>
         </Box>
 
-        <Box
-          maxWidth="800px"
-          width="100%"
-          height="100%"
-          minHeight="100vh"
-          alignY="center"
-          alignX="center"
-          padding="major-5"
-        >
-          <Set orientation="vertical" spacing="major-3">
+        <Box maxWidth="600px" width="100%" height="100%" minHeight="100vh">
+          <Set orientation="vertical">
             {ports.map((port) => (
               <Device key={port.id} details={port} />
             ))}
