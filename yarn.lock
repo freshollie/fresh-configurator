@@ -2611,7 +2611,6 @@ __metadata:
     electron-rebuild: ^2.3.4
     electron-unhandled: ^3.0.2
     esbuild-loader: ^2.9.1
-    file-loader: ^5.1.0
     fork-ts-checker-webpack-plugin: ^6.0.7
     graphql: "*"
     graphql-ws: ^3.2.0
@@ -15152,18 +15151,6 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"file-loader@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "file-loader@npm:5.1.0"
-  dependencies:
-    loader-utils: ^1.4.0
-    schema-utils: ^2.5.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 58c00327d639aa6553058c1e68fb5cd7d5a9d69693a37b415cb976a2664335aaa6ebfb95c6616611fe8360f2ea6bba2070baeccda0a01ca02f72c7731ba7e3ae
-  languageName: node
-  linkType: hard
-
 "file-loader@npm:^6.0.0":
   version: 6.0.0
   resolution: "file-loader@npm:6.0.0"
@@ -25790,16 +25777,6 @@ resolve@^1.18.1:
     ajv-errors: ^1.0.0
     ajv-keywords: ^3.1.0
   checksum: d2f753e7a17c6054cb8c6d0806daeddac73ea2a192e452f506e50af14da1999d1435618b81a616d9f72e1606c0e46bf1870c9b429bce5d3a949d34455e6e54ff
-  languageName: node
-  linkType: hard
-
-"schema-utils@npm:^2.5.0":
-  version: 2.6.4
-  resolution: "schema-utils@npm:2.6.4"
-  dependencies:
-    ajv: ^6.10.2
-    ajv-keywords: ^3.4.1
-  checksum: 26d3184dc7f6f95f5cacf58c4fffb7c44854d974831670e76df8e97f47aa147e6f76f89d4bc96890c7d24bba3f9dad2982f976c87fd56edf8192b9234b8bc828
   languageName: node
   linkType: hard
 

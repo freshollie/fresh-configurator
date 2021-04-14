@@ -64,8 +64,12 @@ module.exports = (_, { mode }) => ({
         ],
       },
       {
-        test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
-        loader: "file-loader",
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: "asset/inline",
+      },
+      {
+        test: /\.(ico|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
+        type: "asset/resource",
       },
     ],
   },
