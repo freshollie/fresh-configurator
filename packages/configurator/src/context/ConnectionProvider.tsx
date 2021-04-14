@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { Flex, Spinner, Box, Text, Set } from "bumbag";
 import { gql, useMutation, useSubscription } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
@@ -8,10 +8,17 @@ export const ConnectionContext = createContext("");
 
 const ConnectionProvider: React.FC = ({ children }) => {
   const log = useLogger();
+  const unmountedRef = useRef(false);
   const [connected, setConnected] = useState(false);
   const [location, setLocation] = useLocation();
   const connectionId = location.split("/connections/").pop()?.split("/")[0];
 
+  useEffect(
+    () => () => {
+      unmountedRef.current = true;
+    },
+    [unmountedRef]
+  );
   // Create a subscription to the current connection
   // and handle updating the app state when connection
   // is closed
@@ -30,6 +37,10 @@ const ConnectionProvider: React.FC = ({ children }) => {
       },
       skip: !connectionId,
       onSubscriptionData: ({ subscriptionData: { data: onChangedData } }) => {
+        if (unmountedRef.current) {
+          return;
+        }
+
         const newConnectionId = onChangedData?.onConnectionChanged;
         if (newConnectionId && connectionId) {
           setLocation(location.replace(connectionId, newConnectionId));
