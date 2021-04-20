@@ -26,7 +26,7 @@
     "lint:all": "yarn lint . .*.js",
     "fmt": "prettier --write **/*.{ts,tsx,js,jsx}",
     "fmt:check": "prettier --check **/*.{ts,tsx,js,jsx}",
-    "postinstall": "yarn clean:codegen && yarn codegen",
+    "postinstall": "yarn clean:codegen && yarn codegen && husky install",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
     "publish": "lerna publish --conventional-commits -y",
     "release": "yarn workspace @betaflight/configurator release"
@@ -63,7 +63,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "graphql": "*",
     "graphql-codegen-persisted-query-ids": "^0.1.2",
-    "husky": "^4.3.6",
+    "husky": "^6.0.0",
     "jest": "*",
     "lerna": "^3.22.1",
     "lint-staged": "^10.2.13",
@@ -88,11 +88,6 @@
     "**/*.{json,graphql,js,jsx,ts,tsx}": [
       "prettier --write"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged --allow-empty"
-    }
   },
   "dependenciesMeta": {
     "dmg-builder@22.9.1": {
