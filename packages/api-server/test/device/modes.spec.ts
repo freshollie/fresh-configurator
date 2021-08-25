@@ -1,5 +1,4 @@
 import { Modes } from "@betaflight/api";
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -17,9 +16,7 @@ describe("device.modes", () => {
       mockApi.readBoxIds.mockResolvedValue([0, 1, 2]);
       add("/dev/something", "testconnectionId");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { errors, data } = await query({
+      const { errors, data } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "testconnectionId") {
@@ -34,7 +31,7 @@ describe("device.modes", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.modes.available).toEqual([0, 1, 2]);
+      expect(data?.connection.device.modes.available).toEqual([0, 1, 2]);
       expect(mockApi.readBoxIds).toHaveBeenCalledWith("/dev/something");
     });
   });
@@ -59,9 +56,7 @@ describe("device.modes", () => {
       ]);
       add("/dev/something", "testconnectionId2");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { errors, data } = await query({
+      const { errors, data } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "testconnectionId2") {
@@ -86,7 +81,7 @@ describe("device.modes", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.modes.slots).toEqual([
+      expect(data?.connection.device.modes.slots).toEqual([
         {
           id: 0,
           modeId: 0,
@@ -121,9 +116,7 @@ describe("device.modes", () => {
       ]);
       add("/dev/something", "testconnectionId2");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { errors, data } = await query({
+      const { errors, data } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "testconnectionId2") {
@@ -148,7 +141,7 @@ describe("device.modes", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.modes.slots).toEqual([
+      expect(data?.connection.device.modes.slots).toEqual([
         {
           id: 0,
           modeId: 12,
@@ -189,9 +182,7 @@ describe("device.modes", () => {
       ]);
       add("/dev/something", "testconnectionId2");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { errors, data } = await query({
+      const { errors, data } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "testconnectionId2") {
@@ -216,7 +207,7 @@ describe("device.modes", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.modes.slot).toEqual({
+      expect(data?.connection.device.modes.slot).toEqual({
         id: 1,
         modeId: 0,
         auxChannel: 3,
@@ -245,9 +236,7 @@ describe("device.modes", () => {
       ]);
       add("/dev/something", "testconnectionId2");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { errors, data } = await query({
+      const { errors, data } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "testconnectionId2") {
@@ -272,7 +261,7 @@ describe("device.modes", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.modes.slot).toEqual(null);
+      expect(data?.connection.device.modes.slot).toEqual(null);
     });
   });
 
@@ -281,10 +270,8 @@ describe("device.modes", () => {
       mockApi.writeModeRangeSlot.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetModeRangeSlot(
             $connection: ID!
             $slotId: Int!
@@ -328,10 +315,8 @@ describe("device.modes", () => {
       mockApi.writeModeRangeSlot.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetModeRangeSlot(
             $connection: ID!
             $slotId: Int!

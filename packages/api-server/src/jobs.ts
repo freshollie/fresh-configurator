@@ -1,4 +1,4 @@
-import { PubSub } from "apollo-server-express";
+import { PubSub } from "graphql-subscriptions";
 import debug from "debug";
 import type { JobType, JobUpdateType } from "./graph/__generated__";
 

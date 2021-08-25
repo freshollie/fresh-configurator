@@ -1,5 +1,4 @@
 import { BlackboxDevices, SdCardStates } from "@betaflight/api";
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import mockFs from "mock-fs";
 import mockDate from "mockdate";
@@ -62,9 +61,8 @@ describe("device.blackbox", () => {
       });
 
       add("/dev/serial", "ajdfasdf");
-      const client = createTestClient(apolloServer);
 
-      const { data, errors } = await client.query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "ajdfasdf") {
@@ -79,7 +77,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.blackbox.supported).toBe(true);
+      expect(data?.connection.device.blackbox.supported).toBe(true);
 
       expect(mockApi.readBlackboxConfig).toHaveBeenCalledWith("/dev/serial");
     });
@@ -97,9 +95,8 @@ describe("device.blackbox", () => {
       });
 
       add("/dev/serial", "jhadkjhadf");
-      const client = createTestClient(apolloServer);
 
-      const { data, errors } = await client.query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "jhadkjhadf") {
@@ -120,7 +117,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.blackbox.config).toEqual({
+      expect(data?.connection.device.blackbox.config).toEqual({
         device: BlackboxDevices.FLASH,
         rateNum: 1,
         rateDenom: 1,
@@ -143,9 +140,8 @@ describe("device.blackbox", () => {
       });
 
       add("/dev/serial", "jhadkjhadf");
-      const client = createTestClient(apolloServer);
 
-      const { data, errors } = await client.query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "jhadkjhadf") {
@@ -166,7 +162,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.blackbox.flash).toEqual({
+      expect(data?.connection.device.blackbox.flash).toEqual({
         ready: true,
         supported: true,
         sectors: 42,
@@ -189,9 +185,8 @@ describe("device.blackbox", () => {
       });
 
       add("/dev/serial", "jhadkjhadf");
-      const client = createTestClient(apolloServer);
 
-      const { data, errors } = await client.query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "jhadkjhadf") {
@@ -212,7 +207,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(data.connection.device.blackbox.sdCard).toEqual({
+      expect(data?.connection.device.blackbox.sdCard).toEqual({
         supported: true,
         state: SdCardStates.FS_INIT,
         filesystemLastError: 1,
@@ -228,10 +223,9 @@ describe("device.blackbox", () => {
     it("should update the blackbox config with the provided values", async () => {
       mockApi.writePartialBlackboxConfig.mockResolvedValue();
       add("/dev/serial", "fsu9dfgjkhdsfgk");
-      const client = createTestClient(apolloServer);
 
-      const { errors } = await client.mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetDeviceConfig($config: BlackboxConfigInput!) {
             deviceSetBlackboxConfig(
               connectionId: "fsu9dfgjkhdsfgk"
@@ -262,10 +256,9 @@ describe("device.blackbox", () => {
     it("should erase the device flash data", async () => {
       mockApi.eraseDataFlash.mockResolvedValue();
       add("/dev/serial", "lkajsdflksdf");
-      const client = createTestClient(apolloServer);
 
-      const { errors } = await client.mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation {
             deviceEraseFlashData(connectionId: "lkajsdflksdf")
           }
@@ -298,8 +291,6 @@ describe("device.blackbox", () => {
     });
 
     it("should offload the flash data into an artifact file", async () => {
-      const client = createTestClient(apolloServer);
-
       let callNum = 0;
       mockApi.readDataFlashChunk.mockImplementation(async () => {
         callNum += 1;
@@ -314,8 +305,8 @@ describe("device.blackbox", () => {
       const jobProgress = jest.fn();
       waitForJobProgress().then(jobProgress);
 
-      const { errors, data } = await client.mutate({
-        mutation: gql`
+      const { errors, data } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "fsu9dfgjkhdsfgk"
@@ -328,7 +319,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      const jobId = data.createFlashDataOffloadJob.id;
+      const jobId = data?.createFlashDataOffloadJob.id;
 
       await waitForJobCompleted(jobId);
 
@@ -376,8 +367,6 @@ describe("device.blackbox", () => {
     });
 
     it("should stop reading once 0 bytes are read", async () => {
-      const client = createTestClient(apolloServer);
-
       let callNum = 0;
       mockApi.readDataFlashChunk.mockImplementation(async () => {
         callNum += 1;
@@ -389,8 +378,8 @@ describe("device.blackbox", () => {
 
       add("/dev/thedevice", "fsu9dfgjkhdsfgk");
 
-      const { errors, data } = await client.mutate({
-        mutation: gql`
+      const { errors, data } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "fsu9dfgjkhdsfgk"
@@ -403,7 +392,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      const jobId = data.createFlashDataOffloadJob.id;
+      const jobId = data?.createFlashDataOffloadJob.id;
 
       await waitForJobCompleted(jobId);
 
@@ -433,8 +422,6 @@ describe("device.blackbox", () => {
     });
 
     it("should mark the job as errored if device disconnects", async () => {
-      const client = createTestClient(apolloServer);
-
       mockApi.readDataFlashChunk.mockResolvedValue(
         Buffer.from(new Array(512).fill(1))
       );
@@ -443,8 +430,8 @@ describe("device.blackbox", () => {
       mockApi.isOpen.mockReturnValue(false);
 
       add("/dev/thedevice", "oijlkjsfgsdf");
-      const { errors, data } = await client.mutate({
-        mutation: gql`
+      const { errors, data } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "oijlkjsfgsdf"
@@ -457,7 +444,7 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      const jobId = data.createFlashDataOffloadJob.id;
+      const jobId = data?.createFlashDataOffloadJob.id;
 
       await waitForJobCompleted(jobId);
 
@@ -478,8 +465,6 @@ describe("device.blackbox", () => {
     });
 
     it("should stop reading chunks if job is cancelled", async () => {
-      const client = createTestClient(apolloServer);
-
       let resolveChunk: ((value: Buffer) => void) | undefined;
       mockApi.readDataFlashChunk.mockImplementation(
         () =>
@@ -489,8 +474,8 @@ describe("device.blackbox", () => {
       );
 
       add("/dev/thedevice", "lasdhfjahsdf");
-      const { errors, data } = await client.mutate({
-        mutation: gql`
+      const { errors, data } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "lasdhfjahsdf"
@@ -503,10 +488,10 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toBeFalsy();
-      const jobId = data.createFlashDataOffloadJob.id;
+      const jobId = data?.createFlashDataOffloadJob.id;
 
-      const { errors: cancelErrors } = await client.mutate({
-        mutation: gql`
+      const { errors: cancelErrors } = await apolloServer.executeOperation({
+        query: gql`
           mutation CancelJob($jobId: ID!) {
             cancelJob(jobId: $jobId)
           }
@@ -537,7 +522,6 @@ describe("device.blackbox", () => {
     });
 
     it("should throw an error if flash is not ready to be read", async () => {
-      const client = createTestClient(apolloServer);
       mockApi.readDataFlashSummary.mockResolvedValue({
         ready: false,
         supported: true,
@@ -547,8 +531,8 @@ describe("device.blackbox", () => {
       });
 
       add("/dev/thedevice", "asjdhfkjha");
-      const { errors } = await client.mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "asjdhfkjha"
@@ -582,12 +566,11 @@ describe("device.blackbox", () => {
     });
 
     it("should throw an error if artifacts directory cannot be created", async () => {
-      const client = createTestClient(apolloServer);
       await fs.promises.writeFile(artifactsDirectory, "sometext");
 
       add("/dev/thedevice", "asjdhfkjha");
-      const { errors } = await client.mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation CreateOffloadJob {
             createFlashDataOffloadJob(
               connectionId: "asjdhfkjha"

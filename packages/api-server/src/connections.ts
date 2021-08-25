@@ -1,4 +1,5 @@
-import { PubSub, ApolloError } from "apollo-server-express";
+import { ApolloError } from "apollo-server-express";
+import { PubSub } from "graphql-subscriptions";
 
 const changeEvents = new PubSub();
 const reconnectingEvents = new PubSub();

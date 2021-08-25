@@ -1,4 +1,3 @@
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -16,9 +15,7 @@ describe("device.name", () => {
 
     add("/dev/device", "abc");
 
-    const client = createTestClient(apolloServer);
-
-    const { data, errors } = await client.query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           connection(connectionId: "abc") {
@@ -31,7 +28,7 @@ describe("device.name", () => {
     });
 
     expect(errors).toBeFalsy();
-    expect(data.connection.device.name).toBe("oliver");
+    expect(data?.connection.device.name).toBe("oliver");
 
     expect(mockApi.readName).toHaveBeenCalledWith("/dev/device");
   });

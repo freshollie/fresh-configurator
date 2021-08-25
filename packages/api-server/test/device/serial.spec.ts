@@ -1,4 +1,3 @@
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { SerialPortFunctions } from "@betaflight/api";
 import { createServer } from "../../src";
@@ -27,9 +26,7 @@ describe("device.serial", () => {
     });
     add("/dev/something", "abcd");
 
-    const { query } = createTestClient(apolloServer);
-
-    const { data, errors } = await query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           connection(connectionId: "abcd") {
@@ -108,8 +105,6 @@ describe("device.serial", () => {
       mockApi.writeSerialConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
       const newFunctions = [
         {
           id: 0,
@@ -121,8 +116,8 @@ describe("device.serial", () => {
         },
       ];
 
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetSerialFunctions(
             $connection: ID!
             $portFunctions: [PortFunctionsInput!]!

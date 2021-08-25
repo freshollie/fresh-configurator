@@ -1,4 +1,3 @@
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../src";
 import { add, connectLock } from "../src/connections";
@@ -13,9 +12,7 @@ describe("ports", () => {
       { path: "/dev/anotherport" },
     ]);
 
-    const { query } = createTestClient(apolloServer);
-
-    const { data, errors } = await query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           ports {
@@ -40,9 +37,8 @@ describe("ports", () => {
     ]);
 
     connectLock("/dev/anotherport", () => new Promise(() => {}));
-    const { query } = createTestClient(apolloServer);
 
-    const { data, errors } = await query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           ports {
@@ -68,9 +64,8 @@ describe("ports", () => {
     ]);
 
     add("/dev/something", "abcd");
-    const { query } = createTestClient(apolloServer);
 
-    const { data, errors } = await query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           ports {

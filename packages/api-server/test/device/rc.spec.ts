@@ -5,7 +5,6 @@ import {
   SerialRxProviders,
   SpiRxProtocols,
 } from "@betaflight/api";
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -40,9 +39,7 @@ describe("device.rc", () => {
 
       add("/dev/something", "abcd");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { data, errors } = await query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "abcd") {
@@ -91,9 +88,7 @@ describe("device.rc", () => {
 
       add("/dev/something", "abcd");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { data, errors } = await query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "abcd") {
@@ -140,9 +135,7 @@ describe("device.rc", () => {
 
       add("/dev/something", "abcd");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { data, errors } = await query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "abcd") {
@@ -174,10 +167,8 @@ describe("device.rc", () => {
       mockApi.writePartialRxConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetRxConfig($connection: ID!, $config: RxConfigInput!) {
             deviceSetReceiverConfig(
               connectionId: $connection
@@ -214,10 +205,8 @@ describe("device.rc", () => {
       mockApi.writePartialRxConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetRcSmoothingConfig(
             $connection: ID!
             $config: RcSmoothingInput!
@@ -255,10 +244,8 @@ describe("device.rc", () => {
       mockApi.writeRxMap.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
             deviceSetChannelMap(connectionId: $connection, channelMap: $map)
           }
@@ -286,10 +273,8 @@ describe("device.rc", () => {
       mockApi.writeRxMap.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
             deviceSetChannelMap(connectionId: $connection, channelMap: $map)
           }
@@ -325,10 +310,8 @@ describe("device.rc", () => {
       mockApi.writeRxMap.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
             deviceSetChannelMap(connectionId: $connection, channelMap: $map)
           }
@@ -366,10 +349,8 @@ describe("device.rc", () => {
       mockApi.writeRssiConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetRssiChannel($connection: ID!, $channel: Int!) {
             deviceSetRssiChannel(connectionId: $connection, channel: $channel)
           }

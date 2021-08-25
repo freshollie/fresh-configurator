@@ -30,7 +30,7 @@
   "dependencies": {
     "@serialport/bindings": "9.0.3",
     "@serialport/stream": "^9.0.2",
-    "debug": "^4.1.1"
+    "debug": "^4.3.2"
   },
   "devDependencies": {
     "@serialport/binding-mock": "^9.0.2",

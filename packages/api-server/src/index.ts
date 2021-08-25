@@ -1,5 +1,5 @@
 import { ApolloError, ApolloServer } from "apollo-server-express";
-import { makeExecutableSchema } from "graphql-tools";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import debug from "debug";
 import express from "express";
 import http from "http";
@@ -7,6 +7,7 @@ import ws from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { execute, GraphQLSchema, parse, subscribe } from "graphql";
 import getPort from "get-port";
+import { SubscriptionServer } from "subscriptions-transport-ws";
 import { startTicks } from "./mock/api";
 import graph from "./graph";
 import context, { Context, mockedContext } from "./context";
@@ -63,21 +64,39 @@ export const createServer = ({
     ? mockedContext({ artifactsDir: artifactsDirectory })
     : context({ artifactsDir: artifactsDirectory });
 
+  const legacyWsServer = legacyWsProtocol
+    ? SubscriptionServer.create(
+        {
+          schema,
+          execute,
+          subscribe,
+        },
+        {
+          server,
+          path: "/graphql",
+        }
+      )
+    : undefined;
+
   const apolloServer = new ApolloServer({
     schema,
     context: contextGenerator,
-    playground,
     formatError: (error) => {
       log(error);
       return error;
     },
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              legacyWsServer?.close();
+            },
+          };
+        },
+      },
+    ],
   });
-
-  apolloServer.applyMiddleware({ app });
-
-  if (legacyWsProtocol) {
-    apolloServer.installSubscriptionHandlers(server);
-  }
 
   const wsServer = !legacyWsProtocol
     ? new ws.Server({
@@ -131,6 +150,9 @@ export const createServer = ({
     listen: async ({ port, hostname }) => {
       const listeningPort =
         port ?? (await getPort({ port: 9000, host: hostname }));
+
+      await apolloServer.start();
+      apolloServer.applyMiddleware({ app });
       return new Promise((resolve, reject) => {
         try {
           server.listen(listeningPort, hostname, () => {

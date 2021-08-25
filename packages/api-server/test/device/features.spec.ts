@@ -1,5 +1,4 @@
 import { Features } from "@betaflight/api";
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -20,9 +19,7 @@ describe("device.features", () => {
     ]);
     add("/dev/something", "testconnectionId");
 
-    const { query } = createTestClient(apolloServer);
-
-    const { errors, data } = await query({
+    const { errors, data } = await apolloServer.executeOperation({
       query: gql`
         query {
           connection(connectionId: "testconnectionId") {
@@ -53,10 +50,8 @@ describe("device.features", () => {
       ]);
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetReceiverMode($connection: ID!, $features: [Int!]!) {
             deviceSetFeatures(connectionId: $connection, features: $features)
           }

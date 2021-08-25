@@ -1,4 +1,3 @@
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import mockFs from "mock-fs";
 import supertest from "supertest";
@@ -20,8 +19,7 @@ describe("jobs", () => {
     jobs.completed("abc", { error: { message: "test" } });
     jobs.completed("bcd", { artifact: "test.png" });
 
-    const client = createTestClient(apolloServer);
-    const { data, errors } = await client.query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           jobs {
@@ -43,7 +41,7 @@ describe("jobs", () => {
     });
 
     expect(errors).toBeFalsy();
-    expect(data.jobs).toEqual([
+    expect(data?.jobs).toEqual([
       {
         id: "abc",
         progress: 100,
@@ -72,7 +70,7 @@ describe("jobs", () => {
     ]);
 
     expect(
-      data.jobs[0]!.createdAt.startsWith(
+      data?.jobs[0]!.createdAt.startsWith(
         new Date().toISOString().split("T")[0]!
       )
     ).toBeTruthy();
@@ -82,8 +80,7 @@ describe("jobs", () => {
     jobs.add("abc", JobType.Offload);
     jobs.add("bcd", JobType.General);
 
-    const client = createTestClient(apolloServer);
-    const { data, errors } = await client.query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           jobs(ofType: GENERAL) {
@@ -104,7 +101,7 @@ describe("jobs", () => {
     });
 
     expect(errors).toBeFalsy();
-    expect(data.jobs).toEqual([
+    expect(data?.jobs).toEqual([
       {
         id: "bcd",
         progress: 0,
@@ -122,9 +119,8 @@ describe("jobs", () => {
     it("should cancel the given job id", async () => {
       jobs.add("bcd", JobType.Offload);
 
-      const client = createTestClient(apolloServer);
-      const { errors } = await client.mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation {
             cancelJob(jobId: "bcd")
           }
@@ -133,7 +129,7 @@ describe("jobs", () => {
 
       expect(errors).toBeFalsy();
 
-      const { data } = await client.query({
+      const { data } = await apolloServer.executeOperation({
         query: gql`
           query {
             jobs {
@@ -150,7 +146,7 @@ describe("jobs", () => {
           }
         `,
       });
-      expect(data.jobs).toEqual([
+      expect(data?.jobs).toEqual([
         {
           id: "bcd",
           progress: 0,

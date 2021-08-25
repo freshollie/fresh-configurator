@@ -1,11 +1,10 @@
 import * as uuid from "uuid";
 import gql from "graphql-tag";
 import { ApolloError } from "apollo-server-express";
-import { mergeResolvers, mergeTypes } from "merge-graphql-schemas";
+import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 import debug from "debug";
 import device from "./device";
 import { Resolvers } from "../__generated__";
-import { Context } from "../../context";
 
 const log = debug("api-server:connection");
 
@@ -190,6 +189,6 @@ const resolvers: Resolvers = {
 };
 
 export default {
-  resolvers: mergeResolvers<Context, Resolvers>([device.resolvers, resolvers]),
-  typeDefs: mergeTypes([device.typeDefs, typeDefs]),
+  resolvers: mergeResolvers([device.resolvers, resolvers]),
+  typeDefs: mergeTypeDefs([device.typeDefs, typeDefs]),
 };

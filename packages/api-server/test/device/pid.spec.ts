@@ -1,4 +1,3 @@
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -34,9 +33,7 @@ describe("device.pid", () => {
       mockApi.readAdvancedConfig.mockResolvedValue(advancedConfig);
       add("/dev/something", "someconnectionid");
 
-      const { query } = createTestClient(apolloServer);
-
-      const { data, errors } = await query({
+      const { data, errors } = await apolloServer.executeOperation({
         query: gql`
           query {
             connection(connectionId: "someconnectionid") {
@@ -74,11 +71,10 @@ describe("device.pid", () => {
     it("should write given pid protocols to the device", async () => {
       add("/dev/somedevice", "abcd");
 
-      const { mutate } = createTestClient(apolloServer);
       mockApi.writePartialAdvancedConfig.mockResolvedValue(undefined);
 
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetPidProtocols(
             $connectionId: ID!
             $protocols: PidProtocolsInput!

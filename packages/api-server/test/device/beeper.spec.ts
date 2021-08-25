@@ -1,5 +1,4 @@
 import { Beepers } from "@betaflight/api";
-import { createTestClient } from "apollo-server-testing";
 import gql from "graphql-tag";
 import { createServer } from "../../src";
 import { add, reset } from "../../src/connections";
@@ -22,9 +21,7 @@ describe("device.beeper", () => {
     });
     add("/dev/something", "abcd");
 
-    const { query } = createTestClient(apolloServer);
-
-    const { data, errors } = await query({
+    const { data, errors } = await apolloServer.executeOperation({
       query: gql`
         query {
           connection(connectionId: "abcd") {
@@ -58,10 +55,8 @@ describe("device.beeper", () => {
       mockApi.writePartialBeeperConfig.mockResolvedValue();
       add("/dev/something", "testconnectionId");
 
-      const { mutate } = createTestClient(apolloServer);
-
-      const { errors } = await mutate({
-        mutation: gql`
+      const { errors } = await apolloServer.executeOperation({
+        query: gql`
           mutation SetDshotBeeperConfig(
             $connection: ID!
             $config: DshotBeeperConfigInput!

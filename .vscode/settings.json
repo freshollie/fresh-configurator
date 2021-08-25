@@ -22,7 +22,7 @@
   },
   "eslint.nodePath": ".yarn/sdks",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "jest.pathToJest": "yarn jest",
+  "jest.jestCommandLine": "yarn jest",
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
