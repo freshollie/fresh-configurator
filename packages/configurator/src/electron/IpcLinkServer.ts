@@ -13,8 +13,7 @@ import {
   ExecutionArgs,
   DocumentNode,
   ExecutionResult,
-  GraphQLSchema,
-  validate
+  GraphQLSchema
 } from "graphql";
 import { serializeError } from "serialize-error";
 import type { IpcMain, IpcMainEvent } from "electron";

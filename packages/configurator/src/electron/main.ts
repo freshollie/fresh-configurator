@@ -6,7 +6,6 @@ import url from "url";
 import fs from "fs";
 import { createServer } from "@betaflight/api-server";
 
-import { SchemaLink } from '@apollo/client/link/schema';
 import unhandled from "electron-unhandled";
 import persistedQueries from "../gql/__generated__/persisted-queries-server.json";
 import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";

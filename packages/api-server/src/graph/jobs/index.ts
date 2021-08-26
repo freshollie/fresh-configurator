@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server-express";
 
 import gql from "graphql-tag";
+import { withFilter } from "graphql-subscriptions";
 import {
   JobUpdate,
   RequireFields,
@@ -8,7 +9,6 @@ import {
   SubscriptionJobUpdatesArgs,
 } from "../__generated__";
 import { Context } from "../../context";
-import { withFilter } from "graphql-subscriptions";
 
 const typeDefs = gql`
   type Mutation {

@@ -21,7 +21,7 @@ COPY tsconfig.build.json \
 
 # Build the minimum required to make a functional mock server
 RUN rm packages/configurator/package.json && \
-        yarn --skip-builds && \
+        yarn install --mode=skip-build && \
         yarn codegen && yarn build:lib && rm -r packages/configurator
 
 RUN yarn cache clean && \
