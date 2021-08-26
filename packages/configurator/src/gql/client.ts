@@ -103,7 +103,7 @@ const link = window.ipcRenderer
   : new WebSocketLink({
       url: `${wsBackend}/graphql`,
       keepAlive: 99999999999,
-    });
+    }, persistedQueries);
 
 const client = new ApolloClient({
   cache: cache(),

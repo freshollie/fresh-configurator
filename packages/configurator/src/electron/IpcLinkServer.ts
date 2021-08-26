@@ -14,6 +14,7 @@ import {
   DocumentNode,
   ExecutionResult,
   GraphQLSchema,
+  validate
 } from "graphql";
 import { serializeError } from "serialize-error";
 import type { IpcMain, IpcMainEvent } from "electron";
@@ -49,12 +50,19 @@ const ensureIterable = (
   return createAsyncIterator([data]);
 };
 
+/**
+ * Create a schema link which supports subscriptions
+ */
 export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink =>
   new ApolloLink(
     (request) =>
       new Observable((observer) => {
         (async () => {
           try {
+            // const validationErrors = validate(options.schema, request.query);
+            //   if (validationErrors.length > 0) {
+            //     return { errors: validationErrors };
+            //   }
             const context = await options.context();
             const args: ExecutionArgs = {
               schema: options.schema,
@@ -74,6 +82,7 @@ export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink =>
             await forAwaitEach(iterable, (value) => observer.next(value));
             observer.complete();
           } catch (error) {
+            console.error('Error processing query', request, error)
             observer.error(error);
           }
         })();

@@ -1,3 +1,4 @@
+const { DefinePlugin } = require("webpack");
 const WebpackBar = require("webpackbar");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
@@ -72,6 +73,10 @@ module.exports = (_, { mode }) => ({
           }),
         ]
       : []),
+    // TODO: remove after https://github.com/apollographql/apollo-client/issues/8674 is fixed
+    new DefinePlugin({
+      __DEV__: mode === "development"
+    }),
   ],
   devtool: "source-map",
 });

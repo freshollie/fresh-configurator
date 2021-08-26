@@ -5,6 +5,8 @@ import path from "path";
 import url from "url";
 import fs from "fs";
 import { createServer } from "@betaflight/api-server";
+
+import { SchemaLink } from '@apollo/client/link/schema';
 import unhandled from "electron-unhandled";
 import persistedQueries from "../gql/__generated__/persisted-queries-server.json";
 import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
@@ -18,6 +20,9 @@ unhandled({
 let mainWindow: BrowserWindow | undefined;
 
 const E2E = process.env.E2E === "true";
+/**
+ * the app is packaged
+ */
 const PRODUCTION = process.env.NODE_ENV === "production";
 
 const artifactsDirectory = PRODUCTION
@@ -45,15 +50,18 @@ const startBackend = async (): Promise<void> => {
   });
   createIpcExecutor({ link, ipc: ipcMain, persistedQueries });
 
-  if (mocked && PRODUCTION) {
-    backend.startMockTicks();
-  }
-
   if (!PRODUCTION) {
     const port = await backend.listen({
       hostname: "127.0.0.1",
     });
     console.log(`Starting backend on ${port}`);
+  } else if (mocked) {
+    // in production mode, the mock ticks are not automatically started
+    // because "listen" is not called on the server
+    //
+    // TODO: make it so "startMockTicks" has to be always
+    // explicitly enabled
+    backend.startMockTicks();
   }
 };
 
