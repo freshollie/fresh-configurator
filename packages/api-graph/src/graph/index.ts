@@ -1,11 +1,9 @@
 import gql from "graphql-tag";
-import { mergeTypes, mergeResolvers } from "merge-graphql-schemas";
+import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 
 import connected from "./connection";
 import ports from "./ports";
 import jobs from "./jobs";
-import { Context } from "../context";
-import { Resolvers } from "./__generated__";
 
 const typeDefs = gql`
   type Query {
@@ -14,12 +12,12 @@ const typeDefs = gql`
 `;
 
 export default {
-  resolvers: mergeResolvers<Context, Resolvers>([
+  resolvers: mergeResolvers([
     connected.resolvers,
     ports.resolvers,
     jobs.resolvers,
   ]),
-  typeDefs: mergeTypes([
+  typeDefs: mergeTypeDefs([
     typeDefs,
     connected.typeDefs,
     ports.typeDefs,

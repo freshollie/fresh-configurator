@@ -1,4 +1,4 @@
-import { makeExecutableSchema } from "graphql-tools";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { startTicks } from "./mock/api";
 import graph from "./graph";
 import context, { mockedContext } from "./context";
