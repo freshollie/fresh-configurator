@@ -2,7 +2,7 @@
 /* eslint-disable functional/no-this-expression */
 import { ApolloLink, Operation, FetchResult, Observable } from "@apollo/client";
 import { print, GraphQLError } from "graphql";
-import { createClient, ClientOptions, Client } from "graphql-ws/lib/client";
+import { createClient, ClientOptions, Client } from "graphql-ws";
 
 export default class WebSocketLink extends ApolloLink {
   private client: Client;
