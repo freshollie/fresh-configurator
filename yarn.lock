@@ -2452,7 +2452,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/demo-api-server@workspace:tools/demo-api-server"
   dependencies:
-    "@betaflight/api-server": "workspace:^0.4.0"
+    "@betaflight/api-server": "workspace:packages/api-server"
     graphql: ^15.5.1
   languageName: unknown
   linkType: soft
@@ -2493,9 +2493,9 @@ __metadata:
     "@graphql-tools/merge": ^8.0.3
     "@graphql-tools/schema": ^8.1.2
     "@types/debug": ^4.1.7
-    "@types/jest": "*"
+    "@types/jest": ^26.0.19
     "@types/mock-fs": ^4.13.1
-    "@types/node": ^16.7.4
+    "@types/node": ^12.0.0
     "@types/uuid": ^8.3.1
     date-fns: ^2.23.0
     debug: ^4.3.2
@@ -2505,25 +2505,25 @@ __metadata:
     graphql-tag: ^2.12.5
     mock-fs: ^5.0.0
     mockdate: ^3.0.5
-    ts-jest: "*"
+    ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: "*"
+    typescript: 4.2.2
     uuid: ^8.3.2
   peerDependencies:
     graphql: ^15.0.0
   languageName: unknown
   linkType: soft
 
-"@betaflight/api-server@workspace:^0.4.0, @betaflight/api-server@workspace:packages/api-server":
+"@betaflight/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@betaflight/api-server@workspace:packages/api-server"
   dependencies:
     "@betaflight/api-graph": "workspace:packages/api-graph"
     "@types/debug": ^4.1.7
     "@types/express": ^4.17.13
-    "@types/jest": ^27.0.1
+    "@types/jest": ^26.0.19
     "@types/mock-fs": ^4.13.1
-    "@types/node": ^16.7.4
+    "@types/node": ^12.0.0
     "@types/supertest": ^2.0.11
     "@types/ws": ^7.4.7
     apollo-server-express: ^3.3.0
@@ -2536,27 +2536,27 @@ __metadata:
     mockdate: ^3.0.5
     subscriptions-transport-ws: ^0.9.19
     supertest: ^6.1.6
-    ts-jest: "*"
+    ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: "*"
+    typescript: 4.2.2
     ws: ^8.2.0
   peerDependencies:
     graphql: ^15.0.0
   languageName: unknown
   linkType: soft
 
-"@betaflight/api@workspace:^0.3.0, @betaflight/api@workspace:packages/api":
+"@betaflight/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@betaflight/api@workspace:packages/api"
   dependencies:
-    "@betaflight/msp": "workspace:^0.3.0"
-    "@types/jest": "*"
-    "@types/node": ^16.7.4
+    "@betaflight/msp": "workspace:packages/msp"
+    "@types/jest": ^26.0.19
+    "@types/node": ^12.0.0
     "@types/semver": ^7.1.0
     semver: ^7.1.3
-    ts-jest: "*"
-    ts-node: ^8.8.2
-    typescript: "*"
+    ts-jest: ^26.3.0
+    ts-node: ^10.2.1
+    typescript: 4.2.2
   languageName: unknown
   linkType: soft
 
@@ -2569,8 +2569,8 @@ __metadata:
     "@babel/preset-env": ^7.12.11
     "@babel/preset-react": ^7.12.10
     "@betaflight-tools/storyshots-runner": ^0.1.0
-    "@betaflight/api": "workspace:^0.3.0"
-    "@betaflight/api-server": "workspace:^0.4.0"
+    "@betaflight/api": "workspace:packages/api"
+    "@betaflight/api-server": "workspace:packages/api-server"
     "@emotion/jest": ^11.3.0
     "@fortawesome/free-solid-svg-icons": ^5.15.3
     "@graphql-typed-document-node/core": ^3.1.0
@@ -2584,7 +2584,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.4.0
     "@testing-library/react": ^10.2.0
     "@types/electron-devtools-installer": ^2.2.0
-    "@types/jest": "*"
+    "@types/jest": ^26.0.19
     "@types/puppeteer": ^2.0.1
     "@types/reach__router": ^1.3.7
     "@types/react": ^16.9.19
@@ -2596,7 +2596,6 @@ __metadata:
     babel-loader: ^8.0.6
     bumbag: ^1.11.6
     cross-env: ^7.0.2
-    date-fns: ^2.11.0
     dmg-builder: 22.9.1
     electron: 11.1.0
     electron-builder: 22.9.1
@@ -2605,8 +2604,8 @@ __metadata:
     electron-unhandled: ^3.0.2
     esbuild-loader: ^2.9.1
     fork-ts-checker-webpack-plugin: ^6.0.7
-    graphql: "*"
-    graphql-ws: ^3.2.0
+    graphql: ^15.5.1
+    graphql-ws: ^5.4.1
     html-webpack-plugin: ^5.0.0-beta.4
     identity-obj-proxy: ^3.0.0
     iterall: ^1.3.0
@@ -2633,8 +2632,8 @@ __metadata:
     storybook-dark-mode: ^1.0.7
     themeprovider-storybook: ^1.7.1
     three: ^0.124.0
-    ts-jest: "*"
-    typescript: "*"
+    ts-jest: ^26.3.0
+    typescript: 4.2.2
     webpack: ^5.11.1
     webpack-bundle-analyzer: ^4.3.0
     webpack-cli: ^3
@@ -2644,23 +2643,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight/msp@workspace:^0.3.0, @betaflight/msp@workspace:packages/msp":
+"@betaflight/msp@workspace:packages/msp":
   version: 0.0.0-use.local
   resolution: "@betaflight/msp@workspace:packages/msp"
   dependencies:
     "@serialport/binding-mock": ^9.0.2
     "@serialport/bindings": 9.0.3
     "@serialport/stream": ^9.0.2
-    "@types/debug": ^4.1.5
-    "@types/jest": "*"
-    "@types/node": "*"
+    "@types/debug": ^4.1.7
+    "@types/jest": ^26.0.19
+    "@types/node": ^12.0.0
     "@types/serialport__binding-mock": "workspace:^8.0.0"
     "@types/serialport__bindings": "workspace:^8.0.0"
     "@types/serialport__stream": "workspace:^8.0.0"
-    debug: ^4.1.1
+    debug: ^4.3.2
     flush-promises: ^1.0.2
-    ts-jest: "*"
-    typescript: "*"
+    ts-jest: ^26.3.0
+    typescript: 4.2.2
   languageName: unknown
   linkType: soft
 
@@ -6730,6 +6729,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jest@npm:26.x":
+  version: 26.0.24
+  resolution: "@types/jest@npm:26.0.24"
+  dependencies:
+    jest-diff: ^26.0.0
+    pretty-format: ^26.0.0
+  checksum: ae39675412f08d884926254e9b12bfd2b5a4e4d204c94d3148cb942174a474930d0c60540133c968f22241d4712b7940c96cbc883096eb326a4d5b206fb78bd0
+  languageName: node
+  linkType: hard
+
 "@types/jest@npm:^26.0.19":
   version: 26.0.20
   resolution: "@types/jest@npm:26.0.20"
@@ -6926,10 +6935,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.0.0":
-  version: 12.19.13
-  resolution: "@types/node@npm:12.19.13"
-  checksum: 4022d194da102a9a88ae7930d8255f0ae126724828d3f2529e071931a592f4c66b8ff744479cf800f24eb2c6e7d8dd74a9a65266bfea11b59140fd002e1634a7
+"@types/node@npm:*, @types/node@npm:>= 8":
+  version: 16.7.4
+  resolution: "@types/node@npm:16.7.4"
+  checksum: da7813e6c37e7813645a9d40de6d9f803fbadb2975748d307ec31d8e4f9baabccf49b667a39e4b1288d477ec7d34a339e8a41d8703a1d7ab0ec8eb2516073f27
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^10.1.0":
+  version: 10.17.60
+  resolution: "@types/node@npm:10.17.60"
+  checksum: 2cdb3a77d071ba8513e5e8306fa64bf50e3c3302390feeaeff1fd325dd25c8441369715dfc8e3701011a72fed5958c7dfa94eb9239a81b3c286caa4d97db6eef
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^12.0.0, @types/node@npm:^12.0.12, @types/node@npm:^12.6.8":
+  version: 12.20.21
+  resolution: "@types/node@npm:12.20.21"
+  checksum: 080b2f471ba5d4dd9a31e3e93b5dc0364523de14e0d6a6aa9b3383e5567c87d541959638a2f03c2047b7c799a36731927516a264e17c3616e8a9589f9d08cb4e
   languageName: node
   linkType: hard
 
@@ -7217,7 +7240,7 @@ __metadata:
   version: 5.0.3
   resolution: "@types/testing-library__jest-dom@npm:5.0.3"
   dependencies:
-    "@types/jest": "*"
+    "@types/jest": ^26.0.19
   checksum: 8d4df015c8fdcf9f93998f824448e9fc283a99dbf8af07f0ac83ad260e82011c3196249afd2b884fd698ff6e009cfd6a0edc53cfddb459d78a4f984e25e1a2b0
   languageName: node
   linkType: hard
@@ -7226,7 +7249,7 @@ __metadata:
   version: 5.9.5
   resolution: "@types/testing-library__jest-dom@npm:5.9.5"
   dependencies:
-    "@types/jest": "*"
+    "@types/jest": ^26.0.19
   checksum: f2ed81103acb52d54f992d826e3854551294618628997dc01f8955efd8c1d476d64715b79187371b09ec3e61e44cc10a7ffe1e427d1bda798552f83d18309056
   languageName: node
   linkType: hard
@@ -12429,7 +12452,7 @@ app-builder-lib@22.9.1:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.11.0, date-fns@npm:^2.23.0":
+"date-fns@npm:^2.23.0":
   version: 2.23.0
   resolution: "date-fns@npm:2.23.0"
   checksum: 485216d550255a548552db16379e7a5cd440e262b90fbdc0362f63ee71d0e74bd00ce29ca8d76b343f6df36c1ecb6f22edba0b72848a4c32674e755619695c1f
@@ -15387,17 +15410,17 @@ app-builder-lib@22.9.1:
     eslint-plugin-jsx-a11y: ^6.4.1
     eslint-plugin-react: ^7.22.0
     eslint-plugin-react-hooks: ^4.2.0
-    graphql: "*"
+    graphql: ^15.5.1
     graphql-codegen-persisted-query-ids: ^0.1.2
     husky: ^6.0.0
-    jest: "*"
+    jest: ^26.4.2
     lerna: ^3.22.1
     lint-staged: ^10.2.13
     prettier: ^2.1.1
     rimraf: ^3.0.2
-    ts-jest: "*"
-    ts-node: ^8.6.2
-    typescript: "*"
+    ts-jest: ^26.3.0
+    ts-node: ^10.2.1
+    typescript: 4.2.2
   dependenciesMeta:
     dmg-builder@22.9.1:
       unplugged: true
@@ -16282,15 +16305,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "graphql-ws@npm:3.2.0"
-  peerDependencies:
-    graphql: ">=0.11 <=15"
-  checksum: 63d50ce17d19825cefb883800c7eba78af613b20ca091a38af970fc2f3631dc34f298f6b7533807351bd40df0abf8fe49c084dc4f710a375bb0106ab1fd04e85
-  languageName: node
-  linkType: hard
-
 "graphql-ws@npm:^5.4.1":
   version: 5.4.1
   resolution: "graphql-ws@npm:5.4.1"
@@ -16300,7 +16314,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"graphql@npm:15.5.1":
+"graphql@npm:^14.0.0":
+  version: 14.7.0
+  resolution: "graphql@npm:14.7.0"
+  dependencies:
+    iterall: ^1.2.2
+  checksum: e5f4e60799421a573904f390e1ec0aa76360f751688dbbe62e9c35baa0d3727c8d59a659bfc524f126dffe3518da87fd8ecaa78c94fd5c0fe4e035c670745242
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^15.5.1":
   version: 15.5.1
   resolution: "graphql@npm:15.5.1"
   checksum: 7e45ae27021e5bafd2a3ce557e708606ff28504aae705654764fa6239b0151d014a90cbd4c68300f4f95a9074820aaee9b1f25b560ff089c8db0b49563e34080
@@ -18317,7 +18340,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"iterall@npm:^1.2.1, iterall@npm:^1.3.0":
+"iterall@npm:^1.2.1, iterall@npm:^1.2.2, iterall@npm:^1.3.0":
   version: 1.3.0
   resolution: "iterall@npm:1.3.0"
   checksum: c78b99678f8c99be488cca7f33e4acca9b72c1326e050afbaf023f086e55619ee466af0464af94a0cb3f292e60cb5bac53a8fd86bd4249ecad26e09f17bb158b
@@ -27805,26 +27828,6 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^8.6.2, ts-node@npm:^8.8.2":
-  version: 8.10.2
-  resolution: "ts-node@npm:8.10.2"
-  dependencies:
-    arg: ^4.1.0
-    diff: ^4.0.1
-    make-error: ^1.1.1
-    source-map-support: ^0.5.17
-    yn: 3.1.1
-  peerDependencies:
-    typescript: ">=2.7"
-  bin:
-    ts-node: dist/bin.js
-    ts-node-script: dist/bin-script.js
-    ts-node-transpile-only: dist/bin-transpile.js
-    ts-script: dist/bin-script-deprecated.js
-  checksum: 480adb076fdab6dbabd726c6056d651ddc567feda0d3e4770d809c01d000715a0f61f80be0e4a92ef87b7f4a494b79d9595d62de4a3931d740122ae26f0e10d8
-  languageName: node
-  linkType: hard
-
 "ts-node@npm:^9":
   version: 9.1.1
   resolution: "ts-node@npm:9.1.1"
@@ -28079,7 +28082,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.2.2":
+typescript@4.2.2:
   version: 4.2.2
   resolution: "typescript@npm:4.2.2"
   bin:
@@ -28089,7 +28092,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.2.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.2.2#~builtin<compat/typescript>":
   version: 4.2.2
   resolution: "typescript@patch:typescript@npm%3A4.2.2#~builtin<compat/typescript>::version=4.2.2&hash=d8b4e7"
   bin:

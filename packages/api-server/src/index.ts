@@ -15,6 +15,7 @@ import {
   mockedDeviceContext,
   startMockDevice,
 } from "@betaflight/api-graph";
+import { Socket } from "net";
 
 const log = debug("api-graph:errors");
 
@@ -149,7 +150,7 @@ export const createServer = ({
           // gracefully reject invalid ones. if the client supports
           // both transports, graphql-ws will prevail
           graphqlWsServer;
-    wss.handleUpgrade(req, socket, head, (s) => {
+    wss.handleUpgrade(req, socket as Socket, head, (s) => {
       wss.emit("connection", s, req);
     });
   });

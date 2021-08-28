@@ -9,7 +9,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@betaflight/api-server": "workspace:^0.4.0",
+    "@betaflight/api-server": "workspace:packages/api-server",
     "graphql": "^15.5.1"
   }
 }
