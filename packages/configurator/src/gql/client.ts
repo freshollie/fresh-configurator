@@ -3,7 +3,6 @@ import WebSocketLink from "./links/WebSocketLink";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
-import persistedQueries from "./__generated__/persisted-queries.json";
 import IpcLink from "./links/IpcLink";
 
 // eslint-disable-next-line @betaflight-tools/ts-graphql/gql-type-assertion
@@ -99,7 +98,7 @@ export const artifactsAddress =
   `${wsBackend.replace("ws", "http")}/job-artifacts`;
 
 const link = window.ipcRenderer
-  ? new IpcLink({ ipc: window.ipcRenderer }, persistedQueries)
+  ? new IpcLink({ ipc: window.ipcRenderer })
   : new WebSocketLink({
       url: `${wsBackend}/graphql`,
       keepAlive: 99999999999,

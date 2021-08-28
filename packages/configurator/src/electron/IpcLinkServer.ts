@@ -7,7 +7,6 @@ import {
 } from "@apollo/client/core";
 import { getMainDefinition } from "@apollo/client/utilities";
 import {
-  parse,
   execute,
   subscribe,
   ExecutionArgs,
@@ -29,7 +28,6 @@ type IpcExecutorOptions = {
   link: ApolloLink;
   ipc: IpcMain;
   channel?: string;
-  persistedQueries: Record<string, string>;
 };
 
 const isSubscription = (query: DocumentNode): boolean => {
@@ -89,10 +87,7 @@ export const createIpcExecutor = (
     id: number,
     request: SerializableGraphQLRequest
   ): void => {
-    const result: Observable<FetchResult> = executeLink(options.link, {
-      ...request,
-      query: parse(options.persistedQueries[request.query] ?? request.query),
-    });
+    const result: Observable<FetchResult> = executeLink(options.link, request);
 
     const sendIpc = (
       type: "data" | "error" | "complete",

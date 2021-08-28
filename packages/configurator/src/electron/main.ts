@@ -6,7 +6,6 @@ import url from "url";
 import fs from "fs";
 import { createServer } from "@betaflight/api-server";
 import unhandled from "electron-unhandled";
-import persistedQueries from "../gql/__generated__/persisted-queries-server.json";
 import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
 
 unhandled({
@@ -35,7 +34,6 @@ const startBackend = async (): Promise<void> => {
   }
   const backend = createServer({
     mocked,
-    persistedQueries,
     artifactsDirectory,
   });
 
@@ -43,7 +41,7 @@ const startBackend = async (): Promise<void> => {
     schema: backend.schema,
     context: backend.context,
   });
-  createIpcExecutor({ link, ipc: ipcMain, persistedQueries });
+  createIpcExecutor({ link, ipc: ipcMain });
 
   if (mocked && PRODUCTION) {
     backend.startMockTicks();

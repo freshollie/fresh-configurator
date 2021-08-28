@@ -7,7 +7,6 @@ import {
   FetchResult,
 } from "@apollo/client/core";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
-import { print } from "graphql";
 import { deserializeError } from "serialize-error";
 import { SerializableGraphQLRequest } from "../../types";
 
@@ -57,10 +56,7 @@ export default class IpcLink extends ApolloLink {
     return undefined;
   };
 
-  constructor(
-    options: ApolloIpcLinkOptions,
-    private persistedQueries?: Record<string, string>
-  ) {
+  constructor(options: ApolloIpcLinkOptions) {
     super();
 
     this.ipc = options.ipc;
@@ -78,9 +74,7 @@ export default class IpcLink extends ApolloLink {
       const request: SerializableGraphQLRequest = {
         operationName: operation.operationName,
         variables: operation.variables,
-        query:
-          this.persistedQueries?.[operation.operationName] ??
-          print(operation.query),
+        query: operation.query,
       };
 
       this.observers.set(current, observer);
