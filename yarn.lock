@@ -15387,7 +15387,7 @@ app-builder-lib@22.9.1:
     eslint-plugin-jsx-a11y: ^6.4.1
     eslint-plugin-react: ^7.22.0
     eslint-plugin-react-hooks: ^4.2.0
-    graphql: ^15.5.1
+    graphql: "*"
     graphql-codegen-persisted-query-ids: ^0.1.2
     husky: ^6.0.0
     jest: "*"
@@ -15395,9 +15395,9 @@ app-builder-lib@22.9.1:
     lint-staged: ^10.2.13
     prettier: ^2.1.1
     rimraf: ^3.0.2
-    ts-jest: ^27.0.5
-    ts-node: ^10.2.1
-    typescript: ^4.4.2
+    ts-jest: "*"
+    ts-node: ^8.6.2
+    typescript: "*"
   dependenciesMeta:
     dmg-builder@22.9.1:
       unplugged: true
@@ -27805,7 +27805,7 @@ resolve@^1.18.1:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^8.8.2":
+"ts-node@npm:^8.6.2, ts-node@npm:^8.8.2":
   version: 8.10.2
   resolution: "ts-node@npm:8.10.2"
   dependencies:
