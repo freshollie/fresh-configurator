@@ -5,7 +5,7 @@ import { createServer } from "../src";
 describe("/job-artifacts", () => {
   const artifactsDirectory = "someartifactsdirectory";
 
-const { rest } = createServer({ artifactsDirectory });
+  const { rest } = createServer({ artifactsDirectory });
 
   beforeEach(() => {
     mockFs({
