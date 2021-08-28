@@ -27,12 +27,12 @@ const BoardAligner: React.FC<Props> = ({
       width="600px"
       opacity="0.4"
       transform="rotate(90deg)"
-      loading="false"
+      loading="eager"
       referrerPolicy=""
     />
 
     <Flex
-      top="0"
+      top="0px"
       position="absolute"
       width="100%"
       height="100%"

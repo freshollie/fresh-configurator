@@ -1,3 +1,5 @@
+import { BufferGeometry, Material } from "three";
+
 export default class JSONLoader extends Loader {
   constructor(manager?: LoadingManager);
 
@@ -7,7 +9,7 @@ export default class JSONLoader extends Loader {
 
   load(
     url: string,
-    onLoad?: (geometry: Geometry, materials: Material[]) => void,
+    onLoad?: (geometry: BufferGeometry, materials: Material[]) => void,
     onProgress?: (event: ProgressEvent) => void,
     onError?: (event: ErrorEvent) => void
   ): void;
@@ -15,5 +17,5 @@ export default class JSONLoader extends Loader {
   parse(
     json: unknown,
     texturePath?: string
-  ): { geometry: Geometry; materials?: Material[] };
+  ): { geometry: BufferGeometry; materials?: Material[] };
 }

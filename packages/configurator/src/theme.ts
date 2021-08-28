@@ -1,7 +1,7 @@
 import { ThemeConfig } from "bumbag";
 
 const theme: ThemeConfig = {
-  Icon: {
+  icons: {
     icons: {
       receiver: {
         viewBoxWidth: 141.7,

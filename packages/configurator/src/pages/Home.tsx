@@ -285,11 +285,11 @@ const Home: React.FC = () => {
     <Box>
       <Flex>
         <Box
-          flexGrow="1"
+          flexGrow={1}
           height="100vh"
           backgroundColor="warning400"
           position="sticky"
-          top="0"
+          top="0px"
         >
           <Flex
             flexWrap="wrap"
@@ -301,7 +301,7 @@ const Home: React.FC = () => {
           >
             <Box borderRight="default" padding="major-5" position="relative">
               <Image
-                loading={false}
+                loading="eager"
                 referrerPolicy=""
                 src={SupaflyLogo}
                 minWidth="400px"
@@ -312,18 +312,18 @@ const Home: React.FC = () => {
             <Box paddingBottom="major-5">
               <Set spacing="major-5">
                 <RouterLink to="/flash">
-                  <Link charSet="" fontSize="400" color="black" href="/flash">
+                  <Link fontSize="400" color="black" href="/flash">
                     Flashing
                   </Link>
                 </RouterLink>
                 <RouterLink to="/help">
-                  <Link charSet="" fontSize="400" color="black" href="/help">
+                  <Link fontSize="400" color="black" href="/help">
                     Help
                   </Link>
                 </RouterLink>
               </Set>
             </Box>
-            <Box padding="minor-1" position="absolute" right="0" bottom="0">
+            <Box padding="minor-1" position="absolute" right="0px" bottom="0px">
               <ThemeSelector />
             </Box>
           </Flex>

@@ -12,7 +12,7 @@ type Props = {
 };
 
 // eslint-disable-next-line consistent-return
-const toWidth = (size: Size): string => {
+const toWidth = (size: Size): "100px" | "200px" | "450px" => {
   switch (size) {
     case "small":
       return "100px";
@@ -25,7 +25,7 @@ const toWidth = (size: Size): string => {
 
 const FlightController: React.FC<Props> = ({ orientation, size, side }) => (
   <Image
-    loading="false"
+    loading="eager"
     referrerPolicy=""
     src={image}
     transform={`rotate(

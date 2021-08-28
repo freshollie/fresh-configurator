@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Canvas } from "react-three-fiber";
-import { Color, Geometry, Material } from "three";
+import { Canvas } from "@react-three/fiber";
+import { Color, BufferGeometry, Material } from "three";
 import JSONLoader from "./JSONLoader";
 
 import quadx from "./models/quad_x.model";
@@ -8,7 +8,7 @@ import tricopter from "./models/tricopter.model";
 import hexx from "./models/hex_x.model";
 
 type ModelData = {
-  geometry: Geometry;
+  geometry: BufferGeometry;
   materials?: Material[] | undefined;
 };
 

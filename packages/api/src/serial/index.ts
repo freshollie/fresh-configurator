@@ -6,11 +6,8 @@ import {
   legacySerialPortFunctionsMap,
   serialPortFunctionBits,
 } from "./constants";
-import {
-  SerialConfig,
-  SerialPortIdentifiers,
-  SerialPortFunctions,
-} from "./types";
+import { SerialPortIdentifiers, SerialPortFunctions } from "./types";
+import type { SerialConfig } from "./types";
 
 export { SerialConfig, SerialPortIdentifiers, SerialPortFunctions };
 

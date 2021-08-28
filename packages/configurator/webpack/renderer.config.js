@@ -76,6 +76,7 @@ module.exports = (_, { mode }) => ({
   output: {
     path: `${__dirname}/../build`,
     filename: "renderer.js",
+    chunkFormat: "array-push",
   },
   optimization: {
     minimize: mode === "production",
