@@ -6,7 +6,7 @@
   },
   "references": [
     {
-      "path": "../api-graph/tsconfig.build.json"
+      "path": "../api/tsconfig.build.json"
     }
   ]
 }

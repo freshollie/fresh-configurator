@@ -13,6 +13,9 @@
     },
     {
       "path": "./packages/api-server/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/api-graph/tsconfig.build.json"
     }
   ]
 }
