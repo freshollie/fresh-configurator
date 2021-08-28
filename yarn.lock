@@ -2539,7 +2539,7 @@ __metadata:
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
     typescript: 4.2.2
-    ws: ^8.2.0
+    ws: ^7.5.3
   peerDependencies:
     graphql: ^15.0.0
   languageName: unknown
@@ -29637,7 +29637,7 @@ typescript@4.2.2:
   languageName: node
   linkType: hard
 
-"ws@npm:^5.2.0 || ^6.0.0 || ^7.0.0":
+"ws@npm:^5.2.0 || ^6.0.0 || ^7.0.0, ws@npm:^7.5.3":
   version: 7.5.3
   resolution: "ws@npm:7.5.3"
   peerDependencies:
@@ -29688,21 +29688,6 @@ typescript@4.2.2:
     utf-8-validate:
       optional: true
   checksum: 2e69a635cc907809bac0aa775b12e6cc6d7ef58a6f212331d5b6ab1ea097d403963e058f6011ccfd5b814387a06c2fcac1f7e2ce8877c1871f9cdf13d5775eec
-  languageName: node
-  linkType: hard
-
-"ws@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "ws@npm:8.2.0"
-  peerDependencies:
-    bufferutil: ^4.0.1
-    utf-8-validate: ^5.0.2
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    utf-8-validate:
-      optional: true
-  checksum: 7cd544312a48dafcb8158c9b4e5f20986cce980d516e0ef0602665911b0e95c5e0dea2846a4bb3153a1e2c839aa3d92fb7e69dd864fe432e881eee9d4e8cf70b
   languageName: node
   linkType: hard
 

@@ -35,7 +35,7 @@
     "get-port": "^5.1.1",
     "graphql-ws": "^5.4.1",
     "subscriptions-transport-ws": "^0.9.19",
-    "ws": "^8.2.0"
+    "ws": "^7.5.3"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
