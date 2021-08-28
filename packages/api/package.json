@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/jest": "*",
-    "@types/node": "*",
+    "@types/node": "^16.7.4",
     "@types/semver": "^7.1.0",
     "ts-jest": "*",
     "ts-node": "^8.8.2",
