@@ -5,6 +5,7 @@ module.exports = {
   ...config,
   displayName: {
     name,
-    color: "magenta",
+    color: "purple",
   },
+  setupFiles: ["./.jest/setup.ts"],
 };

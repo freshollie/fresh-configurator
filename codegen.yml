@@ -6,7 +6,7 @@ schema:
   - "!**/__generated__/*.ts"
 
 generates:
-  ./packages/api-server/src/graph/__generated__/index.ts:
+  ./packages/api-graph/src/graph/__generated__/index.ts:
     config:
       overwrite: true
       contextType: ../../context#Context

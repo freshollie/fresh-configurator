@@ -9,6 +9,9 @@
     },
     {
       "path": "./packages/api-server/tsconfig.cjs.build.json"
+    },
+    {
+      "path": "./packages/api-graph/tsconfig.build.json"
     }
   ]
 }

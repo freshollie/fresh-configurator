@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": ["node", "jest"]
+  },
+  "include": [
+    ".jest/*.ts",
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "__mocks__/**/*.ts",
+    "__mocks__/**/*.tsx",
+    "*.d.ts"
+  ]
+}
