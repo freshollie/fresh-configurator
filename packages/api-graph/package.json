@@ -35,17 +35,17 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
-    "@types/jest": "*",
+    "@types/jest": "^26.0.19",
     "@types/mock-fs": "^4.13.1",
-    "@types/node": "^16.7.4",
+    "@types/node": "^12.0.0",
     "@types/uuid": "^8.3.1",
     "flush-promises": "^1.0.2",
     "graphql": "^15.5.1",
     "mock-fs": "^5.0.0",
     "mockdate": "^3.0.5",
-    "ts-jest": "*",
+    "ts-jest": "^26.3.0",
     "ts-node": "^10.2.1",
-    "typescript": "*"
+    "typescript": "^4.2.2"
   },
   "peerDependencies": {
     "graphql": "^15.0.0"
