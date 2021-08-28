@@ -4,6 +4,9 @@ import { createServer } from "../src";
 
 describe("/job-artifacts", () => {
   const artifactsDirectory = "someartifactsdirectory";
+
+  const { rest } = createServer({ artifactsDirectory });
+
   beforeEach(() => {
     mockFs({
       someartifactsdirectory: {
@@ -17,8 +20,6 @@ describe("/job-artifacts", () => {
   });
 
   it("should provide access to the configured artifacts directory", async () => {
-    const { rest } = createServer({ artifactsDirectory });
-
     const response = await supertest(rest).get("/job-artifacts/89765");
 
     expect(response.status).toBe(200);
@@ -26,8 +27,6 @@ describe("/job-artifacts", () => {
   });
 
   it("should respond with 404 for non existent artifacts", async () => {
-    const { rest } = createServer({ artifactsDirectory });
-
     const response = await supertest(rest).get("/job-artifacts/43532");
 
     expect(response.status).toBe(404);

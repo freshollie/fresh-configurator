@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { mergeTypes, mergeResolvers } from "merge-graphql-schemas";
+import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 import { Resolvers } from "../../__generated__";
 
 import arming from "./arming";
@@ -19,7 +19,6 @@ import motors from "./motors";
 import beepers from "./beeper";
 import modes from "./modes";
 import blackbox from "./blackbox";
-import { Context } from "../../../context";
 
 const typeDefs = gql`
   extend type Connection {
@@ -51,7 +50,7 @@ const resolvers: Resolvers = {
 };
 
 export default {
-  typeDefs: mergeTypes([
+  typeDefs: mergeTypeDefs([
     typeDefs,
     arming.typeDefs,
     alignment.typeDefs,
@@ -71,7 +70,7 @@ export default {
     modes.typeDefs,
     blackbox.typeDefs,
   ]),
-  resolvers: mergeResolvers<Context, Resolvers>([
+  resolvers: mergeResolvers([
     resolvers,
     arming.resolvers,
     alignment.resolvers,
