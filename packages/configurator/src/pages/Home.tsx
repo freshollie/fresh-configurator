@@ -301,7 +301,7 @@ const Home: React.FC = () => {
           >
             <Box borderRight="default" padding="major-5" position="relative">
               <Image
-                loading={false}
+                loading="eager"
                 referrerPolicy=""
                 src={SupaflyLogo}
                 minWidth="400px"

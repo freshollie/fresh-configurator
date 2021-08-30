@@ -25,7 +25,7 @@ const toWidth = (size: Size): string => {
 
 const FlightController: React.FC<Props> = ({ orientation, size, side }) => (
   <Image
-    loading="false"
+    loading="eager"
     referrerPolicy=""
     src={image}
     transform={`rotate(
