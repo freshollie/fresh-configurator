@@ -5,6 +5,7 @@ import {
   Observable,
   Operation,
   FetchResult,
+  Observer,
 } from "@apollo/client/core";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 import { deserializeError } from "serialize-error";
@@ -22,10 +23,7 @@ export default class IpcLink extends ApolloLink {
 
   private channel = "graphql";
 
-  private observers: Map<
-    string,
-    ZenObservable.SubscriptionObserver<FetchResult>
-  > = new Map();
+  private observers: Map<string, Observer<FetchResult>> = new Map();
 
   protected listener = (
     event: IpcRendererEvent,
@@ -40,16 +38,16 @@ export default class IpcLink extends ApolloLink {
     const observer = this.observers.get(id);
     switch (type) {
       case "data":
-        return observer?.next(data);
+        return observer?.next?.(data);
 
       case "error": {
         this.observers.delete(id);
-        return observer?.error(deserializeError(data));
+        return observer?.error?.(deserializeError(data));
       }
 
       case "complete": {
         this.observers.delete(id);
-        return observer?.complete();
+        return observer?.complete?.();
       }
     }
 

@@ -1,3 +1,4 @@
+const { DefinePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
@@ -109,6 +110,10 @@ module.exports = (_, { mode }) => ({
           }),
         ]
       : []),
+    // Bumbag seems to require a "process" object exists
+    new DefinePlugin({
+      process: { env: {} },
+    }),
   ],
   devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
