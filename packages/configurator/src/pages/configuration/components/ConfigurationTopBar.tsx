@@ -72,7 +72,7 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
       <Box backgroundColor="warning" padding="major-1">
         <Set orientation="horizontal">
           <Image
-            loading={false}
+            loading="eager"
             referrerPolicy=""
             src={SupaflyLogo}
             height="30px"
