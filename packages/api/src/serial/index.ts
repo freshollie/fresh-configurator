@@ -6,13 +6,13 @@ import {
   legacySerialPortFunctionsMap,
   serialPortFunctionBits,
 } from "./constants";
-import {
-  SerialConfig,
-  SerialPortIdentifiers,
-  SerialPortFunctions,
-} from "./types";
+import { SerialPortIdentifiers, SerialPortFunctions } from "./types";
 
-export { SerialConfig, SerialPortIdentifiers, SerialPortFunctions };
+import type { SerialConfig } from "./types";
+
+export type { SerialConfig };
+
+export { SerialPortIdentifiers, SerialPortFunctions };
 
 export const BAUD_RATES = [
   -1,
