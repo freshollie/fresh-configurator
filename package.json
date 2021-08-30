@@ -83,6 +83,12 @@
   "dependenciesMeta": {
     "dmg-builder@22.9.1": {
       "unplugged": true
+    },
+    "open@7.0.4": {
+      "unplugged": true
+    },
+    "open@8.2.1": {
+      "unplugged": true
     }
   }
 }

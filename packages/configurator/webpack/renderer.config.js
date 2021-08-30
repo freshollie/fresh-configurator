@@ -1,3 +1,4 @@
+const { DefinePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
@@ -68,7 +69,7 @@ module.exports = (_, { mode }) => ({
         type: "asset/inline",
       },
       {
-        test: /\.(ico|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
+        test: /\.(ico|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|gltf)(\?.*)?$/,
         type: "asset/resource",
       },
     ],
@@ -110,16 +111,15 @@ module.exports = (_, { mode }) => ({
           }),
         ]
       : []),
+    // Bumbag seems to require a "process" object exists
+    new DefinePlugin({
+      process: { env: {} },
+    }),
   ],
   devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
-    stats: {
-      colors: true,
-      chunks: true,
-      children: true,
-    },
-    before() {
+    onBeforeSetupMiddleware() {
       spawn("electron", [`${__dirname}/../build/main.js`], {
         shell: true,
         env: {

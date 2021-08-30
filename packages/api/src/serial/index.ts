@@ -7,9 +7,11 @@ import {
   serialPortFunctionBits,
 } from "./constants";
 import { SerialPortIdentifiers, SerialPortFunctions } from "./types";
+
 import type { SerialConfig } from "./types";
 
-export { SerialConfig, SerialPortIdentifiers, SerialPortFunctions };
+export type { SerialConfig };
+export { SerialPortIdentifiers, SerialPortFunctions };
 
 export const BAUD_RATES = [
   -1,

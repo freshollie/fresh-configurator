@@ -3781,7 +3781,7 @@ __metadata:
     bumbag: ^2.6.0
     cross-env: ^7.0.3
     dmg-builder: ^22.13.1
-    electron: ^13.2.3
+    electron: 13.2.3
     electron-builder: ^22.11.7
     electron-devtools-installer: ^3.2.0
     electron-rebuild: ^3.2.2
@@ -15204,7 +15204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^13.2.3":
+"electron@npm:13.2.3":
   version: 13.2.3
   resolution: "electron@npm:13.2.3"
   dependencies:
@@ -17125,6 +17125,10 @@ __metadata:
     typescript: 4.2.2
   dependenciesMeta:
     dmg-builder@22.9.1:
+      unplugged: true
+    open@7.0.4:
+      unplugged: true
+    open@8.2.1:
       unplugged: true
   languageName: unknown
   linkType: soft
