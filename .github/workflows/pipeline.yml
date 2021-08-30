@@ -228,7 +228,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
-    needs: [test, lint, format, storybook]
+    needs: [test, lint, format]
 
     steps:
       - uses: actions/checkout@v1
