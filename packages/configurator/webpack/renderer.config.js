@@ -68,7 +68,7 @@ module.exports = (_, { mode }) => ({
         type: "asset/inline",
       },
       {
-        test: /\.(ico|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|model)(\?.*)?$/,
+        test: /\.(ico|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|gltf)(\?.*)?$/,
         type: "asset/resource",
       },
     ],

@@ -11,7 +11,7 @@ module.exports = {
   setupFilesAfterEnv: ["./.jest/setup.ts"],
   moduleNameMapper: {
     // Mock any files which webpack would convert to file paths
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|model|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|gltf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
       "identity-obj-proxy",
     ...config.moduleNameMapper,
   },
