@@ -84,7 +84,7 @@
     ]
   },
   "dependenciesMeta": {
-    "dmg-builder@22.9.1": {
+    "dmg-builder@23.13.1": {
       "unplugged": true
     },
     "open@7.0.4": {
