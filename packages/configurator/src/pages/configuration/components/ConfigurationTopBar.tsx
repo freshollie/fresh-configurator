@@ -37,21 +37,19 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
   const items = [
     <Breadcrumb.Item>
       <RouterLink to="/">
-        <Breadcrumb.Link color="black" charSet="">
-          Home
-        </Breadcrumb.Link>
+        <Breadcrumb.Link color="black">Home</Breadcrumb.Link>
       </RouterLink>
     </Breadcrumb.Item>,
     <Breadcrumb.Item>
       <RouterLink to={`/connections/${connection}/`}>
-        <Breadcrumb.Link color="black" charSet="" isCurrent={!page}>
+        <Breadcrumb.Link color="black" isCurrent={!page}>
           {port}
         </Breadcrumb.Link>
       </RouterLink>
     </Breadcrumb.Item>,
     page && (
       <Breadcrumb.Item>
-        <Breadcrumb.Link color="black" charSet="" isCurrent>
+        <Breadcrumb.Link color="black" isCurrent>
           {page}
         </Breadcrumb.Link>
       </Breadcrumb.Item>
@@ -62,7 +60,7 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
     <Box
       position="sticky"
       top="0px"
-      zIndex="999"
+      zIndex={"999" as never}
       backgroundColor="default"
       border={colorMode !== "dark" ? "default" : "none"}
       borderTop="none"

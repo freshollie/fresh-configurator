@@ -32,7 +32,7 @@ const BoardAligner: React.FC<Props> = ({
     />
 
     <Flex
-      top="0"
+      top="0px"
       position="absolute"
       width="100%"
       height="100%"

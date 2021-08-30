@@ -54,7 +54,7 @@ const Overview: React.FC = () => {
     <Box>
       <ConfigurationTopBar>
         <Flex>
-          <Box margin="major-5" minWidth="7">
+          <Box margin="major-5" minWidth="7px">
             <Heading
               textOverflow="ellipsis"
               maxWidth="400px"
@@ -68,7 +68,7 @@ const Overview: React.FC = () => {
               {data?.connection.device.info.targetName}
             </Text>
           </Box>
-          <Box alignY="bottom" flexGrow="1">
+          <Box alignY="bottom" flexGrow={"1" as never}>
             <Box alignX="right">
               <ResetManager />
             </Box>
@@ -145,7 +145,7 @@ const Overview: React.FC = () => {
           </Columns.Column>
           <Columns.Column spread={8}>
             <Box
-              height="calc(100vh - 300px)"
+              height={"calc(100vh - 300px)" as never}
               borderColor="default"
               borderRadius="1"
             >
