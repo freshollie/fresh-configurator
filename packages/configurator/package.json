@@ -75,7 +75,7 @@
     "semver": "^7.1.3",
     "serialize-error": "^8.0.1",
     "source-map-support": "^0.5.19",
-    "three": "^0.124.0",
+    "three": "^0.125.0",
     "wouter": "^2.7.4"
   },
   "devDependencies": {
