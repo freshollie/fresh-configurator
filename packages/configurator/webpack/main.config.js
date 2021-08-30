@@ -48,6 +48,7 @@ module.exports = (_, { mode }) => ({
   },
   output: {
     path: `${__dirname}/../build`,
+    chunkFormat: "commonjs",
   },
   optimization: {
     minimize: mode === "production",

@@ -77,6 +77,7 @@ module.exports = (_, { mode }) => ({
   output: {
     path: `${__dirname}/../build`,
     filename: "renderer.js",
+    chunkFormat: "array-push",
   },
   optimization: {
     minimize: mode === "production",
@@ -118,11 +119,6 @@ module.exports = (_, { mode }) => ({
   devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
-    stats: {
-      colors: true,
-      chunks: true,
-      children: true,
-    },
     before() {
       spawn("electron", [`${__dirname}/../build/main.js`], {
         shell: true,

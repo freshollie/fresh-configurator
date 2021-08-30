@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@betaflight/msp": "workspace:packages/msp",
-    "semver": "^7.1.3"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
