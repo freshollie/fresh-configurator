@@ -14,7 +14,12 @@ const ModelView: React.FC<{
   return (
     <Box position="relative" height="100%">
       <Paper>
-        <Level width="100%" position="absolute" padding="minor-2" zIndex="10">
+        <Level
+          width="100%"
+          position="absolute"
+          padding="minor-2"
+          zIndex={"10" as never}
+        >
           <Columns fontSize="100">
             <Columns.Column>
               <Box>

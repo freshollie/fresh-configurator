@@ -14,7 +14,7 @@ const Blackbox: React.FC = () => (
         Blackbox
       </Heading>
       <Set padding="major-3" spacing="minor-5">
-        <Box flexGrow="1">
+        <Box flexGrow={"1" as never}>
           <BlackboxFlashInfoProvider />
         </Box>
         <Box alignSelf="flex-end" justifyContent="center">

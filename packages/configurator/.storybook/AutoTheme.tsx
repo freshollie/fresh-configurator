@@ -34,14 +34,14 @@ window.snaps = {
  */
 const disableAnimations = (): void => {
   const DISABLE_CSS_ANIMATIONS_STYLE = `
-  *, :before, :after {
-    -webkit-transition: none !important;
-    transition: none !important;
-    -webkit-animation: none !important;
-    animation: none !important;
-    will-change: auto !important;
-  }
-  `;
+   *, :before, :after {
+     -webkit-transition: none !important;
+     transition: none !important;
+     -webkit-animation: none !important;
+     animation: none !important;
+     will-change: auto !important;
+   }
+   `;
 
   const frameDuration = 16;
   const maxFrames = 100;
@@ -122,7 +122,7 @@ const disableAnimations = (): void => {
       new Promise((resolve) => {
         let timeout: number;
         if (callbacks.length < 1) {
-          timeout = setTimeout(resolve, 100);
+          timeout = (setTimeout(resolve, 100) as unknown) as number;
         }
         resolvedListeners.push({
           cancelTimeout: () => clearTimeout(timeout),
@@ -170,8 +170,9 @@ const withProvider = <P,>(Component: React.FC<P>): React.FC<P> => (p) => (
     }}
   >
     <Box
+      // calc is for some reason not allowed here
       // eslint-disable-next-line no-underscore-dangle
-      height={window.__snapshot__ ? "100vh" : "calc(100vh - 32px)"}
+      height={(window.__snapshot__ ? "100vh" : "calc(100vh - 32px)") as never}
     >
       <Component
         // eslint-disable-next-line react/jsx-props-no-spreading
