@@ -68,7 +68,7 @@ const Overview: React.FC = () => {
               {data?.connection.device.info.targetName}
             </Text>
           </Box>
-          <Box alignY="bottom" flexGrow={1}>
+          <Box alignY="bottom" flexGrow={"1" as never}>
             <Box alignX="right">
               <ResetManager />
             </Box>

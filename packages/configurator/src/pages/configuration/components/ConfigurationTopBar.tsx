@@ -60,7 +60,8 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
     <Box
       position="sticky"
       top="0px"
-      zIndex={999}
+      // TODO: fix type once bumbag works with numbers as expected
+      zIndex={"999" as never}
       backgroundColor="default"
       border={colorMode !== "dark" ? "default" : "none"}
       borderTop="none"

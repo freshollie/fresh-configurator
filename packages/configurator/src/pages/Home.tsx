@@ -285,7 +285,7 @@ const Home: React.FC = () => {
     <Box>
       <Flex>
         <Box
-          flexGrow={1}
+          flexGrow={"1" as never}
           height="100vh"
           backgroundColor="warning400"
           position="sticky"
