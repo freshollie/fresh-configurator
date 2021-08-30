@@ -154,7 +154,7 @@ jobs:
         run: yarn build:storybook
 
       - name: Test
-        uses: ianwalter/puppeteer@14728ddef82390d1ecd4732fb543f62177392fbb
+        uses: ianwalter/puppeteer@d50433d5b7595870c2726b2920ad9760987fcca2
         env:
           CI: true
         with:
