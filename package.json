@@ -49,7 +49,7 @@
     "@graphql-codegen/typescript-resolvers": "^1.17.10",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "^7.17.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.0.0",
@@ -72,6 +72,9 @@
     "ts-node": "^10.2.1",
     "typescript": "4.2.2"
   },
+  "resolutions": {
+    "node-abi": "2.30.0"
+  },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "eslint --fix"
@@ -81,7 +84,7 @@
     ]
   },
   "dependenciesMeta": {
-    "dmg-builder@22.9.1": {
+    "dmg-builder@22.13.1": {
       "unplugged": true
     },
     "open@7.0.4": {
