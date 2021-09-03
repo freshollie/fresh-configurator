@@ -54,15 +54,8 @@ const FlightIndicatorsDemo = ({
 }: {
   showBox: boolean;
 }): JSX.Element => {
-  const {
-    roll,
-    pitch,
-    heading,
-    vario,
-    speed,
-    altitude,
-    pressure,
-  } = useIndicatorValues();
+  const { roll, pitch, heading, vario, speed, altitude, pressure } =
+    useIndicatorValues();
   return (
     <>
       <Attitude showBox={showBox} roll={roll} pitch={pitch} />

@@ -68,9 +68,10 @@ describe("device.sensors", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(
-        mockApi.writeDisabledSensors
-      ).toHaveBeenCalledWith("/dev/something", [Sensors.ACCELEROMETER]);
+      expect(mockApi.writeDisabledSensors).toHaveBeenCalledWith(
+        "/dev/something",
+        [Sensors.ACCELEROMETER]
+      );
     });
   });
 });

@@ -60,7 +60,7 @@ const ChannelMapManager: React.FC = () => {
         setChannelMap({
           variables: {
             connection,
-            map: ((e.target as unknown) as { value: string }).value.split(""),
+            map: (e.target as unknown as { value: string }).value.split(""),
           },
         });
       }}

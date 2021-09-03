@@ -7,24 +7,7 @@ describe("writePartialAdvancedConfig", () => {
     mockMsp.setApiVersion("1.31.0");
     // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
-      3,
-      2,
-      0,
-      1,
-      224,
-      1,
-      194,
-      1,
-      0,
-      0,
-      0,
-      0,
-      48,
-      125,
-      0,
-      0,
-      0,
-      2,
+      3, 2, 0, 1, 224, 1, 194, 1, 0, 0, 0, 0, 48, 125, 0, 0, 0, 2,
     ]);
 
     await writePartialAdvancedConfig("/dev/someport", {
@@ -41,24 +24,7 @@ describe("writePartialAdvancedConfig", () => {
     mockMsp.setApiVersion("1.31.0");
     // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
-      3,
-      2,
-      0,
-      1,
-      224,
-      1,
-      194,
-      1,
-      0,
-      0,
-      0,
-      0,
-      48,
-      125,
-      0,
-      0,
-      0,
-      2,
+      3, 2, 0, 1, 224, 1, 194, 1, 0, 0, 0, 0, 48, 125, 0, 0, 0, 2,
     ]);
 
     await writePartialAdvancedConfig("/dev/someport", {
@@ -80,24 +46,7 @@ describe("writePartialAdvancedConfig", () => {
     mockMsp.setApiVersion("1.31.0");
     // Respond to `readAdvancedConfig`
     mockMsp.setResponse([
-      3,
-      2,
-      0,
-      1,
-      224,
-      1,
-      194,
-      1,
-      0,
-      0,
-      0,
-      0,
-      48,
-      125,
-      0,
-      0,
-      0,
-      2,
+      3, 2, 0, 1, 224, 1, 194, 1, 0, 0, 0, 0, 48, 125, 0, 0, 0, 2,
     ]);
 
     await writePartialAdvancedConfig("/dev/someport", {

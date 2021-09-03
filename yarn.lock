@@ -17088,7 +17088,7 @@ __metadata:
     jest: ^26.4.2
     lerna: ^3.22.1
     lint-staged: ^10.2.13
-    prettier: ^2.1.1
+    prettier: ^2.3.2
     rimraf: ^3.0.2
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
@@ -24965,12 +24965,12 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "prettier@npm:2.1.1"
+"prettier@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "prettier@npm:2.3.2"
   bin:
     prettier: bin-prettier.js
-  checksum: c6cd8449f9ce78b7b44533072d36e17dd85d5adcc6f883d8dd8d266fa226ae8b0e91090162445c42641cbd264af94faec0fa2939661ec6f610a20a7b1fcd1889
+  checksum: 17ce5784ac67621c292df58e2da60b2ee150c2d6aebea22a6ad9e52fcd6a5e66c349d0a8436ea3bd8ff9d778920a5f68000d7625b74f43558718a49755aa5259
   languageName: node
   linkType: hard
 

@@ -75,7 +75,7 @@ const BeeperManager: React.FC = () => {
         setBeeperConfig({
           variables: {
             connection,
-            config: ((e.target as unknown) as { checked: boolean }).checked
+            config: (e.target as unknown as { checked: boolean }).checked
               ? {
                   tone: 1,
                   conditions: REQUIRED_CONDITIONS,

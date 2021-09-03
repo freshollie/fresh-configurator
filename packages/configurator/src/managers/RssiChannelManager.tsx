@@ -73,7 +73,7 @@ const RssiChannelManager: React.FC = () => {
       disabled={loading || setting}
       onChange={(e) => {
         const channel = Number(
-          ((e.target as unknown) as { value: string }).value
+          (e.target as unknown as { value: string }).value
         );
         setRssiChannel({
           variables: {

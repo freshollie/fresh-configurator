@@ -1,7 +1,7 @@
 import { execute, apiVersion, MspDataView } from "@betaflight/msp";
 
-const mockExecute = (execute as unknown) as jest.MockedFunction<typeof execute>;
-const mockApiVersion = (apiVersion as unknown) as jest.MockedFunction<
+const mockExecute = execute as unknown as jest.MockedFunction<typeof execute>;
+const mockApiVersion = apiVersion as unknown as jest.MockedFunction<
   typeof apiVersion
 >;
 

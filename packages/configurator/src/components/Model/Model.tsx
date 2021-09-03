@@ -36,14 +36,13 @@ type ModelProps = {
 const ambientColor = new Color(0x404040);
 const whiteColor = new Color(1, 1, 1);
 
-const GltfAsset: React.FC<
-  { file: string } & Omit<PrimitiveProps, "object">
-> = ({ file, ...primitiveProps }) => {
-  const gltf = useLoader(GLTFLoader, file);
+const GltfAsset: React.FC<{ file: string } & Omit<PrimitiveProps, "object">> =
+  ({ file, ...primitiveProps }) => {
+    const gltf = useLoader(GLTFLoader, file);
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <primitive {...primitiveProps} object={gltf.scene} />;
-};
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <primitive {...primitiveProps} object={gltf.scene} />;
+  };
 
 /**
  * Create a 3D representation of the given model

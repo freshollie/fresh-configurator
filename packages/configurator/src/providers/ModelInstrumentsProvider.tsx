@@ -35,8 +35,11 @@ const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
     }
   );
 
-  const { roll = 0, pitch = 0, yaw = 0 } =
-    deviceData?.connection.device.attitude ?? {};
+  const {
+    roll = 0,
+    pitch = 0,
+    yaw = 0,
+  } = deviceData?.connection.device.attitude ?? {};
 
   return (
     <>

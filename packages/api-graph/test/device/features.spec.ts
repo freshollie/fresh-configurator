@@ -63,12 +63,10 @@ describe("device.features", () => {
       });
 
       expect(errors).toBeFalsy();
-      expect(
-        mockApi.writeEnabledFeatures
-      ).toHaveBeenCalledWith("/dev/something", [
-        Features.SOFTSERIAL,
-        Features.TRANSPONDER,
-      ]);
+      expect(mockApi.writeEnabledFeatures).toHaveBeenCalledWith(
+        "/dev/something",
+        [Features.SOFTSERIAL, Features.TRANSPONDER]
+      );
     });
   });
 });

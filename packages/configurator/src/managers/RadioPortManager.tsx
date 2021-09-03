@@ -118,7 +118,7 @@ const RadioPortManager: React.FC = () => {
       // We can assume that RX_MODE is set to one of these, if not, just show PPM
       value={featureToId(features) ?? currentPort ?? 100}
       onChange={(e) => {
-        const id = Number(((e.target as unknown) as { value: string }).value);
+        const id = Number((e.target as unknown as { value: string }).value);
         const enabledFeature = idToFeature(id);
         setFunctionsAndFeatures({
           variables: {

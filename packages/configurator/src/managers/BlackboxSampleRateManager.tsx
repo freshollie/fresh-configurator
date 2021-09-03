@@ -128,7 +128,7 @@ const BlackboxSampleRateManager: React.FC = () => {
           }
 
           const newDenom = Number(
-            ((e.target as unknown) as { value: string }).value
+            (e.target as unknown as { value: string }).value
           );
           setBlackboxConfig({
             variables: {
@@ -165,7 +165,7 @@ const BlackboxSampleRateManager: React.FC = () => {
         }
 
         const position = Number(
-          ((e.target as unknown) as { value: string }).value
+          (e.target as unknown as { value: string }).value
         );
         if (legacy) {
           setBlackboxConfig({

@@ -31,11 +31,13 @@ type BaseInstrumentProps = {
  * WithBase: a HOC which should be used as a Base to create instruments from
  */
 export default <P extends Record<string, unknown>>(
-  Instrument: React.FC<P>
-): React.FC<P & BaseInstrumentProps> => ({ size, showBox, ...rest }) => (
-  <InstrumentContainer size={size}>
-    {showBox && <FiBox />}
-    <Instrument {...(rest as P)} />
-    <FiCircle />
-  </InstrumentContainer>
-);
+    Instrument: React.FC<P>
+  ): React.FC<P & BaseInstrumentProps> =>
+  ({ size, showBox, ...rest }) =>
+    (
+      <InstrumentContainer size={size}>
+        {showBox && <FiBox />}
+        <Instrument {...(rest as P)} />
+        <FiCircle />
+      </InstrumentContainer>
+    );

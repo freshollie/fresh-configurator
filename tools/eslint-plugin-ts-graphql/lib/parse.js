@@ -1,4 +1,5 @@
-const operationNameRegex = /^\s*(query|mutation|subscription|fragment)[\s\r\n]*([_A-Za-z][_0-9A-Za-z]*)?/gim;
+const operationNameRegex =
+  /^\s*(query|mutation|subscription|fragment)[\s\r\n]*([_A-Za-z][_0-9A-Za-z]*)?/gim;
 const schemaRegex = /^\s*type [_A-Za-z][_0-9A-Za-z]* \{/;
 // This is not a real parser - just a quick-and-dirty regex.
 function parseOperationNames(node) {

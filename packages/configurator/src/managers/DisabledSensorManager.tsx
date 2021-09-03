@@ -64,7 +64,7 @@ const DisabledSensorManager: React.FC<{ sensor: Sensors }> = ({ sensor }) => {
       label={enabled ? "Enabled" : "Disabled"}
       disabled={loading || !data || setting}
       onChange={(event) => {
-        const { checked } = (event.target as unknown) as { checked: boolean };
+        const { checked } = event.target as unknown as { checked: boolean };
         if (data && connection) {
           if (checked) {
             log("Enabling accelerometer");

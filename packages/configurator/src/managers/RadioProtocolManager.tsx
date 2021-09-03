@@ -103,9 +103,10 @@ const RadioProtocolManager: React.FC = () => {
     }
   );
 
-  const hasSerialPortSet = !!serialPortsData?.connection.device.serial.ports.find(
-    ({ functions }) => functions.includes(SerialPortFunctions.RX_SERIAL)
-  );
+  const hasSerialPortSet =
+    !!serialPortsData?.connection.device.serial.ports.find(({ functions }) =>
+      functions.includes(SerialPortFunctions.RX_SERIAL)
+    );
   const selectedProtocol =
     data?.connection.device.rc.receiver.serialProvider ?? -1;
 
@@ -121,7 +122,7 @@ const RadioProtocolManager: React.FC = () => {
       value={smoothingSet ? selectedProtocol : -1}
       onChange={(e) => {
         const serialProvider = Number(
-          ((e.target as unknown) as { value: string }).value
+          (e.target as unknown as { value: string }).value
         );
         setReceiverConfig({
           variables: {

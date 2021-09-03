@@ -58,17 +58,13 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     }
   );
 
-  const {
-    bytesRead,
-    bytesWritten,
-    packetErrors,
-    baudRate,
-  } = connectionStatsData?.connection ?? {
-    bytesRead: 0,
-    bytesWritten: 0,
-    packetErrors: 0,
-    baudRate: 0,
-  };
+  const { bytesRead, bytesWritten, packetErrors, baudRate } =
+    connectionStatsData?.connection ?? {
+      bytesRead: 0,
+      bytesWritten: 0,
+      packetErrors: 0,
+      baudRate: 0,
+    };
 
   // Read the sent and received bytes every second in order to
   // determine the port usage compared to the baudRate

@@ -7,25 +7,7 @@ describe("readDataFlashChunk", () => {
   it("should return the requested chunk of flash data for a v1.30.0 device", async () => {
     mockMsp.setApiVersion("1.30.0");
     mockMsp.setResponse([
-      0,
-      160,
-      0,
-      0,
-      12,
-      0,
-      1,
-      0,
-      0,
-      0,
-      20,
-      10,
-      5,
-      2,
-      129,
-      64,
-      160,
-      80,
-      40,
+      0, 160, 0, 0, 12, 0, 1, 0, 0, 0, 20, 10, 5, 2, 129, 64, 160, 80, 40,
     ]);
     const data = await readDataFlashChunk("/dev/serial", 10 * 4096, 10);
 
@@ -74,19 +56,7 @@ describe("readDataFlashChunk", () => {
 
     expect(data).toEqual(
       Buffer.from([
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
-        255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
       ])
     );
     expect(mockMsp.execute).toHaveBeenCalledWith("/dev/serial", {

@@ -14,36 +14,8 @@ describe("readRxConfig", () => {
   it("should respond correctly for version 1.40.0", async () => {
     mockMsp.setApiVersion("1.40.0");
     mockMsp.setResponse([
-      0,
-      108,
-      7,
-      220,
-      5,
-      26,
-      4,
-      0,
-      117,
-      3,
-      67,
-      8,
-      2,
-      19,
-      40,
-      5,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      2,
-      0,
-      0,
-      0,
-      1,
-      2,
-      0,
+      0, 108, 7, 220, 5, 26, 4, 0, 117, 3, 67, 8, 2, 19, 40, 5, 0, 0, 0, 0, 0,
+      0, 0, 2, 0, 0, 0, 1, 2, 0,
     ]);
 
     const config = await readRxConfig("/dev/someport");

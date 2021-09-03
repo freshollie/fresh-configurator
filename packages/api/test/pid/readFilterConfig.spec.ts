@@ -6,34 +6,8 @@ describe("readFilterConfig", () => {
   it("should read the filter config from the device for v1.40.0", async () => {
     mockMsp.setApiVersion("1.40.0");
     mockMsp.setResponse([
-      100,
-      100,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      160,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      100,
-      0,
-      44,
-      1,
-      0,
-      0,
-      200,
-      0,
+      100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
+      44, 1, 0, 0, 200, 0,
     ]);
     const config = await readFilterConfig("/dev/port");
     expect(config).toEqual({

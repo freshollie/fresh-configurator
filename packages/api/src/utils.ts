@@ -122,13 +122,13 @@ export const mergeDeep = <T>(target: T, source: RecursivePartial<T>): T => {
   return target;
 };
 
-export const partialWriteFunc = <T extends Record<string, unknown>, R>(
-  readFunc: (port: string) => Promise<T>,
-  writeFunc: (port: string, config: T) => Promise<R>
-): ((port: string, config: RecursivePartial<T>) => Promise<R>) => async (
-  port,
-  config
-) => writeFunc(port, mergeDeep(await readFunc(port), config));
+export const partialWriteFunc =
+  <T extends Record<string, unknown>, R>(
+    readFunc: (port: string) => Promise<T>,
+    writeFunc: (port: string, config: T) => Promise<R>
+  ): ((port: string, config: RecursivePartial<T>) => Promise<R>) =>
+  async (port, config) =>
+    writeFunc(port, mergeDeep(await readFunc(port), config));
 
 export const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));

@@ -66,9 +66,9 @@ export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink =>
             const result = await (isSubscription(request.query)
               ? subscribe(args)
               : execute(args));
-            const iterable = (ensureIterable(
+            const iterable = ensureIterable(
               result
-            ) as unknown) as AsyncIterable<FetchResult>;
+            ) as unknown as AsyncIterable<FetchResult>;
             await forAwaitEach(iterable, (value) => observer.next(value));
             observer.complete();
           } catch (error) {

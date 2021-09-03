@@ -6,27 +6,7 @@ describe("readExtendedStatus", () => {
   it("should correctly read the status and arming flags for api verion 1.40.0", async () => {
     mockMsp.setApiVersion("1.40.0");
     mockMsp.setResponse([
-      250,
-      0,
-      0,
-      0,
-      33,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      40,
-      0,
-      3,
-      0,
-      0,
-      20,
-      132,
-      0,
-      0,
-      0,
+      250, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 40, 0, 3, 0, 0, 20, 132, 0, 0, 0,
     ]);
 
     const config = await readExtendedStatus("/dev/someport");

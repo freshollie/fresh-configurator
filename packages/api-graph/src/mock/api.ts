@@ -142,38 +142,8 @@ let mockDevice = {
     mcuTypeId: 4,
     sampleRateHz: undefined,
     signature: [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0,
     ],
     targetCapabilities: 55,
     targetName: "STM32F411",
@@ -404,38 +374,8 @@ const reset = () => {
       mcuTypeId: 4,
       sampleRateHz: undefined,
       signature: [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
       ],
       targetCapabilities: 55,
       targetName: "STM32F411",
@@ -727,13 +667,11 @@ export const writePartialMixerConfig: typeof api.writePartialMixerConfig = (
     mockDevice.mixerConfig = mergeDeep(mockDevice.mixerConfig, config);
   });
 
-export const writePartialAdvancedConfig: typeof api.writePartialAdvancedConfig = (
-  port,
-  config
-) =>
-  delay(10).then(() => {
-    mockDevice.advancedConfig = mergeDeep(mockDevice.advancedConfig, config);
-  });
+export const writePartialAdvancedConfig: typeof api.writePartialAdvancedConfig =
+  (port, config) =>
+    delay(10).then(() => {
+      mockDevice.advancedConfig = mergeDeep(mockDevice.advancedConfig, config);
+    });
 
 export const readBeeperConfig = (port: string) =>
   delay(20).then(() => mockDevice.beeper);
@@ -830,13 +768,11 @@ export const writeBlackboxConfig: typeof api.writeBlackboxConfig = (
     mockDevice.blackboxConfig = { ...mockDevice.blackboxConfig, ...config };
   });
 
-export const writePartialBlackboxConfig: typeof api.writePartialBlackboxConfig = (
-  port,
-  config
-) =>
-  delay(50).then(() => {
-    mockDevice.blackboxConfig = mergeDeep(mockDevice.blackboxConfig, config);
-  });
+export const writePartialBlackboxConfig: typeof api.writePartialBlackboxConfig =
+  (port, config) =>
+    delay(50).then(() => {
+      mockDevice.blackboxConfig = mergeDeep(mockDevice.blackboxConfig, config);
+    });
 
 export const readDataFlashChunk: typeof api.readDataFlashChunk = (
   port,

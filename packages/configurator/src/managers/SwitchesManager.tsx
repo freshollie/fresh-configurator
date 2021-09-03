@@ -172,7 +172,7 @@ const SwitchManager: React.FC<{
               return;
             }
             const value = Number(
-              ((e.target as unknown) as { value: string }).value
+              (e.target as unknown as { value: string }).value
             );
 
             // If the slot was previously disabled, then when the aux channel is set
@@ -325,9 +325,8 @@ const SwitchesManager: React.FC = () => {
             (slot) => slot.modeId === mode.id
           );
 
-          return (slotsForMode.length > 0
-            ? slotsForMode
-            : [firstInactiveSlot]
+          return (
+            slotsForMode.length > 0 ? slotsForMode : [firstInactiveSlot]
           ).map((slot, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <Table.Row key={`${mode.id} + ${i}`}>

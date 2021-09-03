@@ -52,7 +52,7 @@ export default async (): Promise<Application> => {
         E2E: "true",
         HEADLESS: PRODUCTION ? "true" : "false",
       },
-      path: PRODUCTION ? binaryPath() : ((electronPath as unknown) as string),
+      path: PRODUCTION ? binaryPath() : (electronPath as unknown as string),
       args: PRODUCTION
         ? undefined
         : [path.join(__dirname, "../../build/main.js")],

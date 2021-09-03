@@ -6,24 +6,7 @@ describe("readAdvancedConfig", () => {
   it("should read the advanced pid config from a v1.31.0 device", async () => {
     mockMsp.setApiVersion("1.31.0");
     mockMsp.setResponse([
-      3,
-      2,
-      0,
-      1,
-      224,
-      1,
-      194,
-      1,
-      0,
-      0,
-      0,
-      0,
-      48,
-      125,
-      0,
-      0,
-      0,
-      2,
+      3, 2, 0, 1, 224, 1, 194, 1, 0, 0, 0, 0, 48, 125, 0, 0, 0, 2,
     ]);
 
     expect(await readAdvancedConfig("/dev/someport")).toEqual({

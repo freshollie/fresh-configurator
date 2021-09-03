@@ -84,7 +84,7 @@ const BlackboxDeviceManager: React.FC = () => {
         setBlackBoxDevice({
           variables: {
             connection,
-            device: Number(((e.target as unknown) as { value: string }).value),
+            device: Number((e.target as unknown as { value: string }).value),
           },
         });
       }}
