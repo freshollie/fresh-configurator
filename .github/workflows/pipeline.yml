@@ -255,6 +255,28 @@ jobs:
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
 
+      - name: Output Linux
+        uses: actions/upload-artifact@v2-preview
+        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
+        with:
+          name: linux
+          path: packages/configurator/dist/*.snap
+
+      - name: Output Windows
+        uses: actions/upload-artifact@v2-preview
+        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
+        with:
+          name: windows
+          path: packages/configurator/dist/*.msi
+
+      - name: Output MacOS
+        uses: actions/upload-artifact@v2-preview
+        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
+        with:
+          name: macos
+          path: |
+            packages/configurator/dist/*.dmg
+
       - name: E2E
         uses: GabrielBB/xvfb-action@v1.4
         with:
@@ -294,25 +316,3 @@ jobs:
         run: yarn workspace @betaflight/configurator release
         env:
           GH_TOKEN: ${{ secrets.github_token }}
-
-      - name: Output Linux
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: linux
-          path: packages/configurator/dist/*.snap
-
-      - name: Output Windows
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: windows
-          path: packages/configurator/dist/*.msi
-
-      - name: Output MacOS
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: macos
-          path: |
-            packages/configurator/dist/*.dmg
