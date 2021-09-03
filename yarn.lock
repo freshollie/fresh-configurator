@@ -3670,7 +3670,7 @@ __metadata:
     mockdate: ^3.0.5
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: 4.2.2
+    typescript: ^4.4.2
     uuid: ^8.3.2
   peerDependencies:
     graphql: ^15.0.0
@@ -3701,7 +3701,7 @@ __metadata:
     supertest: ^6.1.6
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: 4.2.2
+    typescript: ^4.4.2
     ws: ^7.5.3
   peerDependencies:
     graphql: ^15.0.0
@@ -3719,7 +3719,7 @@ __metadata:
     semver: ^7.3.5
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: 4.2.2
+    typescript: ^4.4.2
   languageName: unknown
   linkType: soft
 
@@ -3792,7 +3792,7 @@ __metadata:
     storybook-dark-mode: ^1.0.8
     three: ^0.132.2
     ts-jest: ^26.3.0
-    typescript: 4.2.2
+    typescript: ^4.4.2
     webpack: ^5.51.1
     webpack-bundle-analyzer: ^4.4.2
     webpack-cli: ^4.8.0
@@ -3818,7 +3818,7 @@ __metadata:
     debug: ^4.3.2
     flush-promises: ^1.0.2
     ts-jest: ^26.3.0
-    typescript: 4.2.2
+    typescript: ^4.4.2
   languageName: unknown
   linkType: soft
 
@@ -17092,7 +17092,7 @@ __metadata:
     rimraf: ^3.0.2
     ts-jest: ^26.3.0
     ts-node: ^10.2.1
-    typescript: 4.2.2
+    typescript: ^4.4.2
   dependenciesMeta:
     dmg-builder@22.13.1:
       unplugged: true
@@ -29906,23 +29906,23 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-typescript@4.2.2:
-  version: 4.2.2
-  resolution: "typescript@npm:4.2.2"
+typescript@^4.4.2:
+  version: 4.4.2
+  resolution: "typescript@npm:4.4.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e035ade8bac05c23dbd30045122f7b0c6f63693c23c394b563161118c0bea66887ec470337d3e9f44e6459793332f741c731e86eeffd83ddebff23f70f71669b
+  checksum: 194e08e9d1971d667d6fd1a0554616b7022312a2319d70e81a64e502a265992061ee7817ed9a69b52bbabe7a9b85e7938cb8c11c433e40a516b277f8c4dacd51
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.2.2#~builtin<compat/typescript>":
-  version: 4.2.2
-  resolution: "typescript@patch:typescript@npm%3A4.2.2#~builtin<compat/typescript>::version=4.2.2&hash=d8b4e7"
+"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
+  version: 4.4.2
+  resolution: "typescript@patch:typescript@npm%3A4.4.2#~builtin<compat/typescript>::version=4.4.2&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c20aa1680ee9b157deeb2ce381b71646196a938fc6609a430a0477d3adc5933ad43a476bd1bff557a078dff4b4ae827cc590e0fc4610f57c5cf5f0f0c896ec38
+  checksum: 3109ae25705746996007161cdd3271857db4f40356b894e34d4cabc216bf9e251f53e0bb6e48df2450b5e3fd948dcbee716a616a4ad4cf7251292025e6163cb1
   languageName: node
   linkType: hard
 

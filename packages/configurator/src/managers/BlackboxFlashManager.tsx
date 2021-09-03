@@ -103,7 +103,7 @@ const BlackboxFlashManager: React.FC = () => {
   const erasing =
     !loading &&
     (sendingEraseCommand ||
-      (flashSupported && !data?.connection.device.blackbox.flash.ready));
+      (flashSupported && !data.connection.device.blackbox.flash.ready));
 
   const downloadJob = jobs.find(
     ({ completed, connectionId }) => !completed && connectionId === connection
@@ -121,7 +121,7 @@ const BlackboxFlashManager: React.FC = () => {
           erasing ||
           loading ||
           !!downloadJob ||
-          (data?.connection.device.blackbox.flash.usedSize ?? 0) < 1
+          data.connection.device.blackbox.flash.usedSize < 1
         }
         onClick={() => {
           createOffloadJob();

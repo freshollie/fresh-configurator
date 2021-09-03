@@ -170,7 +170,7 @@ const resolvers: Resolvers = {
               // eslint-disable-next-line no-await-in-loop
               await offloadFile.write(chunk);
             } catch (e) {
-              fileError = e;
+              fileError = e as Error;
               break;
             }
             address += chunk.byteLength;

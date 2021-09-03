@@ -129,7 +129,9 @@ const resolvers: Resolvers = {
           try {
             await connect();
           } catch (e) {
-            throw new GraphQLError(`Could not open port: ${e.message}`);
+            throw new GraphQLError(
+              `Could not open port: ${(e as Error).message}`
+            );
           }
         }
         deviceId = await api.readUID(port);

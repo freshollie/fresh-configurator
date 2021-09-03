@@ -42,6 +42,6 @@
     "@types/serialport__stream": "workspace:^8.0.0",
     "flush-promises": "^1.0.2",
     "ts-jest": "^26.3.0",
-    "typescript": "4.2.2"
+    "typescript": "^4.4.2"
   }
 }

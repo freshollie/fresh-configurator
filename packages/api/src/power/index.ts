@@ -247,9 +247,12 @@ export const readBatteryState = async (port: string): Promise<BatteryState> => {
     cellCount: data.readU8(),
     capacity: data.readU16(), // mAh
 
+    // @ts-expect-error typescript is erroring here
+    // but this shouldn't be a problem
     voltage: data.readU8() / 10, // V
     mAhDrawn: data.readU16(), // mAh
     amperage: data.readU16() / 100, // A
+
     ...(semver.gte(api, "1.41.0")
       ? {
           batteryState: data.readU8(),

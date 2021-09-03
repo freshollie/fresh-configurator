@@ -70,7 +70,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.3.0",
     "ts-node": "^10.2.1",
-    "typescript": "4.2.2"
+    "typescript": "^4.4.2"
   },
   "resolutions": {
     "node-abi": "2.30.0"
@@ -90,5 +90,6 @@
     "open@7.0.4": {
       "unplugged": true
     }
-  }
+  },
+  "packageManager": "yarn@3.0.2"
 }
