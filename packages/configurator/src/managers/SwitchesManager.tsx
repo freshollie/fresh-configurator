@@ -54,13 +54,18 @@ const MODES = [
 const numAuxChannels = (numChannels: number): number =>
   numChannels > 4 ? numChannels - 4 : 0;
 
-const rangeToValue = (range: Range): string | undefined =>
-  RANGES.findIndex(
-    ({ start, end }) => range.start === start && range.end === end
-  ).toString();
+const rangeToValue = (range: Range): string[] =>
+  RANGES.filter(
+    ({ start, end }) => range.start >= start && range.end <= end
+  ).map((_, i) => i.toString());
 
 const isInRange = (value: number, range: Range): boolean =>
   value > range.start && value < range.end;
+
+const compileRanges = (ranges: Range[]): Range => ({
+  start: Math.min(...ranges.map(({ start }) => start)),
+  end: Math.min(...ranges.map(({ end }) => end)),
+});
 
 const SwitchManager: React.FC<{
   slotId?: number;
@@ -68,7 +73,7 @@ const SwitchManager: React.FC<{
   numChannels: number;
 }> = ({ slotId, numChannels, mode }) => {
   const connection = useConnection();
-  const { data } = useQuery(
+  const { data, error } = useQuery(
     gql`
       query ModeSlotAndChannels($connection: ID!, $slotId: Int!) {
         connection(connectionId: $connection) {
@@ -156,6 +161,7 @@ const SwitchManager: React.FC<{
     data?.connection.device.modes.slot?.range.start ===
     data?.connection.device.modes.slot?.range.end;
 
+  console.log(slotData, error, slotId);
   return (
     <>
       <Table.Cell>
@@ -221,7 +227,7 @@ const SwitchManager: React.FC<{
             data?.connection.device.modes.slot?.range ?? { start: 0, end: 0 }
           )}
           onChange={
-            ((_: string[], value: string) => {
+            ((values: string[]) => {
               if (!slotData || slotId === undefined) {
                 return;
               }
@@ -232,8 +238,10 @@ const SwitchManager: React.FC<{
                   config: {
                     modeId: mode,
                     auxChannel: slotData.auxChannel,
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    range: RANGES[Number(value)]!,
+                    range: compileRanges(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      values.map((index) => RANGES[Number(index)]!)
+                    ),
                   },
                 },
               });
@@ -320,47 +328,47 @@ const SwitchesManager: React.FC = () => {
   return (
     <Box>
       <Table variant="minimal">
-        {MODES.map((mode) => {
-          const slotsForMode = activeSlots.filter(
-            (slot) => slot.modeId === mode.id
-          );
+        <Table.Body>
+          {MODES.map((mode) => {
+            const slotsForMode = activeSlots.filter(
+              (slot) => slot.modeId === mode.id
+            );
 
-          return (slotsForMode.length > 0
-            ? slotsForMode
-            : [firstInactiveSlot]
-          ).map((slot, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Table.Row key={`${mode.id} + ${i}`}>
-              <Table.Cell>
-                <Text>
-                  <b>{mode.label}</b>
-                  {slot &&
-                    channelData &&
-                    isInRange(
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      channelData.connection.device.rc.channels[
-                        slot.auxChannel + 4
-                      ]!,
-                      slot.range
-                    ) && (
-                      <Badge
-                        size="small"
-                        isAttached
-                        backgroundColor="warning"
-                      />
-                    )}
-                </Text>
-              </Table.Cell>
-              <Table.Cell>
+            return (slotsForMode.length > 0
+              ? slotsForMode
+              : [firstInactiveSlot]
+            ).map((slot, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Table.Row key={`${mode.id} + ${i}`}>
+                <Table.Cell>
+                  <Text>
+                    <b>{mode.label}</b>
+                    {slot &&
+                      channelData &&
+                      isInRange(
+                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                        channelData.connection.device.rc.channels[
+                          slot.auxChannel + 4
+                        ]!,
+                        slot.range
+                      ) && (
+                        <Badge
+                          size="small"
+                          isAttached
+                          backgroundColor="warning"
+                        />
+                      )}
+                  </Text>
+                </Table.Cell>
                 <SwitchManager
                   slotId={slot?.id}
                   numChannels={numChannels}
                   mode={mode.id}
                 />
-              </Table.Cell>
-            </Table.Row>
-          ));
-        }).flat()}
+              </Table.Row>
+            ));
+          }).flat()}
+        </Table.Body>
       </Table>
     </Box>
   );
