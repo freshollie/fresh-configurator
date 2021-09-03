@@ -255,27 +255,11 @@ jobs:
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
 
-      - name: Output Linux
+      - name: Output
         uses: actions/upload-artifact@v2-preview
         if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
         with:
-          name: linux
-          path: packages/configurator/dist/*.snap
-
-      - name: Output Windows
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: windows
-          path: packages/configurator/dist/*.msi
-
-      - name: Output MacOS
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: macos
-          path: |
-            packages/configurator/dist/*.dmg
+          path: packages/configurator/dist/*.{snap,msi,dmg}
 
       - name: E2E
         uses: GabrielBB/xvfb-action@v1.4
