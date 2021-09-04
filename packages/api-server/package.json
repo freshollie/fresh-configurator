@@ -38,6 +38,8 @@
     "ws": "^7.5.3"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.84",
+    "@swc/jest": "^0.2.2",
     "@types/debug": "^4.1.7",
     "@types/express": "^4.17.13",
     "@types/jest": "^26.0.19",

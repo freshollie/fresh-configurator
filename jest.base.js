@@ -1,6 +1,23 @@
 module.exports = {
   config: {
-    preset: "ts-jest",
+    transform: {
+      "^.+\\.(t|j)sx?$": [
+        "@swc/jest",
+        {
+          jsc: {
+            parser: {
+              syntax: "typescript",
+              tsx: true,
+            },
+            target: "es2020",
+          },
+          sourceMaps: true,
+          module: {
+            type: "commonjs",
+          },
+        },
+      ],
+    },
     resetMocks: true,
     testPathIgnorePatterns: [
       "/node_modules/",

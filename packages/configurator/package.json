@@ -89,6 +89,8 @@
     "@storybook/addons": "^6.3.7",
     "@storybook/react": "^6.3.7",
     "@storybook/theming": "^6.3.7",
+    "@swc/core": "^1.2.84",
+    "@swc/jest": "^0.2.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@types/electron-devtools-installer": "^2.2.0",
