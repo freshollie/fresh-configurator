@@ -37,16 +37,13 @@ const reply = (port: string, data: Buffer): void => {
   (raw(port)?.binding as MockBinding).emitData(data);
 };
 
-const realSetTimeout = setTimeout;
-
-let killMspReplying = false;
 /**
  * Automatically reply MSP info for the given port
  * when it's opened
  */
-const handleMspInfoReply = async (port: string): Promise<void> => {
+const handleMspInfoReply = (port: string) => {
   let currentPort = raw(port);
-  while (!killMspReplying) {
+  return setInterval(() => {
     try {
       if (
         currentPort !== raw(port) &&
@@ -59,15 +56,13 @@ const handleMspInfoReply = async (port: string): Promise<void> => {
         reply(port, Buffer.from([36, 77, 62, 3, 1, 0, 1, 40, 43]));
       }
     } catch (e) {}
-    // Respond to an open request within 100ms
-    await new Promise((resolve) => realSetTimeout(resolve, 10));
-  }
+  }, 100);
 };
 
-mockMspDevices.forEach((port) => handleMspInfoReply(port));
+const repliers = mockMspDevices.map((port) => handleMspInfoReply(port));
 
 afterAll(() => {
-  killMspReplying = true;
+  repliers.forEach((replier) => clearTimeout(replier));
 });
 
 beforeEach(() => {
@@ -100,25 +95,9 @@ describe("open", () => {
     expect(mockMspDevices.every((port) => isOpen(port))).toBe(true);
   });
 
-  it("should throw an error when trying to open a port which doesn't respond with api version", () =>
-    new Promise<void>((done) => {
-      jest.useFakeTimers();
-
-      open("/dev/non-msp-device")
-        .then(() => {
-          throw new Error("should not have resolved");
-        })
-        .catch((e) => {
-          // Only way to test this is in a callback
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(e).toMatchSnapshot();
-          done();
-        });
-
-      realSetTimeout(() => {
-        jest.advanceTimersByTime(2500);
-      }, 100);
-    }));
+  it("should throw an error when trying to open a port which doesn't respond with api version", async () => {
+    await expect(open("/dev/non-msp-device")).rejects.toMatchSnapshot();
+  });
 
   it("should provide a callback and close the connection when the connection closes", () =>
     new Promise<void>((done) => {
@@ -398,7 +377,6 @@ describe("execute", () => {
   it("should ignore malformed responses", async () => {
     await open("/dev/something");
 
-    jest.useFakeTimers();
     const execution = execute("/dev/something", {
       code: 108,
     });
@@ -410,7 +388,6 @@ describe("execute", () => {
     );
     await flushPromises();
 
-    jest.runAllTimers();
     // Should timeout from no response
     await expect(execution).rejects.toEqual(expect.any(Error));
     expect(packetErrors("/dev/something")).toBe(1);
