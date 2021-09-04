@@ -34,6 +34,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.84",
+    "@swc/jest": "^0.2.2",
     "@types/debug": "^4.1.7",
     "@types/jest": "^26.0.19",
     "@types/mock-fs": "^4.13.1",
