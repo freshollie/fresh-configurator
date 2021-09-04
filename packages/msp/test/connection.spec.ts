@@ -109,6 +109,8 @@ describe("open", () => {
           throw new Error("should not have resolved");
         })
         .catch((e) => {
+          // Only way to test this is in a callback
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(e).toMatchSnapshot();
           done();
         });
@@ -202,6 +204,7 @@ describe("close", () => {
             throw new Error("Should have thrown an error");
           })
           .catch((e) => {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(e).toMatchSnapshot();
           })
       )

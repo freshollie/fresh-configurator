@@ -9,13 +9,12 @@ module.exports = {
     "@betaflight-tools/ts-graphql",
   ],
   extends: [
+    "airbnb",
     "airbnb-typescript",
     "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
     "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint",
   ],
   rules: {
     "@typescript-eslint/no-unused-vars": "error",
@@ -36,6 +35,7 @@ module.exports = {
       },
     ],
     "react/prop-types": ["off"],
+    "react/require-default-props": ["off"],
     "react/function-component-definition": [
       "error",
       {
