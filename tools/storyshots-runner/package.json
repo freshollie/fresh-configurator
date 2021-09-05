@@ -8,7 +8,7 @@
   "dependencies": {
     "import-jsx": "^4.0.0",
     "ink": "^3.0.9",
-    "meow": "^10.1.1",
+    "meow": "^9.0.0",
     "pending-xhr-puppeteer": "^2.3.3",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",
