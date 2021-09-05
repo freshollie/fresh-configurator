@@ -31,5 +31,15 @@ module.exports = {
       "<rootDir>/.*/__mocks__",
     ],
     testEnvironment: "node",
+    globals: {
+      "ts-jest": {
+        diagnostics: {
+          // Duplicate identifier, (only because a pesky gql codegen preset
+          // won't let us disable the file)
+          // Eslint will catch this anyway in production code
+          ignoreCodes: "TS2300",
+        },
+      },
+    },
   },
 };
