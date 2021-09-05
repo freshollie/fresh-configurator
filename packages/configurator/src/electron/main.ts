@@ -4,8 +4,9 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import url from "url";
 import fs from "fs";
-import { createServer } from "@betaflight/api-server";
+
 import unhandled from "electron-unhandled";
+import type { ApolloLink } from "@apollo/client";
 import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
 
 unhandled({
@@ -23,6 +24,45 @@ const artifactsDirectory = PRODUCTION
   ? path.join(app.getPath("temp"), `artifacts-${new Date().getTime()}`)
   : path.join(__dirname, "artifacts");
 
+const createBackend = async (
+  mocked: boolean
+): Promise<{ link: ApolloLink; start: () => Promise<void> | void }> => {
+  if (PRODUCTION) {
+    const { schema, mockedDeviceContext, context, startMockDevice } =
+      await import("@betaflight/api-graph");
+    return {
+      link: createSchemaLink({
+        schema,
+        context: (mocked ? mockedDeviceContext : context)({
+          artifactsDir: artifactsDirectory,
+        }),
+      }),
+      start: () => {
+        if (mocked) {
+          startMockDevice();
+        }
+      },
+    };
+  }
+  const { createServer } = await import("@betaflight/api-server");
+  const backend = createServer({
+    mocked,
+    artifactsDirectory,
+  });
+  return {
+    link: createSchemaLink({
+      schema: backend.schema,
+      context: backend.context,
+    }),
+    start: async () => {
+      const port = await backend.listen({
+        hostname: "127.0.0.1",
+      });
+      console.log(`Starting backend on ${port}`);
+    },
+  };
+};
+
 const startBackend = async (): Promise<void> => {
   if (PRODUCTION) {
     await fs.promises.mkdir(artifactsDirectory);
@@ -32,27 +72,11 @@ const startBackend = async (): Promise<void> => {
   if (mocked) {
     console.log("Creating backend in mocked mode");
   }
-  const backend = createServer({
-    mocked,
-    artifactsDirectory,
-  });
 
-  const link = createSchemaLink({
-    schema: backend.schema,
-    context: backend.context,
-  });
+  const { link, start } = await createBackend(mocked);
   createIpcExecutor({ link, ipc: ipcMain });
 
-  if (mocked && PRODUCTION) {
-    backend.startMockTicks();
-  }
-
-  if (!PRODUCTION) {
-    const port = await backend.listen({
-      hostname: "127.0.0.1",
-    });
-    console.log(`Starting backend on ${port}`);
-  }
+  await start();
 };
 
 // Temporary fix broken high-dpi scale factor on Windows (125% scaling)
