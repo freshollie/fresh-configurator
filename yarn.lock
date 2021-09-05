@@ -1681,15 +1681,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight-tools/eslint-plugin-ts-graphql@workspace:tools/eslint-plugin-ts-graphql":
-  version: 0.0.0-use.local
-  resolution: "@betaflight-tools/eslint-plugin-ts-graphql@workspace:tools/eslint-plugin-ts-graphql"
-  dependencies:
-    "@typescript-eslint/experimental-utils": ^4.30.0
-    lodash: ^4.17.21
-  languageName: unknown
-  linkType: soft
-
 "@betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner":
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner"
@@ -1798,7 +1789,6 @@ __metadata:
     "@betaflight/api-server": "workspace:packages/api-server"
     "@emotion/jest": ^11.3.0
     "@fortawesome/free-solid-svg-icons": ^5.15.4
-    "@graphql-typed-document-node/core": ^3.1.0
     "@reach/router": ^1.3.4
     "@react-three/fiber": ^7.0.6
     "@storybook/addon-actions": ^6.3.7
@@ -3015,7 +3005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.0":
+"@graphql-typed-document-node/core@npm:^3.0.0":
   version: 3.1.0
   resolution: "@graphql-typed-document-node/core@npm:3.1.0"
   peerDependencies:
@@ -6631,7 +6621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/experimental-utils@npm:4.30.0, @typescript-eslint/experimental-utils@npm:^4.0.1, @typescript-eslint/experimental-utils@npm:^4.30.0, @typescript-eslint/experimental-utils@npm:^4.9.1":
+"@typescript-eslint/experimental-utils@npm:4.30.0, @typescript-eslint/experimental-utils@npm:^4.0.1, @typescript-eslint/experimental-utils@npm:^4.9.1":
   version: 4.30.0
   resolution: "@typescript-eslint/experimental-utils@npm:4.30.0"
   dependencies:
@@ -13613,7 +13603,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fresh-configurator@workspace:."
   dependencies:
-    "@betaflight-tools/eslint-plugin-ts-graphql": "workspace:tools/eslint-plugin-ts-graphql"
     "@graphql-codegen/add": ^3.1.0
     "@graphql-codegen/cli": ^2.1.1
     "@graphql-codegen/gql-tag-operations": ^1.1.3
