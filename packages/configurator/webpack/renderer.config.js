@@ -132,7 +132,7 @@ module.exports = (_, { mode }) => ({
   devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
-    before() {
+    onBeforeSetupMiddleware() {
       spawn("electron", [`${__dirname}/../build/main.js`], {
         shell: true,
         env: {

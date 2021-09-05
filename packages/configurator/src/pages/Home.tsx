@@ -179,13 +179,12 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
           <Set orientation="vertical">
             {!details.connectionId && (
               <Button
-                visibility={
-                  details.connecting || connecting ? undefined : "hidden"
-                }
-                _groupHover={{ visibility: "visible" }}
+                _groupHover={{
+                  backgroundColor: "success",
+                  color: "white",
+                }}
                 size="small"
-                palette="success"
-                color="white"
+                palette="default"
                 data-testid="connect-button"
                 disabled={details.connecting || connecting}
                 isLoading={details.connecting || connecting}
@@ -199,8 +198,6 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
             )}
             {details.connectionId && (
               <Button
-                visibility="hidden"
-                _groupHover={{ visibility: "visible" }}
                 size="small"
                 palette="danger"
                 onClick={() => {
@@ -212,8 +209,6 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
             )}
             {details.connectionId && (
               <Button
-                visibility="hidden"
-                _groupHover={{ visibility: "visible" }}
                 size="small"
                 data-testid="configure-button"
                 disabled={badVersion}
