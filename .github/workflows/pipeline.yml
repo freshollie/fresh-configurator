@@ -158,7 +158,7 @@ jobs:
         env:
           CI: true
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
-          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-857950/chrome-linux/chrome
+          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-9404595/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
 
@@ -258,10 +258,13 @@ jobs:
         run: yarn workspace @betaflight/configurator build
 
       - name: Output
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
         with:
-          path: packages/configurator/dist/*.{snap,msi,dmg}
+          path: |
+            packages/configurator/dist/*.snap
+            packages/configurator/dist/*.msi
+            packages/configurator/dist/*.dmg
 
       - name: E2E
         uses: GabrielBB/xvfb-action@v1.4
