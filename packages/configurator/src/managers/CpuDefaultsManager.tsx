@@ -56,7 +56,7 @@ const findProcessorType = ({
     targetName.toLocaleLowerCase().includes(name.toLowerCase())
   );
 
-const PidProtocolsAndProcessor = gql`
+const PidProtocolsAndProcessor = gql(/* GraphQL */ `
   query PidProtocolsAndProcessor($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -76,10 +76,7 @@ const PidProtocolsAndProcessor = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/CpuDefaultsManager").PidProtocolsAndProcessorQuery,
-  import("./__generated__/CpuDefaultsManager").PidProtocolsAndProcessorQueryVariables
->;
+`);
 
 const CpuDefaultsManager: React.FC = () => {
   const connection = useConnection();
@@ -90,17 +87,14 @@ const CpuDefaultsManager: React.FC = () => {
   });
 
   const [setProtocols, { loading: saving }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetPidProtocols(
         $connection: ID!
         $protocols: PidProtocolsInput!
       ) {
         deviceSetPidProtocols(connectionId: $connection, protocols: $protocols)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/CpuDefaultsManager").SetPidProtocolsMutation,
-      import("./__generated__/CpuDefaultsManager").SetPidProtocolsMutationVariables
-    >,
+    `),
     {
       refetchQueries: [
         {

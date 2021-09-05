@@ -6,7 +6,6 @@ module.exports = {
     "import",
     "functional",
     "jest",
-    "@betaflight-tools/ts-graphql",
   ],
   extends: [
     "airbnb",

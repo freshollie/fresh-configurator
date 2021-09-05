@@ -69,7 +69,7 @@ const SwitchManager: React.FC<{
 }> = ({ slotId, numChannels, mode }) => {
   const connection = useConnection();
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query ModeSlotAndChannels($connection: ID!, $slotId: Int!) {
         connection(connectionId: $connection) {
           device {
@@ -86,10 +86,7 @@ const SwitchManager: React.FC<{
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").ModeSlotAndChannelsQuery,
-      import("./__generated__/SwitchesManager").ModeSlotAndChannelsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -100,7 +97,7 @@ const SwitchManager: React.FC<{
   );
 
   const [setSlotConfig, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetModeSlotConfig(
         $connection: ID!
         $slotId: Int!
@@ -112,15 +109,12 @@ const SwitchManager: React.FC<{
           config: $config
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").SetModeSlotConfigMutation,
-      import("./__generated__/SwitchesManager").SetModeSlotConfigMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: gql`
+          query: gql(/* GraphQL */ `
             query ModeSlot($connection: ID!, $slotId: Int!) {
               connection(connectionId: $connection) {
                 device {
@@ -138,10 +132,7 @@ const SwitchManager: React.FC<{
                 }
               }
             }
-          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-            import("./__generated__/SwitchesManager").ModeSlotQuery,
-            import("./__generated__/SwitchesManager").ModeSlotQueryVariables
-          >,
+          `),
           variables: {
             connection,
             slotId,
@@ -255,7 +246,7 @@ const SwitchManager: React.FC<{
 const SwitchesManager: React.FC = () => {
   const connection = useConnection();
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query ModeSlots($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -273,10 +264,7 @@ const SwitchesManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").ModeSlotsQuery,
-      import("./__generated__/SwitchesManager").ModeSlotsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -293,7 +281,7 @@ const SwitchesManager: React.FC = () => {
   );
 
   const { data: channelData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query RcChannels($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -303,10 +291,7 @@ const SwitchesManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SwitchesManager").RcChannelsQuery,
-      import("./__generated__/SwitchesManager").RcChannelsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

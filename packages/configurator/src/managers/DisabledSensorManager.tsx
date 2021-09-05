@@ -5,7 +5,7 @@ import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnection from "../hooks/useConnection";
 import useLogger from "../hooks/useLogger";
 
-const DisabledSensors = gql`
+const DisabledSensors = gql(/* GraphQL */ `
   query DisabledSensors($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -15,10 +15,7 @@ const DisabledSensors = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/DisabledSensorManager").DisabledSensorsQuery,
-  import("./__generated__/DisabledSensorManager").DisabledSensorsQueryVariables
->;
+`);
 
 const DisabledSensorManager: React.FC<{ sensor: Sensors }> = ({ sensor }) => {
   const connection = useConnection();
@@ -30,17 +27,14 @@ const DisabledSensorManager: React.FC<{ sensor: Sensors }> = ({ sensor }) => {
   });
 
   const [setDisabledSensors, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetDisabledSensors($connection: ID!, $disabledSensors: [Int!]!) {
         deviceSetDisabledSensors(
           connectionId: $connection
           disabledSensors: $disabledSensors
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/DisabledSensorManager").SetDisabledSensorsMutation,
-      import("./__generated__/DisabledSensorManager").SetDisabledSensorsMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [

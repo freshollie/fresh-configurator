@@ -10,7 +10,7 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
 }) => {
   const connection = useConnection();
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query RcModelViewData($connection: ID!) {
         connection(connectionId: $connection) {
           apiVersion
@@ -45,10 +45,7 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RcModelViewProvider").RcModelViewDataQuery,
-      import("./__generated__/RcModelViewProvider").RcModelViewDataQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -59,7 +56,7 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
   const apiVersion = data?.connection.apiVersion ?? "0.0.0";
 
   const { data: channelsData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query RcChannels($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -69,10 +66,7 @@ const RcModelViewProvider: React.FC<{ refreshRate: number }> = ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RcModelViewProvider").RcChannelsQuery,
-      import("./__generated__/RcModelViewProvider").RcChannelsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

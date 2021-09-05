@@ -13,7 +13,7 @@ const gcd = (a: number, b: number): number => {
 const BlackboxSampleRateManager: React.FC = () => {
   const connection = useConnection();
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query BlackboxSampleRatesAndPids($connection: ID!) {
         connection(connectionId: $connection) {
           apiVersion
@@ -39,10 +39,7 @@ const BlackboxSampleRateManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxSampleRateManager").BlackboxSampleRatesAndPidsQuery,
-      import("./__generated__/BlackboxSampleRateManager").BlackboxSampleRatesAndPidsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -51,22 +48,19 @@ const BlackboxSampleRateManager: React.FC = () => {
   );
 
   const [setBlackboxConfig, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetBlackboxConfig(
         $connection: ID!
         $config: BlackboxConfigInput!
       ) {
         deviceSetBlackboxConfig(connectionId: $connection, config: $config)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxSampleRateManager").SetBlackboxConfigMutation,
-      import("./__generated__/BlackboxSampleRateManager").SetBlackboxConfigMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: gql`
+          query: gql(/* GraphQL */ `
             query BlackboxSampleRates($connection: ID!) {
               connection(connectionId: $connection) {
                 device {
@@ -81,10 +75,7 @@ const BlackboxSampleRateManager: React.FC = () => {
                 }
               }
             }
-          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-            import("./__generated__/BlackboxSampleRateManager").BlackboxSampleRatesQuery,
-            import("./__generated__/BlackboxSampleRateManager").BlackboxSampleRatesQueryVariables
-          >,
+          `),
           variables: {
             connection,
           },

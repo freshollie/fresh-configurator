@@ -4,7 +4,7 @@ import BoardAligner from "../components/BoardAligner";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnection from "../hooks/useConnection";
 
-const BoadAlignment = gql`
+const BoadAlignment = gql(/* GraphQL */ `
   query DeviceBoardAlignment($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -16,10 +16,7 @@ const BoadAlignment = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/BoardAlignmentManager").DeviceBoardAlignmentQuery,
-  import("./__generated__/BoardAlignmentManager").DeviceBoardAlignmentQueryVariables
->;
+`);
 
 const BoardAlignmentManager: React.FC = () => {
   const connection = useConnection();
@@ -30,7 +27,7 @@ const BoardAlignmentManager: React.FC = () => {
   });
 
   const [setAlignment] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetBoardAlignment(
         $connection: ID!
         $alignment: AlignmentInput!
@@ -40,10 +37,7 @@ const BoardAlignmentManager: React.FC = () => {
           alignment: $alignment
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BoardAlignmentManager").SetBoardAlignmentMutation,
-      import("./__generated__/BoardAlignmentManager").SetBoardAlignmentMutationVariables
-    >,
+    `),
     {
       refetchQueries: [
         {

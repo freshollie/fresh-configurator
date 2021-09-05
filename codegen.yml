@@ -34,20 +34,10 @@ generates:
       - typescript
       - typescript-resolvers
 
-  ./packages/configurator/src/gql/:
+  ./packages/configurator/src/gql/__generated__/tag/:
     documents:
       - "./packages/configurator/{src,stories}/**/*.{ts,tsx}":
           noRequire: true
       - "!**/__generated__/*.ts"
 
-    preset: near-operation-file
-    presetConfig:
-      extension: .ts
-      baseTypesPath: ./__generated__/schema.tsx
-      folder: __generated__
-    config:
-      nonOptionalTypename: true
-      immutableTypes: true
-    plugins:
-      - typescript-operations
-      - typed-document-node
+    preset: gql-tag-operations

@@ -3,8 +3,8 @@ import client from "./client";
 import { versionInfo } from "../util";
 import { gql } from "./apollo";
 
-const Logs = gql`
-  query Logs {
+const Logs = gql(/* GraphQL */ `
+  query LogsTest {
     configurator @client {
       logs {
         message
@@ -12,19 +12,13 @@ const Logs = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/client.spec").LogsQuery,
-  import("./__generated__/client.spec").LogsQueryVariables
->;
+`);
 
-const Log = gql`
-  mutation Log($message: String!) {
+const Log = gql(/* GraphQL */ `
+  mutation LogTest($message: String!) {
     log(message: $message) @client
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/client.spec").LogMutation,
-  import("./__generated__/client.spec").LogMutationVariables
->;
+`);
 
 beforeEach(async () => {
   advanceTo(new Date("2020-03-01T19:00:00.000Z"));

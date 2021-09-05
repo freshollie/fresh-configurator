@@ -1,12 +1,18 @@
-import { InMemoryCache, ApolloClient, gql, ApolloLink } from "@apollo/client";
+import {
+  InMemoryCache,
+  ApolloClient,
+  ApolloLink,
+  gql as schema,
+} from "@apollo/client";
 import WebSocketLink from "./links/WebSocketLink";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
 import IpcLink from "./links/IpcLink";
 
-// eslint-disable-next-line @betaflight-tools/ts-graphql/gql-type-assertion
-const typeDefs = gql`
+import { gql } from "./apollo";
+
+const typeDefs = schema(/* GraphQL */ `
   type Query {
     configurator: Configurator!
   }
@@ -23,9 +29,9 @@ const typeDefs = gql`
     time: String!
     message: String!
   }
-`;
+`);
 
-const Logs = gql`
+const Logs = gql(/* GraphQL */ `
   query Logs {
     configurator @client {
       logs {
@@ -34,10 +40,7 @@ const Logs = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/client").LogsQuery,
-  import("./__generated__/client").LogsQueryVariables
->;
+`);
 
 export const cache = (): InMemoryCache =>
   new InMemoryCache({
@@ -134,7 +137,7 @@ const client = new ApolloClient({
 const writeInitial = (): void => {
   const { os, version, chromeVersion } = versionInfo();
   client.writeQuery({
-    query: gql`
+    query: gql(/* GraphQL */ `
       query InitWrite {
         configurator {
           logs {
@@ -143,10 +146,7 @@ const writeInitial = (): void => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/client").InitWriteQuery,
-      import("./__generated__/client").InitWriteQueryVariables
-    >,
+    `),
     data: {
       __typename: "Query",
       configurator: {

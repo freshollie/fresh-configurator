@@ -25,7 +25,7 @@ const Overview: React.FC = () => {
   const connection = useConnection();
 
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query DeviceData($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -39,10 +39,7 @@ const Overview: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/Overview").DeviceDataQuery,
-      import("./__generated__/Overview").DeviceDataQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

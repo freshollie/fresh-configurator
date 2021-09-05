@@ -43,7 +43,7 @@ const SensorsListProvider: React.FC = () => {
   const connection = useConnection();
 
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query AvailableSensors($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -53,10 +53,7 @@ const SensorsListProvider: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SensorListProvider").AvailableSensorsQuery,
-      import("./__generated__/SensorListProvider").AvailableSensorsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

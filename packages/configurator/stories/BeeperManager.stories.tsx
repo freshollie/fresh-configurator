@@ -12,7 +12,7 @@ export default {
 
 const dshotBeeperConfigMock = (enabled: boolean): MockedResponse => ({
   request: {
-    query: gql`
+    query: gql(/* GraphQL */ `
       query DshotBeeperConfig($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -25,10 +25,7 @@ const dshotBeeperConfigMock = (enabled: boolean): MockedResponse => ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BeeperManager.stories").DshotBeeperConfigQuery,
-      import("./__generated__/BeeperManager.stories").DshotBeeperConfigQueryVariables
-    >,
+    `),
     variables: {
       connection: "abc",
     },

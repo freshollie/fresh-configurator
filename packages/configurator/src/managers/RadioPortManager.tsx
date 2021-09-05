@@ -48,7 +48,7 @@ const featureToId = (features: readonly Features[]): number | undefined =>
 const idToFeature = (rxMode: number): Features =>
   RX_MODE_VALUES.find(({ id }) => rxMode === id)?.feature ?? Features.RX_SERIAL;
 
-const DataQuery = gql`
+const DataQuery = gql(/* GraphQL */ `
   query RadioPortManagerData($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -62,10 +62,7 @@ const DataQuery = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/RadioPortManager").RadioPortManagerDataQuery,
-  import("./__generated__/RadioPortManager").RadioPortManagerDataQueryVariables
->;
+`);
 
 const RadioPortManager: React.FC = () => {
   const connection = useConnection();
@@ -76,7 +73,7 @@ const RadioPortManager: React.FC = () => {
   });
 
   const [setFunctionsAndFeatures, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetDeviceSerialFunctionsAndFeatures(
         $connection: ID!
         $portFunctions: [PortFunctionsInput!]!
@@ -88,10 +85,7 @@ const RadioPortManager: React.FC = () => {
         )
         deviceSetFeatures(connectionId: $connection, features: $features)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RadioPortManager").SetDeviceSerialFunctionsAndFeaturesMutation,
-      import("./__generated__/RadioPortManager").SetDeviceSerialFunctionsAndFeaturesMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [

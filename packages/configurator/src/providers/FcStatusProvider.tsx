@@ -9,7 +9,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
 }) => {
   const connection = useConnection();
   const { data: deviceStatus } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query Status($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -21,10 +21,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/FcStatusProvider").StatusQuery,
-      import("./__generated__/FcStatusProvider").StatusQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -37,7 +34,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
     deviceStatus?.connection.device.status ?? {};
 
   const { data: connectionStatsData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query ConnectionStats($connection: ID!) {
         connection(connectionId: $connection) {
           baudRate
@@ -46,10 +43,7 @@ const FcStatusProvider: React.FC<{ refreshRate: number }> = ({
           packetErrors
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/FcStatusProvider").ConnectionStatsQuery,
-      import("./__generated__/FcStatusProvider").ConnectionStatsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

@@ -6,7 +6,7 @@ import useConnection from "../hooks/useConnection";
 const RssiChannelManager: React.FC = () => {
   const connection = useConnection();
   const { data, loading } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query RssiChannelAndChannels($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -19,10 +19,7 @@ const RssiChannelManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RssiChannelManager").RssiChannelAndChannelsQuery,
-      import("./__generated__/RssiChannelManager").RssiChannelAndChannelsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -31,19 +28,16 @@ const RssiChannelManager: React.FC = () => {
   );
 
   const [setRssiChannel, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetRssiChannel($connection: ID!, $channel: Int!) {
         deviceSetRssiChannel(connectionId: $connection, channel: $channel)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RssiChannelManager").SetRssiChannelMutation,
-      import("./__generated__/RssiChannelManager").SetRssiChannelMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-          query: gql`
+          query: gql(/* GraphQL */ `
             query RcChannel($connection: ID!) {
               connection(connectionId: $connection) {
                 device {
@@ -55,10 +49,7 @@ const RssiChannelManager: React.FC = () => {
                 }
               }
             }
-          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-            import("./__generated__/RssiChannelManager").RcChannelQuery,
-            import("./__generated__/RssiChannelManager").RcChannelQueryVariables
-          >,
+          `),
           variables: {
             connection,
           },

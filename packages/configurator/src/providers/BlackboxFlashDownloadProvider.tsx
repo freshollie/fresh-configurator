@@ -24,7 +24,7 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
   );
 
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query BlackboxFlashUsed($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -36,10 +36,7 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashDownloadProvider").BlackboxFlashUsedQuery,
-      import("./__generated__/BlackboxFlashDownloadProvider").BlackboxFlashUsedQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -75,14 +72,11 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
   const rate = useRate(downloadJob?.progress ?? 0);
 
   const [cancelJob, { loading: cancelling }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation CancelJob($jobId: ID!) {
         cancelJob(jobId: $jobId)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashDownloadProvider").CancelJobMutation,
-      import("./__generated__/BlackboxFlashDownloadProvider").CancelJobMutationVariables
-    >
+    `)
   );
 
   const ButtonProps = Button.useProps();

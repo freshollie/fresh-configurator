@@ -14,7 +14,7 @@ const connection = "asfasdf";
 
 const availableSensorsResolver = (sensors: Sensors[]): MockedResponse => ({
   request: {
-    query: gql`
+    query: gql(/* GraphQL */ `
       query AvailableSensors($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -24,10 +24,7 @@ const availableSensorsResolver = (sensors: Sensors[]): MockedResponse => ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/SensorListProvider.stories").AvailableSensorsQuery,
-      import("./__generated__/SensorListProvider.stories").AvailableSensorsQueryVariables
-    >,
+    `),
     variables: {
       connection,
     },

@@ -13,14 +13,11 @@ const mockCallibrateMutation = (
   callback: () => void
 ): MockedResponse => ({
   request: {
-    query: gql`
+    query: gql(/* GraphQL */ `
       mutation CallibrateAccelerometer($connection: ID!) {
         deviceCallibrateAccelerometer(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/AccelerometerCallibrationManager.spec").CallibrateAccelerometerMutation,
-      import("./__generated__/AccelerometerCallibrationManager.spec").CallibrateAccelerometerMutationVariables
-    >,
+    `),
     variables: {
       connection,
     },

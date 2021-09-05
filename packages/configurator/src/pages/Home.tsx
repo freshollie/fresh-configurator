@@ -22,7 +22,7 @@ import useLogger from "../hooks/useLogger";
 import config from "../config";
 import { Port } from "../gql/__generated__/schema";
 
-const portConnectionStateQuery = gql`
+const portConnectionStateQuery = gql(/* GraphQL */ `
   query PortConnectionState($id: String!) {
     port(id: $id) {
       id
@@ -30,10 +30,7 @@ const portConnectionStateQuery = gql`
       connectionId
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/Home").PortConnectionStateQuery,
-  import("./__generated__/Home").PortConnectionStateQueryVariables
->;
+`);
 const Device: React.FC<{ details: Port }> = ({ details }) => {
   const log = useLogger();
   const [, setLocation] = useLocation();
@@ -41,14 +38,11 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
   const { colorMode } = useColorMode();
 
   const [disconnectMutation] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation Disconnect($connection: ID!) {
         close(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/Home").DisconnectMutation,
-      import("./__generated__/Home").DisconnectMutationVariables
-    >,
+    `),
     {
       variables: {
         connection: details.connectionId ?? "",
@@ -81,17 +75,14 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
       });
 
   const [connect, { error }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation Connect($port: String!, $baudRate: Int!) {
         connect(port: $port, baudRate: $baudRate) {
           id
           apiVersion
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/Home").ConnectMutation,
-      import("./__generated__/Home").ConnectMutationVariables
-    >,
+    `),
     {
       context: { retry: false },
       variables: {
@@ -117,7 +108,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
   );
 
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query ConnectionDetails($connection: ID!) {
         connection(connectionId: $connection) {
           apiVersion
@@ -126,10 +117,7 @@ const Device: React.FC<{ details: Port }> = ({ details }) => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/Home").ConnectionDetailsQuery,
-      import("./__generated__/Home").ConnectionDetailsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection: details.connectionId ?? "",
@@ -259,7 +247,7 @@ const ThemeSelector: React.FC = () => {
 
 const Home: React.FC = () => {
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query Ports {
         ports {
           id
@@ -271,10 +259,7 @@ const Home: React.FC = () => {
           serialNumber
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/Home").PortsQuery,
-      import("./__generated__/Home").PortsQueryVariables
-    >,
+    `),
     {
       pollInterval: 1000,
     }

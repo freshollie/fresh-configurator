@@ -3,7 +3,7 @@ import { OptionButtons } from "bumbag";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnection from "../hooks/useConnection";
 
-const MotorDirection = gql`
+const MotorDirection = gql(/* GraphQL */ `
   query MotorDirection($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -13,10 +13,7 @@ const MotorDirection = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/MotorDirectionManager").MotorDirectionQuery,
-  import("./__generated__/MotorDirectionManager").MotorDirectionQueryVariables
->;
+`);
 
 const MotorDirectionManager: React.FC = () => {
   const connection = useConnection();
@@ -27,14 +24,11 @@ const MotorDirectionManager: React.FC = () => {
   });
 
   const [setDirection] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetMotorsDirection($connection: ID!, $reversed: Boolean!) {
         deviceSetMotorsDirection(connectionId: $connection, reversed: $reversed)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/MotorDirectionManager").SetMotorsDirectionMutation,
-      import("./__generated__/MotorDirectionManager").SetMotorsDirectionMutationVariables
-    >,
+    `),
     {
       refetchQueries: [
         {
