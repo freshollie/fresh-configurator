@@ -1727,6 +1727,7 @@ __metadata:
     graphql: ^15.5.2
     graphql-subscriptions: ^1.2.1
     graphql-tag: ^2.12.5
+    memfs: ^3.2.4
     mock-fs: ^5.0.0
     mockdate: ^3.0.5
     ts-jest: ^27.0.5
@@ -18228,7 +18229,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"memfs@npm:^3.1.2, memfs@npm:^3.2.2":
+"memfs@npm:^3.1.2, memfs@npm:^3.2.2, memfs@npm:^3.2.4":
   version: 3.2.4
   resolution: "memfs@npm:3.2.4"
   dependencies:

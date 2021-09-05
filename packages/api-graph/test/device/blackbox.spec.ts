@@ -1,6 +1,6 @@
 import { BlackboxDevices, SdCardStates } from "@betaflight/api";
 import gql from "graphql-tag";
-import mockFs from "mock-fs";
+import memfs from "memfs";
 import mockDate from "mockdate";
 import fs from "fs";
 import { createExecutor } from "../utils";
@@ -9,7 +9,7 @@ import { JobType, JobUpdateType } from "../../src/graph/__generated__";
 import { details, onUpdated, reset as resetJobs } from "../../src/jobs";
 import { mockApi } from "../mocks";
 
-const artifactsDirectory = "artifacts";
+const artifactsDirectory = "/artifacts";
 
 const waitForJobProgress = async () => {
   const queue = onUpdated();
@@ -272,7 +272,7 @@ describe("device.blackbox", () => {
 
   describe("createFlashDataOffloadJob", () => {
     beforeEach(() => {
-      mockFs();
+      memfs.vol.reset();
       mockDate.set(new Date("2021-03-14T14:00:00Z"));
       mockApi.readName.mockResolvedValue("some-device");
       mockApi.readFcVariant.mockResolvedValue("BTFL");
@@ -284,10 +284,6 @@ describe("device.blackbox", () => {
         usedSize: 4096,
       });
       mockApi.isOpen.mockReturnValue(true);
-    });
-
-    afterEach(() => {
-      mockFs.restore();
     });
 
     it("should offload the flash data into an artifact file", async () => {
@@ -569,10 +565,10 @@ describe("device.blackbox", () => {
       });
 
       expect(errors).toMatchInlineSnapshot(`
-        Array [
-          [GraphQLError: Artifacts directory (artifacts) is not a directory],
-        ]
-      `);
+Array [
+  [GraphQLError: Artifacts directory (/artifacts) is not a directory],
+]
+`);
     });
   });
 });

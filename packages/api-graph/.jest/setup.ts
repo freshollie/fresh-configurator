@@ -11,3 +11,5 @@ jest.mock("@betaflight/api", () => {
     ...Object.fromEntries(dontMock.map((key) => [key, unmocked[key]])),
   };
 });
+
+jest.mock("fs", () => jest.requireActual("memfs"));
