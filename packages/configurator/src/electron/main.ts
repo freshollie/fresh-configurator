@@ -43,25 +43,24 @@ const createBackend = async (
         }
       },
     };
-  } 
-    const { createServer } = await import("@betaflight/api-server");
-    const backend = createServer({
-      mocked,
-      artifactsDirectory,
-    });
-    return {
-      link: createSchemaLink({
-        schema: backend.schema,
-        context: backend.context,
-      }),
-      start: async () => {
-        const port = await backend.listen({
-          hostname: "127.0.0.1",
-        });
-        console.log(`Starting backend on ${port}`);
-      },
-    };
-  
+  }
+  const { createServer } = await import("@betaflight/api-server");
+  const backend = createServer({
+    mocked,
+    artifactsDirectory,
+  });
+  return {
+    link: createSchemaLink({
+      schema: backend.schema,
+      context: backend.context,
+    }),
+    start: async () => {
+      const port = await backend.listen({
+        hostname: "127.0.0.1",
+      });
+      console.log(`Starting backend on ${port}`);
+    },
+  };
 };
 
 const startBackend = async (): Promise<void> => {
