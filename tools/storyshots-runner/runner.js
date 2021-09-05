@@ -89,7 +89,7 @@ const run = async ({
   // Launch Puppeteer process to fetch stories info.
   const storiesBrowser = await new StoriesBrowser(connection, {
     launchOptions: {
-      executablePath: CI ? "google-chrome-stable" : undefined,
+      executablePath: CI ? process.env.PUPPETEER_EXECUTABLE_PATH : undefined,
       args: ["--no-sandbox"],
     },
   }).boot();
