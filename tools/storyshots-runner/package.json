@@ -7,13 +7,13 @@
   "bin": "bin.js",
   "dependencies": {
     "import-jsx": "^4.0.0",
-    "ink": "^3.0.8",
-    "meow": "^8.1.0",
+    "ink": "^3.0.9",
+    "meow": "^10.1.1",
     "pending-xhr-puppeteer": "^2.3.3",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",
     "react": "^17.0.2",
-    "storycrawler": "^3.0.3"
+    "storycrawler": "^3.1.0"
   },
   "peerDependencies": {
     "puppeteer": ">=5"

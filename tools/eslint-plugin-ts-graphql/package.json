@@ -4,6 +4,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "@typescript-eslint/experimental-utils": "^4.30.0",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.21"
   }
 }

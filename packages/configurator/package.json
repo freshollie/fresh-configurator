@@ -64,7 +64,7 @@
     "@react-three/fiber": "^7.0.6",
     "bumbag": "^2.6.0",
     "electron-unhandled": "^3.0.2",
-    "graphql": "^15.5.1",
+    "graphql": "^15.5.2",
     "graphql-ws": "^5.4.1",
     "iterall": "^1.3.0",
     "react": "^17.0.2",

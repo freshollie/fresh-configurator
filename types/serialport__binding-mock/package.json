@@ -5,6 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "@types/serialport": "^8.0.0",
-    "@types/serialport__bindings": "^8.0.0"
+    "@types/serialport__bindings": "workspace:types/serialport__bindings"
   }
 }

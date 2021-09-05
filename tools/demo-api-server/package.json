@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "@betaflight/api-server": "workspace:packages/api-server",
-    "graphql": "^15.5.1"
+    "graphql": "^15.5.2"
   }
 }
