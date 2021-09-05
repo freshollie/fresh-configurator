@@ -12,14 +12,11 @@ const ResetManager: React.FC = () => {
   const log = useLogger();
 
   const [reset, { loading }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation Reset($connection: ID!) {
         deviceReset(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ResetManager").ResetMutation,
-      import("./__generated__/ResetManager").ResetMutationVariables
-    >,
+    `),
     {
       variables: {
         connection,

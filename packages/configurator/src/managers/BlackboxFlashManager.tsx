@@ -9,7 +9,7 @@ import useConnection from "../hooks/useConnection";
 const BlackboxFlashManager: React.FC = () => {
   const connection = useConnection();
   const { data, loading } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query FlashData($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -25,10 +25,7 @@ const BlackboxFlashManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashManager").FlashDataQuery,
-      import("./__generated__/BlackboxFlashManager").FlashDataQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -38,14 +35,11 @@ const BlackboxFlashManager: React.FC = () => {
   );
 
   const [eraseFlash, { loading: sendingEraseCommand }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation EraseFlash($connection: ID!) {
         deviceEraseFlashData(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashManager").EraseFlashMutation,
-      import("./__generated__/BlackboxFlashManager").EraseFlashMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       variables: {
@@ -53,7 +47,7 @@ const BlackboxFlashManager: React.FC = () => {
       },
       refetchQueries: [
         {
-          query: gql`
+          query: gql(/* GraphQL */ `
             query FlashReady($connection: ID!) {
               connection(connectionId: $connection) {
                 device {
@@ -65,10 +59,7 @@ const BlackboxFlashManager: React.FC = () => {
                 }
               }
             }
-          ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-            import("./__generated__/BlackboxFlashManager").FlashReadyQuery,
-            import("./__generated__/BlackboxFlashManager").FlashReadyQueryVariables
-          >,
+          `),
           variables: {
             connection,
           },
@@ -78,16 +69,13 @@ const BlackboxFlashManager: React.FC = () => {
   );
 
   const [createOffloadJob] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation CreateOffloadJob($connection: ID!) {
         createFlashDataOffloadJob(connectionId: $connection, chunkSize: 4096) {
           id
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashManager").CreateOffloadJobMutation,
-      import("./__generated__/BlackboxFlashManager").CreateOffloadJobMutationVariables
-    >,
+    `),
     {
       context: { retry: false },
       variables: {

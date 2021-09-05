@@ -6,7 +6,7 @@ import useConnection from "../hooks/useConnection";
 
 const REQUIRED_CONDITIONS = [Beepers.RX_SET, Beepers.RX_LOST];
 
-const BeeperConfig = gql`
+const BeeperConfig = gql(/* GraphQL */ `
   query DshotBeeperConfig($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -19,10 +19,7 @@ const BeeperConfig = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/BeeperManager").DshotBeeperConfigQuery,
-  import("./__generated__/BeeperManager").DshotBeeperConfigQueryVariables
->;
+`);
 
 const BeeperManager: React.FC = () => {
   const connection = useConnection();
@@ -34,17 +31,14 @@ const BeeperManager: React.FC = () => {
   });
 
   const [setBeeperConfig, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetDshotBeeperConfig(
         $connection: ID!
         $config: DshotBeeperConfigInput!
       ) {
         deviceSetDshotBeeperConfig(connectionId: $connection, config: $config)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BeeperManager").SetDshotBeeperConfigMutation,
-      import("./__generated__/BeeperManager").SetDshotBeeperConfigMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [

@@ -11,7 +11,7 @@ type Props = {
 const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
   const connection = useConnection();
   const { data: deviceData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query Attitude($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -23,10 +23,7 @@ const ModelInstrumentsProvider: React.FC<Props> = ({ refreshRate }) => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ModelInstrumentsProvider").AttitudeQuery,
-      import("./__generated__/ModelInstrumentsProvider").AttitudeQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

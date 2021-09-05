@@ -4,7 +4,7 @@ import { gql, useMutation, useQuery } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
 import useConnection from "../hooks/useConnection";
 
-const IdleSpeedConfig = gql`
+const IdleSpeedConfig = gql(/* GraphQL */ `
   query MotorDigitalIdleSpeed($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -14,10 +14,7 @@ const IdleSpeedConfig = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/MotorIdleSpeedManager").MotorDigitalIdleSpeedQuery,
-  import("./__generated__/MotorIdleSpeedManager").MotorDigitalIdleSpeedQueryVariables
->;
+`);
 
 const MotorIdleSpeedManager: React.FC = () => {
   const connection = useConnection();
@@ -29,7 +26,7 @@ const MotorIdleSpeedManager: React.FC = () => {
   });
 
   const [setConnection] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetMotorDigitalIdleSpeed(
         $connection: ID!
         $idlePercentage: Float!
@@ -39,10 +36,7 @@ const MotorIdleSpeedManager: React.FC = () => {
           idlePercentage: $idlePercentage
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/MotorIdleSpeedManager").SetMotorDigitalIdleSpeedMutation,
-      import("./__generated__/MotorIdleSpeedManager").SetMotorDigitalIdleSpeedMutationVariables
-    >,
+    `),
     {
       onError: (e) =>
         log(

@@ -119,4 +119,5 @@ schema.graphql
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+!.yarn/patches
 .pnp.*

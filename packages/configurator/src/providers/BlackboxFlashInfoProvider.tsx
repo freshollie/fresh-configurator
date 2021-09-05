@@ -7,7 +7,7 @@ const BlackboxFlashInfoProvider: React.FC = () => {
   const connection = useConnection();
 
   const { data, loading } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query BlackboxFlashInfo($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -22,10 +22,7 @@ const BlackboxFlashInfoProvider: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/BlackboxFlashInfoProvider").BlackboxFlashInfoQuery,
-      import("./__generated__/BlackboxFlashInfoProvider").BlackboxFlashInfoQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

@@ -1,0 +1,13 @@
+diff --git a/bin.js b/bin.js
+index bf604b5942b00be7d0ff02651c4008a07161d618..83f54f669e160146f3e9e09672a91f81cb0ba338 100755
+--- a/bin.js
++++ b/bin.js
+@@ -375,7 +375,7 @@ async function getPluginByName(name, pluginLoader) {
+ }
+ 
+ async function getPresetByName(name, loader) {
+-    const possibleNames = [`@graphql-codegen/${name}`, `@graphql-codegen/${name}-preset`, name];
++    const possibleNames = [`@graphql-codegen/${name}-preset`, `@graphql-codegen/${name}`, name];
+     for (const moduleName of possibleNames) {
+         try {
+             const loaded = await loader(moduleName);

@@ -3,7 +3,7 @@ import React from "react";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useConnection from "../hooks/useConnection";
 
-const ChannelMap = gql`
+const ChannelMap = gql(/* GraphQL */ `
   query ChannelMap($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -15,10 +15,7 @@ const ChannelMap = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/ChannelMapManager").ChannelMapQuery,
-  import("./__generated__/ChannelMapManager").ChannelMapQueryVariables
->;
+`);
 
 const ChannelMapManager: React.FC = () => {
   const connection = useConnection();
@@ -29,14 +26,11 @@ const ChannelMapManager: React.FC = () => {
   });
 
   const [setChannelMap, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetChannelMap($connection: ID!, $map: [ID!]!) {
         deviceSetChannelMap(connectionId: $connection, channelMap: $map)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ChannelMapManager").SetChannelMapMutation,
-      import("./__generated__/ChannelMapManager").SetChannelMapMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [

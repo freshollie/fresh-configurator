@@ -13,7 +13,7 @@ type Props = {
 const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const connection = useConnection();
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query FcSummary($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -33,10 +33,7 @@ const FcSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/FcSummaryProvider").FcSummaryQuery,
-      import("./__generated__/FcSummaryProvider").FcSummaryQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

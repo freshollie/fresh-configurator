@@ -11,7 +11,7 @@ export default {
 
 const motorIdleMock = (percent: number): MockedResponse => ({
   request: {
-    query: gql`
+    query: gql(/* GraphQL */ `
       query MotorDigitalIdleSpeed($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -21,10 +21,7 @@ const motorIdleMock = (percent: number): MockedResponse => ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitalIdleSpeedQuery,
-      import("./__generated__/MoterIdleSpeedManager.stories").MotorDigitalIdleSpeedQueryVariables
-    >,
+    `),
     variables: {
       connection: "abc",
     },

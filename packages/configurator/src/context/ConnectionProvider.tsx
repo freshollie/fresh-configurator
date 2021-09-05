@@ -23,14 +23,11 @@ const ConnectionProvider: React.FC = ({ children }) => {
   // and handle updating the app state when connection
   // is closed
   const { error } = useSubscription(
-    gql`
+    gql(/* GraphQL */ `
       subscription OnConnectionChanged($connection: ID!) {
         onConnectionChanged(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ConnectionProvider").OnConnectionChangedSubscription,
-      import("./__generated__/ConnectionProvider").OnConnectionChangedSubscriptionVariables
-    >,
+    `),
     {
       variables: {
         connection: connectionId ?? "",
@@ -58,14 +55,11 @@ const ConnectionProvider: React.FC = ({ children }) => {
   );
 
   const [disconnect, { loading: disconnecting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation Disconnect($connection: ID!) {
         close(connectionId: $connection)
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ConnectionProvider").DisconnectMutation,
-      import("./__generated__/ConnectionProvider").DisconnectMutationVariables
-    >,
+    `),
     {
       variables: {
         connection: connectionId,
@@ -74,7 +68,7 @@ const ConnectionProvider: React.FC = ({ children }) => {
   );
 
   const [disableArming] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation DisableArming($connection: ID!) {
         deviceSetArming(
           connectionId: $connection
@@ -82,10 +76,7 @@ const ConnectionProvider: React.FC = ({ children }) => {
           runawayTakeoffPreventionDisabled: false
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ConnectionProvider").DisableArmingMutation,
-      import("./__generated__/ConnectionProvider").DisableArmingMutationVariables
-    >,
+    `),
     {
       variables: {
         connection: connectionId,

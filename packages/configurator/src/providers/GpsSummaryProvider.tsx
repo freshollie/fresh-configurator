@@ -12,7 +12,7 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const connection = useConnection();
 
   const { data: sensorsData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query AvailableSensors($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -22,10 +22,7 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/GpsSummaryProvider").AvailableSensorsQuery,
-      import("./__generated__/GpsSummaryProvider").AvailableSensorsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -35,7 +32,7 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
   const sensors = sensorsData?.connection.device.sensors.available ?? [];
 
   const { data } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query GpsSummary($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -48,10 +45,7 @@ const GpsSummaryProvider: React.FC<Props> = ({ refreshRate }) => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/GpsSummaryProvider").GpsSummaryQuery,
-      import("./__generated__/GpsSummaryProvider").GpsSummaryQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

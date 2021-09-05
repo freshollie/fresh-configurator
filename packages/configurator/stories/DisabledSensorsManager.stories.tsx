@@ -12,7 +12,7 @@ export default {
 
 const disabledSensorsMock = (disabled: Sensors[]): MockedResponse => ({
   request: {
-    query: gql`
+    query: gql(/* GraphQL */ `
       query DisabledSensors($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -22,10 +22,7 @@ const disabledSensorsMock = (disabled: Sensors[]): MockedResponse => ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/DisabledSensorsManager.stories").DisabledSensorsQuery,
-      import("./__generated__/DisabledSensorsManager.stories").DisabledSensorsQueryVariables
-    >,
+    `),
     variables: {
       connection: "abc",
     },

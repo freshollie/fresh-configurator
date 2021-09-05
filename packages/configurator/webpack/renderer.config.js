@@ -95,8 +95,21 @@ module.exports = (_, { mode }) => ({
     // Only typecheck in production
     new ForkTsCheckerWebpackPlugin({
       typescript: {
-        reportFiles: ["src/**/*.{ts,tsx}", "!src/**/*.spec.{ts,tsx}"],
+        reportFiles: ["src/**/*.{ts,tsx}"],
         build: true,
+        mode: "write-references",
+      },
+      issue: {
+        exclude: [
+          {
+            origin: "typescript",
+            file: "!src/**/*.spec.{ts,tsx}",
+          },
+          {
+            origin: "typescript",
+            file: "!src/gql/__generated__/tag/*.ts",
+          },
+        ],
       },
     }),
     new WebpackBar({

@@ -8,7 +8,7 @@ const ChannelsListProvider: React.FC<{ refreshRate: number }> = ({
 }) => {
   const connection = useConnection();
   const { data, loading } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query RcChannels($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -18,10 +18,7 @@ const ChannelsListProvider: React.FC<{ refreshRate: number }> = ({
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ChannelsListProvider").RcChannelsQuery,
-      import("./__generated__/ChannelsListProvider").RcChannelsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,

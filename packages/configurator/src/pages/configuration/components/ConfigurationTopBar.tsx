@@ -14,17 +14,14 @@ const ConfigurationTopBar: React.FC<{ page?: string }> = ({
   const { colorMode } = useColorMode();
 
   const { data, refetch } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query PortConnections {
         ports {
           id
           connectionId
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/ConfigurationTopBar").PortConnectionsQuery,
-      import("./__generated__/ConfigurationTopBar").PortConnectionsQueryVariables
-    >
+    `)
   );
 
   // Refetch the list of ports if the connection id changes

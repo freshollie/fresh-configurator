@@ -12,7 +12,7 @@ export default ({
   ofType?: JobType;
 }): { loading: boolean; jobs: readonly JobDetails[] } => {
   const { data, subscribeToMore, loading } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query Jobs($ofType: JobType) {
         jobs(ofType: $ofType) {
           id
@@ -28,10 +28,7 @@ export default ({
           artifact
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/useJobs").JobsQuery,
-      import("./__generated__/useJobs").JobsQueryVariables
-    >,
+    `),
     {
       fetchPolicy: "cache-and-network",
       variables: {
@@ -43,7 +40,7 @@ export default ({
   useEffect(
     () =>
       subscribeToMore({
-        document: gql`
+        document: gql(/* GraphQL */ `
           subscription JobUpdates($ofType: JobType) {
             jobUpdates(ofType: $ofType) {
               type
@@ -63,10 +60,7 @@ export default ({
               }
             }
           }
-        ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-          import("./__generated__/useJobs").JobUpdatesSubscription,
-          import("./__generated__/useJobs").JobUpdatesSubscriptionVariables
-        >,
+        `),
         variables: {
           ofType,
         },

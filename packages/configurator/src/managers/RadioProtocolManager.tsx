@@ -17,7 +17,7 @@ const PROVIDERS = [
   { label: "CrossFire", value: SerialRxProviders.CRSF },
 ];
 
-const DataQuery = gql`
+const DataQuery = gql(/* GraphQL */ `
   query RadioProtocolManagerData($connection: ID!) {
     connection(connectionId: $connection) {
       device {
@@ -32,15 +32,12 @@ const DataQuery = gql`
       }
     }
   }
-` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-  import("./__generated__/RadioProtocolManager").RadioProtocolManagerDataQuery,
-  import("./__generated__/RadioProtocolManager").RadioProtocolManagerDataQueryVariables
->;
+`);
 
 const RadioProtocolManager: React.FC = () => {
   const connection = useConnection();
   const { data: serialPortsData } = useQuery(
-    gql`
+    gql(/* GraphQL */ `
       query SerialPortFunctions($connection: ID!) {
         connection(connectionId: $connection) {
           device {
@@ -53,10 +50,7 @@ const RadioProtocolManager: React.FC = () => {
           }
         }
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RadioProtocolManager").SerialPortFunctionsQuery,
-      import("./__generated__/RadioProtocolManager").SerialPortFunctionsQueryVariables
-    >,
+    `),
     {
       variables: {
         connection,
@@ -71,7 +65,7 @@ const RadioProtocolManager: React.FC = () => {
     skip: !connection,
   });
   const [setReceiverConfig, { loading: setting }] = useMutation(
-    gql`
+    gql(/* GraphQL */ `
       mutation SetReceiverProtocolAndSmoothingData(
         $connection: ID!
         $serialProvider: Int
@@ -86,10 +80,7 @@ const RadioProtocolManager: React.FC = () => {
           smoothingConfig: { type: $smoothingType }
         )
       }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/RadioProtocolManager").SetReceiverProtocolAndSmoothingDataMutation,
-      import("./__generated__/RadioProtocolManager").SetReceiverProtocolAndSmoothingDataMutationVariables
-    >,
+    `),
     {
       awaitRefetchQueries: true,
       refetchQueries: [
