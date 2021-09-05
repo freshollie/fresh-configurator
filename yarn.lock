@@ -1795,6 +1795,7 @@ __metadata:
     "@babel/preset-react": ^7.14.5
     "@betaflight-tools/storyshots-runner": "workspace:tools/storyshots-runner"
     "@betaflight/api": "workspace:packages/api"
+    "@betaflight/api-graph": "workspace:packages/api-graph"
     "@betaflight/api-server": "workspace:packages/api-server"
     "@emotion/jest": ^11.3.0
     "@fortawesome/free-solid-svg-icons": ^5.15.4

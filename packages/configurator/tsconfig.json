@@ -29,6 +29,9 @@
     },
     {
       "path": "../api-server/tsconfig.build.json"
+    },
+    {
+      "path": "../api-graph/tsconfig.build.json"
     }
   ]
 }

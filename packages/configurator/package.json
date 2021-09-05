@@ -57,6 +57,7 @@
   "dependencies": {
     "@apollo/client": "^3.4.10",
     "@betaflight/api": "workspace:packages/api",
+    "@betaflight/api-graph": "workspace:packages/api-graph",
     "@betaflight/api-server": "workspace:packages/api-server",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@graphql-typed-document-node/core": "^3.1.0",

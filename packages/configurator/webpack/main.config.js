@@ -75,4 +75,13 @@ module.exports = (_, { mode }) => ({
       : []),
   ],
   devtool: "source-map",
+  // make it so we don't bundle the API server, or dev-tools if compiling
+  ...(mode === "production"
+    ? {
+        externals: {
+          "@betaflight/api-server": "commonjs @betaflight/api-server",
+          "electron-devtools-installer": "commonjs electron-devtools-installer",
+        },
+      }
+    : {}),
 });
