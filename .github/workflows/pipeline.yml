@@ -154,9 +154,11 @@ jobs:
         run: yarn build:storybook
 
       - name: Test
-        uses: ianwalter/puppeteer@d50433d5b7595870c2726b2920ad9760987fcca2
+        uses: ianwalter/playwright-container@43940dfa7d309fe3569b9df407ae9e84dcbf2e7f
         env:
           CI: true
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-857950/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
 
