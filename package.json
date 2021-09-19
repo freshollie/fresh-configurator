@@ -20,8 +20,8 @@
     "test": "jest",
     "storyshots": "yarn workspace @betaflight/configurator storyshots",
     "storyshots:production": "yarn workspace @betaflight/configurator storyshots:production",
-    "e2e": "jest --config packages/configurator/jest.e2e.js",
-    "e2e:production": "cross-env PRODUCTION=true jest --config packages/configurator/jest.e2e.js",
+    "e2e": "yarn workspace @betaflight/configurator e2e",
+    "e2e:production": "yarn workspace @betaflight/configurator e2e:production:headless",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
     "fmt": "prettier --write **/*.{ts,tsx,js,jsx}",
@@ -86,6 +86,9 @@
     ]
   },
   "dependenciesMeta": {
+    "@codeceptjs/ui@0.4.6": {
+      "unplugged": true
+    },
     "dmg-builder@22.13.1": {
       "unplugged": true
     },

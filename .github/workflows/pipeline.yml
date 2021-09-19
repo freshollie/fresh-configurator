@@ -31,7 +31,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Lint
         run: yarn lint:all
@@ -84,7 +84,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Format
         run: yarn fmt:check
@@ -114,7 +114,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Test
         run: yarn test --coverage
@@ -148,7 +148,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Build
         run: yarn build:storybook
@@ -157,7 +157,7 @@ jobs:
         uses: ianwalter/playwright-container@43940dfa7d309fe3569b9df407ae9e84dcbf2e7f
         env:
           CI: true
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
           PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-9404595/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
@@ -270,6 +270,14 @@ jobs:
         uses: GabrielBB/xvfb-action@v1.4
         with:
           run: yarn e2e:production
+
+      - name: Upload failure artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: diff
+          path: |
+            packages/configurator/e2e/output/*.png
 
       - name: Preview demo
         id: preview-demo
