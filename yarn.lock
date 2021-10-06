@@ -1824,7 +1824,7 @@ __metadata:
     "@types/three": ^0.131.0
     babel-loader: ^8.2.2
     bumbag: ^2.6.0
-    codeceptjs: ^3.1
+    codeceptjs: ^3.1.3
     cross-env: ^7.0.3
     dmg-builder: ^22.13.1
     electron: 13.2.3
@@ -10051,9 +10051,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codeceptjs@npm:^3.1":
-  version: 3.1.2
-  resolution: "codeceptjs@npm:3.1.2"
+"codeceptjs@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "codeceptjs@npm:3.1.3"
   dependencies:
     "@codeceptjs/configure": ^0.6.2
     "@codeceptjs/helper": ^1.0.2
@@ -10091,7 +10091,7 @@ __metadata:
     faker: ^5.5.1
   bin:
     codeceptjs: bin/codecept.js
-  checksum: 60cf0f6e27a2c4809f0a343428c2fefce5336469291d9afbbf8acf77a6400f2a90ede397ecb6a31c46cf5c559eae2859faa2bafbd364a10ed51e2841c1fefef6
+  checksum: 33a9e72bf95e62981ef25533bf57b879eb20c4ed2ae8731915893dd620d495494523f31b81ee7320bc8b0e74a51e5d4b8061611b9b285d9808e5a7795468d931
   languageName: node
   linkType: hard
 
