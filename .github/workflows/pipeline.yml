@@ -154,11 +154,11 @@ jobs:
         run: yarn build:storybook
 
       - name: Test
-        uses: ianwalter/playwright-container@43940dfa7d309fe3569b9df407ae9e84dcbf2e7f
+        uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
         env:
           CI: true
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
-          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-9404595/chrome-linux/chrome
+          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-907428/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
 
@@ -252,6 +252,8 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
         run: yarn --immutable
 
       - name: Build configurator
