@@ -10051,7 +10051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codeceptjs@npm:^3.1.3":
+"codeceptjs@npm:3.1.3":
   version: 3.1.3
   resolution: "codeceptjs@npm:3.1.3"
   dependencies:
@@ -10092,6 +10092,50 @@ __metadata:
   bin:
     codeceptjs: bin/codecept.js
   checksum: 33a9e72bf95e62981ef25533bf57b879eb20c4ed2ae8731915893dd620d495494523f31b81ee7320bc8b0e74a51e5d4b8061611b9b285d9808e5a7795468d931
+  languageName: node
+  linkType: hard
+
+"codeceptjs@patch:codeceptjs@npm:3.1.3#.yarn/patches/codeceptjs-npm-3.1.3-294bd19eb6::locator=fresh-configurator%40workspace%3A.":
+  version: 3.1.3
+  resolution: "codeceptjs@patch:codeceptjs@npm%3A3.1.3#.yarn/patches/codeceptjs-npm-3.1.3-294bd19eb6::version=3.1.3&hash=c59307&locator=fresh-configurator%40workspace%3A."
+  dependencies:
+    "@codeceptjs/configure": ^0.6.2
+    "@codeceptjs/helper": ^1.0.2
+    acorn: ^7.4.1
+    allure-js-commons: ^1.3.2
+    arrify: ^2.0.1
+    axios: ^0.21.1
+    chalk: ^4.1.0
+    commander: ^2.20.3
+    cross-spawn: ^7.0.3
+    css-to-xpath: ^0.1.0
+    cucumber-expressions: ^6.6.2
+    envinfo: ^7.5.1
+    escape-string-regexp: ^1.0.3
+    figures: ^3.2.0
+    fn-args: ^4.0.0
+    fs-extra: ^8.1.0
+    gherkin: ^5.1.0
+    glob: ^6.0.1
+    inquirer: ^6.5.2
+    js-beautify: ^1.11.0
+    lodash.clonedeep: ^4.5.0
+    lodash.merge: ^4.6.2
+    mkdirp: ^1.0.4
+    mocha: 8.1.3
+    mocha-junit-reporter: 1.23.1
+    ms: ^2.1.3
+    parse-function: ^5.6.4
+    promise-retry: ^1.1.1
+    requireg: ^0.2.2
+    resq: ^1.10.0
+    sprintf-js: ^1.1.1
+    uuid: ^8.3.2
+  peerDependencies:
+    faker: ^5.5.1
+  bin:
+    codeceptjs: bin/codecept.js
+  checksum: 2fd5884430d99f2679d93e59afd9a22dd377f0c5f93350dfff42b28be7baad70bfcb6278cfc69183cc26892a83b24d88ada754f8e64696c4d70ca45627fbd150
   languageName: node
   linkType: hard
 

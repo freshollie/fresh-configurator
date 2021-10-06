@@ -75,7 +75,8 @@
   },
   "resolutions": {
     "node-abi": "2.30.0",
-    "@graphql-codegen/cli": "patch:@graphql-codegen/cli@npm:2.1.1#.yarn/patches/@graphql-codegen-cli-npm-2.1.1-f1f785d069"
+    "@graphql-codegen/cli": "patch:@graphql-codegen/cli@npm:2.1.1#.yarn/patches/@graphql-codegen-cli-npm-2.1.1-f1f785d069",
+    "codeceptjs": "patch:codeceptjs@npm:3.1.3#.yarn/patches/codeceptjs-npm-3.1.3-294bd19eb6"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
