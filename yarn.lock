@@ -1702,8 +1702,6 @@ __metadata:
     pngjs: ^6.0.0
     react: ^17.0.2
     storycrawler: ^3.1.0
-  peerDependencies:
-    puppeteer: ">=5"
   bin:
     storyshots-runner: bin.js
   languageName: unknown
