@@ -284,6 +284,8 @@ jobs:
           name: diff
           path: |
             packages/configurator/e2e/output/*.png
+            packages/configurator/e2e/output/*.webm
+            packages/configurator/e2e/output/trace/*.zip
 
       - name: Preview demo
         id: preview-demo

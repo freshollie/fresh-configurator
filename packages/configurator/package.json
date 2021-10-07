@@ -56,7 +56,8 @@
     "e2e": "codeceptjs run -c .",
     "e2e:production": "cross-env PRODUCTION=true yarn run e2e",
     "e2e:headless": "cross-env HEADLESS=true yarn run e2e",
-    "e2e:production:headless": "cross-env PRODUCTION=true HEADLESS=true yarn run e2e"
+    "e2e:production:headless": "cross-env PRODUCTION=true HEADLESS=true yarn run e2e",
+    "codecept:ui": "codecept-ui --app"
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",

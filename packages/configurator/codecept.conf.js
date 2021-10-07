@@ -53,6 +53,7 @@ exports.config = {
   helpers: {
     Playwright: {
       video: true,
+      trace: true,
       browser: "electron",
       electron: {
         executablePath: PRODUCTION ? binaryPath() : electronPath,
@@ -60,6 +61,7 @@ exports.config = {
         env: {
           E2E: "true",
           HEADLESS: HEADLESS ? "true" : "false",
+          DISPLAY: ":0",
         },
       },
       waitForTimeout: 10000,

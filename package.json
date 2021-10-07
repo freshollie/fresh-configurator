@@ -22,6 +22,7 @@
     "storyshots:production": "yarn workspace @betaflight/configurator storyshots:production",
     "e2e": "yarn workspace @betaflight/configurator e2e",
     "e2e:production": "yarn workspace @betaflight/configurator e2e:production:headless",
+    "codecept": "yarn workspace @betaflight/configurator codecept:ui",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:all": "yarn lint . .*.js",
     "fmt": "prettier --write **/*.{ts,tsx,js,jsx}",
