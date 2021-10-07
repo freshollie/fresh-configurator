@@ -117,7 +117,9 @@ const run = async ({
     new Array(numWorkers).fill(0).map((i) =>
       new StoryPreviewBrowser(connection, i, {
         launchOptions: {
-          executablePath: CI ? "google-chrome-stable" : undefined,
+          executablePath: CI
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : undefined,
           headless: true,
           args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
         },
