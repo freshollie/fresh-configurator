@@ -153,16 +153,11 @@ jobs:
       - name: Build
         run: yarn build:storybook
 
-      - name: Output dirs
-        uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
-        with:
-          args: ls -la /opt/playwright-browsers
-
       - name: Test
         uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
         env:
           CI: true
-          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-907428/chrome-linux/chrome
+          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-920619/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
 
