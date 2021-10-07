@@ -273,9 +273,7 @@ jobs:
             packages/configurator/dist/*.dmg
 
       - name: E2E
-        uses: GabrielBB/xvfb-action@v1.4
-        with:
-          run: yarn e2e:production
+        run: yarn e2e:production
 
       - name: Upload failure artifacts
         if: ${{ failure() }}
