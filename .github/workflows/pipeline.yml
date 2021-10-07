@@ -148,7 +148,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - name: Build
         run: yarn build:storybook
