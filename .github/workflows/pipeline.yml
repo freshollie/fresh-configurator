@@ -155,7 +155,8 @@ jobs:
 
       - name: Output dirs
         uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
-        run: ls -la /opt/playwright-browsers
+        with:
+          args: ls -la /opt/playwright-browsers
 
       - name: Test
         uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
