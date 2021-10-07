@@ -31,6 +31,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Lint
@@ -84,6 +85,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Format
@@ -114,6 +116,7 @@ jobs:
       - name: Install
         run: yarn --immutable
         env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Test
@@ -149,6 +152,7 @@ jobs:
         run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Build
         run: yarn build:storybook
@@ -252,6 +256,7 @@ jobs:
 
       - name: Install
         env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
         run: yarn --immutable
 
