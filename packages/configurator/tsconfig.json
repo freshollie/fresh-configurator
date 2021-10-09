@@ -8,7 +8,7 @@
   "include": [
     "src/**/*.tsx",
     "src/**/*.ts",
-    "src/**/__generated__/*.json",
+    "src/**/__generated__/**/*.d.ts",
     "stories/**/*.tsx",
     "stories/**/*.ts",
     "e2e/**/*.ts",

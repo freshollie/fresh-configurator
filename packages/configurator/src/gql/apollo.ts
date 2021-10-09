@@ -17,8 +17,6 @@ import { useEffect } from "react";
 
 export * from "@apollo/client";
 
-export { gql } from "./__generated__/tag";
-
 const production = process.env.NODE_ENV === "production";
 // We are following the definitions from apollo, so any has to be used here
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

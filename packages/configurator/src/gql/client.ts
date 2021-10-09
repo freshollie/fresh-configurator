@@ -12,7 +12,7 @@ import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
 
-const typeDefs = schema(/* GraphQL */ `
+const typeDefs = schema`
   type Query {
     configurator: Configurator!
   }
@@ -29,7 +29,7 @@ const typeDefs = schema(/* GraphQL */ `
     time: String!
     message: String!
   }
-`);
+`;
 
 const Logs = gql(/* GraphQL */ `
   query Logs {
