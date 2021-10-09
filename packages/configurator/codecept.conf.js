@@ -61,7 +61,7 @@ exports.config = {
         env: {
           E2E: "true",
           HEADLESS: HEADLESS ? "true" : "false",
-          DISPLAY: ":0",
+          DISPLAY: process.env.DISPLAY ?? ":0",
         },
       },
       waitForTimeout: 10000,
