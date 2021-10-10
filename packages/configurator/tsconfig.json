@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "target": "ES2019",
-    "types": ["jest"]
+    "types": ["jest", "codeceptjs"]
   },
   "include": [
     "src/**/*.tsx",
@@ -15,11 +15,15 @@
     "__mocks__/**/*.ts",
     "__mocks__/**/*.tsx",
     "*.d.ts",
+    "e2e/*.d.ts",
     ".storybook/*.ts",
     ".storybook/*.tsx",
     ".jest/*.ts",
     "package.json"
   ],
+  "ts-node": {
+    "files": true
+  },
   "references": [
     {
       "path": "../msp/tsconfig.build.json"

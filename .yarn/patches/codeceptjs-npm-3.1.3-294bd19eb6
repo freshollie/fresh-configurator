@@ -1,0 +1,15 @@
+diff --git a/lib/helper/Playwright.js b/lib/helper/Playwright.js
+index 175b9ab6067176b4b5ef9cd583bffac25dffff59..63b21897a8cceca52c3e40f1e9b2fc046b125fbf 100644
+--- a/lib/helper/Playwright.js
++++ b/lib/helper/Playwright.js
+@@ -658,7 +658,9 @@ class Playwright extends Helper {
+     this.context = null;
+     popupStore.clear();
+ 
+-    await this.browser.close();
++    if (!this.isElectron) {
++      await this.browser.close();
++    }
+   }
+ 
+   async _evaluateHandeInContext(...args) {

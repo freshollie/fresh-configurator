@@ -32,6 +32,7 @@ jobs:
         run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Lint
         run: yarn lint:all
@@ -85,6 +86,7 @@ jobs:
         run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Format
         run: yarn fmt:check
@@ -115,6 +117,7 @@ jobs:
         run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Test
         run: yarn test --coverage
@@ -149,14 +152,16 @@ jobs:
         run: yarn --immutable
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
       - name: Build
         run: yarn build:storybook
 
       - name: Test
-        uses: ianwalter/puppeteer@d50433d5b7595870c2726b2920ad9760987fcca2
+        uses: ianwalter/playwright-container@ec253ce35910412cc6607f5d7cfbbe89fb77c9b4
         env:
           CI: true
+          PUPPETEER_EXECUTABLE_PATH: /opt/playwright-browsers/chromium-920619/chrome-linux/chrome
         with:
           args: yarn workspace @betaflight/configurator storyshots:production
 
@@ -221,6 +226,8 @@ jobs:
 
   configurator:
     runs-on: ${{ matrix.os }}
+    env:
+      DISPLAY: :0
 
     strategy:
       fail-fast: false
@@ -250,15 +257,42 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
         run: yarn --immutable
 
       - name: Build configurator
         run: yarn workspace @betaflight/configurator build
 
-      - name: E2E
-        uses: GabrielBB/xvfb-action@v1.4
+      - name: Output
+        uses: actions/upload-artifact@v2
+        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
         with:
-          run: yarn e2e:production
+          path: |
+            packages/configurator/dist/*.snap
+            packages/configurator/dist/*.msi
+            packages/configurator/dist/*.dmg
+
+      - name: Setup xvfb (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
+          # start xvfb in the background
+          sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
+
+      - name: E2E
+        run: yarn e2e:production
+
+      - name: Upload failure artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: diff
+          path: |
+            packages/configurator/e2e/output/*.png
+            packages/configurator/e2e/output/*.webm
+            packages/configurator/e2e/output/trace/*.zip
 
       - name: Preview demo
         id: preview-demo
@@ -294,25 +328,3 @@ jobs:
         run: yarn workspace @betaflight/configurator release
         env:
           GH_TOKEN: ${{ secrets.github_token }}
-
-      - name: Output Linux
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: linux
-          path: packages/configurator/dist/*.snap
-
-      - name: Output Windows
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: windows
-          path: packages/configurator/dist/*.msi
-
-      - name: Output MacOS
-        uses: actions/upload-artifact@v2-preview
-        if: "!startsWith(github.ref, 'refs/tags/@betaflight/configurator@')"
-        with:
-          name: macos
-          path: |
-            packages/configurator/dist/*.dmg
