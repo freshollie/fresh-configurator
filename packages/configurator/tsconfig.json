@@ -3,11 +3,13 @@
   "compilerOptions": {
     "rootDir": ".",
     "target": "ES2019",
-    "types": ["jest", "codeceptjs"]
+    "types": ["jest", "codeceptjs"],
+    "noEmit": true
   },
   "include": [
     "src/**/*.tsx",
     "src/**/*.ts",
+    "src/**/*.json",
     "src/**/__generated__/**/*.d.ts",
     "stories/**/*.tsx",
     "stories/**/*.ts",

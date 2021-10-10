@@ -105,10 +105,6 @@ module.exports = (_, { mode }) => ({
             origin: "typescript",
             file: "!src/**/*.spec.{ts,tsx}",
           },
-          {
-            origin: "typescript",
-            file: "!src/gql/__generated__/tag/*.ts",
-          },
         ],
       },
     }),
