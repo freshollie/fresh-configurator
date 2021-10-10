@@ -6,7 +6,6 @@ FROM node:16 as build
 WORKDIR /build
 COPY packages packages
 COPY tools/demo-api-server tools/demo-api-server
-COPY tools/eslint-plugin-ts-graphql tools/eslint-plugin-ts-graphql
 COPY types types
 COPY scripts scripts
 COPY .yarn .yarn
