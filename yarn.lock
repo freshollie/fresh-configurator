@@ -2582,7 +2582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/gql-tag-operations@npm:^1.2.0":
+"@graphql-codegen/gql-tag-operations@npm:1.2.0":
   version: 1.2.0
   resolution: "@graphql-codegen/gql-tag-operations@npm:1.2.0"
   dependencies:
@@ -2595,6 +2595,22 @@ __metadata:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     graphql-tag: ^2.0.0
   checksum: aad28295fa7e63a623a978141a1338ccb99f9c8eb5a9e325eabd6f63476560151fd9e5548fa1e1d8b1bac6be8d03089cff1a893b1b5047e46cdf82e379776a25
+  languageName: node
+  linkType: hard
+
+"@graphql-codegen/gql-tag-operations@patch:@graphql-codegen/gql-tag-operations@npm:1.2.0#.yarn/patches/@graphql-codegen-gql-tag-operations-npm-1.2.0-f07e1ad902::locator=fresh-configurator%40workspace%3A.":
+  version: 1.2.0
+  resolution: "@graphql-codegen/gql-tag-operations@patch:@graphql-codegen/gql-tag-operations@npm%3A1.2.0#.yarn/patches/@graphql-codegen-gql-tag-operations-npm-1.2.0-f07e1ad902::version=1.2.0&hash=f4d8c8&locator=fresh-configurator%40workspace%3A."
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^2.1.1
+    "@graphql-codegen/visitor-plugin-common": 2.2.1
+    "@graphql-tools/utils": ^8.1.1
+    auto-bind: ~4.0.0
+    tslib: ~2.3.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+    graphql-tag: ^2.0.0
+  checksum: e92f0f3ba7398c85a73c81a6d46a9c948be6cd6623e63b1e1b8dfdef553a554798abb61467cdeb2626af6b657571441dc2abd86aaf0a95a6f4f2f25e1ced766c
   languageName: node
   linkType: hard
 

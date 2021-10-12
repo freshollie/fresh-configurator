@@ -1,0 +1,22 @@
+diff --git a/index.js b/index.js
+index c3ed5c2f71cbe6b599be3c824c7c831b6ee76fe3..83dee2b950a97e030c1a3406764df7cf24b76b5d 100644
+--- a/index.js
++++ b/index.js
+@@ -52,7 +52,7 @@ function getDocumentRegistryChunk(sourcesWithOperations = []) {
+     for (const { operations, ...rest } of sourcesWithOperations) {
+         const originalString = rest.source.rawSDL;
+         const operation = operations[0];
+-        lines.add(`    ${JSON.stringify(originalString)}: graphql.${operation.initialName},\n`);
++        lines.add(`    ${JSON.stringify(originalString.replace(/\r\n/g, "\n"))}: graphql.${operation.initialName},\n`);
+     }
+     lines.add(`};\n`);
+     return lines;
+@@ -66,7 +66,7 @@ function getGqlOverloadChunk(sourcesWithOperations, mode) {
+         const returnType = mode === 'lookup'
+             ? `(typeof documents)[${JSON.stringify(originalString)}]`
+             : `typeof import('./graphql').${operations[0].initialName}`;
+-        lines.add(`export function gql(source: ${JSON.stringify(originalString)}): ${returnType};\n`);
++        lines.add(`export function gql(source: ${JSON.stringify(originalString.replace(/\r\n/g, "\n"))}): ${returnType};\n`);
+     }
+     return lines;
+ }
