@@ -44,16 +44,18 @@ Idealy, to become feature complete with the current configurator. The overall go
 Because `@betaflight/msp` is written separately it could be published as it's own package, available for anyone to build tools which can interact with flight controllers. As `@betaflight/api` is also separate, it provides the ability for people to publish tools which can integrate with betaflight, just by using the API.
 
 ## Packages
-Project | Description
---- | ---
-[@betaflight/configurator](packages/configurator) | The betaflight configurator electron application, built using the rest of the libraries
-[@betaflight/api-server](packages/api-server) | A GraphQL server to read data from betaflight flight controllers, built using the @betaflight/api
-[@betaflight/api](packages/api) | The betaflight API, built using @betaflight/msp
-[@betaflight/msp](packages/msp) | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers
+
+| Project                                           | Description                                                                                            |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [@betaflight/configurator](packages/configurator) | The betaflight configurator electron application, built using the rest of the libraries                |
+| [@betaflight/api-server](packages/api-server)     | A GraphQL server to read data from betaflight flight controllers, built using the @betaflight/api      |
+| [@betaflight/api](packages/api)                   | The betaflight API, built using @betaflight/msp                                                        |
+| [@betaflight/msp](packages/msp)                   | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers |
 
 ## Developing
 
 ### Requirements
+
 - `node@12`
 - `yarn`
 
@@ -124,43 +126,41 @@ $ yarn e2e:production
                        Flight Controller
 ```
 
-
 This is a monorepo application, with the design being to allow a single feature
 to be able to make changes to the entire application stack, but for the packages to be separate enough
-to exist on their own. 
+to exist on their own.
 
 By segrating logic into their own packages, code barriers are
 automatically added to discourage interdependency. Because parts of the
 application are publishable, they must be written to exist on their own and thus
 create even less interdependency.
 
-The only package which cannot exist outside of the monorepo is 
+The only package which cannot exist outside of the monorepo is
 `@betaflight/configurator` as it is the final export of this repo.
 
 Heavy use of TypeScript and `graphql-code-generator` is made throughout the monorepo to ensure
 the datatypes transmitted between the flight controller and the configurator are
 consistent at compile time and `graphql` ensuring the datatypes are consistent at
-runtime. This means that there are many checks in place before even testing the 
+runtime. This means that there are many checks in place before even testing the
 application.
 
-### Configurator 
+### Configurator
 
-The configurator is built with React and uses GraphQL as the core state of the application. 
-[`@apollo/client`](https://github.com/apollographql/apollo-client) is the magic behind all of this. 
-It provides the [hooks](https://reactjs.org/docs/hooks-intro.html) and rerender triggers for the 
+The configurator is built with React and uses GraphQL as the core state of the application.
+[`@apollo/client`](https://github.com/apollographql/apollo-client) is the magic behind all of this.
+It provides the [hooks](https://reactjs.org/docs/hooks-intro.html) and rerender triggers for the
 components when application state changes, which means no render loop.
 
 Client and Device state is held in the same graph, and can be queried from any component in the application.
 The client state graph is described in the [client schema](packages/configurator/src/gql/client.ts), and device
-state is described in the [device schema](packages/api-server/src/graph).
+state is described in the [device schema](packages/api-graph/src/graph).
 
 Because retreiving state from the device is expensive, the client will cache all device state in its graph
 so that queries are only executed for data which is not available in the graph.
 
-The schema of the client and device state are used to enforce that all code which uses the state is 
+The schema of the client and device state are used to enforce that all code which uses the state is
 type-safe. This means that changes to the API will not compile unless the configurator and api-server
 schema is updated to match the types from the API.
-
 
 #### Queries
 
@@ -175,22 +175,20 @@ import useConnection from "../hooks/useConnection";
 const FcStatusProvider: React.FC = () => {
   const { connection } = useConnection();
   const connection = useQuery(
-    gql`
-      query Status($connection: ID!) {
-        connection(connectionId: $connection) {
-          device {
-            status {
-              cycleTime
-              i2cError
-              cpuload
+    gql(/* GraphQL */
+      `query Status($connection: ID!) {
+          connection(connectionId: $connection) {
+            device {
+              status {
+                cycleTime
+                i2cError
+                cpuload
+              }
             }
           }
         }
-      }
-    ` as import("@graphql-typed-document-node/core").TypedDocumentNode<
-      import("./__generated__/FcStatusProvider").StatusQuery,
-      import("./__generated__/FcStatusProvider").StatusQueryVariables
-    >,
+      `
+    ),
     {
       variables: {
         connection,
@@ -214,5 +212,5 @@ const FcStatusProvider: React.FC = () => {
 };
 ```
 
-Having `eslint` auto fixes enabled in your editor will automatically import the required types for this query,
-which can be generated by running [codegen](https://github.com/dotansimha/graphql-code-generator) (`yarn codegen`).
+Running [codegen](https://github.com/dotansimha/graphql-code-generator) (`yarn codegen`), will autoamtically ensure that
+the `gql` tag will return the exact type shape to match your query!
