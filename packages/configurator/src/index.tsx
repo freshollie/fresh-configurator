@@ -36,7 +36,7 @@ ReactDOM.render(
     <ErrorBoundary FallbackComponent={Fallback}>
       <ApolloProvider client={client}>
         <BumbagProvider theme={theme} colorMode="light">
-          <Box minWidth="100vw" minHeight="100vh">
+          <Box minHeight="100vh">
             <App />
           </Box>
         </BumbagProvider>

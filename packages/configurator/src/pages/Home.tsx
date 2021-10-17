@@ -279,7 +279,7 @@ const Home: React.FC = () => {
             height="100%"
             position="relative"
           >
-            <Box borderRight="default" padding="major-5" position="relative">
+            <Box padding="major-5" position="relative">
               <Image
                 loading="eager"
                 referrerPolicy=""
