@@ -114,7 +114,7 @@ $ yarn e2e:production
 |                   |                   |
 |     renderer      |        main       |
 |                   |                   |
-|   configurator <----->  api-server    |
+|   configurator <----->   api-graph    |
 |                   |          |        |
 |                   |          V        |
 |                   |         api       |
