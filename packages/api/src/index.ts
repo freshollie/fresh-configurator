@@ -76,6 +76,7 @@ export * from "./pid";
 export * from "./motors";
 export * from "./serial";
 export * from "./modes";
+export * from "./vtx";
 
 export * from "./types";
 export {
