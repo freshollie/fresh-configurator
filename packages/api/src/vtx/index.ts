@@ -48,7 +48,7 @@ export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
           table: {
             available: data.readU8() !== 0,
             numBands: data.readU8(),
-            numChannels: data.readU8(),
+            maxChannels: data.readU8(),
             numPowerLevels: data.readU8(),
           },
         }
@@ -57,7 +57,7 @@ export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
           table: {
             available: false,
             numBands: 0,
-            numChannels: 0,
+            maxChannels: 0,
             numPowerLevels: 0,
           },
         }),
@@ -85,7 +85,7 @@ export const writeVtxConfig = async (
       .push8(config.channel)
       .push16(config.frequency)
       .push8(config.table.numBands)
-      .push8(config.table.numChannels)
+      .push8(config.table.maxChannels)
       .push8(config.table.numPowerLevels)
       .push8(clearVtxTable ? 1 : 0);
   }

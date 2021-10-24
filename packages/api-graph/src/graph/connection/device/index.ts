@@ -19,6 +19,7 @@ import motors from "./motors";
 import beepers from "./beeper";
 import modes from "./modes";
 import blackbox from "./blackbox";
+import vtx from "./vtx";
 
 const typeDefs = gql`
   extend type Connection {
@@ -69,6 +70,7 @@ export default {
     beepers.typeDefs,
     modes.typeDefs,
     blackbox.typeDefs,
+    vtx.typeDefs,
   ]),
   resolvers: mergeResolvers([
     resolvers,
@@ -89,5 +91,6 @@ export default {
     beepers.resolvers,
     modes.resolvers,
     blackbox.resolvers,
+    vtx.resolvers,
   ]),
 };
