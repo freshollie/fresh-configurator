@@ -23,6 +23,7 @@ import {
   Modes,
   BlackboxDevices,
   SdCardStates,
+  TargetCapabilities,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
@@ -145,7 +146,10 @@ let mockDevice = {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0,
     ],
-    targetCapabilities: 55,
+    targetCapabilities: [
+      TargetCapabilities.HAS_SOFTSERIAL,
+      TargetCapabilities.HAS_VCP,
+    ],
     targetName: "STM32F411",
   },
   mixerConfig: {
@@ -377,7 +381,10 @@ const reset = () => {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
       ],
-      targetCapabilities: 55,
+      targetCapabilities: [
+        TargetCapabilities.IS_UNIFIED,
+        TargetCapabilities.SUPPORTS_RX_BIND,
+      ],
       targetName: "STM32F411",
     },
     mixerConfig: {

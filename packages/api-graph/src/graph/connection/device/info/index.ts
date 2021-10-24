@@ -10,7 +10,7 @@ const typeDefs = gql`
     boardIdentifier: String!
     boardVersion: Int!
     boardType: Int!
-    targetCapabilities: Int!
+    targetCapabilities: [Int!]!
     targetName: String!
     boardName: String!
     manufacturerId: String!
