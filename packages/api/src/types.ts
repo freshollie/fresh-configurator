@@ -17,11 +17,21 @@ export type RawGpsData = {
   groundCourse: number;
 };
 
+export enum TargetCapabilities {
+  HAS_VCP,
+  HAS_SOFTSERIAL,
+  IS_UNIFIED,
+  HAS_FLASH_BOOTLOADER,
+  SUPPORTS_CUSTOM_DEFAULTS,
+  HAS_CUSTOM_DEFAULTS,
+  SUPPORTS_RX_BIND,
+}
+
 export type BoardInfo = {
   boardIdentifier: string;
   boardVersion: number;
   boardType: number;
-  targetCapabilities: number;
+  targetCapabilities: TargetCapabilities[];
   targetName: string;
   boardName: string;
   manufacturerId: string;

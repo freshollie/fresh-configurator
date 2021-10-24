@@ -19,6 +19,7 @@ import {
   GpsSbasTypes,
   GpsBaudRates,
   BlackboxDevices,
+  TargetCapabilities,
 } from "./types";
 import { includeIf } from "./utils";
 
@@ -365,4 +366,14 @@ export const blackboxDevices = (api: string): BlackboxDevices[] => [
   BlackboxDevices.FLASH,
   BlackboxDevices.SDCARD,
   BlackboxDevices.SERIAL,
+];
+
+export const targetCapabilities = (): TargetCapabilities[] => [
+  TargetCapabilities.HAS_VCP,
+  TargetCapabilities.HAS_SOFTSERIAL,
+  TargetCapabilities.IS_UNIFIED,
+  TargetCapabilities.HAS_FLASH_BOOTLOADER,
+  TargetCapabilities.SUPPORTS_CUSTOM_DEFAULTS,
+  TargetCapabilities.HAS_CUSTOM_DEFAULTS,
+  TargetCapabilities.SUPPORTS_RX_BIND,
 ];

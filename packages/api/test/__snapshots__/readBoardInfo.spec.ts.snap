@@ -11,7 +11,9 @@ Object {
   "mcuTypeId": 255,
   "sampleRateHz": undefined,
   "signature": Array [],
-  "targetCapabilities": 2,
+  "targetCapabilities": Array [
+    1,
+  ],
   "targetName": "SPRACINGF3",
 }
 `;
@@ -60,7 +62,13 @@ Object {
     0,
     0,
   ],
-  "targetCapabilities": 55,
+  "targetCapabilities": Array [
+    0,
+    1,
+    2,
+    4,
+    5,
+  ],
   "targetName": "STM32F411",
 }
 `;

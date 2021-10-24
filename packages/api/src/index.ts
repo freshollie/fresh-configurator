@@ -57,6 +57,7 @@ import {
   channelLetters,
   gpsProtocols,
   blackboxDevices,
+  targetCapabilities,
 } from "./features";
 import {
   times,
@@ -115,7 +116,10 @@ export const readBoardInfo = async (port: string): Promise<BoardInfo> => {
     boardIdentifier: String.fromCharCode(...times(() => data.readU8(), 4)),
     boardVersion: data.readU16(),
     boardType: semver.gte(api, "1.35.0") ? data.readU8() : 0,
-    targetCapabilities: semver.gte(api, "1.37.0") ? data.readU8() : 0,
+    targetCapabilities: unpackValues(
+      semver.gte(api, "1.37.0") ? data.readU8() : 0,
+      targetCapabilities()
+    ),
     targetName: semver.gte(api, "1.37.0")
       ? String.fromCharCode(...times(() => data.readU8(), data.readU8()))
       : "",
