@@ -20,7 +20,7 @@ export type VtxConfig = {
   table: {
     available: boolean;
     numBands: number;
-    maxChannels: number;
+    numBandChannels: number;
     numPowerLevels: number;
   };
 };

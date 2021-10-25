@@ -18,7 +18,6 @@ import {
 export type {
   VtxBaseDeviceStatus,
   VtxConfig,
-  VtxDeviceTypes,
   VtxRtc6705DeviceStatus,
   VtxSmartAudioDeviceStatus,
   VtxTableBandsRow,
@@ -27,6 +26,8 @@ export type {
   VtxUnknownDeviceStatus,
   VtxUnsupportedDeviceStatus,
 };
+
+export { VtxDeviceTypes };
 
 export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
   const api = apiVersion(port);
@@ -48,7 +49,7 @@ export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
           table: {
             available: data.readU8() !== 0,
             numBands: data.readU8(),
-            maxChannels: data.readU8(),
+            numBandChannels: data.readU8(),
             numPowerLevels: data.readU8(),
           },
         }
@@ -57,7 +58,7 @@ export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
           table: {
             available: false,
             numBands: 0,
-            maxChannels: 0,
+            numBandChannels: 0,
             numPowerLevels: 0,
           },
         }),
@@ -85,10 +86,12 @@ export const writeVtxConfig = async (
       .push8(config.channel)
       .push16(config.frequency)
       .push8(config.table.numBands)
-      .push8(config.table.maxChannels)
+      .push8(config.table.numBandChannels)
       .push8(config.table.numPowerLevels)
       .push8(clearVtxTable ? 1 : 0);
   }
+
+  await execute(port, { code: codes.MSP_SET_VTX_CONFIG, data: buffer });
 };
 
 export const clearVtxTable = async (port: string): Promise<void> => {
@@ -195,8 +198,13 @@ export const readVtxDeviceStatus = async (
   | VtxRtc6705DeviceStatus
   | VtxUnknownDeviceStatus
   | VtxUnsupportedDeviceStatus
+  | undefined
 > => {
   const data = await execute(port, { code: codes.MSP2_GET_VTX_DEVICE_STATUS });
+
+  if (data.byteLength < 1) {
+    return undefined;
+  }
 
   const vtxType: VtxDeviceTypes = data.readU8();
 
@@ -232,9 +240,10 @@ export const readVtxDeviceStatus = async (
     powers: powersAndLevels.map((value) => value[1]),
   };
 
+  data.readU8(); // custom device status size
+
   switch (vtxType) {
     case VtxDeviceTypes.VTXDEV_SMARTAUDIO:
-      data.readU8(); // custom device status size
       return {
         type: vtxType,
         version: data.readU8(),
@@ -247,7 +256,6 @@ export const readVtxDeviceStatus = async (
     case VtxDeviceTypes.VTXDEV_TRAMP:
     case VtxDeviceTypes.VTXDEV_UNKNOWN:
     default:
-      data.readU8();
       return {
         type: vtxType,
         ...baseConfig,

@@ -8,8 +8,8 @@ import {
   open,
   ports,
   readVtxConfig,
-  readVtxDeviceStatus,
-  readVtxTableBandsRow,
+  VtxDeviceTypes,
+  writeVtxConfig,
 } from "./src";
 
 (async () => {
@@ -17,6 +17,22 @@ import {
   await open(port);
   console.log(apiVersion(port));
   console.log(await readVtxConfig(port));
-  console.log(await readVtxDeviceStatus(port));
-  console.log(await readVtxTableBandsRow(port, 1));
+  await writeVtxConfig(port, {
+    type: VtxDeviceTypes.VTXDEV_SMARTAUDIO,
+    band: 5,
+    channel: 0,
+    power: 0,
+    pitMode: true,
+    frequency: 0,
+    deviceReady: false,
+    lowPowerDisarm: 0,
+    pitModeFrequency: 0,
+    table: {
+      available: true,
+      numBands: 5,
+      numBandChannels: 8,
+      numPowerLevels: 5,
+    },
+  });
+  console.log(await readVtxConfig(port));
 })();
