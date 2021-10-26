@@ -16,6 +16,18 @@
     },
     {
       "path": "./packages/api-graph/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/msp/tsconfig.cjs.build.json"
+    },
+    {
+      "path": "./packages/api/tsconfig.cjs.build.json"
+    },
+    {
+      "path": "./packages/api-server/tsconfig.cjs.build.json"
+    },
+    {
+      "path": "./packages/api-graph/tsconfig.build.json"
     }
   ]
 }
