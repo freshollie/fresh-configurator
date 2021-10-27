@@ -67,7 +67,13 @@ export const readVtxConfig = async (port: string): Promise<VtxConfig> => {
 
 export const writeVtxConfig = async (
   port: string,
-  config: VtxConfig,
+  config: Omit<VtxConfig, "table"> & {
+    table: {
+      numBands: number;
+      numBandChannels: number;
+      numPowerLevels: number;
+    };
+  },
   clearVtxTable = false
 ): Promise<void> => {
   const buffer = new WriteBuffer();

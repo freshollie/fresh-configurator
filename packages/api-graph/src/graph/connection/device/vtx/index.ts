@@ -6,6 +6,19 @@ const typeDefs = gql`
     vtx: VtxConfig!
   }
 
+  extend type Mutation {
+    deviceSetVtxConfig(connectionId: ID!, vtxConfig: VtxConfigInput!): Boolean
+    deviceSetVtxTablePowerLevelsRow(
+      connectionId: ID!
+      powerLevelsRow: PowerLevelsRowInput!
+    ): Boolean
+    deviceSetVtxTableBandsRow(
+      connectionId: ID!
+      bandsRow: BandsRowInput!
+    ): Boolean
+    deviceClearVtxTable(connectionId: ID!): Boolean
+  }
+
   type VtxConfig {
     type: Int!
     band: Int!
@@ -20,7 +33,7 @@ const typeDefs = gql`
   }
 
   type VtxTableConfig {
-    maxChannels: Int!
+    numBandChannels: Int!
     numPowerLevels: Int!
     powerLevels: [PowerLevelsRow!]!
     powerLevel(id: Int!): PowerLevelsRow
@@ -42,9 +55,77 @@ const typeDefs = gql`
     isFactoryBand: Boolean!
     frequencies: [Int!]!
   }
+
+  input VtxConfigInput {
+    type: Int
+    band: Int
+    channel: Int
+    power: Int
+    pitMode: Boolean
+    frequency: Int
+    deviceReady: Boolean
+    lowPowerDisarm: Int
+    pitModeFrequency: Int
+    table: VtxTableConfigInput
+  }
+
+  input VtxTableConfigInput {
+    numBandChannels: Int!
+    bands: [BandsRowInput!]!
+    powerLevels: [PowerLevelsRowInput!]!
+  }
+
+  input PowerLevelsRowInput {
+    id: Int!
+    value: Int!
+    label: String!
+  }
+
+  input BandsRowInput {
+    id: Int!
+    name: String!
+    letter: String!
+    isFactoryBand: Boolean!
+    frequencies: [Int!]!
+  }
 `;
 
 const resolvers: Resolvers = {
+  Mutation: {
+    deviceSetVtxConfig: async (
+      _,
+      { connectionId, vtxConfig },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      const newTable = vtxConfig.table;
+      await api.writePartialVtxConfig(port, {
+        ...vtxConfig,
+        table: newTable
+          ? {
+              numBandChannels: newTable.numBandChannels,
+              numBands: newTable.bands.length,
+              numPowerLevels: newTable.powerLevels.length,
+            }
+          : undefined,
+      });
+
+      if (newTable) {
+        await Promise.all([
+          ...newTable.bands.map((row) =>
+            api.writeVtxTableBandsRow(port, { ...row, rowNumber: row.id })
+          ),
+          ...newTable.powerLevels.map((row) =>
+            api.writeVtxTablePowerLevelsRow(port, { ...row, rowNumber: row.id })
+          ),
+        ]);
+      }
+
+      return null;
+    },
+    deviceClearVtxTable: (_, { connectionId }, { api, connections }) =>
+      api.clearVtxTable(connections.getPort(connectionId)).then(() => null),
+  },
   FlightController: {
     vtx: (_, __, { api, port }) =>
       api.readVtxConfig(port).then((config) => ({
