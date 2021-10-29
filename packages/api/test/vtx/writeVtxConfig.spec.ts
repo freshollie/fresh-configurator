@@ -16,7 +16,6 @@ describe("writeVtxConfig", () => {
       lowPowerDisarm: 0,
       pitModeFrequency: 0,
       table: {
-        available: true,
         numBands: 5,
         numBandChannels: 8,
         numPowerLevels: 5,

@@ -125,6 +125,28 @@ const resolvers: Resolvers = {
     },
     deviceClearVtxTable: (_, { connectionId }, { api, connections }) =>
       api.clearVtxTable(connections.getPort(connectionId)).then(() => null),
+    deviceSetVtxTableBandsRow: (
+      _,
+      { connectionId, bandsRow },
+      { api, connections }
+    ) =>
+      api
+        .writeVtxTableBandsRow(connections.getPort(connectionId), {
+          ...bandsRow,
+          rowNumber: bandsRow.id,
+        })
+        .then(() => null),
+    deviceSetVtxTablePowerLevelsRow: (
+      _,
+      { connectionId, powerLevelsRow },
+      { api, connections }
+    ) =>
+      api
+        .writeVtxTablePowerLevelsRow(connections.getPort(connectionId), {
+          ...powerLevelsRow,
+          rowNumber: powerLevelsRow.id,
+        })
+        .then(() => null),
   },
   FlightController: {
     vtx: (_, __, { api, port }) =>
