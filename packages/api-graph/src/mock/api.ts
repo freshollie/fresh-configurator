@@ -274,6 +274,43 @@ let mockDevice = {
     freeSizeKB: 167772160,
     totalSizeKB: 335545600,
   },
+  vtxConfig: {
+    type: VtxDeviceTypes.VTXDEV_SMARTAUDIO,
+    band: 5,
+    channel: 0,
+    power: 0,
+    pitMode: true,
+    frequency: 0,
+    deviceReady: false,
+    lowPowerDisarm: 0,
+    pitModeFrequency: 0,
+    table: {
+      available: true,
+      numBands: 2,
+      bands: [
+        {
+          rowNumber: 1,
+          isFactoryBand: true,
+          letter: "A",
+          name: "Band A",
+          frequencies: [1, 2, 3],
+        },
+        {
+          rowNumber: 2,
+          isFactoryBand: true,
+          letter: "B",
+          name: "Band B",
+          frequencies: [5, 6, 7],
+        },
+      ],
+      powerLevels: [
+        { rowNumber: 1, label: "Label 1", value: 1 },
+        { rowNumber: 2, label: "Label 2", value: 2 },
+      ],
+      numBandChannels: 3,
+      numPowerLevels: 2,
+    },
+  },
 };
 
 const reset = () => {
@@ -508,6 +545,43 @@ const reset = () => {
       filesystemLastError: 0,
       freeSizeKB: 167772160,
       totalSizeKB: 335545600,
+    },
+    vtxConfig: {
+      type: VtxDeviceTypes.VTXDEV_SMARTAUDIO,
+      band: 5,
+      channel: 0,
+      power: 0,
+      pitMode: true,
+      frequency: 0,
+      deviceReady: false,
+      lowPowerDisarm: 0,
+      pitModeFrequency: 0,
+      table: {
+        available: true,
+        numBands: 2,
+        bands: [
+          {
+            rowNumber: 1,
+            isFactoryBand: true,
+            letter: "A",
+            name: "Band A",
+            frequencies: [1, 2, 3],
+          },
+          {
+            rowNumber: 2,
+            isFactoryBand: true,
+            letter: "B",
+            name: "Band B",
+            frequencies: [5, 6, 7],
+          },
+        ],
+        powerLevels: [
+          { rowNumber: 1, label: "Label 1", value: 1 },
+          { rowNumber: 2, label: "Label 2", value: 2 },
+        ],
+        numBandChannels: 3,
+        numPowerLevels: 2,
+      },
     },
   };
 };
@@ -807,3 +881,59 @@ export const readFcVariant: typeof api.readFcVariant = (port) =>
 
 export const resetConfig: typeof api.resetConfig = (port) =>
   delay(1500).then(() => reset());
+
+export const readVtxConfig: typeof api.readVtxConfig = (port) =>
+  delay(100).then(() => mockDevice.vtxConfig);
+
+export const readVtxTableBandsRow: typeof api.readVtxTableBandsRow = (
+  port,
+  rowNumber
+) =>
+  delay(10).then(() => {
+    const index = rowNumber - 1;
+    const row = mockDevice.vtxConfig.table.bands[index];
+
+    if (!row) {
+      throw new Error("Bad");
+    }
+
+    return row;
+  });
+
+export const readVtxTablePowerLevelsRow: typeof api.readVtxTablePowerLevelsRow =
+  (port, rowNumber) =>
+    delay(10).then(() => {
+      const index = rowNumber - 1;
+      const row = mockDevice.vtxConfig.table.powerLevels[index];
+
+      if (!row) {
+        throw new Error("Bad");
+      }
+
+      return row;
+    });
+
+export const writePartialVtxConfig: typeof api.writePartialVtxConfig = (
+  port,
+  config
+) =>
+  delay(200).then(() => {
+    mockDevice.vtxConfig = mergeDeep(mockDevice.vtxConfig, {
+      ...config,
+      table: { ...config.table },
+    });
+  });
+
+export const writeVtxTableBandsRow: typeof api.writeVtxTableBandsRow = (
+  port,
+  row
+) =>
+  delay(50).then(() => {
+    mockDevice.vtxConfig.table.bands[row.rowNumber - 1] = row;
+  });
+
+export const writeVtxTablePowerLevelsRow: typeof api.writeVtxTablePowerLevelsRow =
+  (port, row) =>
+    delay(50).then(() => {
+      mockDevice.vtxConfig.table.powerLevels[row.rowNumber - 1] = row;
+    });
