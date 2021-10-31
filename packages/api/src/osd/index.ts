@@ -31,25 +31,46 @@ import {
   OSDStaticItem,
   OSDDisplayItem,
   OSDTimer,
-  Position,
+  OSDPosition,
   OSDPrecisionTypes,
 } from "./types";
-import * as OSDTypes from "./types";
 
-export { OSDTypes };
+export {
+  OSDOtherData,
+  OSDAlarm,
+  OSDFlags,
+  OSDWarning,
+  OSDConfig,
+  OSDVideoTypes,
+  OSDAlarms,
+  OSDTimerSources,
+  OSDWarnings,
+  OSDFields,
+  OSDUnitTypes,
+  OSDStaticFields,
+  OSDParameters,
+  OSDStaticItem,
+  OSDDisplayItem,
+  OSDTimer,
+  OSDPosition,
+  OSDPrecisionTypes,
+};
 
 const isVisible = (positionData: number, profile: number): boolean =>
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;
 
-const unpackPosition = (positionData: number): Position => ({
+const unpackPosition = (positionData: number): OSDPosition => ({
   x: positionData & 0x001f,
   y: (positionData >> 5) & 0x001f,
 });
 
-const unpackLegacyPosition = (positionData: number): Position =>
+const unpackLegacyPosition = (positionData: number): OSDPosition =>
   positionData === -1 ? { x: 0, y: 0 } : { x: positionData, y: 0 };
 
-const packLegacyPosition = (position: Position, visible: boolean): number => {
+const packLegacyPosition = (
+  position: OSDPosition,
+  visible: boolean
+): number => {
   if (visible) {
     return position.x === -1 ? 0 : position.x;
   }
@@ -411,4 +432,16 @@ export const writeOSDTimer = async (
       ((timer.time & 0xff) << 8)
   );
   await execute(port, { code: codes.MSP_SET_OSD_CONFIG, data });
+};
+
+export const writeOSDChar = async (
+  port: string,
+  charIndex: number,
+  charBytes: Buffer
+): Promise<void> => {
+  const buffer = new WriteBuffer();
+  buffer.push8(charIndex);
+  buffer.push(...charBytes);
+
+  await execute(port, { code: codes.MSP_OSD_CHAR_WRITE, data: buffer });
 };
