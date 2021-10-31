@@ -12,6 +12,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@2fd/command@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@2fd/command@npm:1.1.2"
+  checksum: 70002af49d1466b34cbfddac2b8a18f70e86ec322dd0614bf9e7b588ce97845991fb78f9f311c89325440ffad4106a144823e16fa82cc4fa73d11862d27c5eb6
+  languageName: node
+  linkType: hard
+
+"@2fd/graphdoc@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@2fd/graphdoc@npm:2.4.0"
+  dependencies:
+    "@2fd/command": ^1.1.2
+    bluebird: ^3.5.0
+    fs-extra: ^0.30.0
+    glob: ^7.1.0
+    graphql: ^0.7.0
+    marked: ^0.3.6
+    mustache: ^2.2.1
+    request: ^2.79.0
+    slug: ^0.9.1
+    striptags: ^3.0.1
+    word-wrap: ^1.2.1
+  bin:
+    graphdoc: ./bin/graphdoc.js
+  checksum: 627beb92ffa707c3faa0fbea143477f3d59415b430e033e10bd41e0daa0af271bc59755a0afa83eeb05af480669703473ecf18f2c0bb9764d7716a829d7f7023
+  languageName: node
+  linkType: hard
+
 "@apollo/client@npm:^3.4.10":
   version: 3.4.10
   resolution: "@apollo/client@npm:3.4.10"
@@ -14007,6 +14035,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fresh-configurator@workspace:."
   dependencies:
+    "@2fd/graphdoc": ^2.4.0
     "@graphql-codegen/add": ^3.1.0
     "@graphql-codegen/cli": ^2.1.1
     "@graphql-codegen/gql-tag-operations": ^1.2.0
@@ -14602,7 +14631,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.1.7":
+"glob@npm:^7.1.0, glob@npm:^7.1.7":
   version: 7.2.0
   resolution: "glob@npm:7.2.0"
   dependencies:
@@ -14865,6 +14894,15 @@ fsevents@~2.1.2:
   peerDependencies:
     graphql: ">=0.11 <=16"
   checksum: 64b236d3931574812bdf353211043736d54a7d72d0e0f5a58288b57c67dab27fcab9fbf9d8f28c6b92d16870413e317cc49d2ceb7e1db8e0112caf755421bad0
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^0.7.0":
+  version: 0.7.2
+  resolution: "graphql@npm:0.7.2"
+  dependencies:
+    iterall: 1.0.2
+  checksum: 9b815b851d4fbc861609ce37e88e0be881d25fa2d5dc54f661379e600d103d4f051cee15a09799c4efa2d3590a61f64fc2e1d67332c7fdf8df2871c27b1c3f40
   languageName: node
   linkType: hard
 
@@ -16787,6 +16825,13 @@ fsevents@~2.1.2:
     html-escaper: ^2.0.0
     istanbul-lib-report: ^3.0.0
   checksum: c5da63f1f4610f47f3015c525a3bc2fb4c87a8791ae452ee3983546d7a2873f0cf5d5fff7c3735ac52943c5b3506f49c294c92f1837df6ec03312625ccd176d7
+  languageName: node
+  linkType: hard
+
+"iterall@npm:1.0.2":
+  version: 1.0.2
+  resolution: "iterall@npm:1.0.2"
+  checksum: f87cbb8e22e3681f4d7ba634e4ce7bd419a78b47ff7b01f57f90cf761d187cb845fcac0d4d7e4c7dfcbfb80467c8ea42a9f3691bb3aa909e3e3707a25735ed70
   languageName: node
   linkType: hard
 
@@ -18718,6 +18763,15 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"marked@npm:^0.3.6":
+  version: 0.3.19
+  resolution: "marked@npm:0.3.19"
+  bin:
+    marked: ./bin/marked
+  checksum: 8567a1b82538e714959bbdb66408cfc805c258b94d87f0a0e76e8ca1d2c8fbc22f11f15dcc14b20b4be6e21e9b206c9085563d71c3941ea8dc61cec529d941bc
+  languageName: node
+  linkType: hard
+
 "marked@npm:^3.0.2":
   version: 3.0.8
   resolution: "marked@npm:3.0.8"
@@ -19497,6 +19551,15 @@ fsevents@~2.1.2:
     arrify: ^2.0.1
     minimatch: ^3.0.4
   checksum: 82c8030a53af965cab48da22f1b0f894ef99e16ee680dabdfbd38d2dfacc3c8208c475203d747afd9e26db44118ed0221d5a0d65268c864f06d6efc7ac6df812
+  languageName: node
+  linkType: hard
+
+"mustache@npm:^2.2.1":
+  version: 2.3.2
+  resolution: "mustache@npm:2.3.2"
+  bin:
+    mustache: ./bin/mustache
+  checksum: e3073355fe8efc4c36eb18af9985812aa7ab216d2b07246b407320b0f93acebeae14719ade700e817393c27e2168a4a1092d6c2f65efb3e26f0be84747a81e78
   languageName: node
   linkType: hard
 
@@ -22964,7 +23027,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"request@npm:^2.88.0, request@npm:^2.88.2":
+"request@npm:^2.79.0, request@npm:^2.88.0, request@npm:^2.88.2":
   version: 2.88.2
   resolution: "request@npm:2.88.2"
   dependencies:
@@ -23942,6 +24005,17 @@ resolve@~1.7.1:
   languageName: node
   linkType: hard
 
+"slug@npm:^0.9.1":
+  version: 0.9.4
+  resolution: "slug@npm:0.9.4"
+  dependencies:
+    unicode: ">= 0.3.1"
+  bin:
+    slug: bin/slug.js
+  checksum: bd262d8ca5527d4648531743f18a8694b1e1c554882df80af9117c911ef5e6d208a6d80161607656a39375d8e5b9e42bcc407cbcd030cd14cac17f0786b4a5d7
+  languageName: node
+  linkType: hard
+
 "smart-buffer@npm:^4.0.2, smart-buffer@npm:^4.1.0":
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
@@ -24769,6 +24843,13 @@ resolve@~1.7.1:
   version: 2.0.1
   resolution: "strip-json-comments@npm:2.0.1"
   checksum: 1074ccb63270d32ca28edfb0a281c96b94dc679077828135141f27d52a5a398ef5e78bcf22809d23cadc2b81dfbe345eb5fd8699b385c8b1128907dec4a7d1e1
+  languageName: node
+  linkType: hard
+
+"striptags@npm:^3.0.1":
+  version: 3.2.0
+  resolution: "striptags@npm:3.2.0"
+  checksum: 1b1f127ab46394665bd4f4dc3dc10f5f98c012cbdea93a68b10d78693671e98efc9ae7609f546af997ae0a02b81a5c9b7b916fa119482c31741406cdabaebf3b
   languageName: node
   linkType: hard
 
@@ -26066,6 +26147,13 @@ typescript@^4.4.2:
   languageName: node
   linkType: hard
 
+"unicode@npm:>= 0.3.1":
+  version: 13.0.0
+  resolution: "unicode@npm:13.0.0"
+  checksum: cd7de54ebd6608641fcebd5f8940a37ba9ced376a4f1e0ef2b97b13a9fa136312102ecf0cbeaea769f90536e6c2a0bd362aa8d1205ff02625bdcc5d64d2b056b
+  languageName: node
+  linkType: hard
+
 "unified@npm:9.2.0":
   version: 9.2.0
   resolution: "unified@npm:9.2.0"
@@ -27212,7 +27300,7 @@ typescript@^4.4.2:
   languageName: node
   linkType: hard
 
-"word-wrap@npm:^1.2.3, word-wrap@npm:~1.2.3":
+"word-wrap@npm:^1.2.1, word-wrap@npm:^1.2.3, word-wrap@npm:~1.2.3":
   version: 1.2.3
   resolution: "word-wrap@npm:1.2.3"
   checksum: 30b48f91fcf12106ed3186ae4fa86a6a1842416df425be7b60485de14bec665a54a68e4b5156647dec3a70f25e84d270ca8bc8cd23182ed095f5c7206a938c1f

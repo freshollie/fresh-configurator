@@ -1,0 +1,15 @@
+introspection:
+  schemaFile: ./schema.graphql
+
+info:
+  title: "@betaflight/api-graph docs"
+  description: Betaflight in a graph
+  contact:
+    name: Oliver Bell
+    url: http://github.com/freshollie
+    email: hi@obell.dev
+
+servers:
+  - url: https://betaflight-mock-api.herokuapp.com/graphql
+    description: Demo API
+    production: true
