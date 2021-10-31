@@ -9,5 +9,5 @@
   "exclude": "*.spec.ts",
   "external-modulemap": ".*packages/([^/]+)/.*",
   "tsconfig": "./tsconfig.typedoc.json",
-  "out": "doc"
+  "out": "doc/api"
 }

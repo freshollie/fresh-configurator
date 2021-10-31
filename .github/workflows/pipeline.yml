@@ -50,7 +50,7 @@ jobs:
       - name: Check contraints
         run: yarn constraints
 
-  docs:
+  api-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -77,8 +77,8 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
 
-      - name: Build docs
-        run: yarn build:docs
+      - name: Build api docs
+        run: yarn build:api-docs
 
   format:
     runs-on: ubuntu-latest
