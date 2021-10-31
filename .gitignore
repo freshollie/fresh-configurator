@@ -122,3 +122,4 @@ schema.graphql
 !.yarn/versions
 !.yarn/patches
 .pnp.*
+doc

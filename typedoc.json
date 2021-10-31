@@ -1,0 +1,13 @@
+{
+  "entryPoints": [
+    "packages/api/src/index.ts",
+    "packages/api-graph/src/index.ts",
+    "packages/api-server/src/index.ts",
+    "packages/msp/src/index.ts"
+  ],
+  "plugin": ["@strictsoftware/typedoc-plugin-monorepo"],
+  "exclude": "*.spec.ts",
+  "external-modulemap": ".*packages/([^/]+)/.*",
+  "tsconfig": "./tsconfig.typedoc.json",
+  "out": "doc"
+}
