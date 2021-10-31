@@ -11,7 +11,7 @@ COPY scripts scripts
 COPY .yarn .yarn
 COPY tsconfig.build.json \
         tsconfig.base.json \
-        tsconfig.cjs.build.json \
+        tsconfig.build.json \
         yarn.lock package.json \
         codegen.yml \
         .gitignore \
