@@ -24,6 +24,7 @@ import {
   BlackboxDevices,
   SdCardStates,
   TargetCapabilities,
+  VtxDeviceTypes,
 } from "@betaflight/api";
 import * as api from "@betaflight/api";
 import { v4 } from "uuid";
