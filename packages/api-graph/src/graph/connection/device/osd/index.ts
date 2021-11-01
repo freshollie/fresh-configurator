@@ -12,19 +12,19 @@ const typeDefs = gql`
   }
 
   type OSDTimer {
-    key: Int!
+    id: Int!
     src: Int!
     precision: Int!
     time: Int!
   }
 
   type OSDAlarm {
-    key: Int!
+    id: Int!
     value: Int!
   }
 
   type OSDWarning {
-    key: Int!
+    id: Int!
     enabled: Boolean!
   }
 
@@ -34,13 +34,13 @@ const typeDefs = gql`
   }
 
   type OSDDisplayItem {
-    key: Int!
+    id: Int!
     position: OSDPosition!
     visibilityProfiles: [Boolean!]!
   }
 
   type OSDStatisticItem {
-    key: Int!
+    id: Int!
     enabled: Boolean!
   }
 
@@ -72,9 +72,25 @@ const typeDefs = gql`
   }
 `;
 
+const keysToIds = <K extends number, T extends { key: K }>(
+  items: T[]
+): (T & { id: K })[] =>
+  items.map((item) => ({
+    ...item,
+    id: item.key,
+  }));
+
 const resolvers: Resolvers = {
   FlightController: {
-    osd: (_, __, { api, port }) => api.readOSDConfig(port),
+    osd: async (_, __, { api, port }) =>
+      api.readOSDConfig(port).then((config) => ({
+        ...config,
+        displayItems: keysToIds(config.displayItems),
+        statisticItems: keysToIds(config.statisticItems),
+        alarms: keysToIds(config.alarms),
+        timers: keysToIds(config.timers),
+        warnings: keysToIds(config.warnings),
+      })),
   },
 };
 
