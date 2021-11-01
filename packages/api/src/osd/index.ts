@@ -35,12 +35,19 @@ import {
   OSDPrecisionTypes,
 } from "./types";
 
-export {
+export type {
   OSDOtherData,
   OSDAlarm,
   OSDFlags,
   OSDWarning,
   OSDConfig,
+  OSDParameters,
+  OSDStatisticItem,
+  OSDDisplayItem,
+  OSDTimer,
+  OSDPosition,
+};
+export {
   OSDVideoTypes,
   OSDAlarms,
   osdAlarms,
@@ -52,11 +59,6 @@ export {
   osdFields,
   OSDUnitTypes,
   OSDStatisticFields,
-  OSDParameters,
-  OSDStatisticItem,
-  OSDDisplayItem,
-  OSDTimer,
-  OSDPosition,
   OSDPrecisionTypes,
 };
 
