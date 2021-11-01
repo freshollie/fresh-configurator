@@ -33,7 +33,7 @@ At the moment functionality is very minimal, and lots is changing all the time.
 - The MultiWii protocol sourcecode has been ported into TypeScript, and utilises promises. It's available in the [@betaflight/msp](packages/msp) package.
 - [Tests have been written](packages/msp/test) for all of `@betaflight/msp`
 - The Betaflight API has been ported into [`@betaflight/api`](packages/api), and has high test coverage
-- The API exists as [graphql schema](https://betaflight-mock-api.herokuapp.com) within [`@betaflight/api-server`](packages/api-server)
+- The API exists as [graphql schema](https://betaflight-mock-api.herokuapp.com) within [`@betaflight/api-graph`](packages/api-graph)
 - The main layout, device connection controls, logging, model information, navigation, instruments, receiver channels have been written in [`@betaflight/configurator`](packages/configurator)
 - [Storybook](https://betaflight-storybook.netlify.app) is utlised to develop components
 
@@ -41,16 +41,17 @@ At the moment functionality is very minimal, and lots is changing all the time.
 
 Idealy, to become feature complete with the current configurator. The overall goal of the project, however, is to simplify the requirements to develop your own configurator or customise an existing one.
 
-Because `@betaflight/msp` is written separately it could be published as it's own package, available for anyone to build tools which can interact with flight controllers. As `@betaflight/api` is also separate, it provides the ability for people to publish tools which can integrate with betaflight, just by using the API.
+Because `@betaflight/msp` is written separately it is published as its own package, available for anyone to build tools which can interact with flight controllers. As `@betaflight/api` is also separate, it provides the ability for people to publish tools which can integrate with betaflight, just by using the API.
 
 ## Packages
 
 | Project                                           | Description                                                                                            |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [@betaflight/configurator](packages/configurator) | The betaflight configurator electron application, built using the rest of the libraries                |
-| [@betaflight/api-server](packages/api-server)     | A GraphQL server to read data from betaflight flight controllers, built using the @betaflight/api      |
+| [@betaflight/api-graph](packages/api-graph)       | A GraphQL schema to read data from betaflight flight controllers, built using the @betaflight/api      |
 | [@betaflight/api](packages/api)                   | The betaflight API, built using @betaflight/msp                                                        |
 | [@betaflight/msp](packages/msp)                   | A library for handling the MultiWii Serial Protocol for reading and writing data to flight controllers |
+| [@betaflight/api-server](packages/api-server)     | A GraphQL server which implements `@betaflight/api-graph`                                              |
 
 ## Developing
 
