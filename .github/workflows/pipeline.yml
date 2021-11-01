@@ -144,7 +144,7 @@ jobs:
           CI: true
 
       - name: Publish Coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
 
   schema-docs:
     runs-on: ubuntu-latest
