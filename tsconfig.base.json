@@ -17,10 +17,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "composite": true,
-    "types": [],
-    "paths": {
-      "@betaflight/*": ["./packages/*/src"]
-    }
+    "types": []
   },
   "exclude": ["/node_modules/", "/dist/"]
 }
