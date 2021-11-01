@@ -14,7 +14,8 @@
     "build": "yarn workspace @betaflight/configurator build",
     "build:lib": "tsc -b tsconfig.build.json",
     "build:storybook": "yarn workspace @betaflight/configurator build-storybook",
-    "build:docs": "typedoc",
+    "build:api-docs": "typedoc",
+    "build:schema-docs": "yarn codegen && graphdoc -s ./schema.graphql -o ./doc/schema --force",
     "storybook": "yarn workspace @betaflight/configurator storybook",
     "codegen": "graphql-codegen --config codegen.yml",
     "test": "jest",
@@ -38,6 +39,7 @@
     "types/*"
   ],
   "devDependencies": {
+    "@2fd/graphdoc": "^2.4.0",
     "@graphql-codegen/add": "^3.1.0",
     "@graphql-codegen/cli": "^2.1.1",
     "@graphql-codegen/gql-tag-operations": "^1.2.0",
@@ -100,6 +102,9 @@
     "open@7.0.4": {
       "unplugged": true
     }
+  },
+  "graphdoc": {
+    "graphiql": "https://betaflight-mock-api.herokuapp.com/graphql"
   },
   "packageManager": "yarn@3.0.2"
 }
