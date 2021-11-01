@@ -1,5 +1,5 @@
 import mockMsp from "../mockMsp";
-import readOsdData from "./readOSDConfig.json";
+import readOsdData from "./osdConfigData";
 import { readOSDConfig } from "../../src";
 import codes from "../../src/codes";
 

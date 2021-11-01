@@ -6,21 +6,25 @@
 import {
   apiVersion,
   open,
+  OSDAlarms,
   ports,
-  readVtxTableBandsRow,
-  writeVtxTableBandsRow,
+  readOSDConfig,
+  writeOSDAlarm,
 } from "./src";
 
 (async () => {
-  const port = (await ports())[0]!.path;
+  console.log(await ports());
+  const port = (await ports())[2]!.path;
   await open(port);
   console.log(apiVersion(port));
-  await writeVtxTableBandsRow(port, {
-    rowNumber: 1,
-    isFactoryBand: true,
-    letter: "A",
-    name: "Band A",
-    frequencies: [1, 2, 3],
+  const config = await readOSDConfig(port);
+  const before = config.alarms;
+  console.log(before);
+  await writeOSDAlarm(port, {
+    key: OSDAlarms.RSSI,
+    value: 69,
   });
-  console.log(await readVtxTableBandsRow(port, 1));
+  const afterConfig = await readOSDConfig(port);
+  const after = afterConfig.alarms;
+  console.log(after);
 })();

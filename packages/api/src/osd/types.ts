@@ -20,16 +20,16 @@ export type OSDWarning = {
   enabled: boolean;
 };
 
-export type Position = { x: number; y: number };
+export type OSDPosition = { x: number; y: number };
 
 export type OSDDisplayItem = {
   key: OSDFields;
-  position: Position;
-  visibility: boolean[];
+  position: OSDPosition;
+  visibilityProfiles: boolean[];
 };
 
-export type OSDStaticItem = {
-  key: OSDStaticFields;
+export type OSDStatisticItem = {
+  key: OSDStatisticFields;
   enabled: boolean;
 };
 
@@ -50,7 +50,7 @@ export type OSDConfig = {
   flags: OSDFlags;
   unitMode: OSDUnitTypes;
   displayItems: OSDDisplayItem[];
-  staticItems: OSDStaticItem[];
+  statisticItems: OSDStatisticItem[];
   warnings: OSDWarning[];
   timers: OSDTimer[];
   timerSources: OSDTimerSources[];
@@ -192,7 +192,7 @@ export enum OSDFields {
   UNKNOWN,
 }
 
-export enum OSDStaticFields {
+export enum OSDStatisticFields {
   MAX_SPEED,
   MIN_BATTERY,
   MIN_RSSI,

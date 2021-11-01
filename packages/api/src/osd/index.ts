@@ -6,7 +6,7 @@ import {
   OSD_VIDEO_VALUE_TO_TYPE,
   OSD_UNIT_VALUE_TO_TYPE,
   osdTimerSources,
-  osdStaticFields,
+  osdStatisticFields,
   OSD_PRECISION_VALUE_TO_TYPE,
   osdWarnings,
   OSD_VALUE_VISIBLE,
@@ -26,30 +26,57 @@ import {
   OSDWarnings,
   OSDFields,
   OSDUnitTypes,
-  OSDStaticFields,
+  OSDStatisticFields,
   OSDParameters,
-  OSDStaticItem,
+  OSDStatisticItem,
   OSDDisplayItem,
   OSDTimer,
-  Position,
+  OSDPosition,
   OSDPrecisionTypes,
 } from "./types";
-import * as OSDTypes from "./types";
 
-export { OSDTypes };
+export type {
+  OSDOtherData,
+  OSDAlarm,
+  OSDFlags,
+  OSDWarning,
+  OSDConfig,
+  OSDParameters,
+  OSDStatisticItem,
+  OSDDisplayItem,
+  OSDTimer,
+  OSDPosition,
+};
+export {
+  OSDVideoTypes,
+  OSDAlarms,
+  osdAlarms,
+  OSDTimerSources,
+  osdTimerSources,
+  OSDWarnings,
+  osdWarnings,
+  OSDFields,
+  osdFields,
+  OSDUnitTypes,
+  OSDStatisticFields,
+  OSDPrecisionTypes,
+};
 
 const isVisible = (positionData: number, profile: number): boolean =>
   positionData !== -1 && (positionData & (OSD_VALUE_VISIBLE << profile)) !== 0;
 
-const unpackPosition = (positionData: number): Position => ({
+const unpackPosition = (positionData: number): OSDPosition => ({
   x: positionData & 0x001f,
   y: (positionData >> 5) & 0x001f,
 });
 
-const unpackLegacyPosition = (positionData: number): Position =>
+const unpackLegacyPosition = (positionData: number): OSDPosition =>
   positionData === -1 ? { x: 0, y: 0 } : { x: positionData, y: 0 };
 
-const packLegacyPosition = (position: Position, visible: boolean): number => {
+const packLegacyPosition = (
+  position: OSDPosition,
+  visible: boolean
+): number => {
   if (visible) {
     return position.x === -1 ? 0 : position.x;
   }
@@ -128,11 +155,11 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
     ? times(() => data.readU16(), displayItemsCount)
     : times(() => data.read16(), displayItemsCount);
 
-  const expectedStaticFields = osdStaticFields(api);
+  const expectedStaticFields = osdStatisticFields(api);
   const staticItems = semver.gte(api, "1.36.0")
     ? times(
         (i) => ({
-          key: expectedStaticFields[i] ?? OSDStaticFields.UNKNOWN,
+          key: expectedStaticFields[i] ?? OSDStatisticFields.UNKNOWN,
           enabled: data.readU8() === 1,
         }),
         data.readU8()
@@ -196,7 +223,7 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
     position: semver.gte(api, "1.21.0")
       ? unpackPosition(positionData)
       : unpackLegacyPosition(positionData),
-    visibility: times(
+    visibilityProfiles: times(
       (profileIndex) => isVisible(positionData, profileIndex),
       osdProfiles.count
     ),
@@ -204,7 +231,7 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
 
   return {
     flags,
-    staticItems,
+    statisticItems: staticItems,
     displayItems,
     alarms,
     timerSources,
@@ -219,7 +246,7 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
 
 export const writeOSDDisplayItem = async (
   port: string,
-  { key, visibility, position }: OSDDisplayItem
+  { key, visibilityProfiles, position }: OSDDisplayItem
 ): Promise<void> => {
   const data = new WriteBuffer();
   const api = apiVersion(port);
@@ -228,18 +255,18 @@ export const writeOSDDisplayItem = async (
   const index = itemOrder.indexOf(key);
 
   if (index === -1) {
-    throw new Error(`OSD_FIELD.${OSDFields[key]} does not exist on device`);
+    throw new Error(`OSDFields.${OSDFields[key]} does not exist on device`);
   }
 
   const packedPosition = semver.gte(api, "1.21.0")
-    ? visibility.reduce(
+    ? visibilityProfiles.reduce(
         (packedVisible, visibilityProfile, i) =>
           packedVisible | (visibilityProfile ? OSD_VALUE_VISIBLE << i : 0),
         0
       ) |
       ((position.y & 0x001f) << 5) |
       position.x
-    : packLegacyPosition(position, visibility[0] ?? false);
+    : packLegacyPosition(position, visibilityProfiles[0] ?? false);
 
   data.push8(index);
   data.push16(packedPosition);
@@ -318,15 +345,6 @@ export const writeOSDAlarm = async (
   });
 };
 
-export const writeOSDFlags = async (
-  port: string,
-  flags: OSDFlags
-): Promise<void> => {
-  const osdConfig = await readOSDConfig(port);
-
-  await writeOSDOtherData(port, { ...osdConfig, flags });
-};
-
 export const writeOSDWarning = async (
   port: string,
   warning: OSDWarning
@@ -379,18 +397,18 @@ export const writeOSDParameters = async (
   await writeOSDOtherData(port, { ...osdConfig, parameters });
 };
 
-export const writeOSDStaticItem = async (
+export const writeOSDStatisticItem = async (
   port: string,
-  { key, enabled }: OSDStaticItem
+  { key, enabled }: OSDStatisticItem
 ): Promise<void> => {
   const data = new WriteBuffer();
-  const staticItemsOrder = osdStaticFields(apiVersion(port));
+  const staticItemsOrder = osdStatisticFields(apiVersion(port));
 
   const index = staticItemsOrder.indexOf(key);
 
   if (index === -1) {
     throw new Error(
-      `OSDStaticFields.${OSDStaticFields[key]} does not exist on device`
+      `OSDStaticFields.${OSDStatisticFields[key]} does not exist on device`
     );
   }
   data.push8(index);
@@ -411,4 +429,16 @@ export const writeOSDTimer = async (
       ((timer.time & 0xff) << 8)
   );
   await execute(port, { code: codes.MSP_SET_OSD_CONFIG, data });
+};
+
+export const writeOSDChar = async (
+  port: string,
+  charIndex: number,
+  charBytes: Buffer
+): Promise<void> => {
+  const buffer = new WriteBuffer();
+  buffer.push8(charIndex);
+  buffer.push(...charBytes);
+
+  await execute(port, { code: codes.MSP_OSD_CHAR_WRITE, data: buffer });
 };
