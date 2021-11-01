@@ -23,7 +23,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -35,7 +35,7 @@ Object {
         "x": 22,
         "y": 11,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         true,
         false,
         false,
@@ -47,7 +47,7 @@ Object {
         "x": 13,
         "y": 6,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -59,7 +59,7 @@ Object {
         "x": 14,
         "y": 2,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -71,7 +71,7 @@ Object {
         "x": 14,
         "y": 6,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -83,7 +83,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -95,7 +95,7 @@ Object {
         "x": 1,
         "y": 11,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         true,
         false,
         false,
@@ -107,7 +107,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -119,7 +119,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -131,7 +131,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -143,7 +143,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -155,7 +155,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -167,7 +167,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -179,7 +179,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -191,7 +191,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -203,7 +203,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -215,7 +215,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -227,7 +227,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -239,7 +239,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -251,7 +251,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -263,7 +263,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -275,7 +275,7 @@ Object {
         "x": 9,
         "y": 9,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         true,
         true,
         true,
@@ -287,7 +287,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -299,7 +299,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -311,7 +311,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -323,7 +323,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -335,7 +335,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -347,7 +347,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -359,7 +359,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -371,7 +371,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -383,7 +383,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -395,7 +395,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -407,7 +407,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -419,7 +419,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -431,7 +431,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -443,7 +443,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -455,7 +455,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -467,7 +467,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -479,7 +479,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -491,7 +491,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -503,7 +503,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -515,7 +515,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -527,7 +527,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -539,7 +539,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -551,7 +551,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -563,7 +563,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -575,7 +575,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -587,7 +587,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -599,7 +599,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -611,7 +611,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -623,7 +623,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -635,7 +635,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -647,7 +647,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -659,7 +659,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -671,7 +671,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         false,
         false,
         false,
@@ -683,7 +683,7 @@ Object {
         "x": 10,
         "y": 7,
       },
-      "visibility": Array [
+      "visibilityProfiles": Array [
         true,
         false,
         false,
@@ -706,7 +706,7 @@ Object {
     "cameraFrameWidth": 24,
     "overlayRadioMode": 2,
   },
-  "staticItems": Array [
+  "statisticItems": Array [
     Object {
       "enabled": false,
       "key": 12,

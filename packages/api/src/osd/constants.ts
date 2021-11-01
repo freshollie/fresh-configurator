@@ -1,7 +1,7 @@
 import semver from "semver";
 import {
   OSDFields,
-  OSDStaticFields,
+  OSDStatisticFields,
   OSDWarnings,
   OSDTimerSources,
   OSDAlarms,
@@ -127,58 +127,60 @@ export const osdFields = (apiVersion: string): OSDFields[] => {
   ];
 };
 
-export const osdStaticFields = (apiVersion: string): OSDStaticFields[] => {
+export const osdStatisticFields = (
+  apiVersion: string
+): OSDStatisticFields[] => {
   if (semver.lt(apiVersion, "1.39.0")) {
     return [
-      OSDStaticFields.MAX_SPEED,
-      OSDStaticFields.MIN_BATTERY,
-      OSDStaticFields.MIN_RSSI,
-      OSDStaticFields.MAX_CURRENT,
-      OSDStaticFields.USED_MAH,
-      OSDStaticFields.MAX_ALTITUDE,
-      OSDStaticFields.BLACKBOX,
-      OSDStaticFields.END_BATTERY,
-      OSDStaticFields.TIMER_1,
-      OSDStaticFields.TIMER_2,
-      OSDStaticFields.MAX_DISTANCE,
-      OSDStaticFields.BLACKBOX_LOG_NUMBER,
+      OSDStatisticFields.MAX_SPEED,
+      OSDStatisticFields.MIN_BATTERY,
+      OSDStatisticFields.MIN_RSSI,
+      OSDStatisticFields.MAX_CURRENT,
+      OSDStatisticFields.USED_MAH,
+      OSDStatisticFields.MAX_ALTITUDE,
+      OSDStatisticFields.BLACKBOX,
+      OSDStatisticFields.END_BATTERY,
+      OSDStatisticFields.TIMER_1,
+      OSDStatisticFields.TIMER_2,
+      OSDStatisticFields.MAX_DISTANCE,
+      OSDStatisticFields.BLACKBOX_LOG_NUMBER,
       ...(semver.gte(apiVersion, "1.37.0")
-        ? [OSDStaticFields.RTC_DATE_TIME]
+        ? [OSDStatisticFields.RTC_DATE_TIME]
         : []),
     ];
   }
   // Starting with 1.39.0 OSD stats are reordered to match how they're presented on screen
   return [
-    OSDStaticFields.RTC_DATE_TIME,
-    OSDStaticFields.TIMER_1,
-    OSDStaticFields.TIMER_2,
-    OSDStaticFields.MAX_SPEED,
-    OSDStaticFields.MAX_DISTANCE,
-    OSDStaticFields.MIN_BATTERY,
-    OSDStaticFields.END_BATTERY,
-    OSDStaticFields.STAT_BATTERY,
-    OSDStaticFields.MIN_RSSI,
-    OSDStaticFields.MAX_CURRENT,
-    OSDStaticFields.USED_MAH,
-    OSDStaticFields.MAX_ALTITUDE,
-    OSDStaticFields.BLACKBOX,
-    OSDStaticFields.BLACKBOX_LOG_NUMBER,
+    OSDStatisticFields.RTC_DATE_TIME,
+    OSDStatisticFields.TIMER_1,
+    OSDStatisticFields.TIMER_2,
+    OSDStatisticFields.MAX_SPEED,
+    OSDStatisticFields.MAX_DISTANCE,
+    OSDStatisticFields.MIN_BATTERY,
+    OSDStatisticFields.END_BATTERY,
+    OSDStatisticFields.STAT_BATTERY,
+    OSDStatisticFields.MIN_RSSI,
+    OSDStatisticFields.MAX_CURRENT,
+    OSDStatisticFields.USED_MAH,
+    OSDStatisticFields.MAX_ALTITUDE,
+    OSDStatisticFields.BLACKBOX,
+    OSDStatisticFields.BLACKBOX_LOG_NUMBER,
     ...(semver.gte(apiVersion, "1.41.0")
       ? [
-          OSDStaticFields.MAX_G_FORCE,
-          OSDStaticFields.MAX_ESC_TEMP,
-          OSDStaticFields.MAX_ESC_RPM,
-          OSDStaticFields.MIN_LINK_QUALITY,
-          OSDStaticFields.FLIGHT_DISTANCE,
-          OSDStaticFields.MAX_FFT,
+          OSDStatisticFields.MAX_G_FORCE,
+          OSDStatisticFields.MAX_ESC_TEMP,
+          OSDStatisticFields.MAX_ESC_RPM,
+          OSDStatisticFields.MIN_LINK_QUALITY,
+          OSDStatisticFields.FLIGHT_DISTANCE,
+          OSDStatisticFields.MAX_FFT,
         ]
       : []),
     ...(semver.gte(apiVersion, "1.42.0")
       ? [
-          OSDStaticFields.TOTAL_FLIGHTS,
-          OSDStaticFields.TOTAL_FLIGHT_TIME,
-          OSDStaticFields.TOTAL_FLIGHT_DIST,
-          OSDStaticFields.MIN_RSSI_DBM,
+          OSDStatisticFields.TOTAL_FLIGHTS,
+          OSDStatisticFields.TOTAL_FLIGHT_TIME,
+          OSDStatisticFields.TOTAL_FLIGHT_DIST,
+          OSDStatisticFields.MIN_RSSI_DBM,
         ]
       : []),
   ];

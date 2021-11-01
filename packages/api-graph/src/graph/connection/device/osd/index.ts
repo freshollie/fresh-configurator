@@ -36,10 +36,10 @@ const typeDefs = gql`
   type OSDDisplayItem {
     key: Int!
     position: OSDPosition!
-    visibility: [Boolean!]!
+    visibilityProfiles: [Boolean!]!
   }
 
-  type OSDStaticItem {
+  type OSDStatisticItem {
     key: Int!
     enabled: Boolean!
   }
@@ -61,7 +61,7 @@ const typeDefs = gql`
     flags: OSDFlags!
     unitMode: Int!
     displayItems: [OSDDisplayItem!]!
-    staticItems: [OSDStaticItem!]!
+    statisticItems: [OSDStatisticItem!]!
     warnings: [OSDWarning!]!
     timers: [OSDTimer!]!
     timerSources: [Int!]!

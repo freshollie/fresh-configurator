@@ -3,12 +3,28 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import { apiVersion, open, ports, writeOSDChar } from "./src";
+import {
+  apiVersion,
+  open,
+  OSDAlarms,
+  ports,
+  readOSDConfig,
+  writeOSDAlarm,
+} from "./src";
 
 (async () => {
   console.log(await ports());
-  const port = (await ports())[0]!.path;
+  const port = (await ports())[2]!.path;
   await open(port);
   console.log(apiVersion(port));
-  await writeOSDChar(port, 0, Buffer.from([1]));
+  const config = await readOSDConfig(port);
+  const before = config.alarms;
+  console.log(before);
+  await writeOSDAlarm(port, {
+    key: OSDAlarms.RSSI,
+    value: 69,
+  });
+  const afterConfig = await readOSDConfig(port);
+  const after = afterConfig.alarms;
+  console.log(after);
 })();
