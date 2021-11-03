@@ -73,10 +73,28 @@ const typeDefs = gql`
 
   extend type Mutation {
     deviceSetOSDDisplayItem(
-      connectionId: String!
+      connectionId: ID!
       displayItem: OSDDisplayItemInput!
     ): Boolean
-    deviceSetOSDProfile(connectionId: String!, profileId: Int!): Boolean
+    deviceSetOSDProfile(connectionId: ID!, profileIndex: Int!): Boolean
+    deviceSetOSDAlarm(connectionId: ID!, alarm: OSDAlarmInput!): Boolean
+    deviceSetOSDWarning(connectionId: ID!, warning: OSDWarningInput!): Boolean
+    deviceSetOSDVideoSystem(connectionId: ID!, videoSystem: Int!): Boolean
+    deviceSetOSDUnitMode(connectionId: ID!, unitMode: Int!): Boolean
+    deviceSetOSDParameters(
+      connectionId: ID!
+      parameters: OSDParametersInput!
+    ): Boolean
+    deviceSetOSDTimer(connectionId: ID!, timer: OSDTimerInput!): Boolean
+    deviceSetOSDStatisticItem(
+      connectionId: ID!
+      statisticItem: OSDStatisticItemInput!
+    ): Boolean
+    deviceSetOSDChar(
+      connectionId: ID!
+      charIndex: Int!
+      charBytesBuffer: [Int!]!
+    ): Boolean
   }
 
   input OSDDisplayItemInput {
@@ -89,6 +107,34 @@ const typeDefs = gql`
     x: Int!
     y: Int!
   }
+
+  input OSDAlarmInput {
+    id: Int!
+    value: Int!
+  }
+
+  input OSDWarningInput {
+    id: Int!
+    enabled: Boolean!
+  }
+
+  input OSDTimerInput {
+    id: Int!
+    src: Int!
+    precision: Int!
+    time: Int!
+  }
+
+  input OSDParametersInput {
+    cameraFrameWidth: Int
+    cameraFrameHeight: Int
+    overlayRadioMode: Int
+  }
+
+  input OSDStatisticItemInput {
+    id: Int!
+    enabled: Boolean!
+  }
 `;
 
 const keysToIds = <K extends number, T extends { key: K }>(
@@ -98,6 +144,19 @@ const keysToIds = <K extends number, T extends { key: K }>(
     ...item,
     id: item.key,
   }));
+
+const idToKey = <I extends number, T extends { id: I }>(
+  item: T
+): Omit<T, "id"> & { key: I } => {
+  const newObject: Omit<T, "id"> & { id?: I; key: I } = {
+    ...item,
+    key: item.id,
+  };
+
+  delete newObject.id;
+
+  return newObject;
+};
 
 const resolvers: Resolvers = {
   FlightController: {
@@ -118,11 +177,11 @@ const resolvers: Resolvers = {
   Mutation: {
     deviceSetOSDProfile: async (
       _,
-      { connectionId, profileId },
+      { connectionId, profileIndex },
       { api, connections }
     ) => {
       const port = connections.getPort(connectionId);
-      await api.writeOSDSelectedProfile(port, profileId);
+      await api.writeOSDSelectedProfile(port, profileIndex);
 
       return null;
     },
@@ -132,11 +191,84 @@ const resolvers: Resolvers = {
       { api, connections }
     ) => {
       const port = connections.getPort(connectionId);
-      await api.writeOSDDisplayItem(port, {
-        key: displayItem.id,
-        ...displayItem,
-      });
+      await api.writeOSDDisplayItem(port, idToKey(displayItem));
 
+      return null;
+    },
+    deviceSetOSDAlarm: async (
+      _,
+      { connectionId, alarm },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDAlarm(port, idToKey(alarm));
+
+      return null;
+    },
+    deviceSetOSDWarning: async (
+      _,
+      { connectionId, warning },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDWarning(port, idToKey(warning));
+
+      return null;
+    },
+    deviceSetOSDTimer: async (
+      _,
+      { connectionId, timer },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDTimer(port, idToKey(timer));
+
+      return null;
+    },
+    deviceSetOSDVideoSystem: async (
+      _,
+      { connectionId, videoSystem },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDVideoSystem(port, videoSystem);
+
+      return null;
+    },
+    deviceSetOSDParameters: async (
+      _,
+      { connectionId, parameters },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writePartialOSDParameters(port, parameters);
+      return null;
+    },
+    deviceSetOSDUnitMode: async (
+      _,
+      { connectionId, unitMode },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDUnitMode(port, unitMode);
+      return null;
+    },
+    deviceSetOSDStatisticItem: async (
+      _,
+      { connectionId, statisticItem },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDStatisticItem(port, idToKey(statisticItem));
+      return null;
+    },
+    deviceSetOSDChar: async (
+      _,
+      { connectionId, charIndex, charBytesBuffer },
+      { api, connections }
+    ) => {
+      const port = connections.getPort(connectionId);
+      await api.writeOSDChar(port, charIndex, Buffer.from(charBytesBuffer));
       return null;
     },
   },

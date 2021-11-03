@@ -252,4 +252,276 @@ describe("device.osd", () => {
       },
     });
   });
+
+  describe("deviceSetOSDProfile", () => {
+    it("should write the selected osd profile", async () => {
+      add("/dev/port", "abc");
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOsdProfile {
+            deviceSetOSDProfile(connectionId: "abc", profileIndex: 4)
+          }
+        `,
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDSelectedProfile).toHaveBeenCalledWith(
+        "/dev/port",
+        4
+      );
+    });
+  });
+
+  describe("deviceSetOSDDisplayItem", () => {
+    it("should write osd display item config", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDDisplayItem($displayItem: OSDDisplayItemInput!) {
+            deviceSetOSDDisplayItem(
+              connectionId: "abc"
+              displayItem: $displayItem
+            )
+          }
+        `,
+        variables: {
+          displayItem: {
+            id: OSDFields.THROTTLE_POSITION,
+            position: {
+              x: 10,
+              y: 20,
+            },
+            visibilityProfiles: [true, true, false],
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDDisplayItem).toHaveBeenCalledWith("/dev/port", {
+        key: OSDFields.THROTTLE_POSITION,
+        position: {
+          x: 10,
+          y: 20,
+        },
+        visibilityProfiles: [true, true, false],
+      });
+    });
+  });
+
+  describe("deviceSetOSDAlarm", () => {
+    it("should write osd alarm config", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDAlarm($alarm: OSDAlarmInput!) {
+            deviceSetOSDAlarm(connectionId: "abc", alarm: $alarm)
+          }
+        `,
+        variables: {
+          alarm: {
+            id: OSDAlarms.CAP,
+            value: 150,
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDAlarm).toHaveBeenCalledWith("/dev/port", {
+        key: OSDAlarms.CAP,
+        value: 150,
+      });
+    });
+  });
+
+  describe("deviceSetOSDWarning", () => {
+    it("should write osd warning config", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDWarning($warning: OSDWarningInput!) {
+            deviceSetOSDWarning(connectionId: "abc", warning: $warning)
+          }
+        `,
+        variables: {
+          warning: {
+            id: OSDWarnings.LAUNCH_CONTROL,
+            enabled: false,
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDWarning).toHaveBeenCalledWith("/dev/port", {
+        key: OSDWarnings.LAUNCH_CONTROL,
+        enabled: false,
+      });
+    });
+  });
+
+  describe("deviceSetOSDTimer", () => {
+    it("should write osd timer config", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDTimer($timer: OSDTimerInput!) {
+            deviceSetOSDTimer(connectionId: "abc", timer: $timer)
+          }
+        `,
+        variables: {
+          timer: {
+            id: 4,
+            src: OSDTimerSources.ON_ARM_TIME,
+            precision: 100,
+            time: 50,
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDTimer).toHaveBeenCalledWith("/dev/port", {
+        key: 4,
+        src: OSDTimerSources.ON_ARM_TIME,
+        precision: 100,
+        time: 50,
+      });
+    });
+  });
+
+  describe("deviceSetOSDStatisticItem", () => {
+    it("should write osd statistic item config", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDStatisticItem($statisticItem: OSDStatisticItemInput!) {
+            deviceSetOSDStatisticItem(
+              connectionId: "abc"
+              statisticItem: $statisticItem
+            )
+          }
+        `,
+        variables: {
+          statisticItem: {
+            id: OSDStatisticFields.STAT_BATTERY,
+            enabled: true,
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDStatisticItem).toHaveBeenCalledWith("/dev/port", {
+        key: OSDStatisticFields.STAT_BATTERY,
+        enabled: true,
+      });
+    });
+  });
+
+  describe("deviceSetOSDVideoSystem", () => {
+    it("should write the osd video system type", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDVideoSystem($videoSystem: Int!) {
+            deviceSetOSDVideoSystem(
+              connectionId: "abc"
+              videoSystem: $videoSystem
+            )
+          }
+        `,
+        variables: {
+          videoSystem: OSDVideoTypes.PAL,
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDVideoSystem).toHaveBeenCalledWith(
+        "/dev/port",
+        OSDVideoTypes.PAL
+      );
+    });
+  });
+
+  describe("deviceSetOSDUnitMode", () => {
+    it("should write the osd unit mode type", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDUnitMode($unitMode: Int!) {
+            deviceSetOSDUnitMode(connectionId: "abc", unitMode: $unitMode)
+          }
+        `,
+        variables: {
+          unitMode: OSDUnitTypes.IMPERIAL,
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDUnitMode).toHaveBeenCalledWith(
+        "/dev/port",
+        OSDUnitTypes.IMPERIAL
+      );
+    });
+  });
+
+  describe("deviceSetOSDChar", () => {
+    it("should write the osd char value", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDChar($charIndex: Int!, $charBytesBuffer: [Int!]!) {
+            deviceSetOSDChar(
+              connectionId: "abc"
+              charIndex: $charIndex
+              charBytesBuffer: $charBytesBuffer
+            )
+          }
+        `,
+        variables: {
+          charIndex: 67,
+          charBytesBuffer: [...Buffer.from([5, 6, 7, 8])],
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writeOSDChar).toHaveBeenCalledWith(
+        "/dev/port",
+        67,
+        Buffer.from([5, 6, 7, 8])
+      );
+    });
+  });
+
+  describe("deviceSetOSDParameters", () => {
+    it("should write the osd parameter values", async () => {
+      add("/dev/port", "abc");
+
+      const { errors } = await client.mutate({
+        mutation: gql`
+          mutation SetOSDParameters($parameters: OSDParametersInput!) {
+            deviceSetOSDParameters(connectionId: "abc", parameters: $parameters)
+          }
+        `,
+        variables: {
+          parameters: {
+            cameraFrameWidth: 540,
+            cameraFrameHeight: 960,
+            overlayRadioMode: 4,
+          },
+        },
+      });
+
+      expect(errors).toBeFalsy();
+      expect(mockApi.writePartialOSDParameters).toHaveBeenCalledWith(
+        "/dev/port",
+        { cameraFrameWidth: 540, cameraFrameHeight: 960, overlayRadioMode: 4 }
+      );
+    });
+  });
 });
