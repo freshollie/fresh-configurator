@@ -234,7 +234,6 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
     statisticItems: staticItems,
     displayItems,
     alarms,
-    timerSources,
     warnings,
     timers,
     videoSystem,
@@ -251,7 +250,6 @@ export const writeOSDDisplayItem = async (
   const data = new WriteBuffer();
   const api = apiVersion(port);
   const itemOrder = osdFields(api);
-
   const index = itemOrder.indexOf(key);
 
   if (index === -1) {
