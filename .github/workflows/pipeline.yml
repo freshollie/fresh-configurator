@@ -210,7 +210,7 @@ jobs:
         run: yarn build:storybook
 
       - name: Test
-        uses: tj-actions/puppeteer@v3.2
+        uses: mujo-code/puppeteer-headful@v2
         env:
           CI: true
         with:
