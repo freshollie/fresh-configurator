@@ -9,6 +9,7 @@
 
 import SerialPort from "@serialport/stream";
 import debug from "debug";
+import { AbstractBinding } from "@serialport/bindings";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
@@ -25,8 +26,12 @@ import {
 // Import bindings when we actually need them, so that libraries
 // can import this library without the bindings needing to be available
 // at import time
-const initialiseBindings = async (): Promise<void> => {
-  const { default: Binding } = await import("@serialport/bindings");
+export const initialiseSerialBackend = async (
+  bindings?: AbstractBinding
+): Promise<void> => {
+  const { default: Binding } = !bindings
+    ? await import("@serialport/bindings")
+    : { default: bindings };
   SerialPort.Binding = Binding;
 };
 
@@ -136,7 +141,7 @@ export const execute = async (
 export const ports = async (): Promise<PortInfo[]> => {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!SerialPort.Binding) {
-    await initialiseBindings();
+    await initialiseSerialBackend();
   }
   return SerialPort.list();
 };
@@ -190,7 +195,7 @@ export const open: OpenConnectionFunction = async (
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!SerialPort.Binding) {
-    await initialiseBindings();
+    await initialiseSerialBackend();
   }
 
   const serial = new SerialPort(port, {
