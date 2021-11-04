@@ -82,7 +82,7 @@ const filterUnset = <T extends Record<string, unknown>>(
 const isObject = (item: unknown): item is Record<string, unknown> =>
   !!item && typeof item === "object" && !Array.isArray(item);
 
-type RecursivePartial<T> = {
+export type RecursivePartial<T> = {
   [P in keyof T]?:
     | (T[P] extends (infer U)[]
         ? RecursivePartial<U>[]

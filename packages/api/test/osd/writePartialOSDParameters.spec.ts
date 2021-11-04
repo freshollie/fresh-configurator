@@ -1,14 +1,14 @@
-import { writeOSDParameters } from "../../src";
+import { writePartialOSDParameters } from "../../src";
 import codes from "../../src/codes";
 import mockMsp from "../mockMsp";
 import osdConfigData from "./osdConfigData";
 
-describe("writeOSDParameters", () => {
+describe("writePartialOSDParameters", () => {
   it("should write the OSD paramters", async () => {
     mockMsp.setApiVersion("1.42.0");
     mockMsp.setResponseForCode(osdConfigData, codes.MSP_OSD_CONFIG);
     mockMsp.setResponseForCode([], codes.MSP_SET_OSD_CONFIG);
-    await writeOSDParameters("/dev/someport", {
+    await writePartialOSDParameters("/dev/someport", {
       overlayRadioMode: 3,
       cameraFrameHeight: 40,
       cameraFrameWidth: 32,

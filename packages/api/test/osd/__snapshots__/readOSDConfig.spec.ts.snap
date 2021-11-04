@@ -804,12 +804,6 @@ Object {
       "key": 23,
     },
   ],
-  "timerSources": Array [
-    0,
-    1,
-    2,
-    3,
-  ],
   "timers": Array [
     Object {
       "key": 0,

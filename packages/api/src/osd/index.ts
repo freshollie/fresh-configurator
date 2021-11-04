@@ -1,6 +1,6 @@
 import semver from "semver";
 import { WriteBuffer, apiVersion, execute } from "@betaflight/msp";
-import { bitCheck, times } from "../utils";
+import { bitCheck, mergeDeep, RecursivePartial, times } from "../utils";
 import {
   osdFields,
   OSD_VIDEO_VALUE_TO_TYPE,
@@ -234,7 +234,6 @@ export const readOSDConfig = async (port: string): Promise<OSDConfig> => {
     statisticItems: staticItems,
     displayItems,
     alarms,
-    timerSources,
     warnings,
     timers,
     videoSystem,
@@ -251,7 +250,6 @@ export const writeOSDDisplayItem = async (
   const data = new WriteBuffer();
   const api = apiVersion(port);
   const itemOrder = osdFields(api);
-
   const index = itemOrder.indexOf(key);
 
   if (index === -1) {
@@ -388,13 +386,16 @@ export const writeOSDUnitMode = async (
   await writeOSDOtherData(port, { ...osdConfig, unitMode });
 };
 
-export const writeOSDParameters = async (
+export const writePartialOSDParameters = async (
   port: string,
-  parameters: OSDParameters
+  parameters: RecursivePartial<OSDParameters>
 ): Promise<void> => {
   const osdConfig = await readOSDConfig(port);
 
-  await writeOSDOtherData(port, { ...osdConfig, parameters });
+  await writeOSDOtherData(port, {
+    ...osdConfig,
+    parameters: mergeDeep(osdConfig.parameters, parameters),
+  });
 };
 
 export const writeOSDStatisticItem = async (

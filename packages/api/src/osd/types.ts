@@ -36,6 +36,7 @@ export type OSDStatisticItem = {
 export type OSDFlags = {
   hasOSD: boolean;
   haveMax7456Video: boolean;
+  isMax7456Detected: boolean;
   haveOsdFeature: boolean;
   isOsdSlave: boolean;
 };
@@ -53,7 +54,6 @@ export type OSDConfig = {
   statisticItems: OSDStatisticItem[];
   warnings: OSDWarning[];
   timers: OSDTimer[];
-  timerSources: OSDTimerSources[];
   osdProfiles: OSDProfileConfig;
   videoSystem: OSDVideoTypes;
   alarms: OSDAlarm[];
