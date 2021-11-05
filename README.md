@@ -6,6 +6,8 @@
 [![Coverage](https://codecov.io/gh/freshollie/fresh-configurator/branch/master/graph/badge.svg?token=JOAYJP148K)](https://codecov.io/gh/freshollie/fresh-configurator)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://betaflight-storybook.netlify.app)
+[![Api documation](https://img.shields.io/github/checks-status/freshollie/fresh-configurator/master?label=api%20docs)](https://betaflight-api-docs.netlify.app)
+[![Schema documentation](https://img.shields.io/github/checks-status/freshollie/fresh-configurator/master?label=schema%20docs)](https://betaflight-schema-docs.netlify.app)
 
 <p align="center">
   <img width="600" src="./docs/progress.png">

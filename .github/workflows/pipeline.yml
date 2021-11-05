@@ -50,36 +50,6 @@ jobs:
       - name: Check contraints
         run: yarn constraints
 
-  api-docs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 16
-        uses: actions/setup-node@v1
-        with:
-          node-version: "16.x"
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install
-        run: yarn --immutable
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
-
-      - name: Build api docs
-        run: yarn build:api-docs
-
   format:
     runs-on: ubuntu-latest
 
@@ -178,6 +148,54 @@ jobs:
         run: yarn build:schema-docs
         env:
           CI: true
+
+      - name: Publish
+        if: github.ref == 'refs/heads/master'
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=doc/schema --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SCHEMA_DOCS_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+  api-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install
+        run: yarn --immutable
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+
+      - name: Build api docs
+        run: yarn build:api-docs
+
+      - name: Publish
+        if: github.ref == 'refs/heads/master'
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=doc/api --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_API_DOCS_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
   storybook:
     runs-on: ubuntu-latest
