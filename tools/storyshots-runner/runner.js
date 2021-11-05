@@ -89,7 +89,7 @@ const run = async ({
   // Launch Puppeteer process to fetch stories info.
   const storiesBrowser = await new StoriesBrowser(connection, {
     launchOptions: {
-      executablePath: CI ? process.env.PUPPETEER_EXECUTABLE_PATH : undefined,
+      executablePath: CI ? process.env.PUPPETEER_EXEC_PATH : undefined,
       args: ["--no-sandbox"],
     },
   }).boot();
@@ -117,9 +117,7 @@ const run = async ({
     new Array(numWorkers).fill(0).map((i) =>
       new StoryPreviewBrowser(connection, i, {
         launchOptions: {
-          executablePath: CI
-            ? process.env.PUPPETEER_EXECUTABLE_PATH
-            : undefined,
+          executablePath: CI ? process.env.PUPPETEER_EXEC_PATH : undefined,
           headless: true,
           args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
         },
