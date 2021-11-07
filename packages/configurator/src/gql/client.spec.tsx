@@ -1,7 +1,8 @@
 import { advanceTo, advanceBy } from "jest-date-mock";
-import client from "./client";
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { versionInfo } from "../util";
 import { gql } from "./apollo";
+import { createClient } from "./client";
 
 const Logs = gql(/* GraphQL */ `
   query LogsTest {
@@ -14,11 +15,17 @@ const Logs = gql(/* GraphQL */ `
   }
 `);
 
+let client: ApolloClient<NormalizedCacheObject>;
+
 const Log = gql(/* GraphQL */ `
   mutation LogTest($message: String!) {
     log(message: $message) @client
   }
 `);
+
+beforeAll(async () => {
+  client = await createClient();
+});
 
 beforeEach(async () => {
   advanceTo(new Date("2020-03-01T19:00:00.000Z"));

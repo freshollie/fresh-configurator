@@ -89,6 +89,7 @@ export {
   packetErrors,
   ports,
   baudRate,
+  initialiseSerialBackend,
 } from "@betaflight/msp";
 export {
   escProtocols,

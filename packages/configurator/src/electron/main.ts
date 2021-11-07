@@ -7,7 +7,8 @@ import fs from "fs";
 
 import unhandled from "electron-unhandled";
 import type { ApolloLink } from "@apollo/client";
-import { createIpcExecutor, createSchemaLink } from "./IpcLinkServer";
+import { createIpcExecutor } from "./IpcLinkServer";
+import { createSchemaLink } from "../shared/SchemaLink";
 
 unhandled({
   showDialog: true,

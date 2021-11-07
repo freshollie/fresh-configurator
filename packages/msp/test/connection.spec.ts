@@ -2,7 +2,7 @@ import MockBinding from "@serialport/binding-mock";
 import binding from "@serialport/bindings";
 import SerialPort from "@serialport/stream";
 import flushPromises from "flush-promises";
-import { raw, reset } from "../src/connection";
+import { initialiseSerialBackend, raw, reset } from "../src/connection";
 import {
   open,
   connections,
@@ -476,5 +476,14 @@ describe("baudRate", () => {
 
   it("should throw an error if the port is not open", () => {
     expect(() => baudRate("/dev/anotherdevice")).toThrowErrorMatchingSnapshot();
+  });
+});
+
+describe("initialiseSerialBackend", () => {
+  it("should set the serial port bindings to the provided bindings", () => {
+    initialiseSerialBackend({
+      myBindings: "yay",
+    } as unknown as typeof SerialPort["Binding"]);
+    expect(SerialPort.Binding).toEqual({ myBindings: "yay" });
   });
 });

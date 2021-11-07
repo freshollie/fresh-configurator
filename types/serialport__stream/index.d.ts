@@ -2,4 +2,8 @@
 // with the @types/serialport package
 import SerialPort from "serialport";
 
-export = SerialPort;
+class CorrectSerialPort extends SerialPort {
+  static Binding: typeof SerialPort.BaseBinding;
+}
+
+export = CorrectSerialPort;

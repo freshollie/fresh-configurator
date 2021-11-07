@@ -1,7 +1,7 @@
 const WebpackBar = require("webpackbar");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
-const { ignoreWarnings } = require("./shared");
+const { ignoreWarnings, externals } = require("./shared");
 const tsconfig = require("../tsconfig.json");
 
 module.exports = (_, { mode }) => ({
@@ -13,6 +13,10 @@ module.exports = (_, { mode }) => ({
   target: "electron11.1-main",
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
+  },
+  externals: {
+    bufferutil: "commonjs bufferutil",
+    ...externals,
   },
   ignoreWarnings: ignoreWarnings(mode),
   node: {

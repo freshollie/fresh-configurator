@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { ApolloProvider } from "@apollo/client";
+import { ApolloClient, ApolloProvider } from "@apollo/client";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { Box, Provider as BumbagProvider } from "bumbag";
 import App from "./App";
-import client from "./gql/client";
+import { createClient } from "./gql/client";
 import theme from "./theme";
 import OnPaintNotifier from "./OnPaintNotifier";
+import FullScreenSpinner from "./components/FullScreenSpinner";
 
-const Fallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => (
+const Fallback: React.FC<FallbackProps> = ({ error }) => (
   <div
     role="alert"
     style={{
@@ -22,9 +23,8 @@ const Fallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => (
     <pre>{error.stack}</pre>
     <button
       type="button"
-      onClick={async () => {
-        await client.resetStore();
-        resetErrorBoundary();
+      onClick={() => {
+        window.location.reload();
       }}
     >
       Reload
@@ -32,17 +32,29 @@ const Fallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => (
   </div>
 );
 
+const ApolloLoader: React.FC = ({ children }) => {
+  const [client, setClient] = useState<ApolloClient<unknown>>();
+  useEffect(() => {
+    createClient().then(setClient);
+  }, []);
+
+  if (!client) {
+    return <FullScreenSpinner text="Loading backend" />;
+  }
+  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <ErrorBoundary FallbackComponent={Fallback}>
-      <ApolloProvider client={client}>
-        <OnPaintNotifier channel="paint" />
-        <BumbagProvider theme={theme} colorMode="light">
-          <Box minHeight="100vh">
+      <BumbagProvider theme={theme} colorMode="light">
+        <Box minHeight="100vh">
+          <ApolloLoader>
+            <OnPaintNotifier channel="paint" />
             <App />
-          </Box>
-        </BumbagProvider>
-      </ApolloProvider>
+          </ApolloLoader>
+        </Box>
+      </BumbagProvider>
     </ErrorBoundary>
   </React.StrictMode>,
   document.getElementById("app")
