@@ -6,6 +6,7 @@ import { Box, Provider as BumbagProvider } from "bumbag";
 import App from "./App";
 import client from "./gql/client";
 import theme from "./theme";
+import OnPaintNotifier from "./OnPaintNotifier";
 
 const Fallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => (
   <div
@@ -35,6 +36,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ErrorBoundary FallbackComponent={Fallback}>
       <ApolloProvider client={client}>
+        <OnPaintNotifier channel="paint" />
         <BumbagProvider theme={theme} colorMode="light">
           <Box minHeight="100vh">
             <App />

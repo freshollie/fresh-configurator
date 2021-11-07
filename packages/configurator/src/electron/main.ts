@@ -123,8 +123,8 @@ const createWindow = (): void => {
     });
   }
 
-  // Don't show until we are ready and loaded
-  mainWindow.webContents.once("dom-ready", async () => {
+  // Don't show until we react has fully loaded
+  ipcMain.once("paint", async () => {
     if (process.env.HEADLESS !== "true") {
       mainWindow?.show();
     }
