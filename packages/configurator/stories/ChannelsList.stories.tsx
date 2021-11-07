@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ChannelsList from "../src/components/ChannelsList";
+import ChannelsList from "../src/renderer/components/ChannelsList";
 import requestInterval from "./helpers/request-interval";
 
 export default {

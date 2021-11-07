@@ -1,8 +1,8 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import React from "react";
-import { ConnectionContext } from "../src/context/ConnectionProvider";
-import { gql } from "../src/gql/apollo";
-import MotorIdleSpeedManager from "../src/managers/MotorIdleSpeedManager";
+import { ConnectionContext } from "../src/renderer/context/ConnectionProvider";
+import { gql } from "../src/renderer/gql/apollo";
+import MotorIdleSpeedManager from "../src/renderer/managers/MotorIdleSpeedManager";
 
 export default {
   title: "Managers/Motor Idle Speed",

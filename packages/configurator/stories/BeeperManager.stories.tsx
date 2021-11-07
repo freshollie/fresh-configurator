@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Beepers } from "@betaflight/api";
 import React from "react";
-import { ConnectionContext } from "../src/context/ConnectionProvider";
-import BeeperManager from "../src/managers/BeeperManager";
+import { ConnectionContext } from "../src/renderer/context/ConnectionProvider";
+import BeeperManager from "../src/renderer/managers/BeeperManager";
 
 export default {
   title: "Managers/Beeper",

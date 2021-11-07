@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BoardAligner from "../src/components/BoardAligner";
+import BoardAligner from "../src/renderer/components/BoardAligner";
 
 export default {
   title: "Components/Board Aligner",

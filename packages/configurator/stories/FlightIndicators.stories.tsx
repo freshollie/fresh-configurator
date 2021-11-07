@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Attitude from "../src/flightindicators/Attitude";
-import Heading from "../src/flightindicators/Heading";
-import Variometer from "../src/flightindicators/Variometer";
-import Airspeed from "../src/flightindicators/Airspeed";
-import Altimeter from "../src/flightindicators/Altimeter";
+import Attitude from "../src/renderer/flightindicators/Attitude";
+import Heading from "../src/renderer/flightindicators/Heading";
+import Variometer from "../src/renderer/flightindicators/Variometer";
+import Airspeed from "../src/renderer/flightindicators/Airspeed";
+import Altimeter from "../src/renderer/flightindicators/Altimeter";
 import requestInterval from "./helpers/request-interval";
 
 export default {
