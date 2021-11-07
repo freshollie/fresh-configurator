@@ -1,9 +1,9 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Sensors } from "@betaflight/api";
 import React from "react";
-import { ConnectionContext } from "../src/context/ConnectionProvider";
-import { gql } from "../src/gql/apollo";
-import SensorsListProvider from "../src/providers/SensorListProvider";
+import { ConnectionContext } from "../src/renderer/context/ConnectionProvider";
+import { gql } from "../src/renderer/gql/apollo";
+import SensorsListProvider from "../src/renderer/providers/SensorListProvider";
 
 export default {
   title: "Providers / Sensor List",

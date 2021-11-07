@@ -20,13 +20,13 @@ generates:
     config:
       includeDirectives: true
 
-  ./packages/configurator/src/gql/__generated__/introspection.json:
+  ./packages/configurator/src/renderer/gql/__generated__/introspection.json:
     plugins:
       - introspection
     config:
       module: es2015
 
-  ./packages/configurator/src/gql/__generated__/schema.tsx:
+  ./packages/configurator/src/renderer/gql/__generated__/schema.tsx:
     config:
       contextType: ../apollo#ApolloContext
       immutableTypes: true
@@ -34,7 +34,7 @@ generates:
       - typescript
       - typescript-resolvers
 
-  ./packages/configurator/src/gql/__generated__/tag/:
+  ./packages/configurator/src/renderer/gql/__generated__/tag/:
     documents:
       - "./packages/configurator/{src,stories}/**/*.{ts,tsx}":
           noRequire: true

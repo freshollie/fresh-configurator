@@ -1,5 +1,5 @@
 import React from "react";
-import FlightController from "../src/components/FlightController";
+import FlightController from "../src/renderer/components/FlightController";
 
 export default {
   title: "Components/FlightController Diagram",

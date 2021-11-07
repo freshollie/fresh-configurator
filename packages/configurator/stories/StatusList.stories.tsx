@@ -1,5 +1,5 @@
 import React from "react";
-import StatusList from "../src/components/StatusList";
+import StatusList from "../src/renderer/components/StatusList";
 
 export default {
   component: StatusList,

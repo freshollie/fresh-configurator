@@ -11,7 +11,7 @@ const { ignoreWarnings, externals } = require("./shared");
 module.exports = (_, { mode }) => ({
   target: "es2020",
   mode: mode || "development",
-  entry: "./src/index.tsx",
+  entry: "./src/renderer/index.tsx",
   watchOptions: {
     ignored: ["build/**/*"],
   },
@@ -89,7 +89,7 @@ module.exports = (_, { mode }) => ({
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/renderer/index.html",
     }),
     // Only typecheck in production
     new ForkTsCheckerWebpackPlugin({

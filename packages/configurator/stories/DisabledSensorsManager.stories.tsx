@@ -1,9 +1,9 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { Sensors } from "@betaflight/api";
 import React from "react";
-import { ConnectionContext } from "../src/context/ConnectionProvider";
-import { gql } from "../src/gql/apollo";
-import DisabledSensorManager from "../src/managers/DisabledSensorManager";
+import { ConnectionContext } from "../src/renderer/context/ConnectionProvider";
+import { gql } from "../src/renderer/gql/apollo";
+import DisabledSensorManager from "../src/renderer/managers/DisabledSensorManager";
 
 export default {
   title: "Managers/Disabled Sensor",

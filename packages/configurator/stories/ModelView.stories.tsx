@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "bumbag";
-import ModelView from "../src/components/ModelView";
-import { ModelTypes } from "../src/components/Model";
+import ModelView from "../src/renderer/components/ModelView";
+import { ModelTypes } from "../src/renderer/components/Model";
 import requestInterval from "./helpers/request-interval";
 
 export default {
