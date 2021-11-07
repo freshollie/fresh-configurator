@@ -9,7 +9,7 @@ import {
 } from "@apollo/client/core";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 import { deserializeError } from "serialize-error";
-import { SerializableGraphQLRequest } from "../../types";
+import { SerializableGraphQLRequest } from "../../../shared/types";
 
 export type ApolloIpcLinkOptions = {
   channel?: string;

@@ -71,7 +71,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     { initialiseSerialBackend },
     { default: WSABinding },
   ] = await Promise.all([
-    import("../shared/SchemaLink"),
+    import("../../shared/SchemaLink"),
     import("@betaflight/api-graph"),
     import("@betaflight/api"),
     import("serialport-binding-webserialapi"),

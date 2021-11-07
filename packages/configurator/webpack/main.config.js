@@ -7,8 +7,8 @@ const tsconfig = require("../tsconfig.json");
 module.exports = (_, { mode }) => ({
   mode: mode || "development",
   entry: {
-    main: "./src/electron/main.ts",
-    preload: "./src/electron/preload.ts",
+    main: "./src/main/index.ts",
+    preload: "./src/main/preload.ts",
   },
   target: "electron11.1-main",
   resolve: {

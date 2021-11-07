@@ -6,7 +6,7 @@ import {
 } from "@apollo/client/core";
 import { serializeError } from "serialize-error";
 import type { IpcMain, IpcMainEvent } from "electron";
-import { SerializableGraphQLRequest } from "../types";
+import { SerializableGraphQLRequest } from "../shared/types";
 
 type IpcExecutorOptions = {
   link: ApolloLink;
