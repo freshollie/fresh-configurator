@@ -9,7 +9,6 @@
 
 import SerialPort from "@serialport/stream";
 import debug from "debug";
-import { AbstractBinding } from "@serialport/bindings";
 import MspDataView from "./dataview";
 import { MspMessage, MspParser } from "./parser";
 import { encodeMessageV2, encodeMessageV1 } from "./encoders";
@@ -27,7 +26,7 @@ import {
 // can import this library without the bindings needing to be available
 // at import time
 export const initialiseSerialBackend = async (
-  bindings?: AbstractBinding
+  bindings?: typeof SerialPort["Binding"]
 ): Promise<void> => {
   const { default: Binding } = !bindings
     ? await import("@serialport/bindings")

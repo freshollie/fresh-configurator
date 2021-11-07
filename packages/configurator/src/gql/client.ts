@@ -8,6 +8,7 @@ import {
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
+import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
 
@@ -53,7 +54,6 @@ export const artifactsAddress =
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
   if (window.ipcRenderer) {
-    const { default: IpcLink } = await import("./links/IpcLink");
     return new IpcLink({ ipc: window.ipcRenderer });
   }
 
@@ -65,15 +65,25 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     });
   }
 
-  const { createSchemaLink } = await import("../shared/SchemaLink");
-  const { schema, mockedDeviceContext, context, startMockDevice } =
-    await import("@betaflight/api-graph");
+  const [
+    { createSchemaLink },
+    { schema, mockedDeviceContext, context, startMockDevice },
+    { initialiseSerialBackend },
+    { default: WSABinding },
+  ] = await Promise.all([
+    import("../shared/SchemaLink"),
+    import("@betaflight/api-graph"),
+    import("@betaflight/api"),
+    import("serialport-binding-webserialapi"),
+  ]);
 
   const mocked = searchParams.get("mocked");
 
   if (mocked) {
     startMockDevice();
   }
+
+  await initialiseSerialBackend(WSABinding);
 
   return createSchemaLink({
     schema,

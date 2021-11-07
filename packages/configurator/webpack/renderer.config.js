@@ -1,15 +1,15 @@
-const { DefinePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const WebpackBar = require("webpackbar");
 const { spawn } = require("child_process");
 const tsconfig = require("../tsconfig.json");
-const { ignoreWarnings } = require("./shared");
+const { ignoreWarnings, externals } = require("./shared");
 
 module.exports = (_, { mode }) => ({
-  target: "es2019",
+  target: "es2020",
   mode: mode || "development",
   entry: "./src/index.tsx",
   watchOptions: {
@@ -19,19 +19,11 @@ module.exports = (_, { mode }) => ({
     extensions: [".ts", ".tsx", ".mjs", ".js"],
     fallback: {
       fs: require.resolve("memfs"),
-      assert: require.resolve("assert/"),
-      buffer: require.resolve("buffer/"),
-      events: require.resolve("events/"),
-      url: require.resolve("url/"),
-      process: require.resolve("process/browser"),
-      stream: false,
-      util: false,
-      path: false,
-      tty: false,
     },
   },
   externals: {
     "@serialport/bindings": "commonjs @serialport/bindings",
+    ...externals,
   },
   module: {
     rules: [
@@ -83,7 +75,8 @@ module.exports = (_, { mode }) => ({
   output: {
     path: `${__dirname}/../build`,
     filename: "[name].renderer.js",
-    chunkFormat: "commonjs",
+    chunkFormat: "array-push",
+    chunkLoading: "jsonp",
   },
   optimization: {
     minimize: mode === "production",
@@ -126,10 +119,7 @@ module.exports = (_, { mode }) => ({
           }),
         ]
       : []),
-    // Bumbag seems to require a "process" object exists
-    new DefinePlugin({
-      process: { env: {} },
-    }),
+    new NodePolyfillPlugin(),
   ],
   devtool: mode === "production" ? "inline-source-map" : "source-map",
   ignoreWarnings: ignoreWarnings(mode),
