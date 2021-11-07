@@ -91,6 +91,12 @@ const resolvers: Resolvers = {
     jobs: (_, { ofType }, { jobs }) =>
       jobs.all().filter((job) => (ofType ? job.type === ofType : true)),
   },
+  JobDetails: {
+    artifact: async ({ artifact }, _, { transmitArtifactData, artifacts }) =>
+      transmitArtifactData && artifact
+        ? artifacts.readArtifact(artifact, "base64")
+        : artifact ?? null,
+  },
 };
 
 export default {

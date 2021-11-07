@@ -106,7 +106,11 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
             <a
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...ButtonProps}
-              href={`${artifactsAddress}/${downloaded.artifact}`}
+              href={
+                window.ipcRenderer
+                  ? `${artifactsAddress}/${downloaded.artifact}`
+                  : `data:application/octet-stream;base64,${downloaded.artifact}`
+              }
               download
             >
               Save

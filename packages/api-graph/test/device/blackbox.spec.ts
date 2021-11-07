@@ -566,7 +566,7 @@ describe("device.blackbox", () => {
 
       expect(errors).toMatchInlineSnapshot(`
 Array [
-  [GraphQLError: Artifacts directory (/artifacts) is not a directory],
+  [GraphQLError: Could not create artifacts directory: ENOTDIR: not a directory, mkdir '/artifacts'],
 ]
 `);
     });

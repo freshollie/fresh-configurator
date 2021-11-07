@@ -1,7 +1,6 @@
 import { GraphQLError } from "graphql";
 import gql from "graphql-tag";
 import * as uuid from "uuid";
-import fs from "fs";
 import debug from "debug";
 import { format } from "date-fns";
 import { Resolvers, JobType } from "../../../__generated__";
@@ -92,7 +91,7 @@ const resolvers: Resolvers = {
     createFlashDataOffloadJob: async (
       _,
       { connectionId, chunkSize },
-      { connections, jobs, api, artifactsDir }
+      { connections, jobs, api, artifacts }
     ) => {
       const port = connections.getPort(connectionId);
       const [{ usedSize, ready }, variant, name] = await Promise.all([
@@ -106,21 +105,6 @@ const resolvers: Resolvers = {
 
       const jobId = uuid.v4();
 
-      await fs.promises
-        .mkdir(artifactsDir)
-        .catch((e: { code?: string } & Error) => {
-          if (e.code !== "EEXIST") {
-            throw new GraphQLError(
-              `Could not create artifacts directory: ${e.message}`
-            );
-          }
-        });
-      if (!(await fs.promises.lstat(artifactsDir)).isDirectory()) {
-        throw new GraphQLError(
-          `Artifacts directory (${artifactsDir}) is not a directory`
-        );
-      }
-
       const now = new Date();
       const artifact = `${[
         "blackbox_log",
@@ -133,8 +117,7 @@ const resolvers: Resolvers = {
         .filter((s) => s !== "")
         .join("_")}.bbl`;
 
-      const offloadFilePath = `${artifactsDir}/${artifact}`;
-      const offloadFile = await fs.promises.open(offloadFilePath, "w");
+      const offloadFile = await artifacts.open(artifact, "w");
       log(
         `Created flash data offload job: ${jobId}. Expecting to read ${usedSize}`
       );
@@ -196,7 +179,7 @@ const resolvers: Resolvers = {
         if (!error && !cancelled) {
           jobs.completed(jobId, { artifact });
         } else {
-          await fs.promises.unlink(offloadFilePath).catch((e) => {
+          await artifacts.delete(artifact).catch((e) => {
             log(`Error removing file after error: ${e.message}`);
           });
 

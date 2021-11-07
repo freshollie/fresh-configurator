@@ -89,6 +89,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     schema,
     context: (mocked ? mockedDeviceContext : context)({
       artifactsDir: "/",
+      transmitArtifactData: true,
     }),
   });
 };
