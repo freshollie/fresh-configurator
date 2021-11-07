@@ -124,7 +124,7 @@ module.exports = (_, { mode }) => ({
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
     onBeforeSetupMiddleware() {
-      spawn("electron", [`${__dirname}/../build/main.js`], {
+      spawn("electron", [`${__dirname}/../build/main/main.js`], {
         shell: true,
         env: {
           NODE_ENV: "development",
