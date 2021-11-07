@@ -119,7 +119,7 @@ const createWindow = (): void => {
     );
   } else {
     console.log("loading renderer");
-    mainWindow.loadFile(path.join(__dirname, "index.html"), {
+    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"), {
       search: searchQuery,
     });
   }

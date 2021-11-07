@@ -73,8 +73,7 @@ module.exports = (_, { mode }) => ({
     ],
   },
   output: {
-    path: `${__dirname}/../build`,
-    filename: "[name].renderer.js",
+    path: `${__dirname}/../build/renderer`,
     chunkFormat: "array-push",
     chunkLoading: "jsonp",
   },
