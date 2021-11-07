@@ -1,8 +1,8 @@
 import { useLocation } from "wouter";
 import React, { createContext, useEffect, useRef, useState } from "react";
-import { Flex, Spinner, Box, Text, Set } from "bumbag";
 import { gql, useMutation, useSubscription } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
+import FullScreenSpinner from "../components/FullScreenSpinner";
 
 export const ConnectionContext = createContext("");
 
@@ -109,21 +109,7 @@ const ConnectionProvider: React.FC = ({ children }) => {
   }, [error, log, setLocation, disableArming, connectionId]);
 
   if (!connectionId || disconnecting || !connected) {
-    return (
-      <Flex
-        width="100%"
-        height="100vh"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Box>
-          <Set>
-            <Text>Configuring connection</Text>
-            <Spinner size="large" />
-          </Set>
-        </Box>
-      </Flex>
-    );
+    return <FullScreenSpinner text="Configuring connection" />;
   }
 
   return (

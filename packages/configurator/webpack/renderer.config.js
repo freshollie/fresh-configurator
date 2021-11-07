@@ -9,7 +9,7 @@ const tsconfig = require("../tsconfig.json");
 const { ignoreWarnings } = require("./shared");
 
 module.exports = (_, { mode }) => ({
-  target: "es2018",
+  target: "es2019",
   mode: mode || "development",
   entry: "./src/index.tsx",
   watchOptions: {
@@ -18,6 +18,12 @@ module.exports = (_, { mode }) => ({
   resolve: {
     extensions: [".ts", ".tsx", ".mjs", ".js"],
     fallback: {
+      fs: require.resolve("memfs"),
+      assert: require.resolve("assert/"),
+      buffer: require.resolve("buffer/"),
+      events: require.resolve("events/"),
+      url: require.resolve("url/"),
+      process: require.resolve("process/browser"),
       stream: false,
       util: false,
       path: false,
@@ -76,8 +82,8 @@ module.exports = (_, { mode }) => ({
   },
   output: {
     path: `${__dirname}/../build`,
-    filename: "renderer.js",
-    chunkFormat: "array-push",
+    filename: "[name].renderer.js",
+    chunkFormat: "commonjs",
   },
   optimization: {
     minimize: mode === "production",
