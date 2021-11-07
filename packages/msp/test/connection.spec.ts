@@ -1,5 +1,5 @@
 import MockBinding from "@serialport/binding-mock";
-import binding, { AbstractBinding } from "@serialport/bindings";
+import binding from "@serialport/bindings";
 import SerialPort from "@serialport/stream";
 import flushPromises from "flush-promises";
 import { initialiseSerialBackend, raw, reset } from "../src/connection";
@@ -483,7 +483,7 @@ describe("initialiseSerialBackend", () => {
   it("should set the serial port bindings to the provided bindings", () => {
     initialiseSerialBackend({
       myBindings: "yay",
-    } as unknown as AbstractBinding);
+    } as unknown as typeof SerialPort["Binding"]);
     expect(SerialPort.Binding).toEqual({ myBindings: "yay" });
   });
 });
