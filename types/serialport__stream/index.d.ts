@@ -2,7 +2,7 @@
 // with the @types/serialport package
 import SerialPort from "serialport";
 
-class CorrectSerialPort extends Omit<SerialPort, "Binding"> {
+class CorrectSerialPort extends SerialPort {
   static Binding: typeof SerialPort.BaseBinding;
 }
 
