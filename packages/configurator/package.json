@@ -1,7 +1,7 @@
 {
   "name": "@betaflight/configurator",
   "version": "0.5.2",
-  "main": "./build/main.js",
+  "main": "./build/main/main.js",
   "license": "MIT",
   "repository": "https://github.com/freshollie/fresh-configurator.git",
   "private": true,
@@ -32,7 +32,10 @@
     },
     "files": [
       "!**/*",
-      "./build/*"
+      "./build/main/*",
+      "./build/renderer/*",
+      "!./build/renderer/*.js",
+      "./build/renderer/main.js"
     ],
     "npmRebuild": false,
     "directories": {

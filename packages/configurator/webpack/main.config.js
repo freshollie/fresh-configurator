@@ -51,7 +51,7 @@ module.exports = (_, { mode }) => ({
     ],
   },
   output: {
-    path: `${__dirname}/../build`,
+    path: `${__dirname}/../build/main`,
     chunkFormat: "commonjs",
   },
   optimization: {
