@@ -10,27 +10,29 @@ export type Context = {
   jobs: typeof jobs;
   port: string;
   artifacts: ArtifactsApi;
-  transmitArtifactData: boolean;
 };
 
-type Options = { artifactsDir: string; transmitArtifactData?: boolean };
-export const mockedContext =
-  ({ artifactsDir, transmitArtifactData }: Options) =>
-  (): Context => ({
+type ContextFunc = () => Context;
+
+type Options = { artifactsDir: string };
+export const mockedContext = ({ artifactsDir }: Options): ContextFunc => {
+  const artifacts = createArtifactsApi(artifactsDir);
+  return () => ({
     api: mockedApi,
     connections,
     jobs,
     port: "",
-    artifacts: createArtifactsApi(artifactsDir),
-    transmitArtifactData: transmitArtifactData ?? false,
+    artifacts,
   });
+};
 
-export default ({ artifactsDir, transmitArtifactData }: Options) =>
-  (): Context => ({
+export default ({ artifactsDir }: Options): ContextFunc => {
+  const artifacts = createArtifactsApi(artifactsDir);
+  return () => ({
     api,
     connections,
     port: "",
     jobs,
-    artifacts: createArtifactsApi(artifactsDir),
-    transmitArtifactData: transmitArtifactData ?? false,
+    artifacts,
   });
+};

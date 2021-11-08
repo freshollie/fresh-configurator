@@ -32,11 +32,9 @@ const getOperationName = (document: DocumentNode): string | undefined =>
 
 export const createExecutor = ({
   artifactsDirectory = `${__dirname}/../artifacts`,
-  transmitArtifactData = false,
 } = {}): Executor => {
   const contextGenerator = context({
     artifactsDir: artifactsDirectory,
-    transmitArtifactData,
   });
   const executeQuery: QueryFunction = ({ query, variables }) => {
     const args: ExecutionArgs = {

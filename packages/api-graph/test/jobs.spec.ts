@@ -16,6 +16,8 @@ describe("jobs", () => {
     jobs.completed("bcd", { artifact: "test.png" });
 
     const client = createExecutor();
+    await client.context.artifacts.writeArtifact("test.png", "my data");
+
     const { data, errors } = await client.query({
       query: gql`
         query {
@@ -30,7 +32,10 @@ describe("jobs", () => {
             type
             progress
             createdAt
-            artifact
+            artifact {
+              id
+              data
+            }
             connectionId
           }
         }
@@ -60,7 +65,10 @@ describe("jobs", () => {
         completed: true,
         error: null,
         type: JobType.Offload,
-        artifact: "test.png",
+        artifact: {
+          id: "test.png",
+          data: Buffer.from("my data").toString("base64"),
+        },
         createdAt: expect.any(String),
         connectionId: null,
       },
@@ -92,7 +100,10 @@ describe("jobs", () => {
             type
             progress
             createdAt
-            artifact
+            artifact {
+              id
+              data
+            }
           }
         }
       `,
@@ -109,35 +120,6 @@ describe("jobs", () => {
         type: JobType.General,
         artifact: null,
         createdAt: expect.any(String),
-      },
-    ]);
-  });
-
-  it("should return the jobs artifact as base64 if transmitArtifactData is in the context", async () => {
-    jobs.add("abc", JobType.Offload);
-
-    const client = createExecutor({ transmitArtifactData: true });
-    await client.context.artifacts.writeArtifact("someartifact.bbl", "my data");
-
-    jobs.completed("abc", { artifact: "someartifact.bbl" });
-    const { data, errors } = await client.query({
-      query: gql`
-        query {
-          jobs(ofType: OFFLOAD) {
-            id
-            type
-            artifact
-          }
-        }
-      `,
-    });
-
-    expect(errors).toBeFalsy();
-    expect(data?.jobs).toEqual([
-      {
-        id: "abc",
-        type: JobType.Offload,
-        artifact: Buffer.from("my data").toString("base64"),
       },
     ]);
   });

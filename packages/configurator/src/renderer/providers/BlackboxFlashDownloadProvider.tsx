@@ -15,6 +15,7 @@ import { JobType } from "../gql/__generated__/schema";
 import useConnection from "../hooks/useConnection";
 import useJobs from "../hooks/useJobs";
 import useRate from "../hooks/useRate";
+import { isElectron } from "../util";
 
 const BlackboxFlashDownloadProvider: React.FC = () => {
   const connection = useConnection();
@@ -44,7 +45,10 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
     }
   );
 
-  const { jobs } = useJobs({ ofType: JobType.Offload });
+  const { jobs } = useJobs({
+    ofType: JobType.Offload,
+    fetchArtifactData: !isElectron,
+  });
 
   const downloadJob = jobs.find(
     ({ completed, connectionId }) => !completed && connectionId === connection
@@ -80,7 +84,7 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
   );
 
   const ButtonProps = Button.useProps();
-  if (downloaded) {
+  if (downloaded?.artifact) {
     return (
       <Callout.Overlay
         fade
@@ -100,18 +104,18 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
             <Callout.Title>Download complete</Callout.Title>
           </Callout.Header>
           <Callout.Content>
-            <Text>{downloaded.artifact}</Text>
+            <Text>{downloaded.artifact.id}</Text>
           </Callout.Content>
           <Callout.Footer>
             <a
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...ButtonProps}
               href={
-                window.ipcRenderer
-                  ? `${artifactsAddress}/${downloaded.artifact}`
-                  : `data:application/octet-stream;base64,${downloaded.artifact}`
+                downloaded.artifact.data
+                  ? `data:application/octet-stream;base64,${downloaded.artifact.data}`
+                  : `${artifactsAddress}/${downloaded.artifact.id}`
               }
-              download
+              download={downloaded.artifact.id}
             >
               Save
             </a>
