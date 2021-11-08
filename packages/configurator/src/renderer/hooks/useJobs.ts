@@ -1,19 +1,19 @@
 import { useEffect, useMemo } from "react";
 import { gql, useQuery } from "../gql/apollo";
-import {
-  JobDetails,
-  JobType,
-  JobUpdateType,
-} from "../gql/__generated__/schema";
+import { JobType, JobUpdateType } from "../gql/__generated__/schema";
 
+// Codegen makes a good set of return values here
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default ({
   ofType,
+  fetchArtifactData = false,
 }: {
   ofType?: JobType;
-}): { loading: boolean; jobs: readonly JobDetails[] } => {
+  fetchArtifactData?: boolean;
+}) => {
   const { data, subscribeToMore, loading } = useQuery(
     gql(/* GraphQL */ `
-      query Jobs($ofType: JobType) {
+      query Jobs($ofType: JobType, $fetchData: Boolean!) {
         jobs(ofType: $ofType) {
           id
           connectionId
@@ -25,7 +25,10 @@ export default ({
           cancelled
           type
           createdAt
-          artifact
+          artifact {
+            id
+            data @include(if: $fetchData)
+          }
         }
       }
     `),
@@ -33,6 +36,7 @@ export default ({
       fetchPolicy: "cache-and-network",
       variables: {
         ofType,
+        fetchData: fetchArtifactData,
       },
     }
   );
@@ -41,7 +45,7 @@ export default ({
     () =>
       subscribeToMore({
         document: gql(/* GraphQL */ `
-          subscription JobUpdates($ofType: JobType) {
+          subscription JobUpdates($ofType: JobType, $fetchData: Boolean!) {
             jobUpdates(ofType: $ofType) {
               type
               details {
@@ -55,7 +59,10 @@ export default ({
                 cancelled
                 type
                 connectionId
-                artifact
+                artifact {
+                  id
+                  data @include(if: $fetchData)
+                }
                 createdAt
               }
             }
@@ -63,6 +70,7 @@ export default ({
         `),
         variables: {
           ofType,
+          fetchData: fetchArtifactData,
         },
         updateQuery: (prev, { subscriptionData }) => {
           switch (subscriptionData.data.jobUpdates.type) {
@@ -94,7 +102,7 @@ export default ({
           }
         },
       }),
-    [subscribeToMore, ofType]
+    [subscribeToMore, ofType, fetchArtifactData]
   );
 
   return useMemo(() => ({ loading, jobs: data?.jobs ?? [] }), [data, loading]);

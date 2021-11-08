@@ -15,7 +15,11 @@ type JobDetails = {
   error?: JobError;
   progress: number;
   cancelled: boolean;
-  artifact?: string;
+  artifact?: {
+    id: string;
+    // Unused, will be filled by resolvers
+    data: string;
+  };
   createdAt: string;
 };
 
@@ -91,6 +95,10 @@ export const completed = (
       ...jobDetails,
       completed: true,
       ...params,
+      artifact: params?.artifact
+        ? // Filled by resolvers
+          { id: params.artifact, data: "" }
+        : undefined,
     };
     jobs[jobId] = updatedDetails;
     updatedEvents.publish("updated", {

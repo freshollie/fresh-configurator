@@ -32,3 +32,5 @@ export const versionInfo = (): VersionInfo => ({
   ),
   version,
 });
+
+export const isElectron = !!window.ipcRenderer;

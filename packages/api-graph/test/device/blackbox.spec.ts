@@ -321,7 +321,10 @@ describe("device.blackbox", () => {
 
       const job = details(jobId);
       expect(job).toEqual({
-        artifact: expect.any(String),
+        artifact: {
+          id: expect.any(String),
+          data: "",
+        },
         cancelled: false,
         completed: true,
         connectionId: "fsu9dfgjkhdsfgk",
@@ -358,7 +361,7 @@ describe("device.blackbox", () => {
       expect(mockApi.isOpen).toHaveBeenCalledWith("/dev/thedevice");
 
       expect(
-        await fs.promises.readFile(`${artifactsDirectory}/${job?.artifact}`)
+        await fs.promises.readFile(`${artifactsDirectory}/${job?.artifact?.id}`)
       ).toEqual(Buffer.from(new Array(4096).fill(1)));
     });
 
@@ -394,7 +397,10 @@ describe("device.blackbox", () => {
 
       const job = details(jobId);
       expect(job).toEqual({
-        artifact: expect.any(String),
+        artifact: {
+          id: expect.any(String),
+          data: "",
+        },
         cancelled: false,
         completed: true,
         connectionId: "fsu9dfgjkhdsfgk",
@@ -413,7 +419,7 @@ describe("device.blackbox", () => {
       expect(mockApi.readDataFlashChunk).toHaveBeenCalledTimes(2);
 
       expect(
-        await fs.promises.readFile(`${artifactsDirectory}/${job?.artifact}`)
+        await fs.promises.readFile(`${artifactsDirectory}/${job?.artifact?.id}`)
       ).toEqual(Buffer.from(new Array(512).fill(1)));
     });
 
@@ -566,7 +572,7 @@ describe("device.blackbox", () => {
 
       expect(errors).toMatchInlineSnapshot(`
 Array [
-  [GraphQLError: Artifacts directory (/artifacts) is not a directory],
+  [GraphQLError: Could not create artifacts directory: ENOTDIR: not a directory, mkdir '/artifacts'],
 ]
 `);
     });

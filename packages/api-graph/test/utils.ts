@@ -7,6 +7,7 @@ import {
   OperationDefinitionNode,
 } from "graphql";
 import { context, schema } from "../src";
+import { Context } from "../src/context";
 
 export type PromiseOrValue<T> = Promise<T> | T;
 
@@ -21,6 +22,7 @@ type MutationFunction = (args: MutationArgs) => ReturnType<QueryFunction>;
 type Executor = {
   query: QueryFunction;
   mutate: MutationFunction;
+  context: Context;
 };
 
 const getOperationName = (document: DocumentNode): string | undefined =>
@@ -31,7 +33,9 @@ const getOperationName = (document: DocumentNode): string | undefined =>
 export const createExecutor = ({
   artifactsDirectory = `${__dirname}/../artifacts`,
 } = {}): Executor => {
-  const contextGenerator = context({ artifactsDir: artifactsDirectory });
+  const contextGenerator = context({
+    artifactsDir: artifactsDirectory,
+  });
   const executeQuery: QueryFunction = ({ query, variables }) => {
     const args: ExecutionArgs = {
       schema,
@@ -48,5 +52,6 @@ export const createExecutor = ({
     query: executeQuery,
     mutate: ({ mutation, variables }) =>
       executeQuery({ query: mutation, variables }),
+    context: contextGenerator(),
   };
 };

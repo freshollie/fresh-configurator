@@ -46,9 +46,14 @@ const typeDefs = gql`
     error: JobError
     completed: Boolean!
     cancelled: Boolean!
-    artifact: String
+    artifact: JobArtifact
     type: JobType!
     connectionId: String
+  }
+
+  type JobArtifact {
+    id: String!
+    data: String!
   }
 
   type JobError {
@@ -90,6 +95,10 @@ const resolvers: Resolvers = {
     },
     jobs: (_, { ofType }, { jobs }) =>
       jobs.all().filter((job) => (ofType ? job.type === ofType : true)),
+  },
+  JobArtifact: {
+    data: async ({ id }, _, { artifacts }) =>
+      artifacts.readArtifact(id, "base64"),
   },
 };
 
