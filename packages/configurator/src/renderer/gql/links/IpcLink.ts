@@ -1,84 +1,37 @@
 /* eslint-disable functional/no-this-expression */
 /* eslint-disable functional/no-class */
-import {
-  ApolloLink,
-  Observable,
-  Operation,
-  FetchResult,
-  Observer,
-} from "@apollo/client/core";
-import type { IpcRenderer, IpcRendererEvent } from "electron";
-import { deserializeError } from "serialize-error";
-import { SerializableGraphQLRequest } from "../../../shared/types";
+import type { IpcRenderer } from "electron";
+import { IpcRendererEvent } from "electron/main";
+import { GraphqlMessageResponse } from "../../../shared/types";
+import MessengerLink from "./MessengerLink";
 
 export type ApolloIpcLinkOptions = {
   channel?: string;
   ipc: IpcRenderer;
 };
 
-export default class IpcLink extends ApolloLink {
+export default class IpcLink extends MessengerLink {
   private ipc: IpcRenderer;
-
-  private counter = 0;
 
   private channel = "graphql";
 
-  private observers: Map<string, Observer<FetchResult>> = new Map();
-
-  protected listener = (
-    event: IpcRendererEvent,
-    id: string,
-    type: "data" | "error" | "complete",
-    data: FetchResult
-  ): void => {
-    if (!this.observers.has(id)) {
-      return undefined;
-    }
-
-    const observer = this.observers.get(id);
-    switch (type) {
-      case "data":
-        return observer?.next?.(data);
-
-      case "error": {
-        this.observers.delete(id);
-        return observer?.error?.(deserializeError(data));
-      }
-
-      case "complete": {
-        this.observers.delete(id);
-        return observer?.complete?.();
-      }
-    }
-
-    return undefined;
-  };
-
   constructor(options: ApolloIpcLinkOptions) {
-    super();
+    super((message) => this.ipc.send(this.channel, message));
 
     this.ipc = options.ipc;
     if (typeof options.channel !== "undefined") {
       this.channel = options.channel;
     }
 
-    this.ipc.on(this.channel, this.listener);
+    this.ipc.on(this.channel, (_, response) => this.listener(response));
   }
 
-  public request(operation: Operation): Observable<FetchResult> {
-    return new Observable<FetchResult>((observer) => {
-      this.counter += 1;
-      const current = `${this.counter}`;
-      const request: SerializableGraphQLRequest = {
-        operationName: operation.operationName,
-        variables: operation.variables,
-        query: operation.query,
-      };
-
-      this.observers.set(current, observer);
-      this.ipc.send(this.channel, current, request);
-    });
-  }
+  private onResponse = (
+    event: IpcRendererEvent,
+    message: GraphqlMessageResponse
+  ): void => {
+    this.listener(message);
+  };
 
   public dispose(): void {
     this.ipc.removeListener(this.channel, this.listener);

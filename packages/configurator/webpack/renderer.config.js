@@ -111,12 +111,12 @@ module.exports = (_, { mode }) => ({
     }),
     ...(process.env.REPORT
       ? [
-          new BundleAnalyzerPlugin({
-            analyzerMode: "static",
-            reportFilename: "renderer-report.html",
-            openAnalyzer: false,
-          }),
-        ]
+        new BundleAnalyzerPlugin({
+          analyzerMode: "static",
+          reportFilename: "renderer-report.html",
+          openAnalyzer: false,
+        }),
+      ]
       : []),
     new NodePolyfillPlugin(),
   ],

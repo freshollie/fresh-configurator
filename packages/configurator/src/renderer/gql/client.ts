@@ -12,6 +12,7 @@ import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
 import config from "../config";
+import WebWorkerLink from "./links/WebWorkerLink";
 
 const typeDefs = schemaTypes`
   type Query {
@@ -65,30 +66,17 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     });
   }
 
-  const [
-    { createSchemaLink },
-    { schema, mockedDeviceContext, context, startMockDevice },
-    { initialiseSerialBackend },
-    { default: WSABinding },
-  ] = await Promise.all([
-    import("../../shared/SchemaLink"),
-    import("@betaflight/api-graph"),
-    import("@betaflight/api"),
-    import("serialport-binding-webserialapi"),
-  ]);
+  const worker = new Worker(
+    new URL("./worker/SchemaExecutor.worker.ts", import.meta.url)
+  );
+  const mocked = config.isMocked;
 
-  if (config.isMocked) {
-    startMockDevice();
-  }
-
-  await initialiseSerialBackend(WSABinding);
-
-  return createSchemaLink({
-    schema,
-    context: (config.isMocked ? mockedDeviceContext : context)({
-      artifactsDir: "/",
-    }),
+  worker.postMessage({ type: "init", mocked });
+  await new Promise((resolve) => {
+    worker.onmessage = resolve;
   });
+
+  return new WebWorkerLink(worker);
 };
 
 export const createClient = async (): Promise<
