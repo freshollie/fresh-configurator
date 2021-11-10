@@ -76,6 +76,7 @@ module.exports = (_, { mode }) => ({
     path: `${__dirname}/../build/renderer`,
     chunkFormat: "array-push",
     chunkLoading: "jsonp",
+    workerChunkLoading: "import-scripts",
   },
   optimization: {
     minimize: mode === "production",
@@ -111,12 +112,12 @@ module.exports = (_, { mode }) => ({
     }),
     ...(process.env.REPORT
       ? [
-        new BundleAnalyzerPlugin({
-          analyzerMode: "static",
-          reportFilename: "renderer-report.html",
-          openAnalyzer: false,
-        }),
-      ]
+          new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+            reportFilename: "renderer-report.html",
+            openAnalyzer: false,
+          }),
+        ]
       : []),
     new NodePolyfillPlugin(),
   ],

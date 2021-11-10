@@ -50,7 +50,9 @@ const Logs = gql(/* GraphQL */ `
 export const artifactsAddress =
   config.artifactsFolder ??
   `${
-    config.wsBackend?.replace("ws", "http") ?? "http://localhost:9000"
+    // Something about esbuild makes optional chaining not an option here :/
+    (config.wsBackend ? config.wsBackend.replace("ws", "http") : undefined) ??
+    "http://localhost:9000"
   }/job-artifacts`;
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
@@ -71,6 +73,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
   );
   const mocked = config.isMocked;
 
+  console.log("sending");
   worker.postMessage({ type: "init", mocked });
   await new Promise((resolve) => {
     worker.onmessage = resolve;
