@@ -1,3 +1,4 @@
+// EXECUTES IN A WEB WORKER
 /* eslint-disable no-restricted-globals */
 import {
   context,
@@ -7,12 +8,9 @@ import {
 } from "@betaflight/api-graph";
 import { initialiseSerialBackend } from "@betaflight/api";
 import WSABinding from "serialport-binding-webserialapi";
-import {
-  GraphqlMessageRequest,
-  GraphqlMessageResponse,
-} from "../../../shared/types";
-import { createMessageLinkHandler } from "../../../shared/MessageLinkServer";
-import { createSchemaExecutor } from "../../../shared/SchemaExecutor";
+import { GraphqlMessageRequest, GraphqlMessageResponse } from "../shared/types";
+import { createMessageLinkHandler } from "../shared/MessageLinkServer";
+import { createSchemaExecutor } from "../shared/SchemaExecutor";
 
 let messageHandler: ReturnType<typeof createMessageLinkHandler> | undefined;
 

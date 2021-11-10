@@ -68,17 +68,13 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     });
   }
 
-  const worker = new Worker(
-    new URL("./worker/SchemaExecutor.worker.ts", import.meta.url)
+  // Hack to get around ts-jest trying to compile `import.meta.url`
+  const { default: schemaExecutor } = await import(
+    "../../worker/SchemaExecutor.bootstrap"
   );
   const mocked = config.isMocked;
 
-  worker.postMessage({ type: "init", mocked });
-  // Wait for the response to mark as initialised
-  await new Promise((resolve) => {
-    worker.onmessage = resolve;
-  });
-
+  const worker = await schemaExecutor.initialise(mocked);
   return new WebWorkerLink(worker);
 };
 
