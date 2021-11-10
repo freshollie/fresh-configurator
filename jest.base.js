@@ -25,7 +25,7 @@ module.exports = {
       "!**/.storybook/**",
       // The boostrap worker files are not possible
       // to compile due to `import.meta.url`
-      "!**/src/workers/*.boostrap.{ts,tsx}",
+      "!**/src/workers/*.bootstrap.{ts,tsx}",
     ],
     modulePathIgnorePatterns: [
       "<rootDir>/e2e/",
