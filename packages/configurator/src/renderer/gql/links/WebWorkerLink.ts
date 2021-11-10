@@ -4,8 +4,11 @@ import MessengerLink from "./MessengerLink";
 
 export default class WebWorkerLink extends MessengerLink {
   constructor(worker: Worker) {
-    super(worker.postMessage);
+    super((message) => {
+      worker.postMessage(message);
+    });
 
+    // eslint-disable-next-line no-param-reassign
     worker.onmessage = (event) => this.listener(event.data);
   }
 }

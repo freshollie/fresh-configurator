@@ -73,8 +73,8 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
   );
   const mocked = config.isMocked;
 
-  console.log("sending");
   worker.postMessage({ type: "init", mocked });
+  // Wait for the response to mark as initialised
   await new Promise((resolve) => {
     worker.onmessage = resolve;
   });

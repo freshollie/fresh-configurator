@@ -37,13 +37,10 @@ self.onmessage = async (
 ) => {
   const { data: message } = event;
   if ("type" in message) {
-    console.log("Initialising", message.mocked);
     await createExecutor(message.mocked);
     self.postMessage("ready");
     return;
   }
-
-  console.log(event);
 
   messageHandler?.onMessage({
     request: message.request,

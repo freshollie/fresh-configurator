@@ -4,7 +4,7 @@ import {
   execute as executeLink,
 } from "@apollo/client/core";
 import { serializeError } from "serialize-error";
-import { GraphqlMessageTypes, SerializableGraphQLRequest } from "./types";
+import { GraphqlMessageType, SerializableGraphQLRequest } from "./types";
 
 // eslint-disable-next-line import/prefer-default-export
 export const createMessageLinkHandler = (
@@ -12,7 +12,7 @@ export const createMessageLinkHandler = (
 ): {
   onMessage: (params: {
     request: SerializableGraphQLRequest;
-    onResponse: (type: GraphqlMessageTypes, data?: FetchResult) => void;
+    onResponse: (type: GraphqlMessageType, data?: FetchResult) => void;
   }) => void;
 } => ({
   onMessage: ({ request, onResponse }) => {

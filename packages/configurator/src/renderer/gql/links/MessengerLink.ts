@@ -27,7 +27,9 @@ export default class MessengerLink extends ApolloLink {
     const observer = this.observers.get(id);
     switch (type) {
       case "data":
-        return observer?.next?.(data);
+        // Data should exist if the type is data
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return observer?.next?.(data!);
 
       case "error": {
         this.observers.delete(id);
