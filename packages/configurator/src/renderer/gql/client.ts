@@ -70,7 +70,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
 
   // Hack to get around ts-jest trying to compile `import.meta.url`
   const { default: schemaExecutor } = await import(
-    "../../worker/SchemaExecutor.bootstrap"
+    "../../workers/SchemaExecutor.bootstrap"
   );
   const mocked = config.isMocked;
 
