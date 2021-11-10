@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { ApolloClient, ApolloProvider } from "@apollo/client";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
-import { Box, Provider as BumbagProvider } from "bumbag";
+import { Box, Image, Provider as BumbagProvider } from "bumbag";
 import App from "./App";
 import { createClient } from "./gql/client";
 import theme from "./theme";
 import OnPaintNotifier from "./OnPaintNotifier";
 import FullScreenSpinner from "./components/FullScreenSpinner";
+import { SupaflyLogo } from "./logos";
 
 const Fallback: React.FC<FallbackProps> = ({ error }) => (
   <div
@@ -39,7 +40,19 @@ const ApolloLoader: React.FC = ({ children }) => {
   }, []);
 
   if (!client) {
-    return <FullScreenSpinner text="Loading backend" />;
+    return (
+      <FullScreenSpinner
+        image={
+          <Image
+            loading="eager"
+            referrerPolicy=""
+            src={SupaflyLogo}
+            width="800px"
+          />
+        }
+        text="Initialising"
+      />
+    );
   }
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
