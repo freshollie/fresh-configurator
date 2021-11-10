@@ -51,7 +51,8 @@ module.exports = {
     };
     config.module.rules = config.module.rules.map((data) => {
       if (`${data.test}`.includes("svg")) {
-        data.test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|gltf)(\?.*)?$/;
+        data.test =
+          /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|gltf)(\?.*)?$/;
       }
       return data;
     });
@@ -82,10 +83,11 @@ module.exports = {
         rule.use &&
         rule.use.find(
           (loader) =>
-            loader && loader.loader && loader.loader.includes("babel-loader")
-        ) &&
-        rule.include instanceof RegExp &&
-        rule.include.exec("/node_modules/are-you-es5")
+            loader &&
+            loader.loader &&
+            loader.loader.includes("babel-loader") &&
+            loader.options.presets.length > 0
+        )
     );
 
     if (es6Rule) {

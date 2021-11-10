@@ -1883,7 +1883,7 @@ __metadata:
     serialport-binding-webserialapi: ^1.0.3
     serve: ^12.0.0
     source-map-support: ^0.5.19
-    storybook-addon-turbo-build: ^1.0.0-beta.0
+    storybook-addon-turbo-build: ^1.0.1
     storybook-dark-mode: ^1.0.8
     three: ^0.132.2
     ts-jest: ^27.0.5
@@ -12896,24 +12896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-loader@npm:^2.10.0":
-  version: 2.15.1
-  resolution: "esbuild-loader@npm:2.15.1"
-  dependencies:
-    esbuild: ^0.12.21
-    joycon: ^3.0.1
-    json5: ^2.2.0
-    loader-utils: ^2.0.0
-    tapable: ^2.2.0
-    type-fest: ^1.4.0
-    webpack-sources: ^2.2.0
-  peerDependencies:
-    webpack: ^4.40.0 || ^5.0.0
-  checksum: bbc7e9a07b0a9cb4bbe06764f9d68e1c620299c30c16d923b8e36c13b13663c0c9db533e5684ce4d9ca470aba776ea919f3d6b97b6132374e34b8139ce8551b6
-  languageName: node
-  linkType: hard
-
-"esbuild-loader@npm:^2.16.0":
+"esbuild-loader@npm:^2.10.0, esbuild-loader@npm:^2.16.0":
   version: 2.16.0
   resolution: "esbuild-loader@npm:2.16.0"
   dependencies:
@@ -12969,15 +12952,6 @@ __metadata:
   version: 0.13.13
   resolution: "esbuild-windows-arm64@npm:0.13.13"
   checksum: e31b910a93e35008a1cdb789a813f75214524aa678e7d988dc0a4bfbd1ad25a9a93d1916f510ae54f8cf156163a5b2fdf1413e3b0a1c3b5e84825953dc99f147
-  languageName: node
-  linkType: hard
-
-"esbuild@npm:^0.12.21":
-  version: 0.12.25
-  resolution: "esbuild@npm:0.12.25"
-  bin:
-    esbuild: bin/esbuild
-  checksum: fd92b0541c17e6d863d3b1cf628a35c9844831a1f1f2d16c3091bc7a130a601a8164083b84a65cd3178209e7c395fc61d454f92c8b1a4869d443fd0ca5a51a8d
   languageName: node
   linkType: hard
 
@@ -24913,12 +24887,12 @@ resolve@~1.7.1:
   languageName: node
   linkType: hard
 
-"storybook-addon-turbo-build@npm:^1.0.0-beta.0":
-  version: 1.0.0-beta.1
-  resolution: "storybook-addon-turbo-build@npm:1.0.0-beta.1"
+"storybook-addon-turbo-build@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "storybook-addon-turbo-build@npm:1.0.1"
   dependencies:
     esbuild-loader: ^2.10.0
-  checksum: dde24299e15fa2221aea09a45c9d405f0aa688e8f142246932c7726bac64313c74dae263266552aa19f2db63d696e5a7fcf8523aacdd1cb3d771527026b11872
+  checksum: a33fe6863af21889280ad12f40b90c025921a52f8015610ee4e98aecb3fa8a8e229f920b6986355fbffad4a67e155810f85b00aa9ae80dd5dbe9bf756925c378
   languageName: node
   linkType: hard
 
