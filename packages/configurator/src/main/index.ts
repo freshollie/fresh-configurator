@@ -7,8 +7,8 @@ import fs from "fs";
 
 import unhandled from "electron-unhandled";
 import type { ApolloLink } from "@apollo/client";
-import { createIpcExecutor } from "./IpcLinkServer";
-import { createSchemaLink } from "../shared/SchemaLink";
+import { createIpcLinkServer } from "./IpcLinkServer";
+import { createSchemaExecutor } from "../shared/SchemaExecutor";
 
 unhandled({
   showDialog: true,
@@ -32,7 +32,7 @@ const createBackend = async (
     const { schema, mockedDeviceContext, context, startMockDevice } =
       await import("@betaflight/api-graph");
     return {
-      link: createSchemaLink({
+      link: createSchemaExecutor({
         schema,
         context: (mocked ? mockedDeviceContext : context)({
           artifactsDir: artifactsDirectory,
@@ -51,7 +51,7 @@ const createBackend = async (
     artifactsDirectory,
   });
   return {
-    link: createSchemaLink({
+    link: createSchemaExecutor({
       schema: backend.schema,
       context: backend.context,
     }),
@@ -75,7 +75,7 @@ const startBackend = async (): Promise<void> => {
   }
 
   const { link, start } = await createBackend(mocked);
-  createIpcExecutor({ link, ipc: ipcMain });
+  createIpcLinkServer({ link, ipc: ipcMain });
 
   await start();
 };

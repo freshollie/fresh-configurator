@@ -1,12 +1,7 @@
-import {
-  ApolloLink,
-  FetchResult,
-  Observable,
-  execute as executeLink,
-} from "@apollo/client/core";
-import { serializeError } from "serialize-error";
+import { ApolloLink } from "@apollo/client/core";
 import type { IpcMain, IpcMainEvent } from "electron";
-import { SerializableGraphQLRequest } from "../shared/types";
+import { GraphqlMessageRequest, GraphqlMessageResponse } from "../shared/types";
+import { createMessageLinkHandler } from "../shared/MessageLinkServer";
 
 type IpcExecutorOptions = {
   link: ApolloLink;
@@ -15,31 +10,24 @@ type IpcExecutorOptions = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const createIpcExecutor = (
+export const createIpcLinkServer = (
   options: IpcExecutorOptions
 ): (() => void) => {
   const channel = options.channel ?? "graphql";
+  const { onMessage } = createMessageLinkHandler(options.link);
   const listener = (
     event: IpcMainEvent,
-    id: number,
-    request: SerializableGraphQLRequest
+    { id, request }: GraphqlMessageRequest
   ): void => {
-    const result: Observable<FetchResult> = executeLink(options.link, request);
-
-    const sendIpc = (
-      type: "data" | "error" | "complete",
-      data?: FetchResult
-    ): void => {
-      if (!event.sender.isDestroyed()) {
-        event.sender.send(channel, id, type, data);
-      }
-    };
-
-    result.subscribe(
-      (data) => sendIpc("data", data),
-      (error) => sendIpc("error", serializeError(error)),
-      () => sendIpc("complete")
-    );
+    onMessage({
+      request,
+      onResponse: (type, data) => {
+        if (!event.sender.isDestroyed()) {
+          const response: GraphqlMessageResponse = { id, type, data };
+          event.sender.send(channel, response);
+        }
+      },
+    });
   };
 
   options.ipc.on(channel, listener);

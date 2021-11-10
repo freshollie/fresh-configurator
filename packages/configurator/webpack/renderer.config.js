@@ -76,6 +76,7 @@ module.exports = (_, { mode }) => ({
     path: `${__dirname}/../build/renderer`,
     chunkFormat: "array-push",
     chunkLoading: "jsonp",
+    workerChunkLoading: "import-scripts",
   },
   optimization: {
     minimize: mode === "production",

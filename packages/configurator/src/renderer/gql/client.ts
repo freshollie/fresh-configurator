@@ -12,6 +12,7 @@ import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
 import config from "../config";
+import WebWorkerLink from "./links/WebWorkerLink";
 
 const typeDefs = schemaTypes`
   type Query {
@@ -49,7 +50,9 @@ const Logs = gql(/* GraphQL */ `
 export const artifactsAddress =
   config.artifactsFolder ??
   `${
-    config.wsBackend?.replace("ws", "http") ?? "http://localhost:9000"
+    // Something about esbuild makes optional chaining not an option here :/
+    (config.wsBackend ? config.wsBackend.replace("ws", "http") : undefined) ??
+    "http://localhost:9000"
   }/job-artifacts`;
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
@@ -65,30 +68,14 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     });
   }
 
-  const [
-    { createSchemaLink },
-    { schema, mockedDeviceContext, context, startMockDevice },
-    { initialiseSerialBackend },
-    { default: WSABinding },
-  ] = await Promise.all([
-    import("../../shared/SchemaLink"),
-    import("@betaflight/api-graph"),
-    import("@betaflight/api"),
-    import("serialport-binding-webserialapi"),
-  ]);
+  // Hack to get around ts-jest trying to compile `import.meta.url`
+  const { default: schemaExecutor } = await import(
+    "../../workers/SchemaExecutor.bootstrap"
+  );
+  const mocked = config.isMocked;
 
-  if (config.isMocked) {
-    startMockDevice();
-  }
-
-  await initialiseSerialBackend(WSABinding);
-
-  return createSchemaLink({
-    schema,
-    context: (config.isMocked ? mockedDeviceContext : context)({
-      artifactsDir: "/",
-    }),
-  });
+  const worker = await schemaExecutor.initialise(mocked);
+  return new WebWorkerLink(worker);
 };
 
 export const createClient = async (): Promise<

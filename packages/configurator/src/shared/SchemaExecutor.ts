@@ -34,7 +34,7 @@ const ensureIterable = (
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink =>
+export const createSchemaExecutor = (options: SchemaLinkOptions): ApolloLink =>
   new ApolloLink(
     (request) =>
       new Observable((observer) => {

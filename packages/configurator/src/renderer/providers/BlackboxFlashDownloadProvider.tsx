@@ -15,7 +15,7 @@ import { JobType } from "../gql/__generated__/schema";
 import useConnection from "../hooks/useConnection";
 import useJobs from "../hooks/useJobs";
 import useRate from "../hooks/useRate";
-import { isElectron } from "../util";
+import config from "../config";
 
 const BlackboxFlashDownloadProvider: React.FC = () => {
   const connection = useConnection();
@@ -47,7 +47,7 @@ const BlackboxFlashDownloadProvider: React.FC = () => {
 
   const { jobs } = useJobs({
     ofType: JobType.Offload,
-    fetchArtifactData: !isElectron,
+    fetchArtifactData: !config.isElectron,
   });
 
   const downloadJob = jobs.find(
