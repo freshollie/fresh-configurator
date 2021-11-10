@@ -11,6 +11,7 @@ import { versionInfo } from "../util";
 import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
+import config from "../config";
 
 const typeDefs = schemaTypes`
   type Query {
@@ -44,12 +45,11 @@ const Logs = gql(/* GraphQL */ `
 
 // extract the backend address from the URL search query, as this can
 // be dynamically passed to us by electron
-const searchParams = new URLSearchParams(window.location.search.slice(1));
-const wsBackend = searchParams.get("backend");
+
 export const artifactsAddress =
-  searchParams.get("artifacts") ??
+  config.artifactsFolder ??
   `${
-    wsBackend?.replace("ws", "http") ?? "http://localhost:9000"
+    config.wsBackend?.replace("ws", "http") ?? "http://localhost:9000"
   }/job-artifacts`;
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
@@ -57,10 +57,10 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     return new IpcLink({ ipc: window.ipcRenderer });
   }
 
-  if (wsBackend) {
+  if (config.wsBackend) {
     const { default: WebSocketLink } = await import("./links/WebSocketLink");
     return new WebSocketLink({
-      url: `${wsBackend}/graphql`,
+      url: `${config.wsBackend}/graphql`,
       keepAlive: 99999999999,
     });
   }
@@ -77,9 +77,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
     import("serialport-binding-webserialapi"),
   ]);
 
-  const mocked = searchParams.get("mocked");
-
-  if (mocked) {
+  if (config.isMocked) {
     startMockDevice();
   }
 
@@ -87,7 +85,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
 
   return createSchemaLink({
     schema,
-    context: (mocked ? mockedDeviceContext : context)({
+    context: (config.isMocked ? mockedDeviceContext : context)({
       artifactsDir: "/",
     }),
   });
@@ -106,44 +104,41 @@ export const createClient = async (): Promise<
       ),
     });
 
-  const resolvers = (): Resolvers => {
-    const config: Resolvers = {
-      Query: {
-        configurator: () => ({
-          __typename: "Configurator",
-          logs: [],
-        }),
-      },
-      Mutation: {
-        log: (_, { message }, { client }) => {
-          const logs =
-            client.readQuery({
-              query: Logs,
-            })?.configurator.logs ?? [];
-
-          client.writeQuery({
+  const resolvers = (): Resolvers => ({
+    Query: {
+      configurator: () => ({
+        __typename: "Configurator",
+        logs: [],
+      }),
+    },
+    Mutation: {
+      log: (_, { message }, { client }) => {
+        const logs =
+          client.readQuery({
             query: Logs,
-            data: {
-              __typename: "Query",
-              configurator: {
-                __typename: "Configurator",
-                logs: logs.concat([
-                  {
-                    time: new Date().toISOString(),
-                    message,
-                    __typename: "Log" as const,
-                  },
-                ]),
-              },
-            },
-          });
+          })?.configurator.logs ?? [];
 
-          return null;
-        },
+        client.writeQuery({
+          query: Logs,
+          data: {
+            __typename: "Query",
+            configurator: {
+              __typename: "Configurator",
+              logs: logs.concat([
+                {
+                  time: new Date().toISOString(),
+                  message,
+                  __typename: "Log" as const,
+                },
+              ]),
+            },
+          },
+        });
+
+        return null;
       },
-    };
-    return config;
-  };
+    },
+  });
 
   const client = new ApolloClient({
     cache: cache(),

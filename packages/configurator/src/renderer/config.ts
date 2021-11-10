@@ -1,3 +1,5 @@
+const searchParams = new URLSearchParams(window.location.search.slice(1));
+
 export default {
   // all versions are specified and compared using semantic versioning http://semver.org/
   apiVersionAccepted: "1.2.1",
@@ -10,4 +12,8 @@ export default {
   cliActive: false,
   cliValid: false,
   gitChangesetId: "unknown",
-};
+  isElectron: !!window.ipcRenderer,
+  isMocked: !!searchParams.get("mocked"),
+  wsBackend: searchParams.get("backend"),
+  artifactsFolder: searchParams.get("artifacts"),
+} as const;

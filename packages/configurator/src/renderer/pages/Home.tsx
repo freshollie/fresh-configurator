@@ -15,12 +15,26 @@ import {
 import React, { useState } from "react";
 import { useLocation, Link as RouterLink } from "wouter";
 import semver from "semver";
-import { faCog, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCog,
+  faMoon,
+  faSun,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { SupaflyLogo } from "../logos";
 import { gql, useMutation, useQuery } from "../gql/apollo";
 import useLogger from "../hooks/useLogger";
 import config from "../config";
 import { Port } from "../gql/__generated__/schema";
+
+declare global {
+  // eslint-disable-next-line functional/prefer-type-literal
+  interface Navigator {
+    readonly serial: {
+      requestPort: () => Promise<void>;
+    };
+  }
+}
 
 const portConnectionStateQuery = gql(/* GraphQL */ `
   query PortConnectionState($id: String!) {
@@ -241,7 +255,7 @@ const ThemeSelector: React.FC = () => {
 };
 
 const Home: React.FC = () => {
-  const { data } = useQuery(
+  const { data, refetch } = useQuery(
     gql(/* GraphQL */ `
       query Ports {
         ports {
@@ -261,6 +275,9 @@ const Home: React.FC = () => {
   );
 
   const ports = data?.ports ?? [];
+
+  const { colorMode } = useColorMode();
+
   return (
     <Box>
       <Flex>
@@ -310,6 +327,35 @@ const Home: React.FC = () => {
         </Box>
 
         <Box maxWidth="600px" width="100%" height="100%" minHeight="100vh">
+          {!config.isElectron && !config.isMocked && (
+            <Box
+              position="sticky"
+              top="0px"
+              zIndex={"999" as never}
+              backgroundColor="default"
+              border={colorMode !== "dark" ? "default" : "none"}
+              borderTop="none"
+              borderRight="none"
+              borderLeft="none"
+              padding="10px"
+              alignX="right"
+            >
+              <Button
+                iconBeforeProps={{
+                  type: "font-awesome",
+                }}
+                iconBefore={faPlus}
+                size="small"
+                onClick={() =>
+                  window.navigator.serial.requestPort().then(() => {
+                    refetch();
+                  })
+                }
+              >
+                Add port
+              </Button>
+            </Box>
+          )}
           <Set orientation="vertical">
             {ports.map((port) => (
               <Device key={port.id} details={port} />
