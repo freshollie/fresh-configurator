@@ -101,7 +101,7 @@ module.exports = (_, { mode }) => ({
         exclude: [
           {
             origin: "typescript",
-            file: "!src/**/*.spec.{ts,tsx}",
+            file: "src/**/*.spec.{ts,tsx}",
           },
         ],
       },
