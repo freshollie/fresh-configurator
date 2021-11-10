@@ -1,7 +1,7 @@
 import React from "react";
 import { Axes3D } from "@betaflight/api";
 import { Box, Image, Flex, Button } from "bumbag";
-import droneBase from "./drone-base.jpeg";
+import droneBase from "./drone-base.jpg";
 import FlightController from "../FlightController";
 
 const mod = (n: number, m: number): number => ((n % m) + m) % m;

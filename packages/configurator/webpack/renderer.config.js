@@ -120,7 +120,7 @@ module.exports = (_, { mode }) => ({
       : []),
     new NodePolyfillPlugin(),
   ],
-  devtool: mode === "production" ? "inline-source-map" : "source-map",
+  devtool: "source-map",
   ignoreWarnings: ignoreWarnings(mode),
   devServer: {
     onBeforeSetupMiddleware() {

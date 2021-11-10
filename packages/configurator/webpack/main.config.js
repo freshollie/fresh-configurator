@@ -10,7 +10,7 @@ module.exports = (_, { mode }) => ({
     main: "./src/main/index.ts",
     preload: "./src/main/preload.ts",
   },
-  target: "electron11.1-main",
+  target: "electron13.2-main",
   resolve: {
     extensions: [".ts", ".mjs", ".js", ".node"],
   },
