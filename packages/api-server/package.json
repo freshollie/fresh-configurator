@@ -28,7 +28,7 @@
     "start": "ts-node -T --compiler-options '{\"module\": \"commonjs\"}' start.ts"
   },
   "dependencies": {
-    "@betaflight/api-graph": "workspace:packages/api-graph",
+    "@betaflight/api-graph": "^0.4.0",
     "apollo-server-express": "^3.3.0",
     "debug": "^4.3.2",
     "express": "^4.17.1",

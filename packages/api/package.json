@@ -27,7 +27,7 @@
     "testscript": "ts-node --project tsconfig.cjs.build.json testscript.ts"
   },
   "dependencies": {
-    "@betaflight/msp": "workspace:packages/msp",
+    "@betaflight/msp": "^0.3.0",
     "semver": "^7.3.5"
   },
   "devDependencies": {
