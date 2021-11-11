@@ -30,6 +30,7 @@
     "fmt:check": "prettier --check **/*.{ts,tsx,js,jsx}",
     "postinstall": "yarn clean:codegen && yarn codegen && husky install",
     "prepublishOnly": "yarn clean:lib && yarn build:lib",
+    "publish": "yarn run prepublishOnly && yarn workspaces foreach --no-private --exclude '@types/*' npm publish --access=public",
     "release": "yarn workspace @betaflight/configurator release",
     "version": "yarn && git add yarn.lock",
     "bump": "yarn lerna version --conventional-commits -y"
