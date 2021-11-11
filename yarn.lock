@@ -1713,12 +1713,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/demo-api-server@workspace:tools/demo-api-server"
   dependencies:
-    "@betaflight/api-server": ^0.4.0
+    "@betaflight/api-server": ^0.5.0
     graphql: ^15.5.2
   languageName: unknown
   linkType: soft
 
-"@betaflight-tools/storyshots-runner@^0.1.0, @betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner":
+"@betaflight-tools/storyshots-runner@^0.1.1, @betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner":
   version: 0.0.0-use.local
   resolution: "@betaflight-tools/storyshots-runner@workspace:tools/storyshots-runner"
   dependencies:
@@ -1736,11 +1736,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight/api-graph@^0.4.0, @betaflight/api-graph@workspace:packages/api-graph":
+"@betaflight/api-graph@^0.5.0, @betaflight/api-graph@workspace:packages/api-graph":
   version: 0.0.0-use.local
   resolution: "@betaflight/api-graph@workspace:packages/api-graph"
   dependencies:
-    "@betaflight/api": ^0.3.0
+    "@betaflight/api": ^0.4.0
     "@graphql-tools/merge": ^8.0.3
     "@graphql-tools/schema": ^8.1.2
     "@types/debug": ^4.1.7
@@ -1766,11 +1766,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight/api-server@^0.4.0, @betaflight/api-server@workspace:packages/api-server":
+"@betaflight/api-server@^0.5.0, @betaflight/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@betaflight/api-server@workspace:packages/api-server"
   dependencies:
-    "@betaflight/api-graph": ^0.4.0
+    "@betaflight/api-graph": ^0.5.0
     "@types/debug": ^4.1.7
     "@types/express": ^4.17.13
     "@types/jest": ^27.0.1
@@ -1797,11 +1797,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight/api@^0.3.0, @betaflight/api@workspace:packages/api":
+"@betaflight/api@^0.4.0, @betaflight/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@betaflight/api@workspace:packages/api"
   dependencies:
-    "@betaflight/msp": ^0.3.0
+    "@betaflight/msp": ^0.4.0
     "@types/jest": ^27.0.1
     "@types/node": ^14.17.14
     "@types/semver": ^7.3.8
@@ -1820,10 +1820,10 @@ __metadata:
     "@babel/core": ^7.15.0
     "@babel/preset-env": ^7.15.0
     "@babel/preset-react": ^7.14.5
-    "@betaflight-tools/storyshots-runner": ^0.1.0
-    "@betaflight/api": ^0.3.0
-    "@betaflight/api-graph": ^0.4.0
-    "@betaflight/api-server": ^0.4.0
+    "@betaflight-tools/storyshots-runner": ^0.1.1
+    "@betaflight/api": ^0.4.0
+    "@betaflight/api-graph": ^0.5.0
+    "@betaflight/api-server": ^0.5.0
     "@codeceptjs/configure": ^0.7.0
     "@codeceptjs/ui": ^0.4.6
     "@emotion/jest": ^11.3.0
@@ -1898,7 +1898,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@betaflight/msp@^0.3.0, @betaflight/msp@workspace:packages/msp":
+"@betaflight/msp@^0.4.0, @betaflight/msp@workspace:packages/msp":
   version: 0.0.0-use.local
   resolution: "@betaflight/msp@workspace:packages/msp"
   dependencies:

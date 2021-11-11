@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/msp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A MultiWii Serial Protocol library to connect and communicate with flight controllers",
   "license": "MIT",
   "author": "freshollie@gmail.com",

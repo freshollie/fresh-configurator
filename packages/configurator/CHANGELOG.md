@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.5.2...@betaflight/configurator@0.6.0) (2021-11-11)
+
+
+### Bug Fixes
+
+* **api:** fixed beeperConfig read and write ([2ca14a1](https://github.com/freshollie/fresh-configurator/commit/2ca14a15ca4754f7a910f937451d8775afa31dc8))
+* **configurator:** correctly set serial port functions ([68dc0d2](https://github.com/freshollie/fresh-configurator/commit/68dc0d2fc9f651045981c800aea9eb7cb5e19162))
+* **configurator:** don't redirect on reconnect when ConnectionProvider has unmounted ([a3ab9c5](https://github.com/freshollie/fresh-configurator/commit/a3ab9c52e181553527701ae5205755a028fce77c))
+* **configurator:** ensure ports update with connection changes ([e353c0b](https://github.com/freshollie/fresh-configurator/commit/e353c0bbb97c36bf975b36890ff6a3ecbc4eacaa))
+* **configurator:** fix aartifacts directory in mocked production build ([db6fe38](https://github.com/freshollie/fresh-configurator/commit/db6fe38c1136a730e549ba7216c34c25ff252ec9))
+* **configurator:** fix build config ([cd06f63](https://github.com/freshollie/fresh-configurator/commit/cd06f63124958eb21c9b14e21b5e316e4fccec1f))
+* **configurator:** fixed missing type ([bd4d83a](https://github.com/freshollie/fresh-configurator/commit/bd4d83a074da82f9f442b58e2a5422476e80e49c))
+* **configurator:** UI fixes ([be540fa](https://github.com/freshollie/fresh-configurator/commit/be540fade9e61004e24c8f3adaf6470aa6f60979))
+* **configurator:** update codegen to fix windows builds ([e09c38e](https://github.com/freshollie/fresh-configurator/commit/e09c38e95e5b18d3c52a65bb0b30876e8a616f15))
+
+
+### Features
+
+* allow receiver serial protocol to be set, api-server refactor ([af79195](https://github.com/freshollie/fresh-configurator/commit/af79195ce4c386a71bf945114d4eb4ada4d5301f))
+* **api-server:** provide new connection id when device reconnects ([f4aea40](https://github.com/freshollie/fresh-configurator/commit/f4aea40886a409238c28da6264f31f27ca761fd4))
+* **api:** added mixer config api ([50b0c19](https://github.com/freshollie/fresh-configurator/commit/50b0c1923d5f125d7d4359228853448c9b1c04c5))
+* auxiliary switch mode bindings ([#28](https://github.com/freshollie/fresh-configurator/issues/28)) ([54f9eb4](https://github.com/freshollie/fresh-configurator/commit/54f9eb45d18e21830e38026d168aa5d45e4068e0))
+* **configurator:** ability to add ports in browser ([cd0d663](https://github.com/freshollie/fresh-configurator/commit/cd0d663457f382dae47c77f8015b85bbf5424e6f))
+* **configurator:** add splash screen ([a90b40e](https://github.com/freshollie/fresh-configurator/commit/a90b40e35a605289614662ddff75d10e575046e2))
+* **configurator:** added error boundary for app crash ([09b6f07](https://github.com/freshollie/fresh-configurator/commit/09b6f07e613d746d5f4337a1c9453c913a4aaa60))
+* **configurator:** blackbox settings and flash download ([91a8293](https://github.com/freshollie/fresh-configurator/commit/91a8293ae5685fef143e47cb22efeb26029c707a))
+* **configurator:** change connect button styles ([044b579](https://github.com/freshollie/fresh-configurator/commit/044b57937395a442c42adfce2e4b44ff7b033e41))
+* **configurator:** device list tweaks ([09b4447](https://github.com/freshollie/fresh-configurator/commit/09b4447883291d770408ff72cc99b2a52416dedd))
+* **configurator:** disable arming when configuration loaded ([90e30b2](https://github.com/freshollie/fresh-configurator/commit/90e30b21b01ace52df2ad3d29c099a79ad85f6e8))
+* **configurator:** don't show window until paint ([3a2ebab](https://github.com/freshollie/fresh-configurator/commit/3a2ebaba23b7828972b59dff5a80f65862b046e1))
+* **configurator:** download artifacts in browser ([#65](https://github.com/freshollie/fresh-configurator/issues/65)) ([13502bf](https://github.com/freshollie/fresh-configurator/commit/13502bfde403f4162b89c6dbb759eed2705a0479))
+* **configurator:** execute schema using webworker in browser ([#66](https://github.com/freshollie/fresh-configurator/issues/66)) ([682c705](https://github.com/freshollie/fresh-configurator/commit/682c705f61be81de56e900b0a1ea504dafeff9c7))
+* **configurator:** finish new blackbox settings ([c560f4a](https://github.com/freshollie/fresh-configurator/commit/c560f4adaa89806099220ba0f8eb004d33e3b2bf))
+* **configurator:** finish sensor list ([ee63f56](https://github.com/freshollie/fresh-configurator/commit/ee63f563e09b77692ae773a556ef24e1e49fd23d))
+* **configurator:** migrate reset manager to new UI ([8601d6e](https://github.com/freshollie/fresh-configurator/commit/8601d6e7c726d3bfc91213e257b99f7de82659ca))
+* **configurator:** new home screen layout ([e177b72](https://github.com/freshollie/fresh-configurator/commit/e177b729d5b9fd722bef67306c78e3074fc3edf9))
+* **configurator:** radio and motor settings ([06de005](https://github.com/freshollie/fresh-configurator/commit/06de005dc3a95f37820e18cda7fdee6d9dd2c8a0))
+* **configurator:** show rejection errors ([947db1e](https://github.com/freshollie/fresh-configurator/commit/947db1e0983f3e1c1758d84bdd7e272c436809f4))
+* **configurator:** start redesign ([6b488da](https://github.com/freshollie/fresh-configurator/commit/6b488da52ff356a68a5c7ccec9ef2c5465d08883))
+* **configurator:** use electron ipc transport ([cd2b92e](https://github.com/freshollie/fresh-configurator/commit/cd2b92eb2adea10842279fe7be9dc173c63b6145))
+* **configurator:** use temp directory for artifacts ([f601af4](https://github.com/freshollie/fresh-configurator/commit/f601af4338a584af8464e37b43cfaa2ee05e6cbd))
+* **configurator:** use web serial when run in browser ([#61](https://github.com/freshollie/fresh-configurator/issues/61)) ([9e88ec0](https://github.com/freshollie/fresh-configurator/commit/9e88ec04e4dea8d8686d273357545cb586060901))
+* configure receiver port ([837aca9](https://github.com/freshollie/fresh-configurator/commit/837aca952ca003bf43d2e60437fac50c1ebc40f9))
+* disable sensors ([ee2bc2d](https://github.com/freshollie/fresh-configurator/commit/ee2bc2de349e645c9f333585eb161c028c4a3132))
+* edit board alignment config ([05493da](https://github.com/freshollie/fresh-configurator/commit/05493daba3aa2837eb48687868144f74bc781c3c))
+* enable persisted queries ([#17](https://github.com/freshollie/fresh-configurator/issues/17)) ([51fcda1](https://github.com/freshollie/fresh-configurator/commit/51fcda10b8ed2c021ad3b1bb6ec1497e3a6be94f))
+* enable pid protocols to be set based on CPU type ([3d0ac25](https://github.com/freshollie/fresh-configurator/commit/3d0ac2506e9ae3e08790d89d7fae39bd76a369db))
+* set channel map ([2dfb730](https://github.com/freshollie/fresh-configurator/commit/2dfb7303851248dcf4ae6f8d1d033d9c363a1b71))
+* set motor beeper ([660b118](https://github.com/freshollie/fresh-configurator/commit/660b11867b64b1f758151246b79a48ffaa20d7ad))
+* set motor idle speed ([e61dbf4](https://github.com/freshollie/fresh-configurator/commit/e61dbf4489c787ef2431d25680cc8236111cf8e1))
+* set prop direction ([8358cb8](https://github.com/freshollie/fresh-configurator/commit/8358cb8b247ddba940e60cba800852ee895b722a))
+* set rssi channel, fix missing data on query variable change ([c659f6d](https://github.com/freshollie/fresh-configurator/commit/c659f6de1ec7e50f849be5ff5ee1ddf120f590ab))
+
+
+
+
+
 ## [0.5.2](https://github.com/freshollie/fresh-configurator/compare/@betaflight/configurator@0.5.1...@betaflight/configurator@0.5.2) (2020-06-05)
 
 

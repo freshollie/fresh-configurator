@@ -1,6 +1,6 @@
 {
   "name": "@betaflight/api-server",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A GraphQL server to retreive data from betaflight flight controllers",
   "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server",
   "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server#readme",
@@ -28,7 +28,7 @@
     "start": "ts-node -T --compiler-options '{\"module\": \"commonjs\"}' start.ts"
   },
   "dependencies": {
-    "@betaflight/api-graph": "^0.4.0",
+    "@betaflight/api-graph": "^0.5.0",
     "apollo-server-express": "^3.3.0",
     "debug": "^4.3.2",
     "express": "^4.17.1",

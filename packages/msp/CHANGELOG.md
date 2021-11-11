@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/freshollie/fresh-configurator/compare/@betaflight/msp@0.3.0...@betaflight/msp@0.4.0) (2021-11-11)
+
+
+### Bug Fixes
+
+* **msp:** improved code ([e824965](https://github.com/freshollie/fresh-configurator/commit/e82496550ec86ed684dc90c119757afbfabea177))
+
+
+### Features
+
+* **api:** added mixer config api ([50b0c19](https://github.com/freshollie/fresh-configurator/commit/50b0c1923d5f125d7d4359228853448c9b1c04c5))
+* **api:** include info in ports api ([5478100](https://github.com/freshollie/fresh-configurator/commit/5478100e46a23af1ce991ce2e24b10de4cf020e7))
+* **api:** provide baudRate for connection ([c27a9d0](https://github.com/freshollie/fresh-configurator/commit/c27a9d0ef8fa4265075ea206253003e4db41132a))
+* **api:** start writing blackbox api ([bbd3926](https://github.com/freshollie/fresh-configurator/commit/bbd39266348b26610898dad304b1388a1304639f))
+* **configurator:** use web serial when run in browser ([#61](https://github.com/freshollie/fresh-configurator/issues/61)) ([9e88ec0](https://github.com/freshollie/fresh-configurator/commit/9e88ec04e4dea8d8686d273357545cb586060901))
+* **msp:** allow responses to be checked for match ([88970a1](https://github.com/freshollie/fresh-configurator/commit/88970a12b7fefdca3d0d4af754997da3fb4c589c))
+
+
+
+
+
 # [0.3.0](https://github.com/freshollie/fresh-configurator/tree/master/packages/msp/compare/@betaflight/msp@0.2.0...@betaflight/msp@0.3.0) (2020-06-05)
 
 
