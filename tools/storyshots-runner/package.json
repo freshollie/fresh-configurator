@@ -2,6 +2,7 @@
   "name": "@betaflight-tools/storyshots-runner",
   "version": "0.1.0",
   "description": "Run visual regression across our storbok",
+  "private": true,
   "license": "MIT",
   "main": "index.js",
   "bin": "bin.js",
