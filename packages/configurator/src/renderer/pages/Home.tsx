@@ -27,15 +27,6 @@ import useLogger from "../hooks/useLogger";
 import config from "../config";
 import { Port } from "../gql/__generated__/schema";
 
-declare global {
-  // eslint-disable-next-line functional/prefer-type-literal
-  interface Navigator {
-    readonly serial: {
-      requestPort: () => Promise<void>;
-    };
-  }
-}
-
 const portConnectionStateQuery = gql(/* GraphQL */ `
   query PortConnectionState($id: String!) {
     port(id: $id) {
