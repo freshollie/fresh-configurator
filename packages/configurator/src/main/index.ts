@@ -6,9 +6,12 @@ import url from "url";
 import fs from "fs";
 
 import unhandled from "electron-unhandled";
-import type { ApolloLink } from "@apollo/client";
-import { createIpcLinkServer } from "./IpcLinkServer";
-import { createSchemaExecutor } from "../shared/SchemaExecutor";
+import {
+  createSchemaExecutor,
+  createMessageBusLinkBackend,
+  electronBus,
+  MessageBusBackend,
+} from "../shared/apollo-messagebus-link";
 
 unhandled({
   showDialog: true,
@@ -27,21 +30,32 @@ const artifactsDirectory = PRODUCTION
 
 const createBackend = async (
   mocked: boolean
-): Promise<{ link: ApolloLink; start: () => Promise<void> | void }> => {
+): Promise<{
+  linkBackend: MessageBusBackend;
+  start: () => Promise<void> | void;
+}> => {
   if (PRODUCTION) {
     const { schema, mockedDeviceContext, context, startMockDevice } =
       await import("@betaflight/api-graph");
-    return {
-      link: createSchemaExecutor({
-        schema,
-        context: (mocked ? mockedDeviceContext : context)({
-          artifactsDir: artifactsDirectory,
+
+    const linkBackend = createMessageBusLinkBackend({
+      registerBus: electronBus(ipcMain),
+      createExecutor: () =>
+        createSchemaExecutor({
+          schema,
+          context: (mocked ? mockedDeviceContext : context)({
+            artifactsDir: artifactsDirectory,
+          }),
         }),
-      }),
-      start: () => {
+    });
+    return {
+      linkBackend,
+      start: async () => {
         if (mocked) {
           startMockDevice();
         }
+        await linkBackend.initialise({});
+        linkBackend.listen();
       },
     };
   }
@@ -50,12 +64,19 @@ const createBackend = async (
     mocked,
     artifactsDirectory,
   });
+  const linkBackend = createMessageBusLinkBackend({
+    registerBus: electronBus(ipcMain),
+    createExecutor: () =>
+      createSchemaExecutor({
+        schema: backend.schema,
+        context: backend.context,
+      }),
+  });
   return {
-    link: createSchemaExecutor({
-      schema: backend.schema,
-      context: backend.context,
-    }),
+    linkBackend,
     start: async () => {
+      await linkBackend.initialise({});
+      linkBackend.listen();
       const port = await backend.listen({
         hostname: "127.0.0.1",
       });
@@ -74,9 +95,7 @@ const startBackend = async (): Promise<void> => {
     console.log("Creating backend in mocked mode");
   }
 
-  const { link, start } = await createBackend(mocked);
-  createIpcLinkServer({ link, ipc: ipcMain });
-
+  const { start } = await createBackend(mocked);
   await start();
 };
 

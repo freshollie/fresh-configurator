@@ -10,7 +10,7 @@ import {
   GraphQLSchema,
 } from "graphql";
 
-type SchemaLinkOptions<TContext = unknown, TRoot = unknown> = {
+type SchemaExecutorOptions<TContext = unknown, TRoot = unknown> = {
   schema: GraphQLSchema;
   root?: TRoot;
   context: () => TContext;
@@ -34,7 +34,9 @@ const ensureIterable = (
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const createSchemaExecutor = (options: SchemaLinkOptions): ApolloLink =>
+export const createSchemaExecutor = (
+  options: SchemaExecutorOptions
+): ApolloLink =>
   new ApolloLink(
     (request) =>
       new Observable((observer) => {
