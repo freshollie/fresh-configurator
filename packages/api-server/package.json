@@ -22,7 +22,8 @@
     "api"
   ],
   "files": [
-    "dist"
+    "dist/esm",
+    "dist/cjs"
   ],
   "scripts": {
     "start": "ts-node -T --compiler-options '{\"module\": \"commonjs\"}' start.ts"

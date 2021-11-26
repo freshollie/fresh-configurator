@@ -2,8 +2,8 @@
   "name": "@betaflight/api-graph",
   "version": "0.5.0",
   "description": "A GraphQL schema to retreive data from betaflight flight controllers",
-  "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server",
-  "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-server#readme",
+  "repository": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-graph",
+  "readme": "https://github.com/freshollie/fresh-configurator/tree/master/packages/api-graph#readme",
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./dist/cjs/index.js",
@@ -21,7 +21,8 @@
     "api"
   ],
   "files": [
-    "dist"
+    "dist/esm",
+    "dist/cjs"
   ],
   "dependencies": {
     "@betaflight/api": "^0.4.0",

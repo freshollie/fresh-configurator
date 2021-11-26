@@ -22,7 +22,8 @@
     "multiwii protocol"
   ],
   "files": [
-    "dist"
+    "dist/esm",
+    "dist/cjs"
   ],
   "scripts": {
     "testscript": "ts-node --project tsconfig.cjs.build.json test-script.ts"
