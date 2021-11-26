@@ -8,11 +8,14 @@ import {
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
-import IpcLink from "./links/IpcLink";
 
 import { gql } from "./apollo";
 import config from "../config";
-import WebWorkerLink from "./links/WebWorkerLink";
+import {
+  createElectronMessageBusLink,
+  createMessageBusWebWorkerLink,
+} from "../../shared/apollo-messagebus-link";
+import { SchemaBackendInitArgs } from "../../shared/types";
 
 const typeDefs = schemaTypes`
   type Query {
@@ -57,7 +60,7 @@ export const artifactsAddress =
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
   if (window.ipcRenderer) {
-    return new IpcLink({ ipc: window.ipcRenderer });
+    return createElectronMessageBusLink(window.ipcRenderer);
   }
 
   if (config.wsBackend) {
@@ -69,13 +72,14 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
   }
 
   // Hack to get around ts-jest trying to compile `import.meta.url`
-  const { default: schemaExecutor } = await import(
-    "../../workers/SchemaExecutor.bootstrap"
+  const { default: worker } = await import(
+    "../../workers/SchemaBackend.bootstrap"
   );
   const mocked = config.isMocked;
 
-  const worker = await schemaExecutor.initialise(mocked);
-  return new WebWorkerLink(worker);
+  const link = createMessageBusWebWorkerLink<SchemaBackendInitArgs>(worker);
+  await link.initialiseBackend({ mocked });
+  return link;
 };
 
 export const createClient = async (): Promise<
