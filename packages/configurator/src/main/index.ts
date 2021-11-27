@@ -8,10 +8,10 @@ import fs from "fs";
 import unhandled from "electron-unhandled";
 import {
   createSchemaExecutor,
-  createMessageBusLinkBackend,
-  electronBus,
+  createBusLinkBackend,
   MessageBusBackend,
-} from "../shared/apollo-messagebus-link";
+} from "apollo-bus-link/core";
+import { electronBus } from "apollo-bus-link/electron";
 
 unhandled({
   showDialog: true,
@@ -38,7 +38,7 @@ const createBackend = async (
     const { schema, mockedDeviceContext, context, startMockDevice } =
       await import("@betaflight/api-graph");
 
-    const linkBackend = createMessageBusLinkBackend({
+    const linkBackend = createBusLinkBackend({
       registerBus: electronBus(ipcMain),
       createExecutor: () =>
         createSchemaExecutor({
@@ -64,7 +64,7 @@ const createBackend = async (
     mocked,
     artifactsDirectory,
   });
-  const linkBackend = createMessageBusLinkBackend({
+  const linkBackend = createBusLinkBackend({
     registerBus: electronBus(ipcMain),
     createExecutor: () =>
       createSchemaExecutor({

@@ -1850,6 +1850,7 @@ __metadata:
     "@types/testing-library__jest-dom": ^5.14.1
     "@types/three": ^0.131.0
     "@types/w3c-web-serial": ^1.0.2
+    apollo-bus-link: ^0.3.2
     babel-loader: ^8.2.2
     bumbag: ^2.6.0
     codeceptjs: ^3.1.3
@@ -1866,7 +1867,6 @@ __metadata:
     graphql-ws: ^5.4.1
     html-webpack-plugin: ^5.3.2
     identity-obj-proxy: ^3.0.0
-    iterall: ^1.3.0
     jest-date-mock: ^1.0.8
     memfs: ^3.2.4
     native-ext-loader: ^2.3.0
@@ -1880,7 +1880,6 @@ __metadata:
     react-is: ^17.0.2
     react-svg-loader: ^3.0.3
     semver: ^7.3.5
-    serialize-error: ^8.1.0
     serialport-binding-webserialapi: ^1.0.3
     serve: ^12.0.0
     source-map-support: ^0.5.19
@@ -7741,6 +7740,19 @@ __metadata:
     normalize-path: ^3.0.0
     picomatch: ^2.0.4
   checksum: 985163db2292fac9e5a1e072bf99f1b5baccf196e4de25a0b0b81865ebddeb3b3eb4480734ef0a2ac8c002845396b91aa89121f5b84f93981a4658164a9ec6e9
+  languageName: node
+  linkType: hard
+
+"apollo-bus-link@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "apollo-bus-link@npm:0.3.2"
+  dependencies:
+    iterall: ^1.3.0
+    serialize-error: ^8.1.0
+  peerDependencies:
+    "@apollo/client": ^3
+    graphql: ">=14"
+  checksum: 1e17abbb0ba2c0d1ab5e979839c35d538275d1e9a47562b5f35431a38477531e2891c4e2a77e1e49c45711d7b839f751b95da8cfa4859afb1c49923f12558279
   languageName: node
   linkType: hard
 

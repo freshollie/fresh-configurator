@@ -5,16 +5,14 @@ import {
   gql as schemaTypes,
   NormalizedCacheObject,
 } from "@apollo/client";
+import { createElectronBusLink } from "apollo-bus-link/electron";
+import { createWebWorkerBusLink } from "apollo-bus-link/webworker";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";
 
 import { gql } from "./apollo";
 import config from "../config";
-import {
-  createElectronMessageBusLink,
-  createMessageBusWebWorkerLink,
-} from "../../shared/apollo-messagebus-link";
 import { SchemaBackendInitArgs } from "../../shared/types";
 
 const typeDefs = schemaTypes`
@@ -60,7 +58,7 @@ export const artifactsAddress =
 
 const createRequiredLink = async (): Promise<ApolloLink> => {
   if (window.ipcRenderer) {
-    return createElectronMessageBusLink(window.ipcRenderer);
+    return createElectronBusLink(window.ipcRenderer);
   }
 
   if (config.wsBackend) {
@@ -77,7 +75,7 @@ const createRequiredLink = async (): Promise<ApolloLink> => {
   );
   const mocked = config.isMocked;
 
-  const link = createMessageBusWebWorkerLink<SchemaBackendInitArgs>(worker);
+  const link = createWebWorkerBusLink<SchemaBackendInitArgs>(worker);
   await link.initialiseBackend({ mocked });
   return link;
 };

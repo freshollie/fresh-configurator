@@ -6,12 +6,12 @@ import "./SchemaBackend.worker";
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import { initialiseSerialBackend } from "@betaflight/api";
 import WSABinding from "serialport-binding-webserialapi";
-import { MessageBusLink } from "../shared/apollo-messagebus-link";
+import { BusLink } from "apollo-bus-link/core";
 import { SchemaBackendInitArgs } from "../shared/types";
 
 jest.mock("@betaflight/api");
 
-const link = new MessageBusLink<SchemaBackendInitArgs>({
+const link = new BusLink<SchemaBackendInitArgs>({
   registerResponseHandler: (handler) => {
     self.postMessage = (event) => {
       handler(event);
@@ -23,16 +23,12 @@ const link = new MessageBusLink<SchemaBackendInitArgs>({
 });
 
 describe("SchemaBackendWorker", () => {
-  it("should setup a schema executor when init message is sent", async () => {
-    await link.initialiseBackend({ mocked: false });
-  });
-
   it("should initialise the web serial backend for betaflight api", async () => {
     await link.initialiseBackend({ mocked: false });
     expect(initialiseSerialBackend).toHaveBeenCalledWith(WSABinding);
   });
 
-  it("should execute apollo queries", async () => {
+  it("should execute apollo queries against the betaflight api", async () => {
     await link.initialiseBackend({ mocked: true });
 
     const client = new ApolloClient({
