@@ -9,13 +9,13 @@ import {
 import { initialiseSerialBackend } from "@betaflight/api";
 import WSABinding from "serialport-binding-webserialapi";
 import {
-  createMessageBusLinkBackend,
+  createBusLinkBackend,
   webWorkerBus,
   createSchemaExecutor,
-} from "../shared/apollo-messagebus-link";
+} from "apollo-bus-link";
 import { SchemaBackendInitArgs } from "../shared/types";
 
-const backend = createMessageBusLinkBackend<SchemaBackendInitArgs>({
+const backend = createBusLinkBackend<SchemaBackendInitArgs>({
   registerBus: webWorkerBus(self),
   createExecutor: async (args) => {
     if (args.mocked) {

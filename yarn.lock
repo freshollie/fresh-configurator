@@ -1850,6 +1850,7 @@ __metadata:
     "@types/testing-library__jest-dom": ^5.14.1
     "@types/three": ^0.131.0
     "@types/w3c-web-serial": ^1.0.2
+    apollo-bus-link: ^0.2.0
     babel-loader: ^8.2.2
     bumbag: ^2.6.0
     codeceptjs: ^3.1.3
@@ -7741,6 +7742,19 @@ __metadata:
     normalize-path: ^3.0.0
     picomatch: ^2.0.4
   checksum: 985163db2292fac9e5a1e072bf99f1b5baccf196e4de25a0b0b81865ebddeb3b3eb4480734ef0a2ac8c002845396b91aa89121f5b84f93981a4658164a9ec6e9
+  languageName: node
+  linkType: hard
+
+"apollo-bus-link@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "apollo-bus-link@npm:0.2.0"
+  dependencies:
+    iterall: ^1.3.0
+    serialize-error: ^8.1.0
+  peerDependencies:
+    "@apollo/client": ^3
+    graphql: ">=14"
+  checksum: 54152c5928140e15b5ec71ee30b0a68ebb5e1b930d17183e80dad7671aa3765afcf33bd47d65104e12fd2c95efdae88d20f4a578dddc03c5819fcdc737cc6b9a
   languageName: node
   linkType: hard
 
