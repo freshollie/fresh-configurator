@@ -6,7 +6,7 @@ import "./SchemaBackend.worker";
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import { initialiseSerialBackend } from "@betaflight/api";
 import WSABinding from "serialport-binding-webserialapi";
-import { BusLink } from "apollo-bus-link";
+import { BusLink } from "apollo-bus-link/core";
 import { SchemaBackendInitArgs } from "../shared/types";
 
 jest.mock("@betaflight/api");

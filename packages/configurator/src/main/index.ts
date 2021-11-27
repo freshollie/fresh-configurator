@@ -9,9 +9,9 @@ import unhandled from "electron-unhandled";
 import {
   createSchemaExecutor,
   createBusLinkBackend,
-  electronBus,
   MessageBusBackend,
-} from "apollo-bus-link";
+} from "apollo-bus-link/core";
+import { electronBus } from "apollo-bus-link/electron";
 
 unhandled({
   showDialog: true,

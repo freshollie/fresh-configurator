@@ -5,7 +5,8 @@ import {
   gql as schemaTypes,
   NormalizedCacheObject,
 } from "@apollo/client";
-import { createElectronBusLink, createWebWorkerBusLink } from "apollo-bus-link";
+import { createElectronBusLink } from "apollo-bus-link/electron";
+import { createWebWorkerBusLink } from "apollo-bus-link/webworker";
 import { Resolvers } from "./__generated__/schema";
 import introspection from "./__generated__/introspection.json";
 import { versionInfo } from "../util";

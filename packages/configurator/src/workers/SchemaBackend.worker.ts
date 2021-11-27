@@ -10,9 +10,9 @@ import { initialiseSerialBackend } from "@betaflight/api";
 import WSABinding from "serialport-binding-webserialapi";
 import {
   createBusLinkBackend,
-  webWorkerBus,
   createSchemaExecutor,
-} from "apollo-bus-link";
+} from "apollo-bus-link/core";
+import { webWorkerBus } from "apollo-bus-link/webworker";
 import { SchemaBackendInitArgs } from "../shared/types";
 
 const backend = createBusLinkBackend<SchemaBackendInitArgs>({
