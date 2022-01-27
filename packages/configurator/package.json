@@ -84,7 +84,7 @@
     "semver": "^7.3.5",
     "serialport-binding-webserialapi": "^1.0.3",
     "source-map-support": "^0.5.19",
-    "three": "^0.132.2",
+    "three": "^0.137.0",
     "wouter": "^2.7.4"
   },
   "devDependencies": {
