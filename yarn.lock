@@ -1856,7 +1856,7 @@ __metadata:
     codeceptjs: ^3.1.3
     cross-env: ^7.0.3
     dmg-builder: ^22.13.1
-    electron: 13.2.3
+    electron: 18.3.7
     electron-builder: ^22.11.7
     electron-devtools-installer: ^3.2.0
     electron-rebuild: ^3.2.2
@@ -2035,6 +2035,28 @@ __metadata:
     global-tunnel-ng:
       optional: true
   checksum: a5158bb2f81ed68491d1ece5f4acfb9d497dbec1f126d0db2212c2fa6b2851a752900fd24b7620cd2e23563a356127134366027e7a98993f035c6d0c8e643577
+  languageName: node
+  linkType: hard
+
+"@electron/get@npm:^1.13.0":
+  version: 1.14.1
+  resolution: "@electron/get@npm:1.14.1"
+  dependencies:
+    debug: ^4.1.1
+    env-paths: ^2.2.0
+    fs-extra: ^8.1.0
+    global-agent: ^3.0.0
+    global-tunnel-ng: ^2.7.1
+    got: ^9.6.0
+    progress: ^2.0.3
+    semver: ^6.2.0
+    sumchecker: ^3.0.1
+  dependenciesMeta:
+    global-agent:
+      optional: true
+    global-tunnel-ng:
+      optional: true
+  checksum: 21fec5e82bbee8f9fa183b46e05675b137c3130c7999d3b2b34a0047d1a06ec3c76347b9bbdb9911ba9b2123697804e360a15dda9db614c0226d5d4dcc4d6d15
   languageName: node
   linkType: hard
 
@@ -6369,6 +6391,13 @@ __metadata:
   version: 14.17.14
   resolution: "@types/node@npm:14.17.14"
   checksum: 66ed675a324fdddc4f693f1b240c0d81a9f53e1c68f7de8b84d02d65c0b447f9fa30d318481d04e1502f68dd37091b5cadc59633b57246582ad25e3fa835cd7d
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.11.26":
+  version: 16.18.3
+  resolution: "@types/node@npm:16.18.3"
+  checksum: 6b8ba2ea5d842f7986e366cb9184c54d273d492784dc62e08fd5afeae938d9b61aec6e4222d2541cd18f9b1412ba361bbcb3f4204fb003608af80a2a6af959f9
   languageName: node
   linkType: hard
 
@@ -12368,16 +12397,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:13.2.3":
-  version: 13.2.3
-  resolution: "electron@npm:13.2.3"
+"electron@npm:18.3.7":
+  version: 18.3.7
+  resolution: "electron@npm:18.3.7"
   dependencies:
-    "@electron/get": ^1.0.1
-    "@types/node": ^14.6.2
+    "@electron/get": ^1.13.0
+    "@types/node": ^16.11.26
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: c4c4c710b645f11a5afb83b1f61af481224b3f5dbe1e04058a1e59de5a7f1131d0d417089ba04216d3fd44113b48a935ce612e0d36e3295e28ae787e4eee9f60
+  checksum: 365a82082926ccf062e9dcc7d997e43988c9d2a1b1bf9ea1e5c3f00d0ec05c9e45d3382cbfa51673a50e0f0127cabc3c4eb5ced0bd797ea2eebe36f1a27e0ecb
   languageName: node
   linkType: hard
 
@@ -14955,6 +14984,20 @@ fsevents@~2.1.2:
     semver: ^7.3.2
     serialize-error: ^7.0.1
   checksum: 09627d2cfc4ae0bee187730d6301cebb80c96c2adadb403d114c5574481b388d491e9c8a6fb2b935e5c0eda886a249bf954e4095d26ca553635cc1ae6d0feb95
+  languageName: node
+  linkType: hard
+
+"global-agent@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "global-agent@npm:3.0.0"
+  dependencies:
+    boolean: ^3.0.1
+    es6-error: ^4.1.1
+    matcher: ^3.0.0
+    roarr: ^2.15.3
+    semver: ^7.3.2
+    serialize-error: ^7.0.1
+  checksum: 75074d80733b4bd5386c47f5df028e798018025beac0ab310e9908c72bf5639e408203e7bca0130d5ee01b5f4abc6d34385d96a9f950ea5fe1979bb431c808f7
   languageName: node
   linkType: hard
 
